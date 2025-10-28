@@ -1,95 +1,142 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Wedding Ticket</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wedding Invitation Ticket</title>
 <style>
-  :root{
-    --bg1:#fffdfb; --bg2:#efe9e5;
-    --ink:#333; --muted:#777;
-    --primary:#f1d3c7; --shadow:rgba(0,0,0,.18);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(180deg,var(--bg1),var(--bg2));
-    font-family:'Noto Sans KR',sans-serif;
-    overflow:hidden;
-  }
+:root {
+  --primary: #f1d3c7;
+  --bg: #fffdfb;
+  --gray: #777;
+  --shadow: rgba(0,0,0,0.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  height:100%;
+  font-family:'Noto Sans KR',sans-serif;
+  background:linear-gradient(180deg,#fffdfb,#efe9e5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.ticket-wrapper {
+  text-align:center;
+  position:relative;
+}
+.ticket {
+  width:min(95vw,380px);
+  cursor:pointer;
+  user-select:none;
+  box-shadow:0 10px 20px var(--shadow);
+  border-radius:20px;
+  overflow:hidden;
+  transition:transform .3s ease;
+  background:#fff;
+}
+.ticket:active{transform:scale(0.98);}
+.top {
+  background:var(--primary);
+  padding:10px;
+  display:flex;
+  border-radius:20px 20px 0 0;
+}
+.top .bar {
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  font-weight:700;
+  font-size:13px;
+  color:#333;
+  padding:8px 2px;
+}
+.pass {
+  flex:1;
+  background:#fff;
+  border-radius:12px;
+  padding:24px;
+}
+.pass h2{font-size:18px;margin-bottom:10px}
+.qr {
+  width:90px;
+  height:90px;
+  background:var(--primary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  border-radius:10px;
+}
+.row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+.names{text-align:center;margin:10px 0;}
+.name-pill{
+  display:inline-block;
+  background:var(--primary);
+  padding:6px 14px;
+  border-radius:34px;
+  font-weight:700;
+  margin:3px 0;
+}
+.meta{display:flex;justify-content:space-between;margin-top:14px;font-weight:600;}
+.meta small{display:block;color:var(--gray);font-size:12px;margin-bottom:4px}
+.place{margin-top:12px;}
+.place small{color:var(--gray);font-size:12px;}
+.place p{font-weight:700;}
 
-  .stage{position:relative;width:100%;height:100%;}
-  .center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);}
+.bottom{
+  background:var(--primary);
+  padding:10px;
+  border-radius:0 0 20px 20px;
+}
+.receipt{
+  background:#fff;
+  border-radius:10px;
+  overflow:hidden;
+}
+.receipt p{
+  margin:0;
+  padding:8px 14px;
+  border-bottom:1px solid #eee;
+  font-size:14px;
+}
+.receipt p:last-child{border-bottom:none;}
+.cta{
+  margin-top:14px;
+  color:#444;
+  font-weight:600;
+}
 
-  .ticket{
-    width:min(92vw,360px);
-    background:#fff;
-    border-radius:20px;
-    box-shadow:0 12px 28px var(--shadow);
-    cursor:pointer;
-    user-select:none;
-    position:relative;
-    transition:transform 0.25s ease;
-  }
-  .ticket:active{transform:scale(0.98);}
-
-  .top{
-    background:var(--primary);
-    padding:14px;
-    border-radius:20px 20px 0 0;
-    display:flex;gap:12px;align-items:stretch;
-  }
-  .bar{
-    writing-mode:vertical-rl;
-    transform:rotate(180deg);
-    font-weight:700;font-size:12px;letter-spacing:.15em;color:#444;
-    display:flex;align-items:center;padding:6px 2px;
-  }
-  .pass{
-    background:#fff;
-    border-radius:12px;
-    padding:20px;
-    flex:1;
-  }
-  .pass h2{margin-bottom:10px;font-size:18px;line-height:1.35}
-  .names{text-align:center;margin-top:10px}
-  .pill{
-    display:inline-block;padding:8px 16px;margin:4px 0;
-    border-radius:34px;background:var(--primary);font-weight:700;
-  }
-  .meta{display:flex;justify-content:space-between;margin-top:10px;font-weight:600}
-  .meta small{display:block;color:var(--muted);font-weight:400;margin-bottom:4px}
-  .place{margin-top:14px}
-  .place small{color:var(--muted)}
-  .place p{font-weight:700}
-
-  .bottom{
-    background:var(--primary);padding:12px;border-radius:0 0 20px 20px;
-  }
-  .receipt{background:#fff;border-radius:10px;overflow:hidden;}
-  .receipt p{margin:0;padding:8px 14px;border-bottom:1px solid #eee}
-  .receipt p:last-child{border-bottom:none}
-  .cta{text-align:center;margin-top:12px;color:#444;font-weight:600}
-
-  canvas.confetti{
-    position:fixed;
-    top:0;left:0;width:100%;height:100%;
-    pointer-events:none;
-    z-index:999;
-  }
+canvas.confetti{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:999;
+}
 </style>
 </head>
 <body>
 
-<div class="stage">
-  <div id="card" class="ticket center">
+<div class="ticket-wrapper">
+  <div id="ticket" class="ticket">
     <div class="top">
-      <div class="bar">FIRST&nbsp;CLASS</div>
+      <div class="bar">FIRST CLASS</div>
       <div class="pass">
-        <h2>WEDDING PASS<br/>웨딩 탑승권</h2>
-        <div class="names">
-          <div class="pill">KIM SANGHO ✕ KIM SOLSU</div>
+        <h2>WEDDING PASS<br>웨딩 탑승권</h2>
+        <div class="row">
+          <div>
+            <div class="names">
+              <div class="name-pill">KIM SANGHO</div>
+              <div>X</div>
+              <div class="name-pill">KIM SOLSU</div>
+            </div>
+          </div>
+          <div class="qr">QR</div>
         </div>
         <div class="meta">
           <div><small>DATE</small>APRIL 23</div>
@@ -107,15 +154,15 @@
         <p>COME TO JOIN US 💍</p>
       </div>
     </div>
-    <div class="cta">티켓을 눌러 초대장을 확인하세요 💌</div>
+    <div class="cta">티켓을 눌러 청첩장을 확인하세요 💌</div>
   </div>
 </div>
 
 <canvas class="confetti"></canvas>
 
 <script>
-const redirectUrl = "https://REDIRECT_URL_HERE/"; // ← 초대장 주소로 변경!
-const card = document.getElementById('card');
+const redirectUrl = "https://REDIRECT_URL_HERE/"; // ← 네 청첩장 주소로 변경!
+const ticket = document.getElementById('ticket');
 const canvas = document.querySelector('.confetti');
 const ctx = canvas.getContext('2d');
 
@@ -126,54 +173,51 @@ function resizeCanvas(){
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-const confetti = [];
+const particles = [];
 function createConfetti(){
-  for(let i=0;i<150;i++){
-    confetti.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height - canvas.height,
-      r: 5 + Math.random()*8,
-      color: `hsl(${Math.random()*360},100%,60%)`,
-      speed: 2 + Math.random()*3,
-      tilt: Math.random()*2-1
+  for(let i=0;i<180;i++){
+    particles.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height - canvas.height,
+      r:4+Math.random()*6,
+      color:`hsl(${Math.random()*360},100%,60%)`,
+      speed:2+Math.random()*3,
+      tilt:Math.random()*2-1
     });
   }
 }
-
 function drawConfetti(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  confetti.forEach(p=>{
+  particles.forEach(p=>{
     ctx.beginPath();
-    ctx.fillStyle = p.color;
-    ctx.ellipse(p.x, p.y, p.r, p.r*0.6, p.tilt, 0, 2*Math.PI);
+    ctx.fillStyle=p.color;
+    ctx.ellipse(p.x,p.y,p.r,p.r*0.6,p.tilt,0,2*Math.PI);
     ctx.fill();
   });
 }
-
 function updateConfetti(){
-  confetti.forEach(p=>{
-    p.y += p.speed;
-    p.x += p.tilt;
-    if(p.y > canvas.height) p.y = -10;
+  particles.forEach(p=>{
+    p.y+=p.speed;
+    p.x+=p.tilt;
+    if(p.y>canvas.height)p.y=-10;
   });
 }
-
 let animation;
 function animate(){
   drawConfetti();
   updateConfetti();
-  animation = requestAnimationFrame(animate);
+  animation=requestAnimationFrame(animate);
 }
 
-card.addEventListener('click', ()=>{
-  if(animation) return; // 중복 방지
+ticket.addEventListener('click',()=>{
+  if(animation) return;
   createConfetti();
   animate();
-  // 2.5초 뒤 초대장으로 이동
+  ticket.style.transform="scale(0.97)";
   setTimeout(()=>{
     cancelAnimationFrame(animation);
     window.location.href = redirectUrl;
-  }, 2500);
+  },2500);
 });
 </script>
 
