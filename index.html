@@ -4,9 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wedding Invitation Ticket</title>
-<!-- ✅ 깔끔한 폰트 -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-
 <style>
 :root {
   --primary:#f7d8d0;
@@ -48,7 +46,7 @@ html,body{
   writing-mode:vertical-rl;
   transform:rotate(180deg);
   font-weight:600;
-  font-size:12px;
+  font-size:13px;
   color:#444;
   padding:8px 4px;
   letter-spacing:.1em;
@@ -57,7 +55,7 @@ html,body{
   flex:1;
   background:#fff;
   border-radius:12px;
-  padding:22px;
+  padding:22px 20px;
   position:relative;
 }
 .pass::after{
@@ -72,31 +70,43 @@ html,body{
 }
 .pass h2{
   font-weight:700;
-  font-size:18px;
-  margin-bottom:10px;
+  font-size:19px;
+  margin-bottom:12px;
   letter-spacing:.05em;
 }
-.names{text-align:center;}
+.names{
+  text-align:center;
+  margin-bottom:12px;
+}
 .name-pill{
   display:inline-block;
   background:var(--primary);
-  padding:6px 14px;
+  padding:7px 16px;
   border-radius:34px;
   font-weight:600;
-  margin:5px 0;
-  font-size:15px;
+  font-size:16px;
 }
 .meta{
   display:flex;
-  justify-content:space-between;
-  margin-top:14px;
+  justify-content:center;
+  align-items:center;
+  gap:25px; /* 날짜-시간 간격 줄이기 */
+  margin-top:10px;
   font-weight:600;
-  font-size:14px;
+  font-size:15px;
 }
-.meta small{display:block;color:var(--muted);font-weight:400;margin-bottom:4px;font-size:12px;}
-.place{margin-top:14px;}
+.meta small{
+  display:block;
+  color:var(--muted);
+  font-weight:400;
+  margin-bottom:2px;
+  font-size:12px;
+}
+.place{
+  margin-top:14px;
+}
 .place small{color:var(--muted);font-size:12px;}
-.place p{font-weight:600;line-height:1.4;}
+.place p{font-weight:600;line-height:1.4;font-size:15px;}
 .bottom{
   background:var(--primary);
   padding:12px;
@@ -122,21 +132,33 @@ html,body{
   margin:0;
   padding:10px 14px;
   border-bottom:1px solid #eee;
-  font-size:14px;
+  font-size:15px;
 }
 .receipt p:last-child{border-bottom:none;}
-.cta{margin-top:16px;color:#444;font-weight:500;font-size:14px;}
+.cta{
+  margin-top:18px;
+  color:#444;
+  font-weight:500;
+  font-size:15px;
+}
 canvas.petal{
   position:fixed;
   top:0;left:0;width:100%;height:100%;
   pointer-events:none;
-  z-index:1;
+  z-index:999;
+}
+@media (max-width:500px){
+  .ticket{width:90vw;}
+  .pass{padding:18px 14px;}
+  .name-pill{font-size:15px;}
+  .meta{gap:15px;font-size:14px;}
+  .place p{font-size:14px;}
+  .receipt p{font-size:14px;}
 }
 </style>
 </head>
 <body>
 
-<!-- 🌸 Flower Petal Canvas -->
 <canvas class="petal"></canvas>
 
 <div class="ticket-wrapper">
@@ -169,58 +191,67 @@ canvas.petal{
 </div>
 
 <script>
-// 🌸 Flower Petal Effect
+// 🌸 Flower Burst Effect on Click
+const redirectUrl = "https://REDIRECT_URL_HERE/"; // 청첩장 주소
 const canvas = document.querySelector('.petal');
 const ctx = canvas.getContext('2d');
 const petalImg = new Image();
-petalImg.src = "./petal.png"; // index.html과 같은 폴더에 꽃잎 이미지 업로드
+petalImg.src = "./petal.png";
 
 function resize(){
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
-window.addEventListener('resize', resize);
 resize();
+window.addEventListener('resize', resize);
 
-const petals=[];
-for(let i=0;i<40;i++){
-  petals.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height*2 - canvas.height,
-    w:20+Math.random()*15,
-    h:15+Math.random()*10,
-    xSpeed:0.6+Math.random()*0.8,
-    ySpeed:0.4+Math.random()*0.4,
-    flip:Math.random(),
-    flipSpeed:Math.random()*0.02
-  });
+let petals = [];
+let animation;
+function createBurst(){
+  petals = [];
+  const count = 70;
+  for(let i=0;i<count;i++){
+    petals.push({
+      x: window.innerWidth/2,
+      y: window.innerHeight/2,
+      w: 24+Math.random()*18,
+      h: 18+Math.random()*12,
+      xSpeed: (Math.random()-0.5)*6,
+      ySpeed: (Math.random()-0.5)*5 - 1,
+      rot: Math.random()*2*Math.PI,
+      rotSpeed: (Math.random()-0.5)*0.2,
+      gravity: 0.08+Math.random()*0.05,
+      opacity: 1
+    });
+  }
 }
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   petals.forEach(p=>{
-    if(p.y>canvas.height||p.x>canvas.width){
-      p.x=Math.random()*canvas.width;
-      p.y=-10;
-    }
-    ctx.globalAlpha=0.75;
-    const scaleX=0.6+Math.abs(Math.cos(p.flip))/3;
-    const scaleY=0.8+Math.abs(Math.sin(p.flip))/5;
-    ctx.drawImage(petalImg,p.x,p.y,p.w*scaleX,p.h*scaleY);
-    p.x+=p.xSpeed;
-    p.y+=p.ySpeed;
-    p.flip+=p.flipSpeed;
+    p.x += p.xSpeed;
+    p.y += p.ySpeed;
+    p.ySpeed += p.gravity;
+    p.rot += p.rotSpeed;
+    p.opacity -= 0.008;
+    ctx.globalAlpha = Math.max(p.opacity,0);
+    ctx.save();
+    ctx.translate(p.x,p.y);
+    ctx.rotate(p.rot);
+    ctx.drawImage(petalImg,-p.w/2,-p.h/2,p.w,p.h);
+    ctx.restore();
   });
-  requestAnimationFrame(draw);
+  petals = petals.filter(p=>p.opacity>0);
+  if(petals.length>0) animation=requestAnimationFrame(draw);
 }
-petalImg.onload = () => draw();
 
-// ✈️ Ticket click → Redirect
-const redirectUrl = "https://REDIRECT_URL_HERE/"; // 청첩장 주소로 바꾸기
 const ticket = document.getElementById('ticket');
 ticket.addEventListener('click',()=>{
+  if(animation) cancelAnimationFrame(animation);
+  createBurst();
+  draw();
   ticket.style.transform="scale(0.97)";
-  setTimeout(()=>window.location.href=redirectUrl,2000);
+  setTimeout(()=>window.location.href=redirectUrl,2500);
 });
 </script>
 
