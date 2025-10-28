@@ -90,7 +90,7 @@ html,body{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:25px; /* 날짜-시간 간격 줄이기 */
+  gap:25px;
   margin-top:10px;
   font-weight:600;
   font-size:15px;
@@ -191,7 +191,6 @@ canvas.petal{
 </div>
 
 <script>
-// 🌸 Flower Burst Effect on Click
 const redirectUrl = "https://REDIRECT_URL_HERE/"; // 청첩장 주소
 const canvas = document.querySelector('.petal');
 const ctx = canvas.getContext('2d');
@@ -207,20 +206,27 @@ window.addEventListener('resize', resize);
 
 let petals = [];
 let animation;
+
 function createBurst(){
   petals = [];
-  const count = 70;
+  const count = 140; // 🌸 꽃잎 개수 크게 증가
+  const radius = 150; // 퍼지는 원 반경
   for(let i=0;i<count;i++){
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.random() * radius;
+    const startX = window.innerWidth/2 + Math.cos(angle)*r;
+    const startY = window.innerHeight/2 + Math.sin(angle)*r;
+
     petals.push({
-      x: window.innerWidth/2,
-      y: window.innerHeight/2,
+      x: startX,
+      y: startY,
       w: 24+Math.random()*18,
       h: 18+Math.random()*12,
-      xSpeed: (Math.random()-0.5)*6,
-      ySpeed: (Math.random()-0.5)*5 - 1,
+      xSpeed: (Math.random()-0.5)*10,   // 좌우 확산 속도
+      ySpeed: (Math.random()-1.2)*6,    // 위쪽으로 퍼짐
       rot: Math.random()*2*Math.PI,
-      rotSpeed: (Math.random()-0.5)*0.2,
-      gravity: 0.08+Math.random()*0.05,
+      rotSpeed: (Math.random()-0.5)*0.25,
+      gravity: 0.05+Math.random()*0.1,
       opacity: 1
     });
   }
@@ -233,7 +239,7 @@ function draw(){
     p.y += p.ySpeed;
     p.ySpeed += p.gravity;
     p.rot += p.rotSpeed;
-    p.opacity -= 0.008;
+    p.opacity -= 0.006;
     ctx.globalAlpha = Math.max(p.opacity,0);
     ctx.save();
     ctx.translate(p.x,p.y);
@@ -251,7 +257,7 @@ ticket.addEventListener('click',()=>{
   createBurst();
   draw();
   ticket.style.transform="scale(0.97)";
-  setTimeout(()=>window.location.href=redirectUrl,2500);
+  setTimeout(()=>window.location.href=redirectUrl,3000);
 });
 </script>
 
