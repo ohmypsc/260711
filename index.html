@@ -6,183 +6,145 @@
 <title>Wedding Ticket</title>
 <style>
   :root{
-    --bg1:#fffdfb; --bg2:#efe9e5; --ink:#333; --muted:#777;
-    --primary:#f1d3c7; --primary-ink:#1a1a1a; --shadow:rgba(0,0,0,.18);
+    --bg1:#fffdfb; --bg2:#efe9e5;
+    --ink:#333; --muted:#777;
+    --primary:#f1d3c7; --shadow:rgba(0,0,0,.18);
   }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
-    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans KR',sans-serif;
-    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
     background:linear-gradient(180deg,var(--bg1),var(--bg2));
-    display:flex; align-items:center; justify-content:center;
+    font-family:'Noto Sans KR',sans-serif;
     overflow:hidden;
   }
 
-  /* 컨테이너 */
-  .stage{position:relative; width:100%; height:100%;}
-  .center{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);}
+  .stage{position:relative;width:100%;height:100%;}
+  .center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);}
 
-  /* 티켓 카드 */
   .ticket{
     width:min(92vw,360px);
-    background:#fff; border-radius:20px; box-shadow:0 12px 28px var(--shadow);
-    cursor:pointer; user-select:none;
-    transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
-    position:relative; isolation:isolate;
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 12px 28px var(--shadow);
+    cursor:pointer;
+    user-select:none;
+    transition:filter .25s ease;
+    position:relative;
   }
-  .ticket:hover{ transform:translateY(-6px); box-shadow:0 18px 34px var(--shadow); }
 
   .top{
     background:var(--primary);
-    padding:14px; border-radius:20px 20px 0 0; display:flex; gap:12px; align-items:stretch;
+    padding:14px;
+    border-radius:20px 20px 0 0;
+    display:flex;gap:12px;align-items:stretch;
   }
-  .top .bar{
-    writing-mode:vertical-rl; transform:rotate(180deg);
-    font-weight:700; font-size:12px; letter-spacing:.15em; color:#444;
-    display:flex; align-items:center; padding:6px 2px;
+  .bar{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-weight:700;font-size:12px;letter-spacing:.15em;color:#444;
+    display:flex;align-items:center;padding:6px 2px;
   }
-  .top .pass{
-    background:#fff; border-radius:12px; padding:20px; flex:1;
+  .pass{
+    background:#fff;
+    border-radius:12px;
+    padding:20px;
+    flex:1;
   }
-  .pass h2{margin:0 0 10px 0; font-size:18px; line-height:1.35}
-  .row{display:flex; gap:18px; align-items:center; margin:12px 0 16px}
-  .qr{width:84px; height:84px; border-radius:10px; background:var(--primary); display:grid; place-items:center; font-size:12px; color:#222}
-  .names{display:grid; gap:6px; text-align:center; margin:8px 0 0}
+  .pass h2{margin-bottom:10px;font-size:18px;line-height:1.35}
+  .names{text-align:center;margin-top:10px}
   .pill{
-    display:inline-block; min-width:180px; padding:8px 14px; border-radius:34px;
-    background:var(--primary); color:var(--primary-ink); font-weight:800; letter-spacing:.02em;
+    display:inline-block;padding:8px 16px;margin:4px 0;
+    border-radius:34px;background:var(--primary);font-weight:700;
   }
-  .meta{display:flex; justify-content:space-between; margin-top:10px}
-  .meta small{color:var(--muted); display:block; margin-bottom:6px}
-  .place{margin-top:12px}
+  .meta{display:flex;justify-content:space-between;margin-top:10px;font-weight:600}
+  .meta small{display:block;color:var(--muted);font-weight:400;margin-bottom:4px}
+  .place{margin-top:14px}
   .place small{color:var(--muted)}
-  .place p{margin:6px 0 0; font-weight:700}
+  .place p{font-weight:700}
 
   .bottom{
-    background:var(--primary); padding:12px; border-radius:0 0 20px 20px;
+    background:var(--primary);padding:12px;border-radius:0 0 20px 20px;
   }
-  .receipt{
-    background:#fff; border-radius:10px; overflow:hidden;
-  }
-  .receipt .row2{display:flex; align-items:center}
-  .rcpt-col{flex:1; border-right:1px solid #eee}
-  .rcpt-col:last-child{border-right:none}
-  .rcpt-col p{margin:0; padding:10px 12px; border-bottom:1px solid #eee; font-size:14px}
-  .rcpt-col p:last-child{border-bottom:none}
-  .stub{width:160px; height:120px; display:grid; place-items:center; font-weight:700; color:#444}
+  .receipt{background:#fff;border-radius:10px;overflow:hidden;}
+  .receipt p{margin:0;padding:8px 14px;border-bottom:1px solid #eee}
+  .receipt p:last-child{border-bottom:none}
+  .cta{text-align:center;margin-top:12px;color:#444;font-weight:600}
 
-  .cta{margin:14px 0; text-align:center; color:#444; font-weight:600}
-
-  /* 비행기(상단으로 날아감) */
+  /* 비행기 */
   .plane{
-    position:absolute; left:50%; top:100%;
-    transform:translate(-50%,0) rotate(-2deg);
-    width:min(22vw,120px); opacity:0;
-    pointer-events:none;
+    position:absolute;
+    left:50%;
+    top:100%;
+    transform:translate(-50%,0) rotate(-6deg);
+    width:100px;
+    opacity:0;
   }
 
-  /* 클릭 후 애니메이션 */
-  .flying .ticket{
-    animation:lift 3.2s ease forwards;
-    filter:blur(.2px);
-  }
-  .flying .plane{ animation:planeUp 3.2s ease forwards; }
+  /* 클릭 시 애니메이션 */
+  .flying .ticket{animation:lift 3.2s ease forwards;}
+  .flying .plane{animation:planeUp 3.2s ease forwards;}
 
   @keyframes lift{
     0%{transform:translate(-50%,-50%) scale(1)}
-    12%{transform:translate(-50%,-62%) scale(1.02)}
-    55%{transform:translate(-50%,-120%) scale(.96); opacity:1}
-    100%{transform:translate(-50%,-160%) scale(.9); opacity:0}
+    30%{transform:translate(-50%,-70%) scale(1.02)}
+    100%{transform:translate(-50%,-180%) scale(.9);opacity:0}
   }
   @keyframes planeUp{
-    0%{opacity:0; transform:translate(-50%,10vh) rotate(-2deg)}
-    12%{opacity:1}
-    100%{opacity:1; transform:translate(-50%,-80vh) rotate(-6deg)}
-  }
-
-  /* 접근성: 모션 최소화 선호 시 */
-  @media (prefers-reduced-motion:reduce){
-    .ticket,.plane{animation:none !important; transition:none !important}
+    0%{opacity:0;transform:translate(-50%,0) rotate(-6deg)}
+    20%{opacity:1}
+    100%{opacity:1;transform:translate(-50%,-80vh) rotate(-6deg)}
   }
 </style>
 </head>
 <body>
 
 <div class="stage">
-  <!-- 티켓 카드 -->
-  <div id="card" class="ticket center" role="button" aria-label="티켓 열기">
+  <div id="card" class="ticket center">
     <div class="top">
       <div class="bar">FIRST&nbsp;CLASS</div>
       <div class="pass">
         <h2>WEDDING PASS<br/>웨딩 탑승권</h2>
-        <div class="row">
-          <div class="qr">QR</div>
-          <div class="names">
-            <div class="pill">KIM SANGHO</div>
-            <div style="opacity:.6; font-weight:700">X</div>
-            <div class="pill">KIM SOLSU</div>
-          </div>
+        <div class="names">
+          <div class="pill">KIM SANGHO ✕ KIM SOLSU</div>
         </div>
         <div class="meta">
-          <div><small>DATE 날짜</small><strong>APRIL 23</strong></div>
-          <div><small>BOARDING 시간</small><strong>16 : 40</strong></div>
+          <div><small>DATE</small>APRIL 23</div>
+          <div><small>TIME</small>16:40</div>
         </div>
         <div class="place">
-          <small>GATE 장소</small>
-          <p>BOTANIC PARK<br/>WEDDING CALLA HALLS</p>
+          <small>PLACE</small>
+          <p>BOTANIC PARK WEDDING CALLA HALLS</p>
         </div>
       </div>
     </div>
-
     <div class="bottom">
       <div class="receipt">
-        <div class="row2">
-          <div class="rcpt-col">
-            <p style="text-align:center; color:#666;">Save The Date</p>
-            <p>23.APR.2025</p>
-            <p style="color:#666;">COME TO JOIN US</p>
-          </div>
-          <div class="stub">TICKET</div>
-        </div>
+        <p>Save The Date — 23.APR.2025</p>
+        <p>COME TO JOIN US 💍</p>
       </div>
     </div>
-
-    <div class="cta">티켓을 누르면 청첩장으로 이동합니다 💌</div>
+    <div class="cta">티켓을 눌러 초대장을 확인하세요 💌</div>
   </div>
 
-  <!-- 간단한 SVG 비행기 -->
-  <svg class="plane center" viewBox="0 0 128 64" aria-hidden="true">
-    <path d="M4 36 L80 36 L116 24 L120 28 L116 32 L80 40 L4 40 Z" fill="#222"/>
-    <circle cx="20" cy="40" r="3" fill="#fff"/>
+  <!-- 더 직관적인 비행기 모양 -->
+  <svg class="plane center" viewBox="0 0 100 50">
+    <path d="M0,20 L70,20 L100,25 L70,30 L0,30 Z" fill="#333"/>
+    <polygon points="60,20 80,0 75,20" fill="#333"/>
   </svg>
 </div>
 
 <script>
-  const redirectUrl = "https://REDIRECT_URL_HERE/"; // ← 이 부분을 네 초대장 주소로 바꿔줘!
+  const redirectUrl = "https://ohmypsc.github.io/260711-main/"; // <- 네 초대장 주소로 바꾸세요
   const stage = document.querySelector('.stage');
   const card = document.getElementById('card');
 
-  function startAnimationAndGo(){
-    // 이미 진행 중이면 중복 방지
+  card.addEventListener('click', ()=>{
     if(stage.classList.contains('flying')) return;
-    // 중앙 고정 후 애니메이션을 위해 transform 기준을 stage 중앙으로 이동
-    const rect = card.getBoundingClientRect();
-    card.style.position = 'absolute';
-    card.style.left = '50%';
-    card.style.top  = '50%';
-    card.style.transform = 'translate(-50%,-50%)';
-
     stage.classList.add('flying');
-
-    // 애니메이션이 끝난 뒤 이동
-    setTimeout(()=>{ window.location.href = redirectUrl; }, 3200);
-  }
-
-  card.addEventListener('click', startAnimationAndGo);
-  // 엔터키 접근성
-  card.tabIndex = 0;
-  card.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') startAnimationAndGo(); });
+    setTimeout(()=>{ window.location.href = redirectUrl; }, 3000);
+  });
 </script>
+
 </body>
 </html>
