@@ -261,8 +261,11 @@ ticket.addEventListener('click',()=>{
   if(animation) cancelAnimationFrame(animation);
   createBurst();
   draw();
-  // 클릭 즉시 이동
-  window.location.href = redirectUrl;
+
+  // 🌸 2초 후 이동 (꽃잎이 흩날린 뒤 이동)
+  setTimeout(()=>{
+    window.location.href = redirectUrl;
+  },2000);
 });
 </script>
 
