@@ -215,21 +215,20 @@ let animation;
 
 function createBurst(){
   petals = [];
-  const count = 140; // 🌸 꽃잎 개수 크게 증가
-  const radius = 150; // 퍼지는 원 반경
+  const count = 140;
+  const radius = 150;
   for(let i=0;i<count;i++){
     const angle = Math.random() * Math.PI * 2;
     const r = Math.random() * radius;
     const startX = window.innerWidth/2 + Math.cos(angle)*r;
     const startY = window.innerHeight/2 + Math.sin(angle)*r;
-
     petals.push({
       x: startX,
       y: startY,
       w: 24+Math.random()*18,
       h: 18+Math.random()*12,
-      xSpeed: (Math.random()-0.5)*10,   // 좌우 확산 속도
-      ySpeed: (Math.random()-1.2)*6,    // 위쪽으로 퍼짐
+      xSpeed: (Math.random()-0.5)*10,
+      ySpeed: (Math.random()-1.2)*6,
       rot: Math.random()*2*Math.PI,
       rotSpeed: (Math.random()-0.5)*0.25,
       gravity: 0.05+Math.random()*0.1,
@@ -262,8 +261,8 @@ ticket.addEventListener('click',()=>{
   if(animation) cancelAnimationFrame(animation);
   createBurst();
   draw();
-  ticket.style.transform="scale(0.97)";
-  setTimeout(()=>window.location.href=redirectUrl,3000);
+  // 클릭 즉시 이동
+  window.location.href = redirectUrl;
 });
 </script>
 
