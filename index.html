@@ -33,102 +33,79 @@ canvas.petal {
   z-index: 999;
 }
 
+/* 🎟️ 티켓 기본 스타일 */
 .ticket {
   display: flex;
+  flex-direction: column;
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 8px 18px var(--shadow);
+  border-radius: 18px;
+  box-shadow: 0 10px 25px var(--shadow);
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease;
-  width: min(95vw, 460px);
-  max-width: 460px;
-  position: relative;
+  width: min(95vw, 430px);
+  text-align: center;
 }
 .ticket:hover { transform: scale(1.02); }
 
-.ticket-left {
-  flex: 3;
-  padding: 24px 20px;
-  background: white;
-  transition: transform 0.6s ease;
+.ticket-top {
+  background: var(--primary);
+  padding: 22px 20px;
 }
-.ticket-left h1 {
-  font-size: 1.4rem;
+.ticket-top h1 {
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #b96e64;
-  margin-bottom: 8px;
+  color: #a65346;
+  margin-bottom: 6px;
 }
-.ticket-left h2 {
+.ticket-top h2 {
   font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 12px;
+  color: #333;
+  margin-bottom: 10px;
 }
-.ticket-left p {
+.ticket-top p {
   font-size: 0.95rem;
-  color: var(--muted);
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 📅 하단 정보 */
+.ticket-info {
+  padding: 18px 22px;
+  font-size: 0.9rem;
+  color: #333;
   line-height: 1.5;
 }
-.ticket-left .details {
-  margin-top: 18px;
-  font-size: 0.9rem;
-  color: #444;
-}
-.ticket-left .details div { margin-bottom: 4px; }
+.ticket-info div { margin-bottom: 6px; }
 
-.divider {
-  width: 2px;
-  background-image: linear-gradient(to bottom, #ccc 50%, transparent 50%);
-  background-size: 2px 8px;
-  background-repeat: repeat-y;
-  transition: transform 0.6s ease;
-  z-index: 3;
-}
-
-.ticket-right {
-  flex: 1.1;
-  background: var(--primary);
+/* 📱 QR코드 + 안내문구 */
+.ticket-bottom {
+  background: #fff6f3;
+  padding: 18px 0 26px;
+  border-top: 1px dashed #f3c6b8;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
-  color: #444;
-  font-weight: 600;
-  position: relative;
-  transition: transform 0.6s ease;
+  gap: 12px;
 }
-.ticket-right::before,
-.ticket-right::after {
-  content: "";
-  position: absolute;
-  left: -8px;
-  width: 16px;
-  height: 16px;
-  background: var(--bg1);
-  border-radius: 50%;
-}
-.ticket-right::before { top: 0; transform: translateY(-50%); }
-.ticket-right::after { bottom: 0; transform: translateY(50%); }
-
 #qrcode {
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
 }
-.cta { margin-top: 10px; font-size: 0.85rem; text-align: center; }
+.cta {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.5;
+}
 
-/* 🎞️ 찢어짐 애니메이션 */
-.ticket.split .ticket-left {
-  transform: translateX(-50px) rotate(-2deg);
-  opacity: 0.6;
-}
-.ticket.split .ticket-right {
-  transform: translateX(50px) rotate(2deg);
-  opacity: 0.6;
-}
-.ticket.split .divider {
-  transform: scaleY(0);
-  opacity: 0;
+/* 반응형 */
+@media (max-width:500px){
+  .ticket { width: 90vw; }
+  .ticket-top h1 { font-size: 1.2rem; }
+  .ticket-top h2 { font-size: 1.1rem; }
+  .ticket-info { font-size: 0.88rem; }
 }
 </style>
 </head>
@@ -137,19 +114,20 @@ canvas.petal {
 <canvas class="petal"></canvas>
 
 <div id="ticket" class="ticket">
-  <div class="ticket-left">
-    <h1>🎬 WEDDING TICKET</h1>
+  <div class="ticket-top">
+    <h1>💌 초대합니다</h1>
     <h2>백승철 ❤️ 오미영</h2>
     <p>저희 두 사람의 새로운 시작에<br>함께 해주시면 감사하겠습니다.</p>
-    <div class="details">
-      <div>📅 2026년 7월 11일 (토) 오전 11시</div>
-      <div>📍 유성컨벤션웨딩홀 3층 그랜드홀</div>
-    </div>
   </div>
-  <div class="divider"></div>
-  <div class="ticket-right">
+
+  <div class="ticket-info">
+    <div>📅 2026년 7월 11일 (토) 오전 11시</div>
+    <div>📍 유성컨벤션웨딩홀 3층 그랜드홀</div>
+  </div>
+
+  <div class="ticket-bottom">
     <div id="qrcode"></div>
-    <div class="cta">티켓을 눌러서 청첩장을 확인해 보세요🌸</div>
+    <div class="cta">티켓을 눌러서<br>청첩장을 확인해 보세요🌸</div>
   </div>
 </div>
 
@@ -157,10 +135,10 @@ canvas.petal {
 const redirectUrl = "https://ohmypsc.github.io/260711-main";
 new QRCode(document.getElementById("qrcode"), {
   text: redirectUrl,
-  width: 60,
-  height: 60,
+  width: 68,
+  height: 68,
   colorDark: "#333333",
-  colorLight: "#f7d8d0",
+  colorLight: "#fff6f3",
   correctLevel: QRCode.CorrectLevel.H
 });
 
@@ -224,11 +202,10 @@ function draw(){
 
 const ticket = document.getElementById('ticket');
 ticket.addEventListener('click', ()=>{
-  ticket.classList.add('split');
   if(animation) cancelAnimationFrame(animation);
   createBurst();
   draw();
-  setTimeout(()=> window.location.href = redirectUrl, 1000);
+  setTimeout(()=> window.location.href = redirectUrl, 1300);
 });
 </script>
 
