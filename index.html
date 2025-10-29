@@ -1,166 +1,134 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta property="og:type" content="website">
-<meta property="og:title" content="백승철❤️오미영 결혼합니다">
-<meta property="og:description" content="💍2026년 7월 11일 토요일 오전 11시 유성컨벤션웨딩홀 3층 그랜드홀">
-<meta property="og:image" content="https://ohmypsc.github.io/260711/thumbnail.jpg">
-<meta property="og:url" content="https://ohmypsc.github.io/260711/">
-<meta property="og:site_name" content="승철과 미영 결혼">
-<meta name="twitter:card" content="summary_large_image">
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Wedding Invitation Ticket</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>승철 ❤️ 미영 결혼식 초대장</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 :root {
-  --primary:#f7d8d0;
-  --bg1:#fffdfb;
-  --bg2:#f5eeea;
-  --ink:#2b2b2b;
-  --muted:#777;
-  --shadow:rgba(0,0,0,.12);
+  --primary: #f7d8d0;
+  --bg1: #fffdfb;
+  --bg2: #f5eeea;
+  --ink: #2b2b2b;
+  --muted: #777;
+  --shadow: rgba(0,0,0,0.12);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{
-  height:100%;
-  background:linear-gradient(180deg,var(--bg1),var(--bg2));
-  font-family:'Poppins','Noto Sans KR',sans-serif;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  color:var(--ink);
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--ink);
 }
-.ticket-wrapper{text-align:center;position:relative;z-index:2;}
-.ticket{
-  width:min(95vw,400px);
-  cursor:pointer;
-  box-shadow:0 10px 20px var(--shadow);
-  border-radius:22px;
-  overflow:hidden;
-  background:#fff;
-  transition:transform .3s ease;
+canvas.petal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 999;
 }
-.ticket:active{transform:scale(0.98);}
-.top{
-  background:var(--primary);
-  padding:10px;
-  display:flex;
-  border-radius:22px 22px 0 0;
+
+.ticket {
+  display: flex;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px var(--shadow);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  width: min(95vw, 460px);
+  max-width: 460px;
+  position: relative;
 }
-.bar{
-  writing-mode:vertical-rl;
-  transform:rotate(180deg);
-  font-weight:600;
-  font-size:13px;
-  color:#444;
-  padding:8px 4px;
-  letter-spacing:.1em;
+.ticket:hover { transform: scale(1.02); }
+
+.ticket-left {
+  flex: 3;
+  padding: 24px 20px;
+  background: white;
+  transition: transform 0.6s ease;
 }
-.pass{
-  flex:1;
-  background:#fff;
-  border-radius:12px;
-  padding:22px 20px;
-  position:relative;
+.ticket-left h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #b96e64;
+  margin-bottom: 8px;
 }
-.pass::after{
-  content:'';
-  position:absolute;
-  bottom:-11px;
-  left:0;
-  width:100%;
-  height:22px;
-  background:radial-gradient(circle at top center,transparent 10px,#fff 11px) repeat-x;
-  background-size:22px 22px;
+.ticket-left h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
-.pass h2{
-  font-weight:700;
-  font-size:19px;
-  margin-bottom:12px;
-  letter-spacing:.05em;
+.ticket-left p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.5;
 }
-.names{
-  text-align:center;
-  margin-bottom:12px;
+.ticket-left .details {
+  margin-top: 18px;
+  font-size: 0.9rem;
+  color: #444;
 }
-.name-pill{
-  display:inline-block;
-  background:var(--primary);
-  padding:7px 16px;
-  border-radius:34px;
-  font-weight:600;
-  font-size:16px;
+.ticket-left .details div { margin-bottom: 4px; }
+
+.divider {
+  width: 2px;
+  background-image: linear-gradient(to bottom, #ccc 50%, transparent 50%);
+  background-size: 2px 8px;
+  background-repeat: repeat-y;
+  transition: transform 0.6s ease;
+  z-index: 3;
 }
-.meta{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:25px;
-  margin-top:10px;
-  font-weight:600;
-  font-size:15px;
+
+.ticket-right {
+  flex: 1.1;
+  background: var(--primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #444;
+  font-weight: 600;
+  position: relative;
+  transition: transform 0.6s ease;
 }
-.meta small{
-  display:block;
-  color:var(--muted);
-  font-weight:400;
-  margin-bottom:2px;
-  font-size:12px;
+.ticket-right::before,
+.ticket-right::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+  background: var(--bg1);
+  border-radius: 50%;
 }
-.place{
-  margin-top:14px;
+.ticket-right::before { top: 0; transform: translateY(-50%); }
+.ticket-right::after { bottom: 0; transform: translateY(50%); }
+
+#qrcode {
+  width: 60px;
+  height: 60px;
 }
-.place small{color:var(--muted);font-size:12px;}
-.place p{font-weight:600;line-height:1.4;font-size:15px;}
-.bottom{
-  background:var(--primary);
-  padding:12px;
-  border-radius:0 0 22px 22px;
-  position:relative;
+.cta { margin-top: 10px; font-size: 0.85rem; text-align: center; }
+
+/* 🎞️ 찢어짐 애니메이션 */
+.ticket.split .ticket-left {
+  transform: translateX(-50px) rotate(-2deg);
+  opacity: 0.6;
 }
-.bottom::before{
-  content:'';
-  position:absolute;
-  top:-11px;
-  left:0;
-  width:100%;
-  height:22px;
-  background:radial-gradient(circle at bottom center,transparent 10px,#fff 11px) repeat-x;
-  background-size:22px 22px;
+.ticket.split .ticket-right {
+  transform: translateX(50px) rotate(2deg);
+  opacity: 0.6;
 }
-.receipt{
-  background:#fff;
-  border-radius:10px;
-  overflow:hidden;
-}
-.receipt p{
-  margin:0;
-  padding:10px 14px;
-  border-bottom:1px solid #eee;
-  font-size:15px;
-}
-.receipt p:last-child{border-bottom:none;}
-.cta{
-  margin-top:18px;
-  color:#444;
-  font-weight:500;
-  font-size:15px;
-}
-canvas.petal{
-  position:fixed;
-  top:0;left:0;width:100%;height:100%;
-  pointer-events:none;
-  z-index:999;
-}
-@media (max-width:500px){
-  .ticket{width:90vw;}
-  .pass{padding:18px 14px;}
-  .name-pill{font-size:15px;}
-  .meta{gap:15px;font-size:14px;}
-  .place p{font-size:14px;}
-  .receipt p{font-size:14px;}
+.ticket.split .divider {
+  transform: scaleY(0);
+  opacity: 0;
 }
 </style>
 </head>
@@ -168,36 +136,34 @@ canvas.petal{
 
 <canvas class="petal"></canvas>
 
-<div class="ticket-wrapper">
-  <div id="ticket" class="ticket">
-    <div class="top">
-      <div class="bar">FIRST CLASS</div>
-      <div class="pass">
-        <h2>WEDDING PASS<br>웨딩 탑승권</h2>
-        <div class="names">
-          <div class="name-pill">백승철 ✕ 오미영</div>
-        </div>
-        <div class="meta">
-          <div><small>날짜</small>2026년 7월 11일 토요일</div>
-          <div><small>시간</small>오전 11시</div>
-        </div>
-        <div class="place">
-          <small>장소</small>
-          <p>유성컨벤션웨딩홀<br>3층 그랜드홀</p>
-        </div>
-      </div>
+<div id="ticket" class="ticket">
+  <div class="ticket-left">
+    <h1>🎬 WEDDING TICKET</h1>
+    <h2>백승철 ❤️ 오미영</h2>
+    <p>저희 두 사람의 새로운 시작에<br>함께 해주시면 감사하겠습니다.</p>
+    <div class="details">
+      <div>📅 2026년 7월 11일 (토) 오전 11시</div>
+      <div>📍 유성컨벤션웨딩홀 3층 그랜드홀</div>
     </div>
-    <div class="bottom">
-      <div class="receipt">
-        <p>결혼식에 초대합니다.💍</p>
-      </div>
-    </div>
-    <div class="cta">티켓을 눌러 청첩장을 확인하세요 💌</div>
+  </div>
+  <div class="divider"></div>
+  <div class="ticket-right">
+    <div id="qrcode"></div>
+    <div class="cta">클릭해서 입장 🌸</div>
   </div>
 </div>
 
 <script>
-const redirectUrl = "https://ohmypsc.github.io/260711-main"; // 청첩장 주소
+const redirectUrl = "https://ohmypsc.github.io/260711-main";
+new QRCode(document.getElementById("qrcode"), {
+  text: redirectUrl,
+  width: 60,
+  height: 60,
+  colorDark: "#333333",
+  colorLight: "#f7d8d0",
+  correctLevel: QRCode.CorrectLevel.H
+});
+
 const canvas = document.querySelector('.petal');
 const ctx = canvas.getContext('2d');
 const petalImg = new Image();
@@ -215,8 +181,8 @@ let animation;
 
 function createBurst(){
   petals = [];
-  const count = 140;
-  const radius = 150;
+  const count = 130;
+  const radius = 160;
   for(let i=0;i<count;i++){
     const angle = Math.random() * Math.PI * 2;
     const r = Math.random() * radius;
@@ -225,8 +191,8 @@ function createBurst(){
     petals.push({
       x: startX,
       y: startY,
-      w: 24+Math.random()*18,
-      h: 18+Math.random()*12,
+      w: 22+Math.random()*16,
+      h: 16+Math.random()*10,
       xSpeed: (Math.random()-0.5)*10,
       ySpeed: (Math.random()-1.2)*6,
       rot: Math.random()*2*Math.PI,
@@ -257,15 +223,12 @@ function draw(){
 }
 
 const ticket = document.getElementById('ticket');
-ticket.addEventListener('click',()=>{
+ticket.addEventListener('click', ()=>{
+  ticket.classList.add('split');
   if(animation) cancelAnimationFrame(animation);
   createBurst();
   draw();
-
-  // 🌸 2초 후 이동 (꽃잎이 흩날린 뒤 이동)
-  setTimeout(()=>{
-    window.location.href = redirectUrl;
-  },2000);
+  setTimeout(()=> window.location.href = redirectUrl, 1000);
 });
 </script>
 
