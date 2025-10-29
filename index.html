@@ -3,22 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>초대합니다 💌</title>
+<title>초대합니다💌</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 :root {
-  --primary: #f7d8d0;
-  --bg1: #fffdfb;
-  --bg2: #f5eeea;
-  --ink: #2b2b2b;
+  --primary: #fdfaf5;
+  --accent: #3d7ecb;
+  --ink: #222;
   --muted: #777;
   --shadow: rgba(0,0,0,.15);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
   height: 100%;
-  background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  background: var(--primary);
   font-family: 'Poppins', 'Noto Sans KR', sans-serif;
   display: flex;
   align-items: center;
@@ -33,89 +32,82 @@ canvas.petal {
   z-index: 10;
 }
 
-/* 💌 봉투 전체 */
-.envelope {
+.boarding-pass {
   position: relative;
-  width: min(90vw, 380px);
-  height: 260px;
-  background: var(--primary);
-  border-radius: 12px;
+  width: min(92vw, 420px);
+  background: #fff;
+  border-radius: 14px;
   box-shadow: 0 8px 25px var(--shadow);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
-.envelope:hover { transform: scale(1.03); }
+.boarding-pass:hover { transform: scale(1.03); }
 
-/* 💌 봉투 윗부분 (뚜껑) */
-.envelope-top {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 55%;
-  background: var(--primary);
-  clip-path: polygon(0 0, 50% 100%, 100% 0);
-  transform-origin: top;
-  transition: transform 0.8s ease;
-  z-index: 2;
-}
-
-/* 📜 안쪽 편지 */
-.letter {
-  position: absolute;
-  top: 100%; left: 0;
-  width: 100%; height: 100%;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  text-align: center;
-  padding: 24px 20px;
-  transition: transform 1s ease;
-  transform: translateY(0);
-  z-index: 1;
-}
-.letter h1 {
-  font-size: 1.3rem;
-  color: #a65346;
-  margin-bottom: 8px;
-}
-.letter h2 {
-  font-size: 1.1rem;
+.header {
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 18px;
   font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.ticket-info {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  border-bottom: 2px dashed #ddd;
+}
+
+.ticket-info div {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.center-text {
+  text-align: center;
+  padding: 16px;
+}
+.center-text h1 {
+  font-size: 1.3rem;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.center-text h2 {
+  font-size: 1.1rem;
   margin-bottom: 10px;
 }
-.letter p {
+.center-text p {
   font-size: 0.9rem;
-  color: #444;
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-.details {
-  font-size: 0.88rem;
   color: #555;
-  margin-bottom: 12px;
+  line-height: 1.5;
 }
-.details div { margin-bottom: 4px; }
 
 .qr {
-  margin-top: 10px;
+  text-align: center;
+  margin: 12px 0;
 }
 #qrcode {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   margin: 0 auto;
 }
-.cta {
-  font-size: 0.85rem;
-  margin-top: 10px;
-  color: #333;
-}
 
-/* 💌 열릴 때 애니메이션 */
-.envelope.open .envelope-top {
-  transform: rotateX(180deg);
-}
-.envelope.open .letter {
-  transform: translateY(-105%);
+.footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding-bottom: 14px;
 }
 </style>
 </head>
@@ -123,36 +115,60 @@ canvas.petal {
 
 <canvas class="petal"></canvas>
 
-<div id="envelope" class="envelope">
-  <div class="envelope-top"></div>
-  <div class="letter">
+<div id="boardingPass" class="boarding-pass">
+  <div class="header">WEDDING BOARDING PASS ✈️</div>
+  <div class="ticket-info">
+    <div>
+      <span class="label">FROM</span>
+      <span class="value">SEOUL</span>
+    </div>
+    <div>
+      <span class="label">TO</span>
+      <span class="value">LOVE</span>
+    </div>
+    <div>
+      <span class="label">DATE</span>
+      <span class="value">2026.07.11</span>
+    </div>
+    <div>
+      <span class="label">TIME</span>
+      <span class="value">11:00 AM</span>
+    </div>
+    <div>
+      <span class="label">GATE</span>
+      <span class="value">3층 그랜드홀</span>
+    </div>
+    <div>
+      <span class="label">SEAT</span>
+      <span class="value">유성컨벤션웨딩홀</span>
+    </div>
+  </div>
+
+  <div class="center-text">
     <h1>초대합니다 💌</h1>
     <h2>백승철 ❤️ 오미영</h2>
-    <p>저희 두 사람의 새로운 시작에<br>함께 해주시면 감사하겠습니다.</p>
-    <div class="details">
-      <div>📅 2026년 7월 11일 (토) 오전 11시</div>
-      <div>📍 유성컨벤션웨딩홀 3층 그랜드홀</div>
-    </div>
-    <div class="qr" id="qrcode"></div>
-    <div class="cta">편지를 클릭하면 청첩장이 열립니다 🌸</div>
+    <p>저희 두 사람의 새로운 시작에 함께해 주시면 감사하겠습니다.</p>
   </div>
+
+  <div class="qr" id="qrcode"></div>
+  <div class="footer">누르면 청첩장이 열립니다 🌸</div>
 </div>
 
 <script>
 const redirectUrl = "https://ohmypsc.github.io/260711-main";
 new QRCode(document.getElementById("qrcode"), {
   text: redirectUrl,
-  width: 64,
-  height: 64,
-  colorDark: "#333333",
-  colorLight: "#fff6f3",
+  width: 72,
+  height: 72,
+  colorDark: "#3d7ecb",
+  colorLight: "#ffffff",
   correctLevel: QRCode.CorrectLevel.H
 });
 
 const canvas = document.querySelector('.petal');
 const ctx = canvas.getContext('2d');
 const petalImg = new Image();
-petalImg.src = "./petal.png";
+petalImg.src = './petal.png';
 
 function resize() {
   canvas.width = window.innerWidth;
@@ -165,25 +181,26 @@ let petals = [];
 let animation;
 function createBurst() {
   petals = [];
-  const count = 130;
-  const radius = 160;
+  const count = 120;
+  const radius = 140;
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
     const r = Math.random() * radius;
     petals.push({
       x: window.innerWidth / 2 + Math.cos(angle) * r,
       y: window.innerHeight / 2 + Math.sin(angle) * r,
-      w: 22 + Math.random() * 16,
-      h: 16 + Math.random() * 10,
-      xSpeed: (Math.random() - 0.5) * 10,
-      ySpeed: (Math.random() - 1.2) * 6,
+      w: 20 + Math.random() * 12,
+      h: 14 + Math.random() * 8,
+      xSpeed: (Math.random() - 0.5) * 8,
+      ySpeed: (Math.random() - 1.1) * 5,
       rot: Math.random() * 2 * Math.PI,
       rotSpeed: (Math.random() - 0.5) * 0.25,
-      gravity: 0.05 + Math.random() * 0.1,
+      gravity: 0.05 + Math.random() * 0.08,
       opacity: 1
     });
   }
 }
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   petals.forEach(p => {
@@ -191,7 +208,7 @@ function draw() {
     p.y += p.ySpeed;
     p.ySpeed += p.gravity;
     p.rot += p.rotSpeed;
-    p.opacity -= 0.006;
+    p.opacity -= 0.005;
     ctx.globalAlpha = Math.max(p.opacity, 0);
     ctx.save();
     ctx.translate(p.x, p.y);
@@ -203,13 +220,11 @@ function draw() {
   if (petals.length > 0) animation = requestAnimationFrame(draw);
 }
 
-const envelope = document.getElementById('envelope');
-envelope.addEventListener('click', () => {
-  envelope.classList.add('open');
+document.getElementById('boardingPass').addEventListener('click', () => {
   if (animation) cancelAnimationFrame(animation);
   createBurst();
   draw();
-  setTimeout(() => window.location.href = redirectUrl, 1500);
+  setTimeout(() => window.location.href = redirectUrl, 1000);
 });
 </script>
 
