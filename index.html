@@ -4,27 +4,31 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>초대합니다💌</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet" />
 <style>
 :root {
-  --primary: #fdfaf5;
-  --accent: #3d7ecb;
-  --ink: #222;
-  --muted: #777;
-  --shadow: rgba(0,0,0,.15);
+  --theme-color: #ff8585;
+  --theme-bg-color: #ffe7e7;
+  --alt-color: #c28080;
+  --alt-bg-color: #f4f0f0;
+  --dark-color: #000000;
+  --muted-color: #7a6666;
+  --shadow: rgba(0, 0, 0, 0.12);
 }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
   height: 100%;
-  background: var(--primary);
-  font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+  background: var(--theme-bg-color) url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+  font-family: 'Noto Serif KR', serif;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--dark-color);
   overflow: hidden;
-  color: var(--ink);
 }
+
+/* 🌸 꽃잎 캔버스 */
 canvas.petal {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -32,82 +36,94 @@ canvas.petal {
   z-index: 10;
 }
 
-.boarding-pass {
+/* 🎟 초대 티켓 */
+.ticket {
   position: relative;
   width: min(92vw, 420px);
   background: #fff;
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: 0 8px 25px var(--shadow);
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease;
+  text-align: center;
 }
-.boarding-pass:hover { transform: scale(1.03); }
+.ticket:hover { transform: scale(1.03); }
 
+/* 절취선 효과 */
+.ticket::before, .ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  background: var(--theme-bg-color);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+.ticket::before { left: -9px; }
+.ticket::after { right: -9px; }
+
+/* 상단 헤더 */
 .header {
-  background: var(--accent);
+  background: var(--theme-color);
   color: #fff;
-  padding: 10px 18px;
+  padding: 12px 18px;
   font-weight: 600;
   letter-spacing: 1px;
 }
 
+/* 정보 영역 */
 .ticket-info {
   padding: 18px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  border-bottom: 2px dashed #ddd;
+  border-bottom: 2px dashed var(--alt-bg-color);
 }
-
 .ticket-info div {
   display: flex;
   flex-direction: column;
 }
-
 .label {
-  font-size: 0.75rem;
-  color: var(--muted);
+  font-size: 0.8rem;
+  color: var(--muted-color);
 }
 .value {
   font-size: 1rem;
   font-weight: 600;
+  color: var(--dark-color);
 }
 
+/* 본문 */
 .center-text {
   text-align: center;
-  padding: 16px;
+  padding: 24px 18px;
 }
 .center-text h1 {
   font-size: 1.3rem;
-  color: var(--accent);
-  margin-bottom: 6px;
+  color: var(--theme-color);
+  margin-bottom: 10px;
 }
 .center-text h2 {
   font-size: 1.1rem;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 .center-text p {
   font-size: 0.9rem;
-  color: #555;
-  line-height: 1.5;
+  color: var(--muted-color);
+  line-height: 1.6;
 }
 
-.qr {
-  text-align: center;
-  margin: 12px 0;
-}
-#qrcode {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto;
-}
-
+/* 하단 안내 */
 .footer {
   text-align: center;
   font-size: 0.85rem;
-  color: var(--muted);
-  padding-bottom: 14px;
+  color: var(--alt-color);
+  padding: 12px 0 14px;
+  background: var(--alt-bg-color);
+  border-top: 1px dashed var(--alt-bg-color);
 }
 </style>
 </head>
@@ -115,60 +131,45 @@ canvas.petal {
 
 <canvas class="petal"></canvas>
 
-<div id="boardingPass" class="boarding-pass">
-  <div class="header">WEDDING BOARDING PASS ✈️</div>
+<div id="inviteTicket" class="ticket">
+  <div class="header">결혼식 초대장 💒</div>
+
   <div class="ticket-info">
     <div>
-      <span class="label">FROM</span>
-      <span class="value">SEOUL</span>
+      <span class="label">날짜</span>
+      <span class="value">2026년 7월 11일 (토)</span>
     </div>
     <div>
-      <span class="label">TO</span>
-      <span class="value">LOVE</span>
+      <span class="label">시간</span>
+      <span class="value">오전 11시</span>
     </div>
     <div>
-      <span class="label">DATE</span>
-      <span class="value">2026.07.11</span>
-    </div>
-    <div>
-      <span class="label">TIME</span>
-      <span class="value">11:00 AM</span>
-    </div>
-    <div>
-      <span class="label">GATE</span>
-      <span class="value">3층 그랜드홀</span>
-    </div>
-    <div>
-      <span class="label">SEAT</span>
+      <span class="label">장소</span>
       <span class="value">유성컨벤션웨딩홀</span>
+    </div>
+    <div>
+      <span class="label">홀</span>
+      <span class="value">3층 그랜드홀</span>
     </div>
   </div>
 
   <div class="center-text">
     <h1>초대합니다 💌</h1>
-    <h2>백승철 ❤️ 오미영</h2>
-    <p>저희 두 사람의 새로운 시작에 함께해 주시면 감사하겠습니다.</p>
+    <h2>백승철 · 오미영</h2>
+    <p>두 사람이 사랑으로 맺어지는<br>이 뜻깊은 자리에 함께해 주시면 감사하겠습니다.</p>
   </div>
 
-  <div class="qr" id="qrcode"></div>
-  <div class="footer">누르면 청첩장이 열립니다 🌸</div>
+  <div class="footer">티켓을 눌러 청첩장으로 이동 🌸</div>
 </div>
 
 <script>
 const redirectUrl = "https://ohmypsc.github.io/260711-main";
-new QRCode(document.getElementById("qrcode"), {
-  text: redirectUrl,
-  width: 72,
-  height: 72,
-  colorDark: "#3d7ecb",
-  colorLight: "#ffffff",
-  correctLevel: QRCode.CorrectLevel.H
-});
 
+/* 🌸 기존 꽃잎 터짐 애니메이션 그대로 */
 const canvas = document.querySelector('.petal');
 const ctx = canvas.getContext('2d');
 const petalImg = new Image();
-petalImg.src = './petal.png';
+petalImg.src = './petal.png'; // 동일한 파일 그대로 사용
 
 function resize() {
   canvas.width = window.innerWidth;
@@ -220,7 +221,7 @@ function draw() {
   if (petals.length > 0) animation = requestAnimationFrame(draw);
 }
 
-document.getElementById('boardingPass').addEventListener('click', () => {
+document.getElementById('inviteTicket').addEventListener('click', () => {
   if (animation) cancelAnimationFrame(animation);
   createBurst();
   draw();
