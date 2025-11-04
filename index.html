@@ -3,127 +3,128 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>초대합니다💌</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet" />
+<title>결혼식 초대장</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Nanum+Myeongjo:wght@700&display=swap" rel="stylesheet" />
 <style>
 :root {
-  --theme-color: #ff8585;
-  --theme-bg-color: #ffe7e7;
-  --alt-color: #c28080;
-  --alt-bg-color: #f4f0f0;
-  --dark-color: #000000;
-  --muted-color: #7a6666;
-  --shadow: rgba(0, 0, 0, 0.12);
+  --paper-bg: #fdfcf9;
+  --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+  --ink: #2e2b28;
+  --muted: #605a54;
+  --accent: #c2a36b;
+  --border: #e5ddcf;
+  --shadow: rgba(0, 0, 0, 0.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
-  height: 100%;
-  background: var(--theme-bg-color) url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+
+body {
+  background: radial-gradient(circle at center, #fdfbf8 0%, #f7f4ef 100%);
   font-family: 'Noto Serif KR', serif;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: var(--dark-color);
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  color: var(--ink);
   overflow: hidden;
 }
 
 /* 🌸 꽃잎 캔버스 */
 canvas.petal {
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   pointer-events: none;
   z-index: 10;
 }
 
-/* 🎟 초대 티켓 */
-.ticket {
+/* 💌 카드 */
+.invite-card {
   position: relative;
-  width: min(92vw, 420px);
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 25px var(--shadow);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+  background: var(--paper-bg) var(--texture);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px var(--shadow);
+  padding: 70px 52px;
+  max-width: 470px;
+  width: 100%;
   text-align: center;
+  z-index: 20;
+  transition: transform 0.3s ease;
 }
-.ticket:hover { transform: scale(1.03); }
-
-/* 절취선 효과 */
-.ticket::before, .ticket::after {
+.invite-card::before {
   content: "";
   position: absolute;
-  top: 50%;
-  width: 18px;
-  height: 18px;
-  background: var(--theme-bg-color);
-  border-radius: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
+  top: 8px; left: 8px; right: 8px; bottom: 8px;
+  border: 1px solid #d9c9aa;
+  border-radius: 14px;
+  opacity: 0.6;
 }
-.ticket::before { left: -9px; }
-.ticket::after { right: -9px; }
+.invite-card:hover { transform: scale(1.02); }
 
-/* 상단 헤더 */
-.header {
-  background: var(--theme-color);
-  color: #fff;
-  padding: 12px 18px;
+/* 🌼 상단 작은 꽃 아이콘 */
+.flower-icon {
+  font-size: 1.8rem;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+/* 이름 */
+.names {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 1.4px;
+  margin-bottom: 22px;
+}
+
+/* 구분선 */
+.divider {
+  width: 46px;
+  height: 1.8px;
+  background: var(--accent);
+  margin: 0 auto 40px;
+  opacity: 0.9;
+}
+
+/* 정보 */
+.info-line {
+  font-size: 1.25rem;
+  line-height: 2.4;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.info-label {
+  color: var(--ink);
   font-weight: 600;
-  letter-spacing: 1px;
+  margin-right: 10px;
 }
 
-/* 정보 영역 */
-.ticket-info {
-  padding: 18px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  border-bottom: 2px dashed var(--alt-bg-color);
-}
-.ticket-info div {
-  display: flex;
-  flex-direction: column;
-}
-.label {
-  font-size: 0.8rem;
-  color: var(--muted-color);
-}
-.value {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--dark-color);
-}
-
-/* 본문 */
-.center-text {
-  text-align: center;
-  padding: 24px 18px;
-}
-.center-text h1 {
-  font-size: 1.3rem;
-  color: var(--theme-color);
-  margin-bottom: 10px;
-}
-.center-text h2 {
-  font-size: 1.1rem;
-  margin-bottom: 14px;
-}
-.center-text p {
-  font-size: 0.9rem;
-  color: var(--muted-color);
-  line-height: 1.6;
-}
-
-/* 하단 안내 */
+/* 하단 버튼 */
 .footer {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--alt-color);
-  padding: 12px 0 14px;
-  background: var(--alt-bg-color);
-  border-top: 1px dashed var(--alt-bg-color);
+  margin-top: 54px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border);
+  font-size: 1.15rem;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.footer:hover { color: #b89455; }
+
+@media (max-width: 480px) {
+  .invite-card {
+    padding: 54px 28px;
+  }
+  .names {
+    font-size: 1.6rem;
+  }
+  .info-line {
+    font-size: 1.1rem;
+  }
 }
 </style>
 </head>
@@ -131,45 +132,27 @@ canvas.petal {
 
 <canvas class="petal"></canvas>
 
-<div id="inviteTicket" class="ticket">
-  <div class="header">결혼식 초대장 💒</div>
+<div id="inviteCard" class="invite-card">
+  <div class="flower-icon">🌸</div>
+  <div class="names">백승철 · 오미영</div>
+  <div class="divider"></div>
 
-  <div class="ticket-info">
-    <div>
-      <span class="label">날짜</span>
-      <span class="value">2026년 7월 11일 (토)</span>
-    </div>
-    <div>
-      <span class="label">시간</span>
-      <span class="value">오전 11시</span>
-    </div>
-    <div>
-      <span class="label">장소</span>
-      <span class="value">유성컨벤션웨딩홀</span>
-    </div>
-    <div>
-      <span class="label">홀</span>
-      <span class="value">3층 그랜드홀</span>
-    </div>
-  </div>
+  <div class="info-line"><span class="info-label">날짜</span>2026년 7월 11일 (토)</div>
+  <div class="info-line"><span class="info-label">시간</span>오전 11시</div>
+  <div class="info-line"><span class="info-label">장소</span>유성컨벤션웨딩홀</div>
+  <div class="info-line"><span class="info-label">홀</span>3층 그랜드홀</div>
 
-  <div class="center-text">
-    <h1>초대합니다 💌</h1>
-    <h2>백승철 · 오미영</h2>
-    <p>두 사람이 사랑으로 맺어지는<br>이 뜻깊은 자리에 함께해 주시면 감사하겠습니다.</p>
-  </div>
-
-  <div class="footer">티켓을 눌러 청첩장으로 이동 🌸</div>
+  <div class="footer">🌸눌러서 청첩장을 확인해 보세요🌸</div>
 </div>
 
 <script>
 const redirectUrl = "https://ohmypsc.github.io/260711-main";
 
-/* 🌸 기존 꽃잎 터짐 애니메이션 그대로 */
+/* 🌸 클릭 시 꽃잎 터짐 */
 const canvas = document.querySelector('.petal');
 const ctx = canvas.getContext('2d');
 const petalImg = new Image();
-petalImg.src = './petal.png'; // 동일한 파일 그대로 사용
+petalImg.src = './petal.png';
 
 function resize() {
   canvas.width = window.innerWidth;
@@ -192,8 +175,8 @@ function createBurst() {
       y: window.innerHeight / 2 + Math.sin(angle) * r,
       w: 20 + Math.random() * 12,
       h: 14 + Math.random() * 8,
-      xSpeed: (Math.random() - 0.5) * 8,
-      ySpeed: (Math.random() - 1.1) * 5,
+      xSpeed: (Math.random() - 0.5) * 7,
+      ySpeed: (Math.random() - 1.2) * 5,
       rot: Math.random() * 2 * Math.PI,
       rotSpeed: (Math.random() - 0.5) * 0.25,
       gravity: 0.05 + Math.random() * 0.08,
@@ -221,7 +204,7 @@ function draw() {
   if (petals.length > 0) animation = requestAnimationFrame(draw);
 }
 
-document.getElementById('inviteTicket').addEventListener('click', () => {
+document.getElementById('inviteCard').addEventListener('click', () => {
   if (animation) cancelAnimationFrame(animation);
   createBurst();
   draw();
