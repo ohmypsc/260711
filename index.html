@@ -54,32 +54,27 @@ body {
 }
 .invite-card:hover { transform: scale(1.02); }
 
-/* 🌸 상단 아이콘 (고급스러운 SVG + 은은한 빛 효과) */
-.flower-icon {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 24px;
-  animation: glow 3.5s ease-in-out infinite alternate;
-}
-@keyframes glow {
-  0% { opacity: 0.8; filter: drop-shadow(0 0 2px #c2a36b); transform: scale(1);}
-  100% { opacity: 1; filter: drop-shadow(0 0 8px #e9cf91); transform: scale(1.05);}
-}
-
-/* 이름 */
+/* 🌸 이름 강조 */
 .names {
   font-family: 'Nanum Myeongjo', serif;
-  font-size: 1.9rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  color: var(--ink);
-  letter-spacing: 1.4px;
-  margin-bottom: 22px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 26px;
+  text-shadow: 0 2px 6px rgba(194,163,107,0.25);
+  animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* 구분선 */
 .divider {
   width: 46px;
-  height: 1.8px;
+  height: 2px;
   background: var(--accent);
   margin: 0 auto 40px;
   opacity: 0.9;
@@ -126,7 +121,7 @@ canvas.petal {
 /* 📱 모바일 대응 */
 @media (max-width: 480px) {
   .invite-card { padding: 54px 28px; }
-  .names { font-size: 1.6rem; }
+  .names { font-size: 1.8rem; letter-spacing: 1.4px; }
   .info-line { font-size: 1.1rem; }
   .footer {
     font-size: 1.2rem;
@@ -140,13 +135,6 @@ canvas.petal {
 <body>
 
 <div id="inviteCard" class="invite-card">
-  <div class="flower-icon">
-    <!-- ✨ 금빛 벚꽃 SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="#c2a36b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M256 32c30 60 30 120 0 180-30-60-30-120 0-180zM256 480c-30-60-30-120 0-180 30 60 30 120 0 180zM32 256c60-30 120-30 180 0-60 30-120 30-180 0zM480 256c-60 30-120 30-180 0 60-30 120-30 180 0zM128 128c45 45 90 90 0 0 45-45 90-45 135 0-45 45-90 45-135 0zM384 384c-45-45-90-90 0 0-45 45-90 45-135 0 45-45 90-45 135 0z"/>
-    </svg>
-  </div>
-
   <div class="names">백승철 · 오미영</div>
   <div class="divider"></div>
 
