@@ -24,7 +24,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100dvh; /* ✅ 모바일 뷰포트 보정 */
+  min-height: 100dvh;
   padding: 24px;
   color: var(--ink);
   overflow: hidden;
@@ -54,11 +54,16 @@ body {
 }
 .invite-card:hover { transform: scale(1.02); }
 
-/* 🌼 상단 작은 꽃 아이콘 */
+/* 🌸 상단 아이콘 (고급스러운 SVG + 은은한 빛 효과) */
 .flower-icon {
-  font-size: 1.8rem;
-  color: var(--accent);
-  margin-bottom: 18px;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 24px;
+  animation: glow 3.5s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  0% { opacity: 0.8; filter: drop-shadow(0 0 2px #c2a36b); transform: scale(1);}
+  100% { opacity: 1; filter: drop-shadow(0 0 8px #e9cf91); transform: scale(1.05);}
 }
 
 /* 이름 */
@@ -98,7 +103,7 @@ body {
   margin-top: 54px;
   padding-top: 26px;
   border-top: 1px solid var(--border);
-  font-size: 1.3rem; /* ✅ 크기 확대 */
+  font-size: 1.3rem;
   color: var(--accent);
   font-weight: 600;
   cursor: pointer;
@@ -120,15 +125,9 @@ canvas.petal {
 
 /* 📱 모바일 대응 */
 @media (max-width: 480px) {
-  .invite-card {
-    padding: 54px 28px;
-  }
-  .names {
-    font-size: 1.6rem;
-  }
-  .info-line {
-    font-size: 1.1rem;
-  }
+  .invite-card { padding: 54px 28px; }
+  .names { font-size: 1.6rem; }
+  .info-line { font-size: 1.1rem; }
   .footer {
     font-size: 1.2rem;
     margin-top: 40px;
@@ -141,7 +140,13 @@ canvas.petal {
 <body>
 
 <div id="inviteCard" class="invite-card">
-  <div class="flower-icon">🌸</div>
+  <div class="flower-icon">
+    <!-- ✨ 금빛 벚꽃 SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="#c2a36b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M256 32c30 60 30 120 0 180-30-60-30-120 0-180zM256 480c-30-60-30-120 0-180 30 60 30 120 0 180zM32 256c60-30 120-30 180 0-60 30-120 30-180 0zM480 256c-60 30-120 30-180 0 60-30 120-30 180 0zM128 128c45 45 90 90 0 0 45-45 90-45 135 0-45 45-90 45-135 0zM384 384c-45-45-90-90 0 0-45 45-90 45-135 0 45-45 90-45 135 0z"/>
+    </svg>
+  </div>
+
   <div class="names">백승철 · 오미영</div>
   <div class="divider"></div>
 
@@ -152,7 +157,7 @@ canvas.petal {
 
   <div class="footer">
     💌<br />
-    카드를 눌러서 <br />청첩장을 확인해 보세요 💌
+    카드를 눌러서 <br />청첩장을 확인해 보세요 <br />💌
   </div>
 </div>
 
