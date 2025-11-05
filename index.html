@@ -14,7 +14,7 @@
   --accent: #c2a36b;
   --border: #e5ddcf;
   --shadow: rgba(0, 0, 0, 0.08);
-  --petal-filter: none;
+  --petal-filter: none; /* 🌸 꽃잎 색상 고정 */
 }
 
 /* 기본 세팅 */
@@ -146,7 +146,7 @@ canvas.petal {
   }
 }
 
-/* 🌙 다크모드 대응 */
+/* 🌙 다크모드 대응 (🌸 꽃잎은 동일 유지) */
 @media (prefers-color-scheme: dark) {
   :root {
     --paper-bg: #2b2a28;
@@ -155,7 +155,7 @@ canvas.petal {
     --accent: #d9c07b;
     --border: #3e3a36;
     --shadow: rgba(0, 0, 0, 0.7);
-    --petal-filter: hue-rotate(40deg) brightness(1.2) saturate(1.4);
+    --petal-filter: none; /* ✅ 다크모드에서도 동일 유지 */
   }
 
   body {
