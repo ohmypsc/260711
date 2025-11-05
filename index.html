@@ -14,8 +14,10 @@
   --accent: #c2a36b;
   --border: #e5ddcf;
   --shadow: rgba(0, 0, 0, 0.08);
+  --petal-filter: none;
 }
 
+/* 기본 세팅 */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -28,6 +30,7 @@ body {
   padding: 24px;
   color: var(--ink);
   overflow: hidden;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 /* 💌 카드 */
@@ -35,13 +38,13 @@ body {
   position: relative;
   background: var(--paper-bg) var(--texture);
   border: 1px solid var(--border);
-  border-radius: 18px;
-  box-shadow: 0 10px 30px var(--shadow);
+  border-radius: 20px;
+  box-shadow: 0 12px 35px var(--shadow);
   padding: 70px 52px;
   width: 90%;
   max-width: 440px;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.5s ease;
   z-index: 10;
 }
 .invite-card::before {
@@ -112,7 +115,7 @@ body {
   cursor: pointer;
   line-height: 1.8;
   transition: all 0.3s ease;
-  white-space: normal; /* ✅ 수정: 줄바꿈 허용 */
+  white-space: normal;
   text-align: center;
 }
 .footer:hover {
@@ -127,6 +130,7 @@ canvas.petal {
   width: 100%; height: 100%;
   pointer-events: none;
   z-index: 9999;
+  filter: var(--petal-filter);
 }
 
 /* 📱 모바일 대응 */
@@ -139,101 +143,144 @@ canvas.petal {
     font-size: 1.1rem;
     margin-top: 40px;
     padding-top: 22px;
-    white-space: normal; /* ✅ 모바일에서도 줄바꿈 유지 */
+  }
+}
+
+/* 🌙 다크모드 대응 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper-bg: #2b2a28;
+    --ink: #f8f7f6;
+    --muted: #d0cfcc;
+    --accent: #d9c07b;
+    --border: #3e3a36;
+    --shadow: rgba(0, 0, 0, 0.7);
+    --petal-filter: hue-rotate(40deg) brightness(1.2) saturate(1.4);
+  }
+
+  body {
+    background: radial-gradient(circle at center, #1a1918 0%, #0f0f0f 100%);
+    color: var(--ink);
+  }
+
+  .invite-card {
+    background: var(--paper-bg) var(--texture);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 35px var(--shadow);
+  }
+
+  .names {
+    background: linear-gradient(90deg, #e6cc8f 0%, #f9eec1 50%, #e6cc8f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 8px rgba(240, 220, 150, 0.5);
+  }
+
+  .subtitle {
+    color: #c5ae75;
+  }
+
+  .info {
+    color: var(--muted);
+  }
+
+  .footer {
+    color: var(--accent);
+    border-top: 1px solid var(--border);
+    text-shadow: 0 0 8px rgba(220, 200, 150, 0.4);
   }
 }
 </style>
 </head>
+
 <body>
+  <div id="inviteCard" class="invite-card">
+    <div class="names">백승철 · 오미영</div>
+    <div class="subtitle">결혼합니다</div>
 
-<div id="inviteCard" class="invite-card">
-  <div class="names">백승철 · 오미영</div>
-  <div class="subtitle">결혼합니다</div>
+    <div class="info">
+      <div class="section">
+        <strong>2026년 7월 11일 토요일</strong><br />
+        <strong>오전 11시</strong>
+      </div>
+      <div class="section">
+        <strong>유성컨벤션웨딩홀</strong><br />
+        <strong>3층 그랜드홀</strong>
+      </div>
+    </div>
 
-  <div class="info">
-    <div class="section">
-      <strong>2026년 7월 11일 토요일</strong><br />
-      <strong>오전 11시</strong>
-    </div>
-    <div class="section">
-      <strong>유성컨벤션웨딩홀</strong><br />
-      <strong>3층 그랜드홀</strong>
-    </div>
+    <div class="footer">카드를 눌러서 <br />청첩장을 확인해 보세요</div>
   </div>
 
-  <div class="footer">카드를 눌러서 <br />청첩장을 확인해 보세요</div>
-</div>
+  <canvas class="petal"></canvas>
 
-<canvas class="petal"></canvas>
+  <script>
+  const redirectUrl = "https://ohmypsc.github.io/260711-main";
+  const card = document.getElementById("inviteCard");
+  const canvas = document.querySelector(".petal");
+  const ctx = canvas.getContext("2d");
+  const petalImg = new Image();
+  petalImg.src = "./petal.png";
 
-<script>
-const redirectUrl = "https://ohmypsc.github.io/260711-main";
-const card = document.getElementById("inviteCard");
-const canvas = document.querySelector(".petal");
-const ctx = canvas.getContext("2d");
-const petalImg = new Image();
-petalImg.src = "./petal.png";
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
-
-let petals = [];
-let animation;
-
-/* 🌸 풍성하게 터지는 꽃잎 */
-function createBurst() {
-  petals = [];
-  const count = 400;
-  const radius = 180;
-  for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const r = Math.random() * radius;
-    petals.push({
-      x: window.innerWidth / 2 + Math.cos(angle) * r,
-      y: window.innerHeight / 2 + Math.sin(angle) * r,
-      w: 20 + Math.random() * 12,
-      h: 14 + Math.random() * 8,
-      xSpeed: (Math.random() - 0.5) * 8,
-      ySpeed: (Math.random() - 1.1) * 5,
-      rot: Math.random() * 2 * Math.PI,
-      rotSpeed: (Math.random() - 0.5) * 0.25,
-      gravity: 0.05 + Math.random() * 0.08,
-      opacity: 1
-    });
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-}
+  resize();
+  window.addEventListener("resize", resize);
 
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  petals.forEach(p => {
-    p.x += p.xSpeed;
-    p.y += p.ySpeed;
-    p.ySpeed += p.gravity;
-    p.rot += p.rotSpeed;
-    p.opacity -= 0.0035;
-    ctx.globalAlpha = Math.max(p.opacity, 0);
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.rot);
-    ctx.drawImage(petalImg, -p.w / 2, -p.h / 2, p.w, p.h);
-    ctx.restore();
+  let petals = [];
+  let animation;
+
+  /* 🌸 풍성하게 터지는 꽃잎 */
+  function createBurst() {
+    petals = [];
+    const count = 400;
+    const radius = 180;
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const r = Math.random() * radius;
+      petals.push({
+        x: window.innerWidth / 2 + Math.cos(angle) * r,
+        y: window.innerHeight / 2 + Math.sin(angle) * r,
+        w: 20 + Math.random() * 12,
+        h: 14 + Math.random() * 8,
+        xSpeed: (Math.random() - 0.5) * 8,
+        ySpeed: (Math.random() - 1.1) * 5,
+        rot: Math.random() * 2 * Math.PI,
+        rotSpeed: (Math.random() - 0.5) * 0.25,
+        gravity: 0.05 + Math.random() * 0.08,
+        opacity: 1
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    petals.forEach(p => {
+      p.x += p.xSpeed;
+      p.y += p.ySpeed;
+      p.ySpeed += p.gravity;
+      p.rot += p.rotSpeed;
+      p.opacity -= 0.0035;
+      ctx.globalAlpha = Math.max(p.opacity, 0);
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.drawImage(petalImg, -p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    petals = petals.filter(p => p.opacity > 0);
+    if (petals.length > 0) animation = requestAnimationFrame(draw);
+  }
+
+  /* ✅ 클릭 시 터지고 이동 */
+  card.addEventListener("click", () => {
+    if (animation) cancelAnimationFrame(animation);
+    createBurst();
+    draw();
+    setTimeout(() => (window.location.href = redirectUrl), 2600);
   });
-  petals = petals.filter(p => p.opacity > 0);
-  if (petals.length > 0) animation = requestAnimationFrame(draw);
-}
-
-/* ✅ 클릭 시 터지고 이동 */
-card.addEventListener("click", () => {
-  if (animation) cancelAnimationFrame(animation);
-  createBurst();
-  draw();
-  setTimeout(() => (window.location.href = redirectUrl), 2600);
-});
-</script>
-
+  </script>
 </body>
 </html>
