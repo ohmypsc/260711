@@ -10,8 +10,8 @@
   --paper-bg: #fdfcf9;
   --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
   --ink: #2e2b28;
-  --muted: #5a544d;
-  --accent: #b9935a;
+  --muted: #605a54;
+  --accent: #c2a36b;
   --border: #e5ddcf;
   --shadow: rgba(0, 0, 0, 0.08);
 }
@@ -38,9 +38,8 @@ body {
   border-radius: 18px;
   box-shadow: 0 10px 30px var(--shadow);
   padding: 70px 52px;
-  width: 90%;              /* 📱 화면 비율에 맞게 반응형 */
-  max-width: 520px;        /* 💻 너무 커지지 않게 제한 */
-  margin: 0 auto;          /* 항상 가운데 정렬 */
+  width: 90%;
+  max-width: 440px;
   text-align: center;
   transition: transform 0.3s ease;
   z-index: 10;
@@ -55,20 +54,18 @@ body {
 }
 .invite-card:hover { transform: scale(1.02); }
 
-/* 🌸 이름 (은은한 금빛 흐름) */
+/* 🌸 이름 은은한 금빛 흐름 */
 .names {
   font-family: 'Nanum Myeongjo', serif;
-  font-size: 2.1rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 1.2px;
-  margin-bottom: 8px;
-  background: linear-gradient(90deg, #b9965e 0%, #e8d3a4 50%, #b9965e 100%);
+  letter-spacing: 1.6px;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #bfa46b 0%, #f0e2b0 50%, #bfa46b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 300% auto;
+  background-size: 200% auto;
   animation: shimmer 6s ease-in-out infinite;
-  white-space: nowrap;
 }
 
 @keyframes shimmer {
@@ -80,40 +77,50 @@ body {
 /* 💍 결혼합니다 */
 .subtitle {
   font-family: 'Noto Serif KR', serif;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #9a8454;
-  margin-bottom: 32px;
+  margin-bottom: 38px;
   letter-spacing: 1px;
 }
 
-/* 📅 시간 / 장소 (심플, 동일 디자인) */
+/* 📅 정보 */
 .info {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   line-height: 2.4rem;
+  color: var(--muted);
+  margin-top: 8px;
+  word-break: keep-all;
+}
+.info strong {
   color: var(--ink);
-  font-weight: 600;
-  margin-top: 14px;
-  letter-spacing: 0.3px;
+  font-weight: 700;
 }
 
-/* 안내문 */
+/* 구분 간격 */
+.section {
+  margin-bottom: 28px;
+}
+
+/* 💌 하단 안내 */
 .footer {
   margin-top: 60px;
   padding-top: 28px;
   border-top: 1px solid var(--border);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--accent);
   font-weight: 700;
   cursor: pointer;
   line-height: 1.8;
   transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: center;
 }
 .footer:hover {
   color: #b89455;
   text-shadow: 0 0 10px rgba(194,163,107,0.3);
 }
 
-/* 🌸 전역 캔버스 */
+/* 🌸 캔버스 */
 canvas.petal {
   position: fixed;
   top: 0; left: 0;
@@ -124,16 +131,11 @@ canvas.petal {
 
 /* 📱 모바일 대응 */
 @media (max-width: 480px) {
-  body { padding: 16px; }
-  .invite-card { padding: 48px 24px; width: 92%; }
-  .names { font-size: 1.8rem; }
-  .subtitle { font-size: 1.1rem; margin-bottom: 24px; }
-  .info { font-size: 1.2rem; line-height: 2.1rem; }
-  .footer {
-    font-size: 1.25rem;
-    margin-top: 46px;
-    padding-top: 22px;
-  }
+  .invite-card { padding: 54px 28px; }
+  .names { font-size: 1.8rem; letter-spacing: 1.4px; }
+  .subtitle { font-size: 1rem; margin-bottom: 28px; }
+  .info { font-size: 1.1rem; line-height: 2.1rem; }
+  .footer { font-size: 1.1rem; margin-top: 40px; padding-top: 22px; }
 }
 </style>
 </head>
@@ -144,20 +146,23 @@ canvas.petal {
   <div class="subtitle">결혼합니다</div>
 
   <div class="info">
-    2026년 7월 11일 토요일 오전 11시<br/>
-    유성컨벤션웨딩홀 3층 그랜드홀
+    <div class="section">
+      <strong>2026년 7월 11일 토요일</strong><br />
+      <strong>오전 11시</strong>
+    </div>
+    <div class="section">
+      <strong>유성컨벤션웨딩홀</strong><br />
+      <strong>3층 그랜드홀</strong>
+    </div>
   </div>
 
-  <div class="footer">
-    카드를 눌러서 청첩장을 확인해 보세요
-  </div>
+  <div class="footer">카드를 눌러서 청첩장을 확인해 보세요</div>
 </div>
 
 <canvas class="petal"></canvas>
 
 <script>
 const redirectUrl = "https://ohmypsc.github.io/260711-main";
-
 const card = document.getElementById("inviteCard");
 const canvas = document.querySelector(".petal");
 const ctx = canvas.getContext("2d");
@@ -174,23 +179,23 @@ window.addEventListener("resize", resize);
 let petals = [];
 let animation;
 
+/* 🌸 중앙 폭발형 + 풍성한 꽃잎 */
 function createBurst(centerX, centerY) {
   petals = [];
-  const count = 240;
-  const radius = 180;
+  const count = 420; // 더 풍성하게
+  const maxSpeed = 16;
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const r = Math.random() * radius;
     petals.push({
-      x: centerX + Math.cos(angle) * r,
-      y: centerY + Math.sin(angle) * r,
-      w: 18 + Math.random() * 16,
+      x: centerX,
+      y: centerY,
+      w: 18 + Math.random() * 14,
       h: 12 + Math.random() * 10,
-      xSpeed: (Math.random() - 0.5) * 18,
-      ySpeed: (Math.random() - 1.3) * 14,
+      xSpeed: Math.cos(angle) * (Math.random() * maxSpeed),
+      ySpeed: Math.sin(angle) * (Math.random() * maxSpeed),
       rot: Math.random() * 2 * Math.PI,
-      rotSpeed: (Math.random() - 0.5) * 0.4,
-      gravity: 0.04 + Math.random() * 0.09,
+      rotSpeed: (Math.random() - 0.5) * 0.3,
+      gravity: 0.02 + Math.random() * 0.05,
       opacity: 1
     });
   }
@@ -203,7 +208,7 @@ function draw() {
     p.y += p.ySpeed;
     p.ySpeed += p.gravity;
     p.rot += p.rotSpeed;
-    p.opacity -= 0.005;
+    p.opacity -= 0.004;
     ctx.globalAlpha = Math.max(p.opacity, 0);
     ctx.save();
     ctx.translate(p.x, p.y);
@@ -224,7 +229,7 @@ card.addEventListener("click", () => {
   createBurst(centerX, centerY);
   draw();
 
-  setTimeout(() => window.location.href = redirectUrl, 2200);
+  setTimeout(() => window.location.href = redirectUrl, 2500);
 });
 </script>
 
