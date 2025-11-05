@@ -156,7 +156,7 @@ canvas.petal {
     </div>
   </div>
 
-  <div class="footer">카드를 눌러서 청첩장을 확인해 보세요</div>
+  <div class="footer">카드를 눌러 청첩장을 확인해 보세요</div>
 </div>
 
 <canvas class="petal"></canvas>
@@ -179,23 +179,24 @@ window.addEventListener("resize", resize);
 let petals = [];
 let animation;
 
-/* 🌸 중앙 폭발형 + 풍성한 꽃잎 */
+/* 🌸 중앙에서 위쪽으로 퍼지는 꽃잎 */
 function createBurst(centerX, centerY) {
   petals = [];
-  const count = 420; // 더 풍성하게
-  const maxSpeed = 16;
+  const count = 420; // 풍성함
+  const maxSpeed = 14;
   for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2;
+    const angle = Math.random() * Math.PI - Math.PI / 2; // 위쪽 반구로 퍼짐
+    const speed = 4 + Math.random() * maxSpeed;
     petals.push({
       x: centerX,
       y: centerY,
       w: 18 + Math.random() * 14,
       h: 12 + Math.random() * 10,
-      xSpeed: Math.cos(angle) * (Math.random() * maxSpeed),
-      ySpeed: Math.sin(angle) * (Math.random() * maxSpeed),
+      xSpeed: Math.cos(angle) * speed,
+      ySpeed: Math.sin(angle) * speed * 1.4, // 위쪽 확산 속도
       rot: Math.random() * 2 * Math.PI,
       rotSpeed: (Math.random() - 0.5) * 0.3,
-      gravity: 0.02 + Math.random() * 0.05,
+      gravity: 0.015 + Math.random() * 0.04,
       opacity: 1
     });
   }
@@ -206,7 +207,7 @@ function draw() {
   petals.forEach(p => {
     p.x += p.xSpeed;
     p.y += p.ySpeed;
-    p.ySpeed += p.gravity;
+    p.ySpeed += p.gravity; // 위로 갔다가 천천히 내려오며 흩날림
     p.rot += p.rotSpeed;
     p.opacity -= 0.004;
     ctx.globalAlpha = Math.max(p.opacity, 0);
@@ -229,7 +230,7 @@ card.addEventListener("click", () => {
   createBurst(centerX, centerY);
   draw();
 
-  setTimeout(() => window.location.href = redirectUrl, 2500);
+  setTimeout(() => window.location.href = redirectUrl, 2600);
 });
 </script>
 
