@@ -156,7 +156,7 @@ canvas.petal {
     </div>
   </div>
 
-  <div class="footer">카드를 눌러 청첩장을 확인해 보세요</div>
+  <div class="footer">카드를 눌러서 청첩장을 확인해 보세요</div>
 </div>
 
 <canvas class="petal"></canvas>
@@ -179,24 +179,24 @@ window.addEventListener("resize", resize);
 let petals = [];
 let animation;
 
-/* 🌸 중앙에서 위쪽으로 퍼지는 꽃잎 */
+/* 🌸 자연스럽게 중앙에서 퍼지는 터짐 (티켓 스타일) */
 function createBurst(centerX, centerY) {
   petals = [];
-  const count = 420; // 풍성함
-  const maxSpeed = 14;
+  const count = 150;       // 꽃잎 수
+  const radius = 100;      // 확산 반경
   for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI - Math.PI / 2; // 위쪽 반구로 퍼짐
-    const speed = 4 + Math.random() * maxSpeed;
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.random() * radius;
     petals.push({
-      x: centerX,
-      y: centerY,
-      w: 18 + Math.random() * 14,
-      h: 12 + Math.random() * 10,
-      xSpeed: Math.cos(angle) * speed,
-      ySpeed: Math.sin(angle) * speed * 1.4, // 위쪽 확산 속도
+      x: centerX + Math.cos(angle) * r,
+      y: centerY + Math.sin(angle) * r,
+      w: 18 + Math.random() * 12,
+      h: 14 + Math.random() * 8,
+      xSpeed: (Math.random() - 0.5) * 9,   // 좌우 방향 다양하게
+      ySpeed: (Math.random() - 1.5) * 8,   // 위쪽 중심 확산
       rot: Math.random() * 2 * Math.PI,
       rotSpeed: (Math.random() - 0.5) * 0.3,
-      gravity: 0.015 + Math.random() * 0.04,
+      gravity: 0.05 + Math.random() * 0.07,
       opacity: 1
     });
   }
@@ -207,9 +207,9 @@ function draw() {
   petals.forEach(p => {
     p.x += p.xSpeed;
     p.y += p.ySpeed;
-    p.ySpeed += p.gravity; // 위로 갔다가 천천히 내려오며 흩날림
+    p.ySpeed += p.gravity;
     p.rot += p.rotSpeed;
-    p.opacity -= 0.004;
+    p.opacity -= 0.006;
     ctx.globalAlpha = Math.max(p.opacity, 0);
     ctx.save();
     ctx.translate(p.x, p.y);
@@ -230,7 +230,7 @@ card.addEventListener("click", () => {
   createBurst(centerX, centerY);
   draw();
 
-  setTimeout(() => window.location.href = redirectUrl, 2600);
+  setTimeout(() => window.location.href = redirectUrl, 2200);
 });
 </script>
 
