@@ -7,21 +7,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Nanum+Myeongjo:wght@700&display=swap" rel="stylesheet" />
 <style>
 :root {
-  --paper-bg: #fdfcf9;
+  /* ✨ 로즈골드톤 메인 팔레트 */
+  --paper-bg: #fdfcfa;
   --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
   --ink: #2e2b28;
-  --muted: #605a54;
-  --accent: #c2a36b;
-  --border: #e5ddcf;
+  --muted: #6b5b58;
+  --accent: #d8a7a7; /* 💗 로즈골드 기본톤 */
+  --accent-light: #f2c9c9; /* 부드러운 반짝임용 */
+  --border: #ebd9d9;
   --shadow: rgba(0, 0, 0, 0.08);
-  --petal-filter: none; /* 🌸 꽃잎 색상 고정 */
+  --petal-filter: none;
 }
 
 /* 기본 세팅 */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: radial-gradient(circle at center, #fdfbf8 0%, #f7f4ef 100%);
+  background: radial-gradient(circle at center, #fdfbf8 0%, #f8f4f3 100%);
   font-family: 'Noto Serif KR', serif;
   display: flex;
   justify-content: center;
@@ -51,20 +53,20 @@ body {
   content: "";
   position: absolute;
   top: 8px; left: 8px; right: 8px; bottom: 8px;
-  border: 1px solid #d9c9aa;
+  border: 1px solid #e5bfbf; /* 로즈골드빛 테두리 */
   border-radius: 14px;
   opacity: 0.6;
 }
 .invite-card:hover { transform: scale(1.02); }
 
-/* 🌸 이름 은은한 금빛 흐름 */
+/* 🌸 이름 은은한 로즈골드 흐름 */
 .names {
   font-family: 'Nanum Myeongjo', serif;
   font-size: 2.2rem;
   font-weight: 700;
   letter-spacing: 1.6px;
   margin-bottom: 16px;
-  background: linear-gradient(90deg, #bfa46b 0%, #f0e2b0 50%, #bfa46b 100%);
+  background: linear-gradient(90deg, #d8a7a7 0%, #f2c9c9 50%, #d8a7a7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
@@ -81,7 +83,7 @@ body {
 .subtitle {
   font-family: 'Noto Serif KR', serif;
   font-size: 1.2rem;
-  color: #9a8454;
+  color: var(--accent);
   margin-bottom: 38px;
   letter-spacing: 1px;
 }
@@ -119,8 +121,8 @@ body {
   text-align: center;
 }
 .footer:hover {
-  color: #b89455;
-  text-shadow: 0 0 10px rgba(194,163,107,0.3);
+  color: #c78e8e;
+  text-shadow: 0 0 10px rgba(216,167,167,0.3);
 }
 
 /* 🌸 캔버스 */
@@ -146,20 +148,21 @@ canvas.petal {
   }
 }
 
-/* 🌙 다크모드 대응 (🌸 꽃잎은 동일 유지) */
+/* 🌙 다크모드 (로즈골드 유지) */
 @media (prefers-color-scheme: dark) {
   :root {
     --paper-bg: #2b2a28;
     --ink: #f8f7f6;
     --muted: #d0cfcc;
-    --accent: #d9c07b;
-    --border: #3e3a36;
+    --accent: #e8b5b5;
+    --accent-light: #f7d6d6;
+    --border: #4a3f3f;
     --shadow: rgba(0, 0, 0, 0.7);
-    --petal-filter: none; /* ✅ 다크모드에서도 동일 유지 */
+    --petal-filter: none;
   }
 
   body {
-    background: radial-gradient(circle at center, #1a1918 0%, #0f0f0f 100%);
+    background: radial-gradient(circle at center, #1b1919 0%, #0e0d0d 100%);
     color: var(--ink);
   }
 
@@ -170,14 +173,14 @@ canvas.petal {
   }
 
   .names {
-    background: linear-gradient(90deg, #e6cc8f 0%, #f9eec1 50%, #e6cc8f 100%);
+    background: linear-gradient(90deg, #f2c9c9 0%, #e8b5b5 50%, #f2c9c9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 8px rgba(240, 220, 150, 0.5);
+    text-shadow: 0 0 8px rgba(255, 210, 210, 0.5);
   }
 
   .subtitle {
-    color: #c5ae75;
+    color: var(--accent);
   }
 
   .info {
@@ -187,7 +190,7 @@ canvas.petal {
   .footer {
     color: var(--accent);
     border-top: 1px solid var(--border);
-    text-shadow: 0 0 8px rgba(220, 200, 150, 0.4);
+    text-shadow: 0 0 8px rgba(245, 200, 200, 0.4);
   }
 }
 </style>
@@ -232,7 +235,6 @@ canvas.petal {
   let petals = [];
   let animation;
 
-  /* 🌸 풍성하게 터지는 꽃잎 */
   function createBurst() {
     petals = [];
     const count = 400;
@@ -274,7 +276,6 @@ canvas.petal {
     if (petals.length > 0) animation = requestAnimationFrame(draw);
   }
 
-  /* ✅ 클릭 시 터지고 이동 */
   card.addEventListener("click", () => {
     if (animation) cancelAnimationFrame(animation);
     createBurst();
