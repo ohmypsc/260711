@@ -7,14 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Nanum+Myeongjo:wght@700&display=swap" rel="stylesheet" />
 <style>
 :root {
-  /* ✨ 로즈골드톤 메인 팔레트 */
-  --paper-bg: #fdfcfa;
+  /* ✨ 고급스러운 로즈골드톤 팔레트 */
+  --paper-bg: #fdfbf9;
   --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-  --ink: #2e2b28;
-  --muted: #6b5b58;
-  --accent: #d8a7a7; /* 💗 로즈골드 기본톤 */
-  --accent-light: #f2c9c9; /* 부드러운 반짝임용 */
-  --border: #ebd9d9;
+  --ink: #2a1f1f;
+  --muted: #6e5a59;
+  --accent: #d2a2a0; /* 메인 로즈골드 (약간 코퍼 계열) */
+  --accent-mid: #e0b2a8; /* 중간톤 그라데이션용 */
+  --accent-light: #f5d2c8; /* 하이라이트 */
+  --border: #ead4d1;
   --shadow: rgba(0, 0, 0, 0.08);
   --petal-filter: none;
 }
@@ -23,7 +24,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: radial-gradient(circle at center, #fdfbf8 0%, #f8f4f3 100%);
+  background: radial-gradient(circle at center, #fcf9f7 0%, #f7f3f2 100%);
   font-family: 'Noto Serif KR', serif;
   display: flex;
   justify-content: center;
@@ -53,23 +54,28 @@ body {
   content: "";
   position: absolute;
   top: 8px; left: 8px; right: 8px; bottom: 8px;
-  border: 1px solid #e5bfbf; /* 로즈골드빛 테두리 */
+  border: 1px solid #d8b1aa;
   border-radius: 14px;
   opacity: 0.6;
 }
 .invite-card:hover { transform: scale(1.02); }
 
-/* 🌸 이름 은은한 로즈골드 흐름 */
+/* 🌸 이름 - 금속성 로즈골드 광택 */
 .names {
   font-family: 'Nanum Myeongjo', serif;
   font-size: 2.2rem;
   font-weight: 700;
   letter-spacing: 1.6px;
   margin-bottom: 16px;
-  background: linear-gradient(90deg, #d8a7a7 0%, #f2c9c9 50%, #d8a7a7 100%);
+  background: linear-gradient(120deg,
+    #c98f8a 0%,
+    #e9c2b8 25%,
+    #f6d9d0 50%,
+    #e1b5aa 75%,
+    #c98f8a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
+  background-size: 300% auto;
   animation: shimmer 6s ease-in-out infinite;
 }
 
@@ -90,10 +96,10 @@ body {
 
 /* 📅 정보 */
 .info {
-  font-size: 1.3rem;
-  line-height: 2.4rem;
+  font-size: 1.4rem;
+  line-height: 2.6rem;
   color: var(--muted);
-  margin-top: 8px;
+  margin-top: 12px;
   word-break: keep-all;
 }
 .info strong {
@@ -103,7 +109,7 @@ body {
 
 /* 구분 간격 */
 .section {
-  margin-bottom: 28px;
+  margin-bottom: 30px;
 }
 
 /* 💌 하단 안내 */
@@ -121,8 +127,8 @@ body {
   text-align: center;
 }
 .footer:hover {
-  color: #c78e8e;
-  text-shadow: 0 0 10px rgba(216,167,167,0.3);
+  color: #b87d7d;
+  text-shadow: 0 0 10px rgba(214,160,160,0.4);
 }
 
 /* 🌸 캔버스 */
@@ -140,7 +146,7 @@ canvas.petal {
   .invite-card { padding: 54px 28px; }
   .names { font-size: 1.8rem; letter-spacing: 1.4px; }
   .subtitle { font-size: 1rem; margin-bottom: 28px; }
-  .info { font-size: 1.1rem; line-height: 2.1rem; }
+  .info { font-size: 1.15rem; line-height: 2.3rem; }
   .footer {
     font-size: 1.1rem;
     margin-top: 40px;
@@ -148,21 +154,21 @@ canvas.petal {
   }
 }
 
-/* 🌙 다크모드 (로즈골드 유지) */
+/* 🌙 다크모드 - 깊이 있는 로즈골드 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper-bg: #2b2a28;
-    --ink: #f8f7f6;
-    --muted: #d0cfcc;
-    --accent: #e8b5b5;
-    --accent-light: #f7d6d6;
-    --border: #4a3f3f;
-    --shadow: rgba(0, 0, 0, 0.7);
+    --paper-bg: #272222;
+    --ink: #f6f5f4;
+    --muted: #cabbb8;
+    --accent: #dca8a0;
+    --accent-light: #f1c2b8;
+    --border: #3c2e2e;
+    --shadow: rgba(0, 0, 0, 0.8);
     --petal-filter: none;
   }
 
   body {
-    background: radial-gradient(circle at center, #1b1919 0%, #0e0d0d 100%);
+    background: radial-gradient(circle at center, #1d1717 0%, #0e0b0b 100%);
     color: var(--ink);
   }
 
@@ -173,14 +179,19 @@ canvas.petal {
   }
 
   .names {
-    background: linear-gradient(90deg, #f2c9c9 0%, #e8b5b5 50%, #f2c9c9 100%);
+    background: linear-gradient(120deg,
+      #f2c5bc 0%,
+      #d99d91 30%,
+      #f7d0c8 50%,
+      #d18a80 75%,
+      #f2c5bc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 8px rgba(255, 210, 210, 0.5);
+    text-shadow: 0 0 10px rgba(250, 200, 200, 0.5);
   }
 
   .subtitle {
-    color: var(--accent);
+    color: var(--accent-light);
   }
 
   .info {
@@ -188,9 +199,9 @@ canvas.petal {
   }
 
   .footer {
-    color: var(--accent);
+    color: var(--accent-light);
     border-top: 1px solid var(--border);
-    text-shadow: 0 0 8px rgba(245, 200, 200, 0.4);
+    text-shadow: 0 0 10px rgba(250, 200, 200, 0.4);
   }
 }
 </style>
