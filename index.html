@@ -10,11 +10,11 @@
   /* ✨ 고급스러운 로즈골드톤 팔레트 */
   --paper-bg: #fdfbf9;
   --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-  --ink: #2a1f1f;
-  --muted: #6e5a59;
-  --accent: #d2a2a0; /* 메인 로즈골드 (약간 코퍼 계열) */
-  --accent-mid: #e0b2a8; /* 중간톤 그라데이션용 */
-  --accent-light: #f5d2c8; /* 하이라이트 */
+  --ink: #1f1414; /* 더 진한 본문 글씨 */
+  --muted: #5a4443; /* 살짝 더 어두운 보조 텍스트 */
+  --accent: #d2a2a0;
+  --accent-mid: #e0b2a8;
+  --accent-light: #f5d2c8;
   --border: #ead4d1;
   --shadow: rgba(0, 0, 0, 0.08);
   --petal-filter: none;
@@ -154,17 +154,17 @@ canvas.petal {
   }
 }
 
-/* 🌙 다크모드 - 깊이 있는 로즈골드 */
+/* 🌙 다크모드 - 질감은 은은하게만 */
 @media (prefers-color-scheme: dark) {
   :root {
     --paper-bg: #272222;
+    --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
     --ink: #f6f5f4;
     --muted: #cabbb8;
     --accent: #dca8a0;
     --accent-light: #f1c2b8;
     --border: #3c2e2e;
     --shadow: rgba(0, 0, 0, 0.8);
-    --petal-filter: none;
   }
 
   body {
@@ -173,7 +173,13 @@ canvas.petal {
   }
 
   .invite-card {
-    background: var(--paper-bg) var(--texture);
+    background: var(--paper-bg);
+    background-image: linear-gradient(
+        rgba(39, 34, 34, 0.97),
+        rgba(39, 34, 34, 0.97)
+      ),
+      var(--texture);
+    background-blend-mode: soft-light; /* 🌙 은은한 질감 */
     border: 1px solid var(--border);
     box-shadow: 0 10px 35px var(--shadow);
   }
