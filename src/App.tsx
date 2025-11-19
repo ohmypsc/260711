@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 
-// 현재 실제로 존재하는 컴포넌트만 import
+// 컴포넌트 import (TSX)
 import { BgEffect } from "./components/BgEffect/BgEffect";
-import { Information } from "./components/Information/Information.scss";
+import { Information } from "./components/Information/Information";
 
+// SCSS 파일 import
 import "./App.scss";
+import "./components/Information/Information.scss";
 
 function App() {
   /** 🔒 화면 확대 방지 */
