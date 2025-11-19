@@ -1,0 +1,19 @@
+/* 전체 페이지 영역 */
+.wedding-page {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* 각 섹션 기본 레이아웃 */
+section {
+  padding: 3rem 1.5rem;
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* 표지 섹션은 전체 화면으로 확장 */
+#cover {
+  padding: 0;
+}
