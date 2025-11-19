@@ -37,8 +37,12 @@ class Petal {
   // 모양 다양화 요소
   widthFactor: number = 1;
   heightFactor: number = 1;
-  flipX: number = 1; // 좌우 반전
+  flipX: number = 1;
   angleOffset: number = 0;
+
+  // 바람 흔들림 요소
+  waveAmplitude: number = 0;
+  waveFrequency: number = 0;
 
   constructor(
     private canvas: HTMLCanvasElement,
@@ -48,7 +52,6 @@ class Petal {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height * 2 - canvas.height;
 
-    // 🌸 로즈골드 색 랜덤
     this.color =
       ROSEGOLD_COLORS[Math.floor(Math.random() * ROSEGOLD_COLORS.length)];
 
@@ -62,27 +65,31 @@ class Petal {
     this.opacity = this.w / 80;
     this.flip = Math.random();
 
-    // 사선 방향 랜덤 (- 또는 +)
+    // 사선 방향 랜덤
     const xDirection = Math.random() > 0.5 ? 1 : -1;
     this.xSpeed = (X_SPEED + Math.random() * X_SPEED_VARIANCE) * xDirection;
     this.ySpeed = Y_SPEED + Math.random() * Y_SPEED_VARIANCE;
 
     this.flipSpeed = Math.random() * FLIP_SPEED_VARIANCE;
 
-    // 🌸 모양 랜덤 변형 (1개 이미지 → 5~6종처럼 보이게)
-    this.widthFactor = 0.7 + Math.random() * 0.8; // 0.7 ~ 1.5
-    this.heightFactor = 0.7 + Math.random() * 0.8; // 0.7 ~ 1.5
+    // 모양 랜덤 변형
+    this.widthFactor = 0.7 + Math.random() * 0.8;
+    this.heightFactor = 0.7 + Math.random() * 0.8;
 
-    this.flipX = Math.random() > 0.5 ? 1 : -1; // 좌우 반전
-    this.angleOffset = Math.random() * Math.PI * 2; // 기본 회전 각도
+    this.flipX = Math.random() > 0.5 ? 1 : -1;
+    this.angleOffset = Math.random() * Math.PI * 2;
+
+    // 바람 흔들림 곡선 설정 (개별 랜덤)
+    this.waveAmplitude = 15 + Math.random() * 25; // 흔들림 폭
+    this.waveFrequency = 0.005 + Math.random() * 0.01; // 흔들림 주기
   }
 
   draw() {
-    // 화면 벗어나면 초기화
+    // 화면 벗어나면 리셋
     if (
       this.y > this.canvas.height ||
-      this.x < -80 ||
-      this.x > this.canvas.width + 80
+      this.x < -100 ||
+      this.x > this.canvas.width + 100
     ) {
       this.initialize();
 
@@ -101,22 +108,33 @@ class Petal {
     ctx.globalAlpha = this.opacity;
 
     // ======================
-    // 랜덤 기울기 + 좌우 반전 + 변형 처리
+    // 바람 곡선: S자 흔들림
     // ======================
-    ctx.translate(this.x, this.y);
+    const windOffset =
+      Math.sin(this.y * this.waveFrequency) * this.waveAmplitude;
+    const drawX = this.x + windOffset;
+
+    // ======================
+    // 좌표 변환
+    // ======================
+    ctx.translate(drawX, this.y);
     ctx.scale(this.flipX, 1);
     ctx.rotate(this.angleOffset + this.flip * 0.5);
 
     const drawW = this.w * this.widthFactor;
     const drawH = this.h * this.heightFactor;
 
-    // 원본 PNG 그리기
+    // 1) PNG 그리기
     ctx.drawImage(this.petalImg, 0, 0, drawW, drawH);
 
-    // 로즈골드 색상 오버레이
-    ctx.globalCompositeOperation = "source-atop";
+    // 2) multiply 색상 tint
+    ctx.globalCompositeOperation = "multiply";
     ctx.fillStyle = this.color;
     ctx.fillRect(0, 0, drawW, drawH);
+
+    // 3) 투명도 유지 (destination-in)
+    ctx.globalCompositeOperation = "destination-in";
+    ctx.drawImage(this.petalImg, 0, 0, drawW, drawH);
 
     ctx.restore();
   }
@@ -125,6 +143,7 @@ class Petal {
     this.x += this.xSpeed;
     this.y += this.ySpeed;
     this.flip += this.flipSpeed;
+
     this.draw();
   }
 }
@@ -141,6 +160,7 @@ export const BgEffect = () => {
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
