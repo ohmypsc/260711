@@ -1,3 +1,6 @@
+@use "./components/Information/Information.scss";
+
+
 html,
 body {
   margin: 0;
@@ -7,9 +10,6 @@ body {
   width: 100%;
   height: 100%;
 }
-
-
-@use "./components/Information/Information.scss";
 
 
 /* ================================
