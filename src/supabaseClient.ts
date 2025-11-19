@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
-// 🔐 프로젝트 URL & 익명 키 입력
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
+const supabaseUrl = "https://wwotrjuzpcbwlhhlyqxv.supabase.co";
+
+const supabaseAnonKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3b3RyanV6cGNid2xoaGx5cXh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NDY3NzgsImV4cCI6MjA3NzIyMjc3OH0.mOCukDJioOQemoV9hiVLMuFYezF1nf3CsZyE5KlpIbo";
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
