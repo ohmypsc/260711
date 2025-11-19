@@ -1,28 +1,31 @@
-/* 공통 모달 오버레이 */
+/* === 배경 오버레이 === */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
+  animation: overlayFadeIn 0.25s ease forwards;
 }
 
-/* 공통 모달 컨테이너 */
+/* === 모달 컨테이너 === */
 .modal-container {
   background: white;
   padding: 24px;
   width: 90%;
   max-width: 380px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.2s ease;
-  font-family: "Noto Serif KR", serif;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  animation: modalShow 0.28s cubic-bezier(0.25, 0.46, 0.45, 1) forwards;
+  transform-origin: center center;
 }
 
+/* === 닫기 버튼 통일 === */
 .modal-close-btn {
-  margin-top: 18px;
+  margin-top: 20px;
   width: 100%;
   padding: 12px;
   background: #b8b8b8;
@@ -37,13 +40,34 @@
   background: #999;
 }
 
-@keyframes fadeIn {
+/* === 애니메이션 === */
+@keyframes overlayFadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+  }
+}
+
+@keyframes modalShow {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modalHide {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
   }
 }
