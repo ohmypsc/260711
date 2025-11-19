@@ -1,3 +1,26 @@
+.information {
+  padding: 2rem 1.5rem;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .account-btn {
+    background: var(--theme-primary);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .account-btn:active {
+    background: var(--theme-primary-light);
+  }
+}
+
+
 .account-modal-overlay {
   position: fixed;
   top: 0;
