@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 // 현재 실제로 존재하는 컴포넌트만 import
 import { BgEffect } from "./components/BgEffect/BgEffect";
-import { Information } from "./components/Information/Information";
+import { Information } from "./components/Information/Information.scss";
 
 import "./App.scss";
 
