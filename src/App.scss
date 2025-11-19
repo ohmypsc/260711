@@ -1,6 +1,4 @@
-/* ❗ 컴포넌트 스타일은 개별 파일에서 import하는 것을 추천! */
 
-/* Reset */
 html,
 body {
   margin: 0;
@@ -46,10 +44,6 @@ section {
   color: var(--text-main);
 }
 
-/* 표지는 전체 화면 */
-#cover {
-  padding: 0;
-}
 
 /* 공통 제목 스타일 */
 h2 {
