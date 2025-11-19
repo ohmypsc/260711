@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 // ⭐ 전역 데이터 Provider 추가
 import { ContactInfoProvider } from "./ContactInfoProvider";
@@ -55,15 +55,16 @@ function MainWeddingPage() {
 
 export default function App() {
   return (
-    // ⭐ 전역 Provider로 감싸줌
     <ContactInfoProvider>
-      <Routes>
-        {/* ⭐ 메인 청첩장 페이지 */}
-        <Route path="/" element={<MainWeddingPage />} />
+      <Router>
+        <Routes>
+          {/* ⭐ 메인 청첩장 페이지 */}
+          <Route path="/" element={<MainWeddingPage />} />
 
-        {/* ⭐ 관리자 페이지 */}
-        <Route path="/admin" element={<AdminPage />} />
-      </Routes>
+          {/* ⭐ 관리자 페이지 */}
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
+      </Router>
     </ContactInfoProvider>
   );
 }
