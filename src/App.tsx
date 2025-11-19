@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";   // ⭐ 라우터 추가
+import { Routes, Route } from "react-router-dom";
+
+// ⭐ 전역 데이터 Provider 추가
+import { ContactInfoProvider } from "./ContactInfoProvider";
 
 // 컴포넌트 import
 import { BgEffect } from "./components/BgEffect/BgEffect";
 import { Information } from "./components/Information/Information";
-import AdminPage from "./AdminPage";  // ⭐ 관리자 페이지 불러오기
+import AdminPage from "./AdminPage";
 
 // 스타일 import
 import "./App.scss";
@@ -52,12 +55,15 @@ function MainWeddingPage() {
 
 export default function App() {
   return (
-    <Routes>
-      {/* ⭐ 메인 청첩장 페이지 */}
-      <Route path="/" element={<MainWeddingPage />} />
+    // ⭐ 전역 Provider로 감싸줌
+    <ContactInfoProvider>
+      <Routes>
+        {/* ⭐ 메인 청첩장 페이지 */}
+        <Route path="/" element={<MainWeddingPage />} />
 
-      {/* ⭐ 관리자 페이지 */}
-      <Route path="/admin" element={<AdminPage />} />
-    </Routes>
+        {/* ⭐ 관리자 페이지 */}
+        <Route path="/admin" element={<AdminPage />} />
+      </Routes>
+    </ContactInfoProvider>
   );
 }
