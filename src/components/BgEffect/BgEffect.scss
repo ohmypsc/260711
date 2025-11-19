@@ -2,12 +2,19 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 99999; /* 최상단 */
-  pointer-events: none; /* 클릭 막지 않음 */
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  pointer-events: none;
+}
 
-  @media print {
-    display: none;
-  }
+.bg-effect canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  padding: 0;
+  margin: 0;
 }
