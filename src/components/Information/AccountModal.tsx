@@ -1,41 +1,50 @@
 export function AccountModal({ onClose, brideInfo, groomInfo }) {
   const copy = (text: string) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
-    alert("📌 복사되었습니다!");
+    alert("📌 계좌번호가 복사되었습니다!");
   };
 
+  const renderList = (list: any[]) => (
+    <>
+      {list.map((item) => (
+        <div key={item.id} className="account-item">
+          <p className="account-title">
+            {item.relation} ({item.name})
+          </p>
+
+          {/* 계좌번호가 있는 경우만 보여주기 */}
+          {item.bank && item.account ? (
+            <div className="account-box">
+              <p className="account-number">
+                <strong>{item.bank}</strong> {item.account}
+              </p>
+
+              <button
+                className="copy-btn"
+                onClick={() => copy(item.account)}
+              >
+                복사하기
+              </button>
+            </div>
+          ) : (
+            <p className="no-account">계좌 정보가 제공되지 않았습니다.</p>
+          )}
+        </div>
+      ))}
+    </>
+  );
+
   return (
-    <div className="account-modal-overlay">
-      <div className="account-modal">
+    <div className="account-modal-overlay" onClick={onClose}>
+      <div className="account-modal" onClick={(e) => e.stopPropagation()}>
         <h3>계좌 정보</h3>
 
-        {/* 신랑 측 */}
-        {groomInfo.map((item) => (
-          <div key={item.id} className="account-item">
-            <p className="account-title">{item.relation} ({item.name})</p>
-            <p className="account-number">{item.account}</p>
-            <button
-              className="copy-btn"
-              onClick={() => copy(item.account)}
-            >
-              복사하기
-            </button>
-          </div>
-        ))}
+        <h4>신랑 측</h4>
+        {renderList(groomInfo)}
 
-        {/* 신부 측 */}
-        {brideInfo.map((item) => (
-          <div key={item.id} className="account-item">
-            <p className="account-title">{item.relation} ({item.name})</p>
-            <p className="account-number">{item.account}</p>
-            <button
-              className="copy-btn"
-              onClick={() => copy(item.account)}
-            >
-              복사하기
-            </button>
-          </div>
-        ))}
+        <h4>신부 측</h4>
+        {renderList(brideInfo)}
 
         <button onClick={onClose} className="close-btn">
           닫기
