@@ -1,30 +1,29 @@
 import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";   // ⭐ 라우터 추가
 
 // 컴포넌트 import
 import { BgEffect } from "./components/BgEffect/BgEffect";
 import { Information } from "./components/Information/Information";
+import AdminPage from "./AdminPage";  // ⭐ 관리자 페이지 불러오기
 
 // 스타일 import
 import "./App.scss";
 
-function App() {
+function MainWeddingPage() {
   /** 🔒 iOS/안드로이드 화면 확대 방지 */
   useEffect(() => {
     let lastTouchTime = 0;
 
-    // 300ms 안에 두 번 터치할 경우 확대 방지
     const blockZoom = (e: TouchEvent) => {
       const now = Date.now();
       if (now - lastTouchTime < 300) {
-        e.preventDefault(); // 확대 트리거 block
+        e.preventDefault();
       }
       lastTouchTime = now;
     };
 
-    // pinch-zoom 제스처 자체 차단
     const stopGesture = (e: Event) => e.preventDefault();
 
-    // passive: false 로 설정해야 preventDefault 정상 동작
     document.addEventListener("touchstart", blockZoom, { passive: false });
     document.addEventListener("gesturestart", stopGesture);
     document.addEventListener("gesturechange", stopGesture);
@@ -40,7 +39,6 @@ function App() {
 
   return (
     <>
-      {/* 배경 효과 */}
       <BgEffect />
 
       <main className="wedding-page">
@@ -52,4 +50,14 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Routes>
+      {/* ⭐ 메인 청첩장 페이지 */}
+      <Route path="/" element={<MainWeddingPage />} />
+
+      {/* ⭐ 관리자 페이지 */}
+      <Route path="/admin" element={<AdminPage />} />
+    </Routes>
+  );
+}
