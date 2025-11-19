@@ -1,12 +1,18 @@
 import { ModalBase } from "../modal/ModalBase";
 import { useContactInfo } from "../../ContactInfoProvider";
 
-export function AccountModal({ onClose }) {
+interface AccountModalProps {
+  type: "groom" | "bride";
+  onClose: () => void;
+}
+
+export function AccountModal({ type, onClose }: AccountModalProps) {
   const contactInfo = useContactInfo();
 
-  // ⭐ 부모 포함 전체 필터링
-  const groomInfo = contactInfo.filter((item) => item.type.startsWith("groom"));
-  const brideInfo = contactInfo.filter((item) => item.type.startsWith("bride"));
+  // 선택된 타입에 따른 필터링 (신랑 & 부모 / 신부 & 부모)
+  const filtered = contactInfo.filter((item) => item.type.startsWith(type));
+
+  const title = type === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
   const copy = (text: string) => {
     if (!text) return;
@@ -14,41 +20,37 @@ export function AccountModal({ onClose }) {
     alert("📌 계좌번호가 복사되었습니다!");
   };
 
-  const renderList = (list: any[]) => (
-    <>
-      {list.map((item) => (
-        <div key={item.id} className="account-item">
-          <p className="account-title">
-            {item.relation} ({item.name})
-          </p>
-
-          {item.bank && item.account ? (
-            <div className="account-box">
-              <p className="account-number">
-                <strong>{item.bank}</strong> {item.account}
-              </p>
-              <button className="copy-btn" onClick={() => copy(item.account)}>
-                복사
-              </button>
-            </div>
-          ) : (
-            <p className="no-account">계좌 정보가 제공되지 않았습니다.</p>
-          )}
-        </div>
-      ))}
-    </>
-  );
-
   return (
     <ModalBase onClose={onClose}>
       <div className="account-modal-content">
-        <h3 className="modal-title">계좌 정보</h3>
+        <h3 className="modal-title">{title}</h3>
 
-        <h4 className="modal-subtitle">신랑 측</h4>
-        {renderList(groomInfo)}
+        <div className="account-list">
+          {filtered.map((item) => (
+            <div key={item.id} className="account-entry">
+              <p className="account-relation">
+                {item.relation} <span className="name">{item.name}</span>
+              </p>
 
-        <h4 className="modal-subtitle">신부 측</h4>
-        {renderList(brideInfo)}
+              {item.bank && item.account ? (
+                <div className="account-box">
+                  <p className="bank-line">
+                    <strong>{item.bank}</strong> {item.account}
+                  </p>
+
+                  <button
+                    className="copy-btn"
+                    onClick={() => copy(item.account!)}
+                  >
+                    복사하기
+                  </button>
+                </div>
+              ) : (
+                <p className="no-account">계좌 정보가 없습니다.</p>
+              )}
+            </div>
+          ))}
+        </div>
 
         <button onClick={onClose} className="modal-close-btn">
           닫기
