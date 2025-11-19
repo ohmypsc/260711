@@ -1,5 +1,4 @@
-import "../../styles/modal.scss";
-
+import { ModalBase } from "../modal/ModalBase";
 
 export function AccountModal({ onClose, brideInfo, groomInfo }) {
   const copy = (text: string) => {
@@ -16,18 +15,13 @@ export function AccountModal({ onClose, brideInfo, groomInfo }) {
             {item.relation} ({item.name})
           </p>
 
-          {/* 계좌번호가 있는 경우만 보여주기 */}
           {item.bank && item.account ? (
             <div className="account-box">
               <p className="account-number">
                 <strong>{item.bank}</strong> {item.account}
               </p>
-
-              <button
-                className="copy-btn"
-                onClick={() => copy(item.account)}
-              >
-                복사하기
+              <button className="copy-btn" onClick={() => copy(item.account)}>
+                복사
               </button>
             </div>
           ) : (
@@ -39,20 +33,18 @@ export function AccountModal({ onClose, brideInfo, groomInfo }) {
   );
 
   return (
-    <div className="account-modal-overlay" onClick={onClose}>
-      <div className="account-modal" onClick={(e) => e.stopPropagation()}>
-        <h3>계좌 정보</h3>
+    <ModalBase onClose={onClose}>
+      <h3>계좌 정보</h3>
 
-        <h4>신랑 측</h4>
-        {renderList(groomInfo)}
+      <h4>신랑 측</h4>
+      {renderList(groomInfo)}
 
-        <h4>신부 측</h4>
-        {renderList(brideInfo)}
+      <h4>신부 측</h4>
+      {renderList(brideInfo)}
 
-        <button onClick={onClose} className="close-btn">
-          닫기
-        </button>
-      </div>
-    </div>
+      <button onClick={onClose} className="modal-close-btn">
+        닫기
+      </button>
+    </ModalBase>
   );
 }
