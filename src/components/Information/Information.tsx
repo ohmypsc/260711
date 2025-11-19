@@ -4,27 +4,32 @@ import { AccountModal } from "./AccountModal";
 import { useContactInfo } from "../../ContactInfoProvider";
 
 export function Information() {
-  const [openModal, setOpenModal] = useState(false);
-
-  // 전역 데이터 가져오기
-  const contactInfo = useContactInfo();
-
-  // 신랑 / 신부 정보 필터링
-  const brideInfo = contactInfo.filter((item) => item.type.startsWith("bride"));
-  const groomInfo = contactInfo.filter((item) => item.type.startsWith("groom"));
+  const [openModal, setOpenModal] = useState<null | "groom" | "bride">(null);
 
   return (
     <div className="information">
       <h2>혼주 정보</h2>
 
-      <button className="account-btn" onClick={() => setOpenModal(true)}>
-        계좌번호 보기
+      {/* 신랑 측 버튼 */}
+      <button
+        className="account-btn"
+        onClick={() => setOpenModal("groom")}
+      >
+        신랑 측 계좌번호 보기
+      </button>
+
+      {/* 신부 측 버튼 */}
+      <button
+        className="account-btn"
+        onClick={() => setOpenModal("bride")}
+      >
+        신부 측 계좌번호 보기
       </button>
 
       {openModal && (
         <AccountModal
-          onClose={() => setOpenModal(false)}
-          // ❗ 이제 props로 brideInfo/groomInfo 안 넘겨도 됨!
+          type={openModal}
+          onClose={() => setOpenModal(null)}
         />
       )}
     </div>
