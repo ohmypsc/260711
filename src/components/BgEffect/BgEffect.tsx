@@ -1,51 +1,90 @@
-import { useEffect } from "react";
-import "./BgEffect.scss";
+const ROSEGOLD_COLORS = ["#c47b85", "#e8b0a7", "#dba5b7"];
 
-export function BgEffect() {
-  useEffect(() => {
-    const petalShapes = ["🌸", "💮", "❀", "✿", "❁"]; // 🌸 랜덤 꽃잎 모양들
+class Petal {
+  x: number;
+  y: number;
+  w: number = 0;
+  h: number = 0;
+  opacity: number = 0;
+  flip: number = 0;
 
-    const roseGoldColors = ["#c47b85", "#e8b0a7", "#dba5b7"];
+  xSpeed: number = 0;
+  ySpeed: number = 0;
+  flipSpeed: number = 0;
 
-    const createPetal = () => {
-      const petal = document.createElement("div");
-      petal.className = "petal";
+  color: string;
 
-      // 🌸 랜덤 꽃잎 모양 선택
-      petal.innerText = petalShapes[Math.floor(Math.random() * petalShapes.length)];
+  constructor(
+    private canvas: HTMLCanvasElement,
+    private ctx: CanvasRenderingContext2D,
+    private petalImg: HTMLImageElement
+  ) {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height * 2 - canvas.height;
 
-      // 랜덤 위치 & 크기
-      const size = Math.random() * 0.9 + 0.6; // 0.6 ~ 1.5 rem
-      petal.style.left = Math.random() * 100 + "vw";
-      petal.style.fontSize = `${size}rem`;
+    // 🌸 로즈골드 색상 랜덤 선택
+    this.color = ROSEGOLD_COLORS[Math.floor(Math.random() * ROSEGOLD_COLORS.length)];
 
-      // 로즈골드 랜덤 색
-      petal.style.color =
-        roseGoldColors[Math.floor(Math.random() * roseGoldColors.length)];
+    this.initialize();
+  }
 
-      // 낙하 속도 랜덤 (7~14s)
-      const fallDuration = 7 + Math.random() * 7;
-      petal.style.animationDuration = `${fallDuration}s`;
+  initialize() {
+    this.w = 25 + Math.random() * 15; 
+    this.h = 20 + Math.random() * 10;
 
-      // 회전 속도 랜덤 (6~12s)
-      const rotateDuration = 6 + Math.random() * 6;
-      petal.style.setProperty("--rotate-duration", `${rotateDuration}s`);
+    this.opacity = this.w / 80;
+    this.flip = Math.random();
 
-      // 수평 드리프트 (-20vw ~ 20vw)
-      const drift = (Math.random() * 40 - 20).toFixed(0);
-      petal.style.setProperty("--drift", `${drift}vw`);
+    // 🌬️ → 사선 방향 랜덤화 (왼쪽/오른쪽 모두 가능)
+    const xDirection = Math.random() > 0.5 ? 1 : -1;
 
-      document.body.appendChild(petal);
+    this.xSpeed = (X_SPEED + Math.random() * X_SPEED_VARIANCE) * xDirection;
+    this.ySpeed = Y_SPEED + Math.random() * Y_SPEED_VARIANCE;
 
-      // 제거
-      setTimeout(() => {
-        petal.remove();
-      }, fallDuration * 1000);
-    };
+    this.flipSpeed = Math.random() * FLIP_SPEED_VARIANCE;
+  }
 
-    const interval = setInterval(createPetal, 450);
-    return () => clearInterval(interval);
-  }, []);
+  draw() {
+    if (this.y > this.canvas.height || this.x < -50 || this.x > this.canvas.width + 50) {
+      this.initialize();
 
-  return null;
+      const rand = Math.random() * (this.canvas.width + this.canvas.height);
+
+      if (rand > this.canvas.width) {
+        this.x = 0;
+        this.y = rand - this.canvas.width;
+      } else {
+        this.x = rand;
+        this.y = 0;
+      }
+    }
+
+    const { ctx } = this;
+    ctx.save();
+
+    ctx.globalAlpha = this.opacity;
+
+    // 🌸 원래 이미지를 그린 뒤
+    ctx.drawImage(
+      this.petalImg,
+      this.x,
+      this.y,
+      this.w * (0.6 + Math.abs(Math.cos(this.flip)) / 3),
+      this.h * (0.8 + Math.abs(Math.sin(this.flip)) / 5)
+    );
+
+    // 🌸 로즈골드 색을 덮기
+    ctx.globalCompositeOperation = "source-atop";
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+
+    ctx.restore();
+  }
+
+  animate() {
+    this.x += this.xSpeed;
+    this.y += this.ySpeed;
+    this.flip += this.flipSpeed;
+    this.draw();
+  }
 }
