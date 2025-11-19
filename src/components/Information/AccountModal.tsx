@@ -1,34 +1,45 @@
-import { useState } from "react";
-
 export function AccountModal({ onClose, brideInfo, groomInfo }) {
-  const [copied, setCopied] = useState("");
-
-  const copyText = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    setCopied(text);
-
-    setTimeout(() => {
-      setCopied("");
-    }, 1500);
+  const copy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    alert("📌 복사되었습니다!");
   };
 
   return (
-    <div className="account-modal-overlay" onClick={onClose}>
-      <div className="account-modal" onClick={(e) => e.stopPropagation()}>
-        <h2>계좌번호 안내</h2>
+    <div className="account-modal-overlay">
+      <div className="account-modal">
+        <h3>계좌 정보</h3>
 
-        {[...brideInfo, ...groomInfo].map((person) => (
-          <div key={person.name} className="account-item">
-            <div className="account-title">{person.relation} · {person.name}</div>
-            <div className="account-number">{person.account}</div>
-
-            <button onClick={() => copyText(person.account)} className="copy-btn">
-              {copied === person.account ? "✔ 복사됨!" : "복사하기"}
+        {/* 신랑 측 */}
+        {groomInfo.map((item) => (
+          <div key={item.id} className="account-item">
+            <p className="account-title">{item.relation} ({item.name})</p>
+            <p className="account-number">{item.account}</p>
+            <button
+              className="copy-btn"
+              onClick={() => copy(item.account)}
+            >
+              복사하기
             </button>
           </div>
         ))}
 
-        <button className="close-btn" onClick={onClose}>닫기</button>
+        {/* 신부 측 */}
+        {brideInfo.map((item) => (
+          <div key={item.id} className="account-item">
+            <p className="account-title">{item.relation} ({item.name})</p>
+            <p className="account-number">{item.account}</p>
+            <button
+              className="copy-btn"
+              onClick={() => copy(item.account)}
+            >
+              복사하기
+            </button>
+          </div>
+        ))}
+
+        <button onClick={onClose} className="close-btn">
+          닫기
+        </button>
       </div>
     </div>
   );
