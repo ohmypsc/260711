@@ -1,19 +1,90 @@
-/* 전체 페이지 영역 */
+/* ================================
+   🌸 Rosegold Classic Theme
+================================== */
+
+:root {
+  --theme-bg: #fff7f8;
+  --theme-primary: #c47b85;
+  --theme-primary-light: #e8b0a7;
+  --theme-accent: #dba5b7;
+
+  --text-main: #2e2525;
+  --text-light: #bdaaaa;
+
+  --section-max-width: 640px;
+
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(16px, 3.2vw, 20px);
+}
+
+/* 전체 페이지 */
 .wedding-page {
   width: 100%;
+  background-color: var(--theme-bg);
   overflow-x: hidden;
 }
 
-/* 각 섹션 기본 레이아웃 */
+/* 기본 섹션 레이아웃 */
 section {
   padding: 3rem 1.5rem;
-  max-width: 640px;
+  max-width: var(--section-max-width);
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  color: var(--text-main);
 }
 
-/* 표지 섹션은 전체 화면으로 확장 */
+/* 표지는 전체 화면 */
 #cover {
   padding: 0;
+}
+
+/* 공통 제목 스타일 */
+h2 {
+  font-size: clamp(1.6rem, 5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.06rem;
+  text-align: center;
+  margin-bottom: 2rem;
+
+  /* ✨ 로즈골드 그라데이션 텍스트 */
+  background: linear-gradient(
+    90deg,
+    var(--theme-primary) 0%,
+    var(--theme-primary-light) 50%,
+    var(--theme-primary) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* 은은한 광택 */
+  text-shadow:
+    0 1px 2px rgba(255, 220, 220, 0.4),
+    0 0 6px rgba(235, 190, 190, 0.2);
+}
+
+/* 모바일 최적화 */
+@media (max-width: 500px) {
+  section {
+    padding: 2.2rem 1.2rem;
+  }
+  h2 {
+    margin-bottom: 1.6rem;
+  }
+}
+
+/* 다크 모드 대응 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --theme-bg: #2b2b2b;
+    --text-main: #f2f2f2;
+  }
+
+  body {
+    background-color: var(--theme-bg);
+  }
+
+  * {
+    color: var(--text-main);
+  }
 }
