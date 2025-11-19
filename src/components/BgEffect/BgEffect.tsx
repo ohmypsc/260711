@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
 import petalUrl from "../../image/petal.png";
 
-// ======================
 // 기본 속도 설정
-// ======================
 const X_SPEED = 0.6;
 const X_SPEED_VARIANCE = 0.8;
 
@@ -12,14 +10,9 @@ const Y_SPEED_VARIANCE = 0.4;
 
 const FLIP_SPEED_VARIANCE = 0.02;
 
-// ======================
 // 로즈골드 팔레트
-// ======================
 const ROSEGOLD_COLORS = ["#c47b85", "#e8b0a7", "#dba5b7"];
 
-// ======================
-// Petal 클래스
-// ======================
 class Petal {
   x: number;
   y: number;
@@ -34,20 +27,18 @@ class Petal {
 
   color: string;
 
-  // 모양 다양화 요소
   widthFactor: number = 1;
   heightFactor: number = 1;
   flipX: number = 1;
   angleOffset: number = 0;
 
-  // 바람 흔들림 요소
   waveAmplitude: number = 0;
   waveFrequency: number = 0;
 
   constructor(
     private canvas: HTMLCanvasElement,
     private ctx: CanvasRenderingContext2D,
-    private petalImg: HTMLImageElement
+    private img: HTMLImageElement
   ) {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height * 2 - canvas.height;
@@ -65,34 +56,29 @@ class Petal {
     this.opacity = this.w / 80;
     this.flip = Math.random();
 
-    // 사선 방향 랜덤
-    const xDirection = Math.random() > 0.5 ? 1 : -1;
-    this.xSpeed = (X_SPEED + Math.random() * X_SPEED_VARIANCE) * xDirection;
+    const dir = Math.random() > 0.5 ? 1 : -1;
+    this.xSpeed = (X_SPEED + Math.random() * X_SPEED_VARIANCE) * dir;
     this.ySpeed = Y_SPEED + Math.random() * Y_SPEED_VARIANCE;
 
     this.flipSpeed = Math.random() * FLIP_SPEED_VARIANCE;
 
-    // 모양 랜덤 변형
     this.widthFactor = 0.7 + Math.random() * 0.8;
     this.heightFactor = 0.7 + Math.random() * 0.8;
 
     this.flipX = Math.random() > 0.5 ? 1 : -1;
     this.angleOffset = Math.random() * Math.PI * 2;
 
-    // 바람 흔들림 곡선 설정 (개별 랜덤)
-    this.waveAmplitude = 15 + Math.random() * 25; // 흔들림 폭
-    this.waveFrequency = 0.005 + Math.random() * 0.01; // 흔들림 주기
+    this.waveAmplitude = 15 + Math.random() * 25;
+    this.waveFrequency = 0.005 + Math.random() * 0.01;
   }
 
   draw() {
-    // 화면 벗어나면 리셋
     if (
       this.y > this.canvas.height ||
       this.x < -100 ||
       this.x > this.canvas.width + 100
     ) {
       this.initialize();
-
       const rand = Math.random() * (this.canvas.width + this.canvas.height);
       if (rand > this.canvas.width) {
         this.x = 0;
@@ -107,16 +93,9 @@ class Petal {
     ctx.save();
     ctx.globalAlpha = this.opacity;
 
-    // ======================
-    // 바람 곡선: S자 흔들림
-    // ======================
-    const windOffset =
-      Math.sin(this.y * this.waveFrequency) * this.waveAmplitude;
-    const drawX = this.x + windOffset;
+    const wind = Math.sin(this.y * this.waveFrequency) * this.waveAmplitude;
+    const drawX = this.x + wind;
 
-    // ======================
-    // 좌표 변환
-    // ======================
     ctx.translate(drawX, this.y);
     ctx.scale(this.flipX, 1);
     ctx.rotate(this.angleOffset + this.flip * 0.5);
@@ -124,17 +103,26 @@ class Petal {
     const drawW = this.w * this.widthFactor;
     const drawH = this.h * this.heightFactor;
 
-    // 1) PNG 그리기
-    ctx.drawImage(this.petalImg, 0, 0, drawW, drawH);
+    // ----- 오프스크린 캔버스 생성 (색 입히기 전용) -----
+    const off = document.createElement("canvas");
+    off.width = drawW;
+    off.height = drawH;
+    const offCtx = off.getContext("2d")!;
 
-    // 2) multiply 색상 tint
-    ctx.globalCompositeOperation = "multiply";
-    ctx.fillStyle = this.color;
-    ctx.fillRect(0, 0, drawW, drawH);
+    // 1) PNG 원본
+    offCtx.drawImage(this.img, 0, 0, drawW, drawH);
 
-    // 3) 투명도 유지 (destination-in)
-    ctx.globalCompositeOperation = "destination-in";
-    ctx.drawImage(this.petalImg, 0, 0, drawW, drawH);
+    // 2) multiply 로즈골드 tint
+    offCtx.globalCompositeOperation = "multiply";
+    offCtx.fillStyle = this.color;
+    offCtx.fillRect(0, 0, drawW, drawH);
+
+    // 3) PNG shape로 마스킹 → 사각형 없음, 투명도 완벽 유지
+    offCtx.globalCompositeOperation = "destination-in";
+    offCtx.drawImage(this.img, 0, 0, drawW, drawH);
+
+    // 4) 최종 출력
+    ctx.drawImage(off, 0, 0);
 
     ctx.restore();
   }
@@ -143,19 +131,15 @@ class Petal {
     this.x += this.xSpeed;
     this.y += this.ySpeed;
     this.flip += this.flipSpeed;
-
     this.draw();
   }
 }
 
-// ======================
-// BgEffect 컴포넌트
-// ======================
 export const BgEffect = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const petalsRef = useRef<Petal[]>([]);
-  const resizeTimeoutRef = useRef(0);
   const frameRef = useRef(0);
+  const resizeTimer = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -164,49 +148,36 @@ export const BgEffect = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const petalImg = new Image();
-    petalImg.src = petalUrl;
+    const img = new Image();
+    img.src = petalUrl;
 
-    const getPetalCount = () =>
+    const getCount = () =>
       Math.floor((window.innerWidth * window.innerHeight) / 30000);
 
-    const initPetals = () => {
-      const count = getPetalCount();
-      const arr = [];
-
+    const init = () => {
+      const count = getCount();
+      petalsRef.current = [];
       for (let i = 0; i < count; i++) {
-        arr.push(new Petal(canvas, ctx, petalImg));
+        petalsRef.current.push(new Petal(canvas, ctx, img));
       }
-      petalsRef.current = arr;
     };
 
-    initPetals();
+    img.onload = () => init();
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       petalsRef.current.forEach((p) => p.animate());
       frameRef.current = requestAnimationFrame(render);
     };
-
     render();
 
     const onResize = () => {
-      clearTimeout(resizeTimeoutRef.current);
-      resizeTimeoutRef.current = window.setTimeout(() => {
+      clearTimeout(resizeTimer.current);
+      resizeTimer.current = window.setTimeout(() => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
-        const newCount = getPetalCount();
-        const current = petalsRef.current.length;
-
-        if (newCount > current) {
-          for (let i = current; i < newCount; i++) {
-            petalsRef.current.push(new Petal(canvas, ctx, petalImg));
-          }
-        } else {
-          petalsRef.current.splice(newCount);
-        }
-      }, 150);
+        init();
+      }, 200);
     };
 
     window.addEventListener("resize", onResize);
@@ -218,7 +189,7 @@ export const BgEffect = () => {
   }, []);
 
   return (
-    <div className="bg-effect" style={{ pointerEvents: "none", zIndex: 99999 }}>
+    <div className="bg-effect">
       <canvas ref={canvasRef} />
     </div>
   );
