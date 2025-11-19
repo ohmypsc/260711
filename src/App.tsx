@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
-// ⭐ 전역 데이터 Provider 추가
+// 전역 Provider
 import { ContactInfoProvider } from "./ContactInfoProvider";
 
 // 컴포넌트 import
@@ -42,8 +42,10 @@ function MainWeddingPage() {
 
   return (
     <>
+      {/* 고정 꽃잎 배경 */}
       <BgEffect />
 
+      {/* 메인 섹션 */}
       <main className="wedding-page">
         <section id="information">
           <Information />
@@ -56,12 +58,13 @@ function MainWeddingPage() {
 export default function App() {
   return (
     <ContactInfoProvider>
+      {/* GitHub Pages 호환 Router */}
       <Router>
         <Routes>
-          {/* ⭐ 메인 청첩장 페이지 */}
+          {/* 메인 청첩장 페이지 */}
           <Route path="/" element={<MainWeddingPage />} />
 
-          {/* ⭐ 관리자 페이지 */}
+          {/* 관리자 페이지 */}
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </Router>
