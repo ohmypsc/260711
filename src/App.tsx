@@ -6,7 +6,6 @@ import { Information } from "./components/Information/Information";
 
 // SCSS 파일 import
 import "./App.scss";
-import "./components/Information/Information.scss";
 
 function App() {
   /** 🔒 화면 확대 방지 */
