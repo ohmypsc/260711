@@ -1,30 +1,37 @@
 import { useEffect } from "react";
 
-// 컴포넌트 import (TSX)
+// 컴포넌트 import
 import { BgEffect } from "./components/BgEffect/BgEffect";
 import { Information } from "./components/Information/Information";
 
-// SCSS 파일 import
+// 스타일 import
 import "./App.scss";
 
 function App() {
-  /** 🔒 화면 확대 방지 */
+  /** 🔒 iOS/안드로이드 화면 확대 방지 */
   useEffect(() => {
-    let last = 0;
+    let lastTouchTime = 0;
+
+    // 300ms 안에 두 번 터치할 경우 확대 방지
     const blockZoom = (e: TouchEvent) => {
       const now = Date.now();
-      if (now - last < 300) e.preventDefault();
-      last = now;
+      if (now - lastTouchTime < 300) {
+        e.preventDefault(); // 확대 트리거 block
+      }
+      lastTouchTime = now;
     };
+
+    // pinch-zoom 제스처 자체 차단
     const stopGesture = (e: Event) => e.preventDefault();
 
-    document.addEventListener("touchend", blockZoom, false);
-    document.addEventListener("gesturestart", stopGesture, false);
-    document.addEventListener("gesturechange", stopGesture, false);
-    document.addEventListener("gestureend", stopGesture, false);
+    // passive: false 로 설정해야 preventDefault 정상 동작
+    document.addEventListener("touchstart", blockZoom, { passive: false });
+    document.addEventListener("gesturestart", stopGesture);
+    document.addEventListener("gesturechange", stopGesture);
+    document.addEventListener("gestureend", stopGesture);
 
     return () => {
-      document.removeEventListener("touchend", blockZoom);
+      document.removeEventListener("touchstart", blockZoom);
       document.removeEventListener("gesturestart", stopGesture);
       document.removeEventListener("gesturechange", stopGesture);
       document.removeEventListener("gestureend", stopGesture);
@@ -33,6 +40,7 @@ function App() {
 
   return (
     <>
+      {/* 배경 효과 */}
       <BgEffect />
 
       <main className="wedding-page">
