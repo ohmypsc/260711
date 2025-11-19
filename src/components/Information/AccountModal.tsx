@@ -4,9 +4,9 @@ import { useContactInfo } from "../../ContactInfoProvider";
 export function AccountModal({ onClose }) {
   const contactInfo = useContactInfo();
 
-  // 전역 데이터에서 신랑/신부 정보 나누기
-  const groomInfo = contactInfo.filter((item) => item.type === "groom");
-  const brideInfo = contactInfo.filter((item) => item.type === "bride");
+  // ⭐ 부모 포함 전체 필터링
+  const groomInfo = contactInfo.filter((item) => item.type.startsWith("groom"));
+  const brideInfo = contactInfo.filter((item) => item.type.startsWith("bride"));
 
   const copy = (text: string) => {
     if (!text) return;
@@ -27,7 +27,6 @@ export function AccountModal({ onClose }) {
               <p className="account-number">
                 <strong>{item.bank}</strong> {item.account}
               </p>
-
               <button className="copy-btn" onClick={() => copy(item.account)}>
                 복사
               </button>
