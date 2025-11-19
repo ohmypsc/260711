@@ -1,3 +1,6 @@
+import "../../styles/modal.scss";
+
+
 export function AccountModal({ onClose, brideInfo, groomInfo }) {
   const copy = (text: string) => {
     if (!text) return;
