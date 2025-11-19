@@ -51,10 +51,6 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
             </div>
           ))}
         </div>
-
-        <button onClick={onClose} className="modal-close-btn">
-          닫기
-        </button>
       </div>
     </ModalBase>
   );
