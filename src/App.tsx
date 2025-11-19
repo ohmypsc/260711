@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 // 전역 Provider
 import { ContactInfoProvider } from "./ContactInfoProvider";
@@ -58,8 +58,8 @@ function MainWeddingPage() {
 export default function App() {
   return (
     <ContactInfoProvider>
-      {/* GitHub Pages 호환 Router */}
-      <Router>
+      {/* GitHub Pages 호환 HashRouter */}
+      <HashRouter basename="/">
         <Routes>
           {/* 메인 청첩장 페이지 */}
           <Route path="/" element={<MainWeddingPage />} />
@@ -67,7 +67,7 @@ export default function App() {
           {/* 관리자 페이지 */}
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
-      </Router>
+      </HashRouter>
     </ContactInfoProvider>
   );
 }
