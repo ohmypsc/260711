@@ -1,8 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  base: "/mysc/",
+  base: "./",  // ⭐ Pages + Actions 조합에서 가장 안정적
   plugins: [react()],
 });
