@@ -9,14 +9,17 @@ interface AccountModalProps {
 export function AccountModal({ type, onClose }: AccountModalProps) {
   const contactInfo = useContactInfo();
 
-  // 선택된 타입에 따른 필터링 (신랑 & 부모 / 신부 & 부모)
+  // 🔎 신랑 또는 신부 쪽 정보만 가져오기
   const filtered = contactInfo.filter((item) => item.type.startsWith(type));
 
   const title = type === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
-  const copy = (text: string) => {
-    if (!text) return;
-    navigator.clipboard.writeText(text);
+  // 📌 하이픈 제거 후 복사
+  const copy = (raw: string) => {
+    if (!raw) return;
+
+    const cleaned = raw.replace(/-/g, ""); // ← 하이픈 제거
+    navigator.clipboard.writeText(cleaned);
     alert("📌 계좌번호가 복사되었습니다!");
   };
 
@@ -51,6 +54,8 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
             </div>
           ))}
         </div>
+
+        {/* 닫기 버튼 제거 — ModalBase 안에 있는 기본 닫기 버튼만 사용 */}
       </div>
     </ModalBase>
   );
