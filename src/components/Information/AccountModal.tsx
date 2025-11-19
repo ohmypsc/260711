@@ -1,6 +1,13 @@
 import { ModalBase } from "../modal/ModalBase";
+import { useContactInfo } from "../../ContactInfoProvider";
 
-export function AccountModal({ onClose, brideInfo, groomInfo }) {
+export function AccountModal({ onClose }) {
+  const contactInfo = useContactInfo();
+
+  // 전역 데이터에서 신랑/신부 정보 나누기
+  const groomInfo = contactInfo.filter((item) => item.type === "groom");
+  const brideInfo = contactInfo.filter((item) => item.type === "bride");
+
   const copy = (text: string) => {
     if (!text) return;
     navigator.clipboard.writeText(text);
@@ -20,6 +27,7 @@ export function AccountModal({ onClose, brideInfo, groomInfo }) {
               <p className="account-number">
                 <strong>{item.bank}</strong> {item.account}
               </p>
+
               <button className="copy-btn" onClick={() => copy(item.account)}>
                 복사
               </button>
@@ -34,17 +42,19 @@ export function AccountModal({ onClose, brideInfo, groomInfo }) {
 
   return (
     <ModalBase onClose={onClose}>
-      <h3>계좌 정보</h3>
+      <div className="account-modal-content">
+        <h3 className="modal-title">계좌 정보</h3>
 
-      <h4>신랑 측</h4>
-      {renderList(groomInfo)}
+        <h4 className="modal-subtitle">신랑 측</h4>
+        {renderList(groomInfo)}
 
-      <h4>신부 측</h4>
-      {renderList(brideInfo)}
+        <h4 className="modal-subtitle">신부 측</h4>
+        {renderList(brideInfo)}
 
-      <button onClick={onClose} className="modal-close-btn">
-        닫기
-      </button>
+        <button onClick={onClose} className="modal-close-btn">
+          닫기
+        </button>
+      </div>
     </ModalBase>
   );
 }
