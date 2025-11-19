@@ -1,13 +1,9 @@
 import { useEffect } from "react";
 import { BgEffect } from "./components/BgEffect/BgEffect";
 
-import { Cover } from "./components/Cover/Cover";
-import { Invitation } from "./components/Invitation/Invitation";
-import { Timeline } from "./components/Timeline/Timeline";
-import { Calendar } from "./components/Calendar/Calendar";
-import { Location } from "./components/Location/Location";
+
 import { Information } from "./components/Information/Information";
-import { GuestBook } from "./components/GuestBook/GuestBook";
+
 
 import AdminPage from "./AdminPage";
 import { STATIC_ONLY } from "./env";
