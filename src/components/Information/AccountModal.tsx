@@ -1,62 +1,84 @@
-import { ModalBase } from "../modal/ModalBase";
-import { useContactInfo } from "../../ContactInfoProvider";
+// -----------------------------------------
+// ContactInfoProvider.tsx (최종 완성본)
+// -----------------------------------------
 
-interface AccountModalProps {
-  type: "groom" | "bride";
-  onClose: () => void;
-}
+import { createContext, useContext } from "react";
 
-export function AccountModal({ type, onClose }: AccountModalProps) {
-  const contactInfo = useContactInfo();
+const ContactInfoContext = createContext([]);
 
-  // 🔎 신랑 또는 신부 쪽 정보만 가져오기
-  const filtered = contactInfo.filter((item) => item.type.startsWith(type));
+/* -------------------------------------------------
+   ContactInfoProvider — 정적 개인 연락처 & 계좌 정보 제공
+   GitHub Secrets → .env.production → import.meta.env
+--------------------------------------------------- */
 
-  const title = type === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
+export function ContactInfoProvider({ children }) {
+  const contactInfo = [
+    /* 🟦 신랑 측 ------------------------------------ */
+    {
+      id: "groom",
+      type: "groom",
+      relation: "신랑",
+      name: import.meta.env.VITE_GROOM_NAME,
+      phone: import.meta.env.VITE_GROOM_PHONE,
+      bank: import.meta.env.VITE_GROOM_BANK,
+      account: import.meta.env.VITE_GROOM_ACCOUNT,
+    },
+    {
+      id: "groom-father",
+      type: "groom",
+      relation: "신랑 아버지",
+      name: import.meta.env.VITE_GROOM_FATHER_NAME,
+      phone: import.meta.env.VITE_GROOM_FATHER_PHONE,
+      bank: import.meta.env.VITE_GROOM_FATHER_BANK,
+      account: import.meta.env.VITE_GROOM_FATHER_ACCOUNT,
+    },
+    {
+      id: "groom-mother",
+      type: "groom",
+      relation: "신랑 어머니",
+      name: import.meta.env.VITE_GROOM_MOTHER_NAME,
+      phone: import.meta.env.VITE_GROOM_MOTHER_PHONE,
+      bank: import.meta.env.VITE_GROOM_MOTHER_BANK,
+      account: import.meta.env.VITE_GROOM_MOTHER_ACCOUNT,
+    },
 
-  // 📌 하이픈 제거 후 복사
-  const copy = (raw: string) => {
-    if (!raw) return;
-
-    const cleaned = raw.replace(/-/g, ""); // ← 하이픈 제거
-    navigator.clipboard.writeText(cleaned);
-    alert("📌 계좌번호가 복사되었습니다!");
-  };
+    /* 🟩 신부 측 ------------------------------------ */
+    {
+      id: "bride",
+      type: "bride",
+      relation: "신부",
+      name: import.meta.env.VITE_BRIDE_NAME,
+      phone: import.meta.env.VITE_BRIDE_PHONE,
+      bank: import.meta.env.VITE_BRIDE_BANK,
+      account: import.meta.env.VITE_BRIDE_ACCOUNT,
+    },
+    {
+      id: "bride-father",
+      type: "bride",
+      relation: "신부 아버지",
+      name: import.meta.env.VITE_BRIDE_FATHER_NAME,
+      phone: import.meta.env.VITE_BRIDE_FATHER_PHONE,
+      bank: import.meta.env.VITE_BRIDE_FATHER_BANK,
+      account: import.meta.env.VITE_BRIDE_FATHER_ACCOUNT,
+    },
+    {
+      id: "bride-mother",
+      type: "bride",
+      relation: "신부 어머니",
+      name: import.meta.env.VITE_BRIDE_MOTHER_NAME,
+      phone: import.meta.env.VITE_BRIDE_MOTHER_PHONE,
+      bank: import.meta.env.VITE_BRIDE_MOTHER_BANK,
+      account: import.meta.env.VITE_BRIDE_MOTHER_ACCOUNT,
+    },
+  ];
 
   return (
-    <ModalBase onClose={onClose}>
-      <div className="account-modal-content">
-        <h3 className="modal-title">{title}</h3>
-
-        <div className="account-list">
-          {filtered.map((item) => (
-            <div key={item.id} className="account-entry">
-              <p className="account-relation">
-                {item.relation} <span className="name">{item.name}</span>
-              </p>
-
-              {item.bank && item.account ? (
-                <div className="account-box">
-                  <p className="bank-line">
-                    <strong>{item.bank}</strong> {item.account}
-                  </p>
-
-                  <button
-                    className="copy-btn"
-                    onClick={() => copy(item.account!)}
-                  >
-                    복사하기
-                  </button>
-                </div>
-              ) : (
-                <p className="no-account">계좌 정보가 없습니다.</p>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* 닫기 버튼 제거 — ModalBase 안에 있는 기본 닫기 버튼만 사용 */}
-      </div>
-    </ModalBase>
+    <ContactInfoContext.Provider value={contactInfo}>
+      {children}
+    </ContactInfoContext.Provider>
   );
+}
+
+export function useContactInfo() {
+  return useContext(ContactInfoContext);
 }
