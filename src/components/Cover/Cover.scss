@@ -1,9 +1,13 @@
+/* 전역 section padding override */
+#cover {
+  padding-top: 2rem !important;
+  padding-bottom: 3rem !important;
+}
+
 .w-cover {
   width: 100%;
-  padding: 3rem 1.6rem 3.5rem;   /* 상단 3rem → 적당한 감성 여백 */
   text-align: center;
 
-  /* 은은한 배경 그라데이션 */
   background: linear-gradient(
       to bottom,
       rgba(255, 247, 248, 0.95),
@@ -11,13 +15,12 @@
     )
     no-repeat;
 
-  /* 내부 정렬 */
   .inner {
     max-width: 640px;
     margin: 0 auto;
   }
 
-  /* 상단 작은 태그라인 */
+  /* 상단 작은 텍스트 */
   .tagline {
     font-size: 0.82rem;
     letter-spacing: 0.32rem;
@@ -26,7 +29,7 @@
     margin-bottom: 1.4rem;
   }
 
-  /* 메인 이름 */
+  /* 이름 */
   .names {
     font-size: clamp(2rem, 7vw, 2.5rem);
     font-weight: 600;
@@ -37,7 +40,6 @@
       color: var(--theme-primary);
       padding: 0 0.45rem;
       font-size: 0.9em;
-      opacity: 0.9;
     }
   }
 
@@ -45,7 +47,6 @@
   .date {
     font-size: 1.05rem;
     color: var(--text-main);
-    font-weight: 500;
     margin-bottom: 0.3rem;
   }
 
@@ -53,37 +54,35 @@
   .place {
     font-size: 1.05rem;
     color: var(--text-main);
-    font-weight: 500;
     margin-bottom: 1.8rem;
   }
 
-  /* 부모님 정보 — 줄 길이 균형 맞춤 */
+  /* 부모님 정보 */
   .parents {
     margin-bottom: 2.4rem;
     font-size: 0.96rem;
     color: var(--text-main);
     line-height: 1.65rem;
 
-    /* 양쪽 균형을 맞추기 위해 일정 너비 사용 */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
 
     p {
-      width: 85%;                 /* 양쪽 줄 길이를 맞춤 */
+      width: 85%;
       text-align: center;
       white-space: nowrap;
     }
 
     strong {
-      font-weight: 600;
       color: var(--theme-primary);
+      font-weight: 600;
     }
   }
 
-  /* 버튼 영역 */
+  /* 버튼 */
   .button-area {
-    margin-top: 0.5rem;
+    margin-top: 0.8rem;
   }
 }
