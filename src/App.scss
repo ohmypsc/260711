@@ -8,17 +8,14 @@ body {
 }
 
 /* ================================
-   🌸 Rosegold Classic Theme
+   🌸 Rosegold Theme
 ================================ */
 :root {
   --theme-bg: #fff7f8;
   --theme-primary: #c47b85;
   --theme-primary-light: #e8b0a7;
-  --theme-accent: #dba5b7;
 
   --text-main: #2e2525;
-  --text-light: #bdaaaa;
-
   --section-max-width: 640px;
 
   font-family: "Noto Serif KR", serif;
@@ -27,52 +24,22 @@ body {
 
 /* 전체 페이지 */
 .wedding-page {
-  width: 100%;
   background-color: var(--theme-bg);
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* ================================
-   공통 섹션 레이아웃
-================================ */
+/* ==================================
+   ⭐ 공통: 모든 섹션의 폭 통일
+================================== */
 section {
-  padding: 0 1.5rem 3rem;
+  padding: 3rem 0 3rem;
 }
 
-/* 공통 내부 컨테이너 */
 .section-inner {
   max-width: var(--section-max-width);
   margin: 0 auto;
+  padding: 0 1.5rem;
   width: 100%;
 }
 
-/* 공통 h2 스타일 */
-h2 {
-  font-size: clamp(1.6rem, 5vw, 2rem);
-  font-weight: 600;
-  letter-spacing: 0.06rem;
-  text-align: center;
-  margin-bottom: 2rem;
-
-  background: linear-gradient(
-    90deg,
-    var(--theme-primary),
-    var(--theme-primary-light),
-    var(--theme-primary)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow:
-    0 1px 2px rgba(255, 220, 220, 0.4),
-    0 0 6px rgba(235, 190, 190, 0.2);
-}
-
-/* 모바일 */
-@media (max-width: 500px) {
-  section {
-    padding: 0 1.2rem 2.2rem;
-  }
-  h2 {
-    margin-bottom: 1.6rem;
-  }
-}
