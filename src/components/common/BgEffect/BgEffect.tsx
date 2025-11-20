@@ -1,14 +1,30 @@
 import { useEffect, useRef } from "react";
 import petalUrl from "@/image/petal.png";
 
-/* ---------- 기본 속도 파라미터 ---------- */
-const BASE_Y_SPEED = 0.6;
-const Y_VARIANCE = 0.4;
+/* --------------------------------------
+   🌸 1) 자연스러운 랜덤 (정규분포) 함수
+-------------------------------------- */
+function gaussianRandom(mean = 0, stdev = 1) {
+  let u = 1 - Math.random();
+  let v = 1 - Math.random();
+  let z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  return z * stdev + mean;
+}
 
-const FLIP_VARIANCE = 0.015;
-const WIND_STRENGTH = 20;   // 좌우 흔들림 범위
+/* --------------------------------------
+   🌬 바람 & 속도 설정
+-------------------------------------- */
+const BASE_Y_SPEED = 0.7;
+const Y_VARIANCE = 0.35;
 
-/* ---------- 꽃잎 클래스 ---------- */
+const WIND_STRENGTH = 22; // 좌우 흔들림 범위 (더 현실적으로)
+const WIND_SPEED = 0.008; // 바람 변화 속도
+
+const ROTATION_COEFFICIENT = 0.04; // 회전 자연스러움 계수
+
+/* --------------------------------------
+   🌸 Petal Class (업그레이드 버전)
+-------------------------------------- */
 class Petal {
   x = 0;
   y = 0;
@@ -16,8 +32,8 @@ class Petal {
   h = 0;
 
   opacity = 0;
-  flip = 0;
-  flipSpeed = 0;
+  rotation = 0;
+  rotationSpeed = 0;
 
   ySpeed = 0;
   windTime = Math.random() * 1000;
@@ -31,10 +47,13 @@ class Petal {
   }
 
   reset(initial = false) {
-    this.w = 20 + Math.random() * 20;
-    this.h = 20 + Math.random() * 20;
+    // 📌 정규분포 기반 크기 (자연스러움 ↑)
+    const size = Math.max(16, gaussianRandom(30, 10));
 
-    this.opacity = Math.random() * 0.4 + 0.3;
+    this.w = size;
+    this.h = size * (0.8 + Math.random() * 0.4);
+
+    this.opacity = 0.25 + Math.random() * 0.4;
 
     this.x = Math.random() * this.canvas.width;
 
@@ -43,27 +62,33 @@ class Petal {
       : -this.h - Math.random() * this.canvas.height;
 
     this.ySpeed = BASE_Y_SPEED + Math.random() * Y_VARIANCE;
-    this.flip = Math.random() * Math.PI * 2;
-    this.flipSpeed = (Math.random() - 0.5) * FLIP_VARIANCE;
+
+    // 📌 크기 기반 회전 속도 (큰 꽃잎 = 느리게)
+    this.rotationSpeed =
+      ((Math.random() * 2 - 1) * ROTATION_COEFFICIENT) *
+      (30 / this.w);
+
+    this.rotation = Math.random() * Math.PI * 2;
 
     this.windTime = Math.random() * 1000;
   }
 
   draw() {
-    const { ctx } = this;
+    const ctx = this.ctx;
 
     if (this.y > this.canvas.height + this.h) {
       this.reset(false);
     }
 
-    this.windTime += 0.01;
+    // 🌬 바람 흔들림
+    this.windTime += WIND_SPEED;
     const windOffset = Math.sin(this.windTime) * WIND_STRENGTH;
 
     ctx.save();
     ctx.globalAlpha = this.opacity;
 
     ctx.translate(this.x + windOffset, this.y);
-    ctx.rotate(this.flip);
+    ctx.rotate(this.rotation);
 
     ctx.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
 
@@ -72,12 +97,17 @@ class Petal {
 
   animate() {
     this.y += this.ySpeed;
-    this.flip += this.flipSpeed;
+
+    // 🌸 바람에 맞춰 회전 속도가 자연스럽게 증가
+    this.rotation += this.rotationSpeed + Math.sin(this.windTime) * 0.01;
+
     this.draw();
   }
 }
 
-/* ---------- 컴포넌트 본체 ---------- */
+/* --------------------------------------
+   🌸 BgEffect Component
+-------------------------------------- */
 export const BgEffect = () => {
   const ref = useRef<HTMLCanvasElement>(null);
   const petalsRef = useRef<Petal[]>([]);
@@ -93,7 +123,10 @@ export const BgEffect = () => {
     const img = new Image();
     img.src = petalUrl;
 
-    const count = Math.floor((window.innerWidth * window.innerHeight) / 36000);
+    // 꽃잎 수 조절 (화면 크기 비례)
+    const count = Math.floor(
+      (window.innerWidth * window.innerHeight) / 38000
+    );
 
     img.onload = () => {
       petalsRef.current = Array.from({ length: count }, () => {
@@ -108,6 +141,7 @@ export const BgEffect = () => {
     };
 
     render();
+
     return () => cancelAnimationFrame(animRef.current);
   }, []);
 
