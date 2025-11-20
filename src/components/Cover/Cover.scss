@@ -1,36 +1,20 @@
-/* 전역 섹션 padding override */
-#cover {
-  padding-top: 1.2rem !important;
-  padding-bottom: 3rem !important;
-}
-
 .w-cover {
-  width: 100%;
   text-align: center;
-
-  background: linear-gradient(
-      to bottom,
-      rgba(255, 247, 248, 0.95),
-      rgba(255, 247, 248, 1)
-    )
-    no-repeat;
-
-  .inner {
-    max-width: 640px;
-    margin: 0 auto;
-  }
+  padding-top: 4rem;
+  padding-bottom: 3rem;
 
   .tagline {
-    font-size: 0.8rem;
-    letter-spacing: 0.32rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.28rem;
     color: var(--theme-primary-light);
-    margin-bottom: 1.4rem;
+    margin-bottom: 1.2rem;
   }
 
   .names {
-    font-size: clamp(2rem, 7vw, 2.6rem);
+    font-size: clamp(2rem, 7vw, 2.4rem);
     font-weight: 600;
-    margin-bottom: 1.7rem;
+    margin-bottom: 1.8rem;
+    color: var(--text-main);
 
     span {
       color: var(--theme-primary);
@@ -40,36 +24,28 @@
 
   .date {
     font-size: 1.05rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.4rem;
   }
 
   .place {
     font-size: 1.05rem;
-    margin-bottom: 1.8rem;
+    margin-bottom: 1.6rem;
   }
 
   .parents {
     margin-bottom: 2.4rem;
-    font-size: 0.96rem;
-    line-height: 1.65rem;
+    line-height: 1.7rem;
+    font-size: 0.95rem;
+  }
 
+  /* 부모 정보 줄 길이 맞추기 */
+  .parents p {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.45rem;
-
-    p {
-      width: 85%;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    strong {
-      color: var(--theme-primary);
-    }
+    justify-content: center;
+    gap: 0.4rem;
   }
 
   .button-area {
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
   }
 }
