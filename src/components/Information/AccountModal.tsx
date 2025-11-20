@@ -1,3 +1,4 @@
+import "./AccountModal.scss";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useContactInfo } from "@/ContactInfoProvider";
 
