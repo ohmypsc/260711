@@ -1,6 +1,4 @@
-// -----------------------------------------
-// ModalBase.tsx — 최종 완성본
-// -----------------------------------------
+
 
 import { useEffect, useRef, useState } from "react";
 import "./modal.scss";
