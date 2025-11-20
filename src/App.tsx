@@ -5,7 +5,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { ContactInfoProvider } from "./ContactInfoProvider";
 
 // 페이지 컴포넌트
-import MainWeddingPage from "./MainWeddingPage";
+import MainWeddingPage from "./index";
 import AdminPage from "./AdminPage";
 
 // 전역 스타일
