@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ContactInfoContext } from "@/ContactInfoProvider";
-import { ModalBase } from "@/components/ModalBase/ModalBase";
+import { ModalBase } from "@/components/Modal/ModalBase";
 import "./ContactModal.scss";
 
 export function ContactModal({ onClose }: { onClose: () => void }) {
