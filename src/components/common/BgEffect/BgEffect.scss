@@ -1,11 +1,11 @@
 .bg-effect {
-  position: fixed !important;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 9999 !important;
+  z-index: 99999;
 }
 
 .bg-effect canvas {
