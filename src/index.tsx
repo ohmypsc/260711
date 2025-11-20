@@ -1,20 +1,19 @@
 import { useEffect } from "react";
 
-// 🔥 수정된 경로: BgEffect는 common 안에 있음
+// BgEffect는 common 안에 있음
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
 
 import { Cover } from "@/components/Cover/Cover";
 import { Information } from "@/components/Information/Information";
 
 export default function MainWeddingPage() {
+  // 모바일 더블터치 확대 방지
   useEffect(() => {
     let lastTouchTime = 0;
 
     const blockZoom = (e: TouchEvent) => {
       const now = Date.now();
-      if (now - lastTouchTime < 300) {
-        e.preventDefault();
-      }
+      if (now - lastTouchTime < 300) e.preventDefault();
       lastTouchTime = now;
     };
 
@@ -38,13 +37,21 @@ export default function MainWeddingPage() {
       <BgEffect />
 
       <main className="wedding-page">
+        
+        {/* Cover */}
         <section id="cover">
-          <Cover />
+          <div className="section-inner">
+            <Cover />
+          </div>
         </section>
 
+        {/* Information */}
         <section id="information">
-          <Information />
+          <div className="section-inner">
+            <Information />
+          </div>
         </section>
+
       </main>
     </>
   );
