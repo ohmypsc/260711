@@ -5,7 +5,6 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
-  /* height: 100% 제거 — 빈공간 버그 해결 */
 }
 
 /* ================================
@@ -34,23 +33,20 @@ body {
 }
 
 /* ================================
-   Section Layout (공통 틀)
+   🌸 공통 Section Layout
 ================================ */
 section {
   max-width: var(--section-max-width);
   margin: 0 auto;
   position: relative;
   color: var(--text-main);
-
-  /* Cover 포함 전체 섹션 기본 padding */
-  padding: 3rem 1.5rem 3rem;
+  padding: 3rem 1.5rem;   /* 🎯 기본 padding 복구 */
 }
 
-/* 공통 제목 스타일 */
+/* 공통 제목 */
 h2 {
   font-size: clamp(1.6rem, 5vw, 2rem);
   font-weight: 600;
-  letter-spacing: 0.06rem;
   text-align: center;
   margin-bottom: 2rem;
 
@@ -62,32 +58,11 @@ h2 {
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  text-shadow:
-    0 1px 2px rgba(255, 220, 220, 0.4),
-    0 0 6px rgba(235, 190, 190, 0.2);
 }
 
 /* 모바일 최적화 */
 @media (max-width: 500px) {
   section {
-    padding: 2.2rem 1.2rem 2.4rem;
-  }
-
-  h2 {
-    margin-bottom: 1.6rem;
-  }
-}
-
-/* 다크 모드 대응 */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --theme-bg: #2b2b2b;
-    --text-main: #f2f2f2;
-  }
-
-  body {
-    background-color: var(--theme-bg);
-    color: var(--text-main);
+    padding: 2.4rem 1.2rem;
   }
 }
