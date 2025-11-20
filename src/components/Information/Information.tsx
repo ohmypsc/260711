@@ -1,7 +1,8 @@
 import "./Information.scss";
 import { useState } from "react";
+
+import { Button } from "@/components/common/Button/Button";
 import { AccountModal } from "./AccountModal";
-import { useContactInfo } from "../../ContactInfoProvider";
 
 export function Information() {
   const [openModal, setOpenModal] = useState<null | "groom" | "bride">(null);
@@ -11,20 +12,14 @@ export function Information() {
       <h2>혼주 정보</h2>
 
       {/* 신랑 측 버튼 */}
-      <button
-        className="account-btn"
-        onClick={() => setOpenModal("groom")}
-      >
+      <Button variant="outline" onClick={() => setOpenModal("groom")}>
         신랑 측 계좌번호 보기
-      </button>
+      </Button>
 
       {/* 신부 측 버튼 */}
-      <button
-        className="account-btn"
-        onClick={() => setOpenModal("bride")}
-      >
+      <Button variant="outline" onClick={() => setOpenModal("bride")}>
         신부 측 계좌번호 보기
-      </button>
+      </Button>
 
       {openModal && (
         <AccountModal
