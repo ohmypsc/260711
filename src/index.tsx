@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 
-import { BgEffect } from "@/components/BgEffect/BgEffect";
+// 🔥 수정된 경로: BgEffect는 common 안에 있음
+import { BgEffect } from "@/components/common/BgEffect/BgEffect";
+
 import { Cover } from "@/components/Cover/Cover";
 import { Information } from "@/components/Information/Information";
 
