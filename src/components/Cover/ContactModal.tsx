@@ -1,16 +1,15 @@
-import { useContext } from "react";
-import { ContactInfoContext } from "@/ContactInfoProvider";
 import { Modal } from "@/components/common/Modal/Modal";
+import { useContactInfo } from "@/ContactInfoProvider";
 import "./ContactModal.scss";
 
 export function ContactModal({ onClose }: { onClose: () => void }) {
-  const contactInfo = useContext(ContactInfoContext);
+  const contactInfo = useContactInfo();
 
   const groomSide = contactInfo.filter((c) => c.type === "groom");
   const brideSide = contactInfo.filter((c) => c.type === "bride");
 
   return (
-    <ModalBase onClose={onClose}>
+    <Modal onClose={onClose}>
       <div className="contact-modal-wrap">
         <h2 className="contact-title">연락처</h2>
 
@@ -36,6 +35,6 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
           </div>
         ))}
       </div>
-    </ModalBase>
+    </Modal>
   );
 }
