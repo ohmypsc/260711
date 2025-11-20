@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import petalUrl from "../../image/petal.png";
+import petalUrl from "@/image/petal.png";
 
 // ✔ 더 은은한 로즈골드 색상
 const ROSEGOLD_COLORS = [
