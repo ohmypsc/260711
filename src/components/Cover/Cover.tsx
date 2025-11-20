@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Cover.scss";
-import { Button } from "../common/Button/Button";
+import { Button } from "../Button/Button";
 import { ContactModal } from "../ContactModal/ContactModal";
 
 export function Cover() {
