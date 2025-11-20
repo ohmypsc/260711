@@ -1,20 +1,18 @@
 .w-cover {
   text-align: center;
-  padding-top: 4rem;
   padding-bottom: 3rem;
 
   .tagline {
     font-size: 0.85rem;
     letter-spacing: 0.28rem;
     color: var(--theme-primary-light);
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
   }
 
   .names {
     font-size: clamp(2rem, 7vw, 2.4rem);
     font-weight: 600;
-    margin-bottom: 1.8rem;
-    color: var(--text-main);
+    margin-bottom: 1.5rem;
 
     span {
       color: var(--theme-primary);
@@ -22,30 +20,20 @@
     }
   }
 
-  .date {
-    font-size: 1.05rem;
-    margin-bottom: 0.4rem;
-  }
-
+  .date,
   .place {
-    font-size: 1.05rem;
-    margin-bottom: 1.6rem;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .parents {
-    margin-bottom: 2.4rem;
+    margin: 1.6rem 0 2.4rem;
     line-height: 1.7rem;
-    font-size: 0.95rem;
-  }
 
-  /* 부모 정보 줄 길이 맞추기 */
-  .parents p {
-    display: flex;
-    justify-content: center;
-    gap: 0.4rem;
-  }
-
-  .button-area {
-    margin-top: 0.5rem;
+    /* 딸 라인 길이 보정 */
+    .daughter {
+      display: inline-block;
+      padding: 0 0.4rem;
+    }
   }
 }
