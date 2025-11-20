@@ -5,9 +5,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
-  
-  /* ❗ 모바일에서 빈공간 만드는 주범 → 제거 */
-  /* height: 100%; ❌ 제거 */
+  /* height: 100% 제거 — 빈공간 버그 해결 */
 }
 
 /* ================================
@@ -36,7 +34,7 @@ body {
 }
 
 /* ================================
-   Section Layout 개선본 ✨
+   Section Layout (공통 틀)
 ================================ */
 section {
   max-width: var(--section-max-width);
@@ -44,8 +42,8 @@ section {
   position: relative;
   color: var(--text-main);
 
-  /* ❗ Cover의 여백과 충돌하지 않도록 상단 padding 제거 */
-  padding: 0 1.5rem 3rem;
+  /* Cover 포함 전체 섹션 기본 padding */
+  padding: 3rem 1.5rem 3rem;
 }
 
 /* 공통 제목 스타일 */
@@ -73,7 +71,7 @@ h2 {
 /* 모바일 최적화 */
 @media (max-width: 500px) {
   section {
-    padding: 0 1.2rem 2.2rem;
+    padding: 2.2rem 1.2rem 2.4rem;
   }
 
   h2 {
