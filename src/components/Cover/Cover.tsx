@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Cover.scss";
 
 import { Button } from "@/components/Button/Button";
-import { ContactModal } from "@/components/ContactModal/ContactModal";
+import { ContactModal } from "@/components/Modal/ContactModal";
 
 export function Cover() {
   const [openModal, setOpenModal] = useState(false);
