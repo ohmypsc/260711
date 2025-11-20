@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./Cover.scss";
-import { Button } from "../Button/Button";
-import { ContactModal } from "../ContactModal/ContactModal";
+
+import { Button } from "@/components/Button/Button";
+import { ContactModal } from "@/components/ContactModal/ContactModal";
 
 export function Cover() {
   const [openModal, setOpenModal] = useState(false);
@@ -9,8 +10,7 @@ export function Cover() {
   return (
     <section className="w-cover">
       <div className="inner">
-
-        <p className="tagline">INVITATION</p>
+        <p className="tagline">초대합니다</p>
 
         <h1 className="names">
           백승철 <span>&</span> 오미영
