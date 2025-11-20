@@ -11,11 +11,14 @@ body {
    🌸 Rosegold Theme
 ================================ */
 :root {
-  --theme-bg: #fff7f8;
-  --theme-primary: #c47b85;
-  --theme-primary-light: #e8b0a7;
+  --theme-bg: #fff9fb;                /* 더 밝은 배경 */
+  --theme-primary: #d9a6b3;          /* 밝은 로즈골드 */
+  --theme-primary-light: #efc8d3;    /* 한 톤 더 밝은 로즈 */
+  --theme-accent: #f6dbe2;           /* 포인트용 연한 컬러 */
 
-  --text-main: #2e2525;
+  --text-main: #3d2a2a;              /* 덜 칙칙한 진한 브라운 */
+  --text-light: #c9b8b8;
+
   --section-max-width: 640px;
 
   font-family: "Noto Serif KR", serif;
@@ -34,6 +37,8 @@ body {
 ================================== */
 section {
   padding: 3rem 0 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .section-inner {
