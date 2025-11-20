@@ -1,13 +1,10 @@
 import { useEffect } from "react";
-
-// BgEffect는 common 안에 있음
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
-
 import { Cover } from "@/components/Cover/Cover";
 import { Information } from "@/components/Information/Information";
 
 export default function MainWeddingPage() {
-  // 모바일 더블터치 확대 방지
+  // (⬇ 기존 줌 방지 useEffect 그대로 유지)
   useEffect(() => {
     let lastTouchTime = 0;
 
@@ -37,21 +34,17 @@ export default function MainWeddingPage() {
       <BgEffect />
 
       <main className="wedding-page">
-        
-        {/* Cover */}
         <section id="cover">
           <div className="section-inner">
             <Cover />
           </div>
         </section>
 
-        {/* Information */}
         <section id="information">
           <div className="section-inner">
             <Information />
           </div>
         </section>
-
       </main>
     </>
   );
