@@ -1,148 +1,119 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 import petalUrl from "@/image/petal.png";
 
-const X_SPEED = 0.6
-const X_SPEED_VARIANCE = 0.8
+/* ---------- 기본 속도 파라미터 ---------- */
+const BASE_Y_SPEED = 0.6;
+const Y_VARIANCE = 0.4;
 
-const Y_SPEED = 0.4
-const Y_SPEED_VARIANCE = 0.4
+const FLIP_VARIANCE = 0.015;
+const WIND_STRENGTH = 20;   // 좌우 흔들림 범위
 
-const FLIP_SPEED_VARIANCE = 0.02
-
-// Petal class
+/* ---------- 꽃잎 클래스 ---------- */
 class Petal {
-  x: number
-  y: number
-  w: number = 0
-  h: number = 0
-  opacity: number = 0
-  flip: number = 0
-  xSpeed: number = 0
-  ySpeed: number = 0
-  flipSpeed: number = 0
+  x = 0;
+  y = 0;
+  w = 0;
+  h = 0;
+
+  opacity = 0;
+  flip = 0;
+  flipSpeed = 0;
+
+  ySpeed = 0;
+  windTime = Math.random() * 1000;
 
   constructor(
     private canvas: HTMLCanvasElement,
     private ctx: CanvasRenderingContext2D,
-    private petalImg: HTMLImageElement,
+    private img: HTMLImageElement
   ) {
-    this.x = Math.random() * canvas.width
-    this.y = Math.random() * canvas.height * 2 - canvas.height
-
-    this.initialize()
+    this.reset(true);
   }
 
-  initialize() {
-    this.w = 25 + Math.random() * 15
-    this.h = 20 + Math.random() * 10
-    this.opacity = this.w / 80
-    this.flip = Math.random()
+  reset(initial = false) {
+    this.w = 20 + Math.random() * 20;
+    this.h = 20 + Math.random() * 20;
 
-    this.xSpeed = X_SPEED + Math.random() * X_SPEED_VARIANCE
-    this.ySpeed = Y_SPEED + Math.random() * Y_SPEED_VARIANCE
-    this.flipSpeed = Math.random() * FLIP_SPEED_VARIANCE
+    this.opacity = Math.random() * 0.4 + 0.3;
+
+    this.x = Math.random() * this.canvas.width;
+
+    this.y = initial
+      ? Math.random() * this.canvas.height
+      : -this.h - Math.random() * this.canvas.height;
+
+    this.ySpeed = BASE_Y_SPEED + Math.random() * Y_VARIANCE;
+    this.flip = Math.random() * Math.PI * 2;
+    this.flipSpeed = (Math.random() - 0.5) * FLIP_VARIANCE;
+
+    this.windTime = Math.random() * 1000;
   }
 
   draw() {
-    if (this.y > this.canvas.height || this.x > this.canvas.width) {
-      this.initialize()
+    const { ctx } = this;
 
-      const rand = Math.random() * (this.canvas.width + this.canvas.height)
-      if (rand > this.canvas.width) {
-        this.x = 0
-        this.y = rand - this.canvas.width
-      } else {
-        this.x = rand
-        this.y = 0
-      }
+    if (this.y > this.canvas.height + this.h) {
+      this.reset(false);
     }
-    this.ctx.globalAlpha = this.opacity
-    this.ctx.drawImage(
-      this.petalImg,
-      this.x,
-      this.y,
-      this.w * (0.6 + Math.abs(Math.cos(this.flip)) / 3),
-      this.h * (0.8 + Math.abs(Math.sin(this.flip)) / 5),
-    )
+
+    this.windTime += 0.01;
+    const windOffset = Math.sin(this.windTime) * WIND_STRENGTH;
+
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+
+    ctx.translate(this.x + windOffset, this.y);
+    ctx.rotate(this.flip);
+
+    ctx.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
+
+    ctx.restore();
   }
 
   animate() {
-    this.x += this.xSpeed
-    this.y += this.ySpeed
-    this.flip += this.flipSpeed
-    this.draw()
+    this.y += this.ySpeed;
+    this.flip += this.flipSpeed;
+    this.draw();
   }
 }
 
-export const BGEffect = () => {
-  const ref = useRef<HTMLCanvasElement>({} as HTMLCanvasElement)
-
-  const petalsRef = useRef<Petal[]>([])
-
-  const resizeTimeoutRef = useRef(0)
-  const animationFrameIdRef = useRef(0)
+/* ---------- 컴포넌트 본체 ---------- */
+export const BgEffect = () => {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const petalsRef = useRef<Petal[]>([]);
+  const animRef = useRef(0);
 
   useEffect(() => {
-    const canvas = ref.current
+    const canvas = ref.current!;
+    const ctx = canvas.getContext("2d")!;
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
+    const img = new Image();
+    img.src = petalUrl;
 
-    const petalImg = new Image()
-    petalImg.src = patelUrl
+    const count = Math.floor((window.innerWidth * window.innerHeight) / 36000);
 
-    const getPetalNum = () => {
-      return Math.floor((window.innerWidth * window.innerHeight) / 30000)
-    }
-
-    const initializePetals = () => {
-      const count = getPetalNum()
-      const petals = []
-      for (let i = 0; i < count; i++) {
-        petals.push(new Petal(canvas, ctx, petalImg))
-      }
-      petalsRef.current = petals
-    }
-
-    initializePetals()
+    img.onload = () => {
+      petalsRef.current = Array.from({ length: count }, () => {
+        return new Petal(canvas, ctx, img);
+      });
+    };
 
     const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      petalsRef.current.forEach((petal) => petal.animate())
-      animationFrameIdRef.current = requestAnimationFrame(render)
-    }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      petalsRef.current.forEach((p) => p.animate());
+      animRef.current = requestAnimationFrame(render);
+    };
 
-    render()
-
-    const onResize = () => {
-      clearTimeout(resizeTimeoutRef.current)
-      resizeTimeoutRef.current = window.setTimeout(() => {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-        const newPetalNum = getPetalNum()
-        if (newPetalNum > petalsRef.current.length) {
-          for (let i = petalsRef.current.length; i < newPetalNum; i++) {
-            petalsRef.current.push(new Petal(canvas, ctx, petalImg))
-          }
-        } else if (newPetalNum < petalsRef.current.length) {
-          petalsRef.current.splice(newPetalNum)
-        }
-      }, 100)
-    }
-
-    window.addEventListener("resize", onResize)
-
-    return () => {
-      window.removeEventListener("resize", onResize)
-      cancelAnimationFrame(animationFrameIdRef.current)
-    }
-  }, [])
+    render();
+    return () => cancelAnimationFrame(animRef.current);
+  }, []);
 
   return (
     <div className="bg-effect">
       <canvas ref={ref} />
     </div>
-  )
-}
+  );
+};
