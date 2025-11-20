@@ -4,7 +4,7 @@ import { Cover } from "@/components/Cover/Cover";
 import { Information } from "@/components/Information/Information";
 
 export default function MainWeddingPage() {
-  // (⬇ 기존 줌 방지 useEffect 그대로 유지)
+
   useEffect(() => {
     let lastTouchTime = 0;
 
@@ -31,9 +31,8 @@ export default function MainWeddingPage() {
 
   return (
     <>
-      <BgEffect />
-
       <main className="wedding-page">
+
         <section id="cover">
           <div className="section-inner">
             <Cover />
@@ -45,7 +44,10 @@ export default function MainWeddingPage() {
             <Information />
           </div>
         </section>
+
       </main>
+
+      <BgEffect /> {/* ← 반드시 여기에 둬야 함 */}
     </>
   );
 }
