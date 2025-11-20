@@ -1,38 +1,43 @@
 .w-cover {
   width: 100%;
-  padding: 4rem 1.6rem 3rem;
+  padding: 3rem 1.6rem 3.5rem;   /* 상단 3rem → 적당한 감성 여백 */
   text-align: center;
+
+  /* 은은한 배경 그라데이션 */
   background: linear-gradient(
       to bottom,
-      rgba(255, 247, 248, 0.9),
+      rgba(255, 247, 248, 0.95),
       rgba(255, 247, 248, 1)
     )
     no-repeat;
 
+  /* 내부 정렬 */
   .inner {
     max-width: 640px;
     margin: 0 auto;
   }
 
-  /* 작은 상단 텍스트 */
+  /* 상단 작은 태그라인 */
   .tagline {
-    font-size: 0.85rem;
-    letter-spacing: 0.28rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.32rem;
     color: var(--theme-primary-light);
-    margin-bottom: 1.2rem;
+    opacity: 0.85;
+    margin-bottom: 1.4rem;
   }
 
-  /* 이름 */
+  /* 메인 이름 */
   .names {
-    font-size: clamp(2rem, 7vw, 2.4rem);
+    font-size: clamp(2rem, 7vw, 2.5rem);
     font-weight: 600;
     color: var(--text-main);
     margin-bottom: 1.8rem;
 
     span {
       color: var(--theme-primary);
-      font-size: 1.8rem;
-      padding: 0 0.4rem;
+      padding: 0 0.45rem;
+      font-size: 0.9em;
+      opacity: 0.9;
     }
   }
 
@@ -40,29 +45,44 @@
   .date {
     font-size: 1.05rem;
     color: var(--text-main);
-    margin-bottom: 0.4rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
   }
 
   /* 장소 */
   .place {
     font-size: 1.05rem;
     color: var(--text-main);
-    margin-bottom: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 1.8rem;
   }
 
-  /* 부모님 정보 */
+  /* 부모님 정보 — 줄 길이 균형 맞춤 */
   .parents {
     margin-bottom: 2.4rem;
-    line-height: 1.7rem;
-    font-size: 0.95rem;
+    font-size: 0.96rem;
     color: var(--text-main);
+    line-height: 1.65rem;
+
+    /* 양쪽 균형을 맞추기 위해 일정 너비 사용 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    p {
+      width: 85%;                 /* 양쪽 줄 길이를 맞춤 */
+      text-align: center;
+      white-space: nowrap;
+    }
 
     strong {
       font-weight: 600;
-      color: var(--text-main);
+      color: var(--theme-primary);
     }
   }
 
+  /* 버튼 영역 */
   .button-area {
     margin-top: 0.5rem;
   }
