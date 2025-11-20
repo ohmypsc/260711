@@ -1,19 +1,16 @@
-
-
 import { useEffect, useRef, useState } from "react";
 import "./modal.scss";
 
-interface ModalBaseProps {
+interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
 }
 
-export function ModalBase({ onClose, children }: ModalBaseProps) {
+export function Modal({ onClose, children }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [closing, setClosing] = useState(false);
 
   useEffect(() => {
-    /* 🔒 스크롤 락 */
     const scrollY = window.scrollY;
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
