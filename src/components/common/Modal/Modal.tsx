@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "./modal.scss";
+import "./Modal.scss";
 
 interface ModalProps {
   onClose: () => void;
