@@ -1,84 +1,69 @@
 // -----------------------------------------
-// ContactInfoProvider.tsx (최종 완성본)
+// AccountModal.tsx (최종 완성본)
 // -----------------------------------------
 
-import { createContext, useContext } from "react";
+import { ModalBase } from "../modal/ModalBase";
+import { useContactInfo } from "../../ContactInfoProvider";
 
-const ContactInfoContext = createContext([]);
-
-/* -------------------------------------------------
-   ContactInfoProvider — 정적 개인 연락처 & 계좌 정보 제공
-   GitHub Secrets → .env.production → import.meta.env
---------------------------------------------------- */
-
-export function ContactInfoProvider({ children }) {
-  const contactInfo = [
-    /* 🟦 신랑 측 ------------------------------------ */
-    {
-      id: "groom",
-      type: "groom",
-      relation: "신랑",
-      name: import.meta.env.VITE_GROOM_NAME,
-      phone: import.meta.env.VITE_GROOM_PHONE,
-      bank: import.meta.env.VITE_GROOM_BANK,
-      account: import.meta.env.VITE_GROOM_ACCOUNT,
-    },
-    {
-      id: "groom-father",
-      type: "groom",
-      relation: "신랑 아버지",
-      name: import.meta.env.VITE_GROOM_FATHER_NAME,
-      phone: import.meta.env.VITE_GROOM_FATHER_PHONE,
-      bank: import.meta.env.VITE_GROOM_FATHER_BANK,
-      account: import.meta.env.VITE_GROOM_FATHER_ACCOUNT,
-    },
-    {
-      id: "groom-mother",
-      type: "groom",
-      relation: "신랑 어머니",
-      name: import.meta.env.VITE_GROOM_MOTHER_NAME,
-      phone: import.meta.env.VITE_GROOM_MOTHER_PHONE,
-      bank: import.meta.env.VITE_GROOM_MOTHER_BANK,
-      account: import.meta.env.VITE_GROOM_MOTHER_ACCOUNT,
-    },
-
-    /* 🟩 신부 측 ------------------------------------ */
-    {
-      id: "bride",
-      type: "bride",
-      relation: "신부",
-      name: import.meta.env.VITE_BRIDE_NAME,
-      phone: import.meta.env.VITE_BRIDE_PHONE,
-      bank: import.meta.env.VITE_BRIDE_BANK,
-      account: import.meta.env.VITE_BRIDE_ACCOUNT,
-    },
-    {
-      id: "bride-father",
-      type: "bride",
-      relation: "신부 아버지",
-      name: import.meta.env.VITE_BRIDE_FATHER_NAME,
-      phone: import.meta.env.VITE_BRIDE_FATHER_PHONE,
-      bank: import.meta.env.VITE_BRIDE_FATHER_BANK,
-      account: import.meta.env.VITE_BRIDE_FATHER_ACCOUNT,
-    },
-    {
-      id: "bride-mother",
-      type: "bride",
-      relation: "신부 어머니",
-      name: import.meta.env.VITE_BRIDE_MOTHER_NAME,
-      phone: import.meta.env.VITE_BRIDE_MOTHER_PHONE,
-      bank: import.meta.env.VITE_BRIDE_MOTHER_BANK,
-      account: import.meta.env.VITE_BRIDE_MOTHER_ACCOUNT,
-    },
-  ];
-
-  return (
-    <ContactInfoContext.Provider value={contactInfo}>
-      {children}
-    </ContactInfoContext.Provider>
-  );
+interface AccountModalProps {
+  type: "groom" | "bride";
+  onClose: () => void;
 }
 
-export function useContactInfo() {
-  return useContext(ContactInfoContext);
+// 계좌번호 보기 좋게 하이픈(-) 자동 삽입
+function formatAccountNumber(account: string) {
+  if (!account) return "";
+  const digits = account.replace(/\D/g, "");
+  return digits.replace(/(\d{4})(?=\d)/g, "$1-");
+}
+
+export function AccountModal({ type, onClose }: AccountModalProps) {
+  const contactInfo = useContactInfo();
+
+  // 신랑 or 신부 측만 필터링
+  const filtered = contactInfo.filter((item) => item.type === type);
+
+  const title = type === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
+
+  const copy = (raw: string) => {
+    const cleaned = raw.replace(/-/g, "");
+    navigator.clipboard.writeText(cleaned);
+    alert("📌 계좌번호가 복사되었습니다!");
+  };
+
+  return (
+    <ModalBase onClose={onClose}>
+      <div className="account-modal-content">
+        <h3 className="modal-title">{title}</h3>
+
+        <div className="account-list">
+          {filtered.map((item) => (
+            <div key={item.id} className="account-entry">
+              <p className="account-relation">
+                {item.relation} <span className="name">{item.name}</span>
+              </p>
+
+              {item.bank && item.account ? (
+                <div className="account-box">
+                  <p className="bank-line">
+                    <strong>{item.bank}</strong>{" "}
+                    {formatAccountNumber(item.account)}
+                  </p>
+
+                  <button
+                    className="copy-btn"
+                    onClick={() => copy(item.account!)}
+                  >
+                    복사하기
+                  </button>
+                </div>
+              ) : (
+                <p className="no-account">계좌 정보가 없습니다.</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </ModalBase>
+  );
 }
