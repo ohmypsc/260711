@@ -1,14 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";   // ⭐ 추가
-import App from "./App";
+import App from "./App"; // 👈 확장자 제거 재시도
 import "./App.scss";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    
-    <BrowserRouter basename="/mysc">
-      <App />
-    </BrowserRouter>
+    <App />
   </React.StrictMode>
 );
