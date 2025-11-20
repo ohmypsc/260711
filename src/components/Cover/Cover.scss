@@ -1,6 +1,6 @@
-/* 전역 section padding override */
+/* 전역 섹션 padding override */
 #cover {
-  padding-top: 2rem !important;
+  padding-top: 1.2rem !important;
   padding-bottom: 3rem !important;
 }
 
@@ -20,48 +20,37 @@
     margin: 0 auto;
   }
 
-  /* 상단 작은 텍스트 */
   .tagline {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     letter-spacing: 0.32rem;
     color: var(--theme-primary-light);
-    opacity: 0.85;
     margin-bottom: 1.4rem;
   }
 
-  /* 이름 */
   .names {
-    font-size: clamp(2rem, 7vw, 2.5rem);
+    font-size: clamp(2rem, 7vw, 2.6rem);
     font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 1.8rem;
+    margin-bottom: 1.7rem;
 
     span {
       color: var(--theme-primary);
-      padding: 0 0.45rem;
-      font-size: 0.9em;
+      padding: 0 0.4rem;
     }
   }
 
-  /* 날짜 */
   .date {
     font-size: 1.05rem;
-    color: var(--text-main);
     margin-bottom: 0.3rem;
   }
 
-  /* 장소 */
   .place {
     font-size: 1.05rem;
-    color: var(--text-main);
     margin-bottom: 1.8rem;
   }
 
-  /* 부모님 정보 */
   .parents {
     margin-bottom: 2.4rem;
     font-size: 0.96rem;
-    color: var(--text-main);
     line-height: 1.65rem;
 
     display: flex;
@@ -77,11 +66,9 @@
 
     strong {
       color: var(--theme-primary);
-      font-weight: 600;
     }
   }
 
-  /* 버튼 */
   .button-area {
     margin-top: 0.8rem;
   }
