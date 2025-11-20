@@ -1,0 +1,80 @@
+/* -------------------------------------
+   ContactModal Style
+   (ModalBase 위에서 콘텐츠 스타일만 정의)
+------------------------------------- */
+
+.contact-modal-wrap {
+  width: 100%;
+  font-family: "Noto Sans KR", sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 메인 제목 */
+.contact-title {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--theme-primary);
+  margin-bottom: 0.4rem;
+
+  letter-spacing: 0.03rem;
+}
+
+/* 신랑측 / 신부측 제목 */
+.side-title {
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--theme-primary-light);
+}
+
+/* 개별 연락처 항목 */
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+  font-size: 0.95rem;
+  color: var(--text-main);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .relation {
+    flex: 1;
+    opacity: 0.8;
+  }
+
+  .name {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .phone {
+    flex: 1;
+    text-align: right;
+    color: var(--theme-primary);
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+/* 모바일 작은 화면 보정 */
+@media (max-width: 360px) {
+  .contact-item {
+    font-size: 0.88rem;
+  }
+}
