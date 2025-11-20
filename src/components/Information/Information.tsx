@@ -9,24 +9,25 @@ export function Information() {
 
   return (
     <div className="information">
-      <h2>혼주 정보</h2>
+  <h2>혼주 정보</h2>
 
-      {/* 신랑 측 버튼 */}
-      <Button variant="outline" onClick={() => setOpenModal("groom")}>
-        신랑 측 계좌번호 보기
-      </Button>
+  <div className="info-buttons">
+    <Button variant="outline" onClick={() => setOpenModal("groom")}>
+      신랑 측 계좌번호 보기
+    </Button>
 
-      {/* 신부 측 버튼 */}
-      <Button variant="outline" onClick={() => setOpenModal("bride")}>
-        신부 측 계좌번호 보기
-      </Button>
+    <Button variant="outline" onClick={() => setOpenModal("bride")}>
+      신부 측 계좌번호 보기
+    </Button>
+  </div>
 
-      {openModal && (
-        <AccountModal
-          type={openModal}
-          onClose={() => setOpenModal(null)}
-        />
-      )}
-    </div>
+  {openModal && (
+    <AccountModal
+      type={openModal}
+      onClose={() => setOpenModal(null)}
+    />
+  )}
+</div>
+
   );
 }
