@@ -1,7 +1,12 @@
 import { useEffect, useRef } from "react";
 import petalUrl from "../../image/petal.png";
 
-const ROSEGOLD_COLORS = ["#c47b85", "#e8b0a7", "#dba5b7"];
+// ✔ 더 은은한 로즈골드 색상
+const ROSEGOLD_COLORS = [
+  "rgba(233, 190, 200, 0.7)",
+  "rgba(245, 210, 215, 0.7)",
+  "rgba(255, 225, 230, 0.7)",
+];
 
 class Petal {
   x = 0;
@@ -36,7 +41,8 @@ class Petal {
     this.w = 25 + Math.random() * 20;
     this.h = 25 + Math.random() * 20;
 
-    this.opacity = Math.random() * 0.7 + 0.4;
+    // ✔ opacity 낮춰서 더 은은하게
+    this.opacity = Math.random() * 0.4 + 0.2;
 
     this.x = initial
       ? Math.random() * this.canvas.width
@@ -46,31 +52,25 @@ class Petal {
       ? Math.random() * this.canvas.height
       : -this.h - Math.random() * this.canvas.height;
 
-    // 기본 속도
-    this.xSpeed = Math.random() * 0.6 - 0.3; // 좌우 랜덤
+    this.xSpeed = Math.random() * 0.6 - 0.3;
     this.ySpeed = 0.4 + Math.random() * 0.6;
 
-    // 회전
     this.angle = Math.random() * Math.PI * 2;
     this.angleSpeed = (Math.random() - 0.5) * 0.02;
 
-    // 바람
     this.windTime = Math.random() * 1000;
   }
 
   draw() {
     const { ctx } = this;
 
-    // 화면 벗어나면 재배치
     if (this.y > this.canvas.height + 50) {
       this.reset();
     }
 
-    // 자연스러운 바람 곡선 이동
     this.windTime += 0.01;
     this.windOffset = Math.sin(this.windTime) * 20;
 
-    // 출력 좌표
     const drawX = this.x + this.windOffset;
 
     ctx.save();
@@ -79,7 +79,7 @@ class Petal {
     ctx.translate(drawX, this.y);
     ctx.rotate(this.angle);
 
-    // 오프스크린 캔버스 tint
+    // 오프스크린 캔버스에 색 입히기
     const off = document.createElement("canvas");
     off.width = this.w;
     off.height = this.h;
@@ -87,26 +87,22 @@ class Petal {
     const o = off.getContext("2d")!;
     o.drawImage(this.img, 0, 0, this.w, this.h);
 
-    o.globalCompositeOperation = "multiply";
+    // ✔ multiply → soft-light로 변경해 더 부드럽게!
+    o.globalCompositeOperation = "soft-light";
     o.fillStyle = this.color;
     o.fillRect(0, 0, this.w, this.h);
 
     o.globalCompositeOperation = "destination-in";
     o.drawImage(this.img, 0, 0, this.w, this.h);
 
-    // 최종 그리기
     ctx.drawImage(off, -this.w / 2, -this.h / 2);
-
     ctx.restore();
   }
 
   animate() {
     this.x += this.xSpeed;
     this.y += this.ySpeed;
-
-    // 회전 자연화
     this.angle += this.angleSpeed;
-
     this.draw();
   }
 }
@@ -127,8 +123,9 @@ export const BgEffect = () => {
     img.src = petalUrl;
 
     img.onload = () => {
+      // ✔ 꽃잎 개수 조금 감소 (28000 → 36000)
       const count =
-        Math.floor((window.innerWidth * window.innerHeight) / 28000);
+        Math.floor((window.innerWidth * window.innerHeight) / 36000);
 
       for (let i = 0; i < count; i++) {
         petalsRef.current.push(new Petal(canvas, ctx, img));
