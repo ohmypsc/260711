@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import patelUrl from "../../icons/petal.png"
+import petalUrl from "@/image/petal.png";
 
 const X_SPEED = 0.6
 const X_SPEED_VARIANCE = 0.8
