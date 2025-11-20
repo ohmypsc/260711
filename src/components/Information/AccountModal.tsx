@@ -1,16 +1,11 @@
-// -----------------------------------------
-// AccountModal.tsx (최종 완성본)
-// -----------------------------------------
-
-import { ModalBase } from "../modal/ModalBase";
-import { useContactInfo } from "../../ContactInfoProvider";
+import { Modal } from "@/components/common/Modal/Modal";
+import { useContactInfo } from "@/ContactInfoProvider";
 
 interface AccountModalProps {
   type: "groom" | "bride";
   onClose: () => void;
 }
 
-// 계좌번호 보기 좋게 하이픈(-) 자동 삽입
 function formatAccountNumber(account: string) {
   if (!account) return "";
   const digits = account.replace(/\D/g, "");
@@ -20,9 +15,7 @@ function formatAccountNumber(account: string) {
 export function AccountModal({ type, onClose }: AccountModalProps) {
   const contactInfo = useContactInfo();
 
-  // 신랑 or 신부 측만 필터링
   const filtered = contactInfo.filter((item) => item.type === type);
-
   const title = type === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
   const copy = (raw: string) => {
@@ -32,7 +25,7 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
   };
 
   return (
-    <ModalBase onClose={onClose}>
+    <Modal onClose={onClose}>
       <div className="account-modal-content">
         <h3 className="modal-title">{title}</h3>
 
@@ -64,6 +57,6 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
           ))}
         </div>
       </div>
-    </ModalBase>
+    </Modal>
   );
 }
