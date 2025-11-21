@@ -9,11 +9,12 @@ button.w-btn {
 
   position: relative;
   width: 100%;
-  border-radius: 14px; /* 살짝 더 둥글게 */
-  font-size: clamp(0.95rem, 2.8vw, 1.1rem);
-  font-weight: 600;
+  border-radius: 14px;
 
-  padding: 1rem 1.25rem; /* 더 여유 있는 패딩 */
+  font-size: clamp(1.15rem, 3.5vw, 1.45rem);  /* 🔥 글자 더 크게 */
+  font-weight: 700; /* 🔥 글자 더 두껍게 */
+
+  padding: 1.1rem 1.3rem; /* 조금 더 여유롭게 */
   background: none;
   border: none;
 
@@ -21,64 +22,14 @@ button.w-btn {
   letter-spacing: 0.2px;
 
   transition: all 0.28s ease;
-
-  /* 부드러운 양각 느낌 */
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
-/* 🌸 리플 효과 */
-button.w-btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  opacity: 0;
-  pointer-events: none;
-}
-
-button.w-btn:active::after {
-  background: radial-gradient(circle, rgba(255,255,255,0.45), transparent 70%);
-  opacity: 1;
-  animation: w-btn-tap 0.35s ease-out forwards;
-}
-
-@keyframes w-btn-tap {
-  0%   { transform: scale(0.8); opacity: 0.7; }
-  60%  { transform: scale(1.25); opacity: 0.3; }
-  100% { transform: scale(1.35); opacity: 0; }
-}
-
-/* ------------------------------------------------------ */
-/* 🌹 OUTLINE 버튼 — "고급스러운 웨딩카드 버튼" 느낌 */
-/* ------------------------------------------------------ */
-button.w-btn.outline {
-  background: #fff;
-  border: 1.8px solid var(--theme-primary);
-  color: var(--theme-primary);
-
-  /* 고급진 미세한 입체감 */
-  box-shadow:
-    0 8px 20px rgba(255,140,148,0.12),
-    0 2px 6px rgba(0,0,0,0.04);
-}
-
-button.w-btn.outline:active {
-  background: var(--theme-primary);
-  color: #fff;
-  transform: scale(0.97);
-  box-shadow:
-    0 4px 12px rgba(255,140,148,0.18),
-    0 2px 4px rgba(0,0,0,0.10);
-}
-
-
-
-/* ------------------------------------------------------ */
-/* 🌙 Disabled */
-/* ------------------------------------------------------ */
-button.w-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none !important;
+/* 🌸 모바일 최적화 (작은 화면에서 폰트 더 크게, 패딩 확대) */
+@media (max-width: 480px) {
+  button.w-btn {
+    font-size: clamp(1.28rem, 4.2vw, 1.55rem); /* 🔥 모바일 전용 더 큰 글자 */
+    padding: 1.25rem 1.4rem; /* 터치 영역 확대 */
+    border-radius: 16px; /* 모바일에서 더 부드럽게 */
+  }
 }
