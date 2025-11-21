@@ -98,6 +98,42 @@
 }
 
 /* -------------------------------------
+   Copy Button (미니멀 버전)
+------------------------------------- */
+.copy-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+
+  background: var(--theme-primary);
+  color: #fff;
+  border: none;
+
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--theme-primary-dark);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+@media (max-width: 360px) {
+  .copy-btn {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+  }
+}
+
+
+
+
+/* -------------------------------------
    RESPONSIVE
 ------------------------------------- */
 @media (max-width: 360px) {
