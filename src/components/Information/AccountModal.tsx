@@ -38,7 +38,8 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
               </p>
 
               {item.bank && item.account ? (
-                <div className="account-box">
+                // 폰트 스타일을 적용하기 위해 account-box 제거, info-group으로 대체
+                <div className="account-info-group">
                   <p className="bank-line">
                     <strong>{item.bank}</strong>{" "}
                     {formatAccountNumber(item.account)}
@@ -48,7 +49,7 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
                     className="copy-btn"
                     onClick={() => copy(item.account!)}
                   >
-                    복사하기
+                    계좌번호 복사하기
                   </button>
                 </div>
               ) : (
