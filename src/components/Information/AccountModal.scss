@@ -1,12 +1,12 @@
 /* -------------------------------------
-    AccountModal Content Styles
+    AccountModal Content Styles (최종: 세로 압축 & 모던)
 ------------------------------------- */
 
 .account-modal-content {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px; 
+  gap: 20px; 
   padding: 0 10px;
 }
 
@@ -17,90 +17,101 @@
 .account-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px; /* 항목 간격을 줄여 압축 */
 }
 
+/* 각 항목 컨테이너: 패딩 최소화, 구분선 사용 */
 .account-entry {
-  padding: 16px;
-  border-radius: 12px;
-  background-color: var(--modal-section-accent-bg, #fefafa);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s;
+  padding: 12px 0; /* 상하 패딩 최소화 */
+  border-bottom: 1px solid var(--modal-border, #f0f0f0);
   
-  &:hover {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  /* 박스 그림자 제거: 목록이 길어질 때 시각적 혼잡 방지 */
+  /* transition 및 hover 효과 제거 */
+  
+  &:last-child {
+    border-bottom: none;
   }
 }
 
 /* -------------------------------------
-    Relation & Name
+    Name & Relation (첫 번째 행)
 ------------------------------------- */
 
 .account-relation {
-  font-size: 1.05rem;
-  margin-bottom: 12px;
+  font-size: 1rem;
+  margin-bottom: 10px; /* 계좌 정보와 간격 */
   color: var(--text-main, #333); 
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(244, 127, 153, 0.15);
-
+  gap: 0.5rem;
+  
   .name {
     font-weight: 700;
     --theme-bright-pink: #F47F99;
     color: var(--theme-bright-pink); 
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 }
 
 /* -------------------------------------
-    Account Box & Details
+    Account Info Line (두 번째 행: 수평 배치 핵심)
 ------------------------------------- */
 
-.account-info-group {
+.account-info-line {
+    /* 은행 + 계좌번호 + 복사 버튼을 수평 배치 */
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--modal-section-accent-bg, #fefafa); /* 연한 배경으로 정보 블록화 */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* 은은한 그림자로 고급화 */
 }
 
 .bank-line {
   font-size: 0.95rem;
   color: var(--text-main, #333);
   
+  /* 계좌 번호가 길어질 경우 대비 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-grow: 1; 
+
   strong {
     color: var(--theme-primary-dark, #4a4a4a); 
     font-weight: 700;
     font-size: 1rem;
+    margin-right: 6px;
   }
 }
 
 /* -------------------------------------
-    Copy Button
+    Copy Button (아이콘화)
 ------------------------------------- */
-.copy-btn {
-  width: 100%;
-  margin-top: 14px;
-  padding: 0.75rem;
-  border-radius: 10px;
+
+.copy-btn-icon {
+  flex-shrink: 0; /* 압축되지 않도록 */
+  margin-left: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
   
   --theme-bright-pink: #F47F99; 
   background: var(--theme-bright-pink);
   color: white;
 
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.9rem; /* 텍스트 크기 조정 */
+  font-weight: 600;
   border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-
+  
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s;
+  transition: opacity 0.2s ease, transform 0.1s;
 
   &:hover {
       background: #E56F88;
   }
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
   }
 }
 
@@ -122,19 +133,22 @@
 ------------------------------------- */
 @media (max-width: 360px) {
   .account-entry {
-    padding: 14px;
+    padding: 10px 0;
+  }
+  .account-info-line {
+    padding: 6px 10px;
   }
   .account-relation {
     font-size: 0.95rem;
-    .name {
-        font-size: 1rem;
-    }
   }
   .bank-line {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    strong {
+        font-size: 0.95rem;
+    }
   }
-  .copy-btn {
-      font-size: 0.95rem;
-      padding: 0.65rem;
+  .copy-btn-icon {
+      font-size: 0.85rem;
+      padding: 5px 8px;
   }
 }
