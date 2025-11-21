@@ -1,83 +1,107 @@
+/* ============================================
+   🌸 Wedding Cover — Elegant Edition
+   ============================================ */
+
 .w-cover {
   text-align: center;
-  padding: 3.5rem 0 3rem; /* 자연스러운 섹션 여백 */
-
-  /* 태그라인 */
-  .tagline {
-    font-size: 0.8rem;
-    letter-spacing: 0.28rem;
-    color: var(--theme-primary-light);
-    margin-bottom: 1.2rem;
-  }
-
-  /* 이름 */
-  .names {
-    font-weight: 600;
-    margin-bottom: 1.6rem;
-    line-height: 1.3;
-    font-size: clamp(2.1rem, 7vw, 2.7rem);
-
-    span {
-      color: var(--theme-primary);
-      padding: 0 0.45rem;
-    }
-  }
-
-  /* 날짜, 장소 */
-  .date,
-  .place {
-    margin-bottom: 0.35rem;
-    letter-spacing: 0.01rem;
-  }
-
-  /* 부모님 정보 */
-  .parents {
-    margin: 2.1rem 0 2.5rem;
-    line-height: 1.55rem;
-
-    p {
-      margin: 0.35rem 0;
-    }
-
-    .daughter {
-      display: inline-block;
-      padding: 0 0.3rem;
-    }
-  }
-
-  /* ⭐ 아들/딸 동일 길이 맞춤 (예시 방식과 100% 동일) */
-  .relation-name {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 500;
-    opacity: 0.85;
-  }
-
-  .relation-name--adjust {
-    min-width: 2.4em; /* 아들/딸 가로 길이 동일하게 강제 */
-    text-align: center;
-    display: inline-flex;
-    justify-content: center;
-  }
-
-  /* 버튼 – 전역 스타일만 그대로 사용 */
-  button {
-    margin-top: 1rem; /* 위치만 조절 */
-  }
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.9rem;
 }
 
-/* 작은 모바일에서 여백 최소 조정 */
+
+/* Names */
+.w-cover .names {
+  font-weight: 600;
+  line-height: 1.34;
+  font-size: clamp(2.3rem, 7.4vw, 3rem);
+  margin-bottom: 0.2rem;
+}
+
+.w-cover .names span {
+  color: var(--theme-primary);
+  padding: 0 0.45rem;
+  position: relative;
+}
+
+/* 로맨틱 밑줄 */
+.w-cover .names span::after {
+  content: "";
+  position: absolute;
+  bottom: -0.25rem;
+  left: 12%;
+  width: 76%;
+  height: 2px;
+  background: var(--theme-primary);
+  opacity: 0.42;
+  border-radius: 2px;
+}
+
+/* Date & Place */
+.w-cover .date,
+.w-cover .place {
+  font-size: 1.05rem;
+  opacity: 0.92;
+  letter-spacing: 0.02rem;
+  margin-bottom: 0.2rem;
+}
+
+/* ============================================
+   🌼 Parents Information Box (OK 영역)
+   ============================================ */
+.w-cover .parents {
+  margin: 1.8rem 0 2.4rem;
+  padding: 1.4rem 0 1.5rem;
+  font-size: 0.96rem;
+  line-height: 1.7rem;
+
+  background: #fffefe;
+  border: 1px solid rgba(255, 140, 148, 0.25);
+  border-radius: 14px;
+
+  /* 은은한 박스 느낌 */
+  box-shadow: 0 10px 24px rgba(255, 140, 148, 0.15);
+
+  letter-spacing: 0.01rem;
+}
+
+.w-cover .parents p {
+  margin: 0.45rem 0;
+}
+
+/* relation name fix */
+.w-cover .relation-name {
+  display: inline-flex;
+  justify-content: center;
+  font-weight: 500;
+  opacity: 0.92;
+}
+
+.w-cover .relation-name--adjust {
+  min-width: 2.6em;
+}
+
+/* Button */
+.w-cover button {
+  margin-top: 0.8rem;
+}
+
+/* Mobile */
 @media (max-width: 420px) {
   .w-cover {
-    padding: 2.8rem 0 2.6rem;
+    gap: 1.6rem;
+  }
 
-    .names {
-      margin-bottom: 1.2rem;
-    }
+  .w-cover .names span::after {
+    bottom: -0.18rem;
+    width: 70%;
+    left: 15%;
+  }
 
-    .parents {
-      margin: 1.6rem 0 2rem;
-    }
+  .w-cover .parents {
+    margin: 1.4rem 0 2rem;
+    padding: 1.2rem 0 1.3rem;
   }
 }
