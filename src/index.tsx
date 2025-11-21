@@ -42,7 +42,7 @@ export default function MainWeddingPage() {
 
         <section id="invitaion">
           <div className="section-inner">
-            <Cover />
+            <Invitaion />
           </div>
         </section>
         
