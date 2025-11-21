@@ -1,7 +1,6 @@
 import "./AccountModal.scss";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useContactInfo } from "@/ContactInfoProvider";
-import Button from "@/components/common/Button/Button";
 
 interface AccountModalProps {
   type: "groom" | "bride";
