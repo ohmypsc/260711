@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import petalUrl from "@/image/petal.png";
+import "./BgEffect.scss";
 
 const BASE_Y_SPEED = 0.6;
 const Y_VARIANCE = 0.3;
