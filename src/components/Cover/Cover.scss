@@ -45,6 +45,22 @@
     }
   }
 
+  /* ⭐ 아들/딸 동일 길이 맞춤 (예시 방식과 100% 동일) */
+  .relation-name {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    opacity: 0.85;
+  }
+
+  .relation-name--adjust {
+    min-width: 3.5em; /* 아들/딸 가로 길이 동일하게 강제 */
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+  }
+
   /* 버튼 – 전역 스타일만 그대로 사용 */
   button {
     margin-top: 1rem; /* 위치만 조절 */
