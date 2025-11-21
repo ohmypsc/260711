@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
 import { Cover } from "@/components/Cover/Cover";
-import { Invitaion } from "@/components/Invitaion/Invitaion";
+import { Invitaion } from "@/components/Invitation/Invitation";
 import { Information } from "@/components/Information/Information";
 
 export default function MainWeddingPage() {
@@ -40,9 +40,9 @@ export default function MainWeddingPage() {
           </div>
         </section>
 
-        <section id="invitaion">
+        <section id="invitation">
           <div className="section-inner">
-            <Invitaion />
+            <Invitation />
           </div>
         </section>
         
