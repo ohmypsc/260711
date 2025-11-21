@@ -17,7 +17,7 @@
 .account-list {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* ✅ 항목 간 간격 축소 (16px -> 10px) */
+  gap: 8px; /* ✅ 항목 간 간격 */
 }
 
 .account-entry {
@@ -34,7 +34,7 @@
 
 .account-relation {
   font-size: 1rem;
-  margin-bottom: 4px; /* ✅ 이름/계좌 정보 간격 축소 (6px -> 4px) */
+  margin-bottom: 2px; /* ✅ 이름/계좌 정보 간격 */
   --theme-bright-pink: #F47F99; 
   color: var(--theme-bright-pink); 
   display: flex;
@@ -134,7 +134,7 @@
     padding: 0;
   }
   .account-list {
-      gap: 8px; /* 모바일에서 더 압축 */
+      gap: 4px; /* 모바일에서 더 압축 */
   }
   .account-relation {
     font-size: 0.95rem;
