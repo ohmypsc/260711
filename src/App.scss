@@ -63,14 +63,30 @@ section {
 .section-inner {
   max-width: var(--section-max-width);
   margin: 0 auto;
-  padding: 0 1.5rem; /* 내부 여백만 */
+  padding: 0 1rem; /* 내부 여백만 */
   width: 100%;
 }
 
+
 .section-title {
-  font-size: 1.8rem;
-  font-weight: 500;
-  margin-bottom: 2rem;
-  letter-spacing: 0.05rem;
+  font-size: 1.6rem;
+  font-weight: 400; /* 부드러운 제목 두께 */
+  margin-bottom: 1.8rem;
+  text-align: center;
+  letter-spacing: 0.03rem;
   color: var(--text-main);
+
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 2px;
+  background-color: var(--theme-primary-light);
+  margin: 0.8rem auto 0;
+  border-radius: 2px;
+  opacity: 0.8;
 }
