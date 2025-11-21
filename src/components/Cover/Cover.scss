@@ -1,39 +1,67 @@
 .w-cover {
   text-align: center;
-  padding-bottom: 3rem;
+  padding: 3.5rem 0 3rem; /* 자연스러운 섹션 여백 */
 
+  /* 태그라인 */
   .tagline {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 0.28rem;
     color: var(--theme-primary-light);
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
   }
 
+  /* 이름 */
   .names {
-    font-size: clamp(2rem, 7vw, 2.4rem);
     font-weight: 600;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.6rem;
+    line-height: 1.3;
+    font-size: clamp(2.1rem, 7vw, 2.7rem);
 
     span {
       color: var(--theme-primary);
-      padding: 0 0.4rem;
+      padding: 0 0.45rem;
     }
   }
 
+  /* 날짜, 장소 */
   .date,
   .place {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.01rem;
   }
 
+  /* 부모님 정보 */
   .parents {
-    margin: 1.6rem 0 2.4rem;
-    line-height: 1.7rem;
+    margin: 2.1rem 0 2.5rem;
+    line-height: 1.55rem;
 
-    /* 딸 라인 길이 보정 */
+    p {
+      margin: 0.35rem 0;
+    }
+
     .daughter {
       display: inline-block;
-      padding: 0 0.4rem;
+      padding: 0 0.3rem;
+    }
+  }
+
+  /* 버튼 – 전역 스타일만 그대로 사용 */
+  button {
+    margin-top: 1rem; /* 위치만 조절 */
+  }
+}
+
+/* 작은 모바일에서 여백 최소 조정 */
+@media (max-width: 420px) {
+  .w-cover {
+    padding: 2.8rem 0 2.6rem;
+
+    .names {
+      margin-bottom: 1.2rem;
+    }
+
+    .parents {
+      margin: 1.6rem 0 2rem;
     }
   }
 }
