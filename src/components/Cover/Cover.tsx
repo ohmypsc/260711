@@ -26,7 +26,7 @@ export function Cover() {
       </div>
 
       <Button variant="outline" onClick={() => setOpen(true)}>
-        연락하기
+        축하 인사 전하기
       </Button>
 
       {open && <ContactModal onClose={() => setOpen(false)} />}
