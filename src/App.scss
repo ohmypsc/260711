@@ -1,22 +1,36 @@
+/* ============================================
+   📌 Global Reset & Layout
+   ============================================ */
+
+/* 전체 요소에 box-sizing 적용 → 모바일 우측 잘림 방지 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+
+  overflow-x: hidden; /* 가로 스크롤 완전 차단 */
   overflow-y: auto;
+
   width: 100%;
+  background-color: var(--theme-bg); /* 모바일/PC 일관 배경 */
 }
 
-/* ================================
-   🌸 Rosegold Theme
-================================ */
+/* ============================================
+   🌸 Rosegold Theme Colors
+   ============================================ */
 :root {
-  --theme-bg: #fff9fb;                /* 더 밝은 배경 */
-  --theme-primary: #d9a6b3;          /* 밝은 로즈골드 */
-  --theme-primary-light: #efc8d3;    /* 한 톤 더 밝은 로즈 */
-  --theme-accent: #f6dbe2;           /* 포인트용 연한 컬러 */
+  --theme-bg: #fff9fb;
+  --theme-primary: #d9a6b3;
+  --theme-primary-light: #efc8d3;
+  --theme-accent: #f6dbe2;
 
-  --text-main: #3d2a2a;              /* 덜 칙칙한 진한 브라운 */
+  --text-main: #3d2a2a;
   --text-light: #c9b8b8;
 
   --section-max-width: 640px;
@@ -25,26 +39,28 @@ body {
   font-size: clamp(16px, 3.2vw, 20px);
 }
 
-/* 전체 페이지 */
+/* ============================================
+   📄 Wedding Page Wrapper
+   ============================================ */
 .wedding-page {
-  position: relative;  /* ⭐ 추가 */
-  z-index: 2;          /* ⭐ 추가 → 꽃잎(canvas) 뒤로 보내지 않음 */
+  position: relative; /* 꽃잎 레이어와의 stacking 안정화 */
+  z-index: 2;         /* BgEffect(99999)보다 뒤, 콘텐츠는 정상 표시 */
+
   background-color: var(--theme-bg);
   width: 100%;
   overflow-x: hidden;
 }
 
-/* ==================================
-   ⭐ 공통: 모든 섹션의 폭 통일
-================================== */
+/* ============================================
+   📦 Section Layout (모든 섹션 공통 규격)
+   ============================================ */
 section {
-  padding: 3rem 0 3rem;
+  padding: 3rem 0;
 }
 
 .section-inner {
   max-width: var(--section-max-width);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 1.5rem; /* 내부 여백만 */
   width: 100%;
 }
-
