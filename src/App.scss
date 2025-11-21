@@ -44,8 +44,6 @@ body {
    ============================================ */
 .wedding-page {
   position: relative; /* 꽃잎 레이어와의 stacking 안정화 */
-  z-index: 2;         /* BgEffect(99999)보다 뒤, 콘텐츠는 정상 표시 */
-
   background-color: var(--theme-bg);
   width: 100%;
   overflow-x: hidden;
