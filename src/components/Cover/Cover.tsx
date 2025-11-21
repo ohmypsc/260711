@@ -22,10 +22,10 @@ export function Cover() {
       <h1 className="names">
         <span>{groom?.name}</span>
 
-        {/* ✨ 스파클 아이콘 (Font Awesome) */}
-        <span className="icon-between">
-          <i className="fa-solid fa-sparkles" aria-hidden="true"></i>
-        </span>
+   
+         <span className="icon-between">
+    <i className="fa-solid fa-gem" aria-hidden="true"></i>
+  </span>
 
         <span>{bride?.name}</span>
       </h1>
