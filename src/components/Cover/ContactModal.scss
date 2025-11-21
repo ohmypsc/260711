@@ -1,5 +1,5 @@
 /* -------------------------------------
-    ContactModal Style (최종 - 산뜻한 분홍색, 정렬 수정)
+    ContactModal Style (최종 완성본 - 간격 통일, 아이콘 회색)
 ------------------------------------- */
 
 .contact-modal-wrap {
@@ -33,7 +33,8 @@
 .contact-item {
   display: flex;
   align-items: center; 
-  justify-content: space-between;
+  /* ✅ 간격을 확보하기 위해 space-between 제거 */
+  /* justify-content: space-between; */ 
   flex-wrap: nowrap; 
   padding: 0.6rem 0; 
   border-bottom: 1px solid var(--modal-border, #f0f0f0);
@@ -46,12 +47,12 @@
   }
 
   .relation {
+    /* ✅ 텍스트 중앙 정렬 유지 */
     width: 110px; 
     flex: 0 0 auto; 
-    /* ✅ 텍스트 중앙 정렬로 변경 */
     text-align: center; 
     
-    /* ✅ 산뜻한 분홍색 적용 */
+    /* 분홍색 유지 (가독성), 필요에 따라 제거 가능 */
     --theme-bright-pink: #F47F99; 
     color: var(--theme-bright-pink); 
     opacity: 1; 
@@ -65,8 +66,8 @@
   .name {
     flex: 1 1 auto; 
     text-align: left; 
-    /* ✅ padding을 늘려 관계 텍스트와 이름 사이의 간격 확장 */
-    padding-left: 20px; 
+    /* ✅ [관계]와의 간격 (약 25px) */
+    padding-left: 25px; 
     font-weight: 600;
     
     white-space: nowrap; 
@@ -81,20 +82,28 @@
     display: flex;
     justify-content: flex-end;
     gap: 18px; 
+    
+    /* ✅ [이름]과의 간격 (약 25px) */
+    margin-left: 25px; 
 
     .icon-link {
-      /* ✅ 아이콘 색상도 산뜻한 분홍색으로 변경 */
-      --theme-bright-pink: #F47F99; 
-      color: var(--theme-bright-pink); 
+      /* ✅ 아이콘 색상을 짙은 회색으로 변경 */
+      color: var(--theme-icon-dark, #4a4a4a); 
       
       font-size: 1.3rem; 
-      padding: 5px;
-      border-radius: 50%; 
       
+      /* ✅ 배경 및 패딩 제거 (배경 필요 없음) */
+      padding: 0; 
+      background-color: transparent; 
+      border-radius: 0; 
+      
+      line-height: 1; 
+      text-decoration: none;
+
+      transition: transform 0.1s;
 
       &:hover {
-        /* 호버 시 배경색을 산뜻한 분홍 기반으로 변경 */
-        background-color: rgba(244, 127, 153, 0.15); 
+        background-color: transparent; 
       }
       &:active {
         transform: scale(0.95);
@@ -109,15 +118,15 @@
 @media (max-width: 360px) {
   .contact-item .relation {
     width: 90px; 
-    /* ✅ 작은 화면에서도 중앙 정렬 유지 */
     text-align: center; 
   }
   .contact-item .name {
-    padding-left: 15px; /* 작은 화면 패딩 조정 */
+    padding-left: 15px; 
   }
   .contact-item .contact-actions {
     min-width: 80px; 
     gap: 12px;
+    margin-left: 15px; /* 작은 화면 간격 조정 */
   }
   .contact-title {
     font-size: 1.4rem;
