@@ -1,10 +1,22 @@
 import { useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { ContactModal } from "@/components/Cover/ContactModal";
+import { useContactInfo } from "@/contexts/ContactInfoContext"; 
 import "./Cover.scss";
 
 export function Cover() {
   const [open, setOpen] = useState(false);
+
+  // 📌 전체 contactInfo 받아오기
+  const contactInfo = useContactInfo();
+
+  // 🟦 신랑/신부/부모님 정보 찾기
+  const groom = contactInfo.find((c) => c.id === "groom");
+  const bride = contactInfo.find((c) => c.id === "bride");
+  const groomFather = contactInfo.find((c) => c.id === "groom-father");
+  const groomMother = contactInfo.find((c) => c.id === "groom-mother");
+  const brideFather = contactInfo.find((c) => c.id === "bride-father");
+  const brideMother = contactInfo.find((c) => c.id === "bride-mother");
 
   return (
     <div className="w-cover">
@@ -12,16 +24,23 @@ export function Cover() {
       <p className="tagline">초대합니다</p>
 
       <h1 className="names">
-        백승철 <span>&</span> 오미영
+        {groom?.name} <span>&</span> {bride?.name}
       </h1>
 
       <p className="date">2026.07.11 (토) 오전 11시</p>
       <p className="place">유성컨벤션웨딩홀 3층 그랜드홀</p>
 
       <div className="parents">
-        <p>백문기 · 김경희의 아들 <strong>백승철</strong></p>
+        <p>
+          {groomFather?.name} · {groomMother?.name}의{" "}
+          <span className="relation-name relation-name--adjust">아들</span>{" "}
+          <strong>{groom?.name}</strong>
+        </p>
+
         <p className="daughter">
-          오세진 · 박근석의 딸 <strong>오미영</strong>
+          {brideFather?.name} · {brideMother?.name}의{" "}
+          <span className="relation-name relation-name--adjust">딸</span>{" "}
+          <strong>{bride?.name}</strong>
         </p>
       </div>
 
