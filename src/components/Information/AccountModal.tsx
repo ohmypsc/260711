@@ -50,7 +50,7 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
                   </p>
 
                   <button
-                    className="w-btn ghost"
+                    className="copy-btn"
                     onClick={() => copy(item.account!)}
                   >
                     복사하기
