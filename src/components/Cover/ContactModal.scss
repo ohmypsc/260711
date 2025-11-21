@@ -1,10 +1,12 @@
+/* -------------------------------------
+    ContactModal Style (최종 - 텍스트 래핑/밀림 방지 강화)
+------------------------------------- */
+
 .contact-modal-wrap {
   width: 100%;
-  /* ✅ font-family 속성을 제거하여 전역 폰트 설정을 따르도록 수정 */
-  
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 18px; 
   padding: 0 10px;
 }
 
@@ -19,30 +21,22 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
 }
 
-/* 신랑측 / 신부측 제목 섹션 컨테이너 */
+/* 신랑측 / 신부측 섹션 컨테이너 */
 .contact-section {
-  padding: 10px 15px;
+  padding: 15px 15px; 
   border-radius: 12px;
-  background-color: var(--modal-section-bg, #fcfcfc); 
+  background-color: var(--modal-section-accent-bg, #fefafa); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
-}
-
-/* 신랑측 / 신부측 제목 */
-.side-title {
-  margin-top: 0; 
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--theme-primary, #9c7569); 
-  border-bottom: 2px solid var(--theme-primary-light, #e9d5ce);
-  padding-bottom: 5px;
 }
 
 /* 개별 연락처 항목 */
 .contact-item {
+  /* 플렉스 래핑 절대 금지 */
   display: flex;
   align-items: center; 
   justify-content: space-between;
+  flex-wrap: nowrap; 
+  
   padding: 0.6rem 0; 
   border-bottom: 1px solid var(--modal-border, #f0f0f0);
 
@@ -54,40 +48,56 @@
   }
 
   .relation {
-    flex: 2; 
-    opacity: 0.75;
-    font-size: 0.9rem;
-    color: var(--text-light, #777);
+    /* ✅ 1. 너비 증가 및 고정 (긴 관계명 수용) */
+    width: 95px; 
+    flex: 0 0 auto; 
+    text-align: right; 
+    
+    /* ✅ 2. 텍스트 자체의 줄바꿈 절대 방지 및 넘칠 경우 ... 처리 */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+
+    color: var(--theme-accent-dark, #9e5a5a); 
+    opacity: 1; 
+    font-size: 0.95rem; 
   }
 
   .name {
-    flex: 2; 
+    flex: 1 1 auto; 
     text-align: left; 
-    padding-left: 15px;
+    padding-left: 10px; 
     font-weight: 600;
+    /* ✅ name에도 overflow 처리를 유지하여, relation이 밀어낼 경우 대비 */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
   /* 전화 & 문자 아이콘 버튼 영역 */
   .contact-actions {
-    flex: 2;
+    flex: 0 0 auto; 
+    min-width: 90px;
     display: flex;
     justify-content: flex-end;
     gap: 18px; 
 
     .icon-link {
-      --theme-accent-soft: #c8967e; 
-      color: var(--theme-accent-soft);
+      --theme-soft-pink: #a86c6c; 
+      color: var(--theme-soft-pink); 
+      
       font-size: 1.3rem; 
       padding: 5px;
       border-radius: 50%; 
-      background-color: rgba(200, 150, 126, 0.1); 
+      
+      background-color: rgba(102, 102, 102, 0.08); 
       line-height: 1; 
       text-decoration: none;
 
       transition: background-color 0.2s, transform 0.1s;
 
       &:hover {
-        background-color: rgba(200, 150, 126, 0.2);
+        background-color: rgba(102, 102, 102, 0.15); 
       }
       &:active {
         transform: scale(0.95);
@@ -96,12 +106,15 @@
   }
 }
 
-/* 모바일 작은 화면 보정 */
+/* -------------------------------------
+    RESPONSIVE 모바일 UI 개선
+------------------------------------- */
 @media (max-width: 360px) {
-  .contact-title {
-    font-size: 1.4rem;
+  .contact-item .relation {
+    width: 80px; /* 작은 화면에서 너비 재조정 */
   }
-  .contact-item {
-    font-size: 0.9rem;
+  .contact-item .contact-actions {
+    min-width: 80px; 
+    gap: 12px;
   }
 }
