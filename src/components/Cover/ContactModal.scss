@@ -1,5 +1,5 @@
 /* -------------------------------------
-    ContactModal Style
+   ContactModal Style
 ------------------------------------- */
 
 .contact-modal-wrap {
@@ -18,7 +18,7 @@
 .contact-section {
   padding: 15px 8px; 
   border-radius: 12px;
-  background-color: var(--modal-section-accent-bg, #fefafa); 
+  background-color: var(--theme-primary-light); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
 
@@ -29,9 +29,9 @@
   flex-wrap: nowrap; 
   gap: 8px; 
   padding: 0.6rem 0; 
-  border-bottom: 1px solid var(--modal-border, #f0f0f0);
+  border-bottom: 1px solid var(--border-color);
   font-size: 1.1rem; 
-  color: var(--text-main, #333); 
+  color: var(--text-main); 
 
   &:last-child {
     border-bottom: none;
@@ -41,8 +41,7 @@
     width: 110px; 
     flex: 0 0 auto; 
     text-align: center; 
-    --theme-bright-pink: #F47F99; 
-    color: var(--theme-bright-pink); 
+    color: var(--theme-primary); 
     font-weight: 600; 
     opacity: 1; 
     font-size: 0.95rem; 
@@ -72,7 +71,8 @@
     margin-left: 0; 
 
     .icon-link {
-      color: var(--theme-icon-dark, #4a4a4a); 
+      /* 아이콘 색상을 가장 옅은 텍스트 변수인 --text-light로 변경 */
+      color: var(--text-light); 
       font-size: 1.3rem; 
       padding: 0; 
       background-color: transparent; 
@@ -81,7 +81,6 @@
       text-decoration: none;
       transition: transform 0.1s;
 
-    
       &:active {
         transform: scale(0.95);
       }
@@ -90,7 +89,7 @@
 }
 
 /* -------------------------------------
-    RESPONSIVE 모바일 UI 개선
+   RESPONSIVE 모바일 UI 개선
 ------------------------------------- */
 @media (max-width: 360px) {
   .contact-item {
