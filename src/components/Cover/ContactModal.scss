@@ -1,10 +1,9 @@
 /* -------------------------------------
-    ContactModal Style (아이콘 색상 수정)
+    ContactModal Style (레이아웃 및 아이콘 색상 재수정)
 ------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
-  
   display: flex;
   flex-direction: column;
   gap: 18px; 
@@ -46,36 +45,43 @@
   }
 
   .relation {
-    flex: 2; 
+    /* ✅ flex-basis를 사용하여 최소 너비 확보 및 flex-shrink로 줄어듦 방지 */
+    flex: 0 0 auto; 
+    min-width: 60px; /* '신랑' 등 관계 표시를 위한 최소 너비 */
     opacity: 0.75;
     font-size: 0.9rem;
     color: var(--text-light, #777);
   }
 
   .name {
-    flex: 2; 
+    /* ✅ flex-grow를 사용하여 남은 공간을 채우되, 너무 줄어들지 않도록 조정 */
+    flex: 1 1 auto; 
     text-align: left; 
     padding-left: 15px;
     font-weight: 600;
+    white-space: nowrap; /* 이름이 줄바꿈되지 않도록 설정 */
+    overflow: hidden; /* 넘치는 경우 숨김 */
+    text-overflow: ellipsis; /* 넘치는 경우 ... 표시 */
   }
 
   /* 전화 & 문자 아이콘 버튼 영역 */
   .contact-actions {
-    flex: 2;
+    /* ✅ 아이콘 영역도 줄어들지 않도록 min-width 확보 */
+    flex: 0 0 auto; 
+    min-width: 90px; /* 두 아이콘 + gap을 위한 최소 너비 */
     display: flex;
     justify-content: flex-end;
     gap: 18px; 
 
     .icon-link {
-      /* ✅ 아이콘 색상을 전역 텍스트 색상(진한 회색/블랙)으로 변경 */
-      color: var(--text-main, #333); 
+      /* ✅ 아이콘 색상을 부드러운 중간 회색으로 변경 */
+      color: var(--theme-text-icon, #666); 
       font-size: 1.3rem; 
       padding: 5px;
       border-radius: 50%; 
       
-
       &:hover {
-        background-color: rgba(51, 51, 51, 0.15); /* 호버 시 약간 진하게 */
+        background-color: rgba(102, 102, 102, 0.15); /* 호버 시 약간 진하게 */
       }
       &:active {
         transform: scale(0.95);
@@ -91,5 +97,12 @@
   }
   .contact-item {
     font-size: 0.9rem;
+  }
+  .contact-item .relation {
+    min-width: 50px; /* 더 작은 화면에서 관계 너비 조정 */
+  }
+  .contact-item .contact-actions {
+    min-width: 80px; /* 더 작은 화면에서 아이콘 영역 너비 조정 */
+    gap: 12px;
   }
 }
