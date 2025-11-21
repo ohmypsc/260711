@@ -6,7 +6,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* 메인 콘텐츠 간격 소폭 축소 (20px -> 16px) */
+  gap: 16px; 
   padding: 0 10px;
 }
 
@@ -17,7 +17,7 @@
 .account-list {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* ✅ 항목 간 간격 */
+  gap: 10px; 
 }
 
 .account-entry {
@@ -34,7 +34,7 @@
 
 .account-relation {
   font-size: 1rem;
-  margin-bottom: 2px; /* ✅ 이름/계좌 정보 간격 */
+  margin-bottom: 4px; 
   --theme-bright-pink: #F47F99; 
   color: var(--theme-bright-pink); 
   display: flex;
@@ -85,20 +85,23 @@
 }
 
 /* -------------------------------------
-    Copy Button (아이콘화)
+    Copy Button (✅ 크기 확대)
 ------------------------------------- */
 
 .copy-btn-icon {
   flex-shrink: 0;
-  margin-left: 12px;
-  padding: 5px 8px;
+  /* 버튼이 커진 만큼 왼쪽 마진 조정 */
+  margin-left: 14px; 
+  /* ✅ 패딩을 늘려 버튼 영역 확대 */
+  padding: 8px 10px;
   border-radius: 6px;
   
   --theme-bright-pink: #F47F99; 
   background: var(--theme-bright-pink);
   color: white;
 
-  font-size: 0.85rem; 
+  /* ✅ 폰트 크기 확대 */
+  font-size: 0.9rem; 
   font-weight: 600;
   border: none;
   
@@ -134,7 +137,7 @@
     padding: 0;
   }
   .account-list {
-      gap: 4px; /* 모바일에서 더 압축 */
+      gap: 8px;
   }
   .account-relation {
     font-size: 0.95rem;
@@ -146,7 +149,9 @@
     }
   }
   .copy-btn-icon {
-      font-size: 0.8rem;
-      padding: 4px 7px;
+      /* ✅ 모바일에서도 패딩과 폰트 크기 조정 */
+      font-size: 0.85rem;
+      padding: 6px 8px; 
+      margin-left: 10px;
   }
 }
