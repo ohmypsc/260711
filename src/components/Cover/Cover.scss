@@ -1,169 +1,154 @@
 /* ============================================
-   🌸 Wedding Cover — Romantic Elite Edition
+   🌸 Romantic Final Edition
    ============================================ */
 
 .w-cover {
   text-align: center;
   max-width: var(--section-max-width);
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  animation: fadeUp 0.8s ease-out;
+}
+
+/* -------------------------
+   이름 (로즈골드 + shimmer + glow)
+-------------------------- */
+
+.names {
+  font-weight: 600;
+  line-height: 1.28;
+  font-size: clamp(2.45rem, 7.5vw, 3.05rem);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.names span:not(.diamond) {
+  background: linear-gradient(
+    90deg,
+    #f2c6cc 0%,
+    #ff8c94 45%,
+    #f2c6cc 100%
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+
+  /* soft glow */
+  text-shadow:
+    0 1px 3px rgba(255,140,148,0.18),
+    0 0 10px rgba(255,140,148,0.14);
+
+  /* 로맨틱 shimmer */
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* 중앙 다이아몬드 */
+.diamond {
+  color: var(--theme-primary);
+  font-size: 1.45rem;
+  opacity: 0.9;
+  animation: diamondGlow 3.2s ease-in-out infinite;
+}
+
+
+/* -------------------------
+   날짜 / 장소
+-------------------------- */
+.date,
+.place {
+  font-size: 1.18rem;
+  opacity: 0.96;
+  margin: 0;
+}
+
+.place {
+  margin-top: -0.35rem;
+}
+
+/* -------------------------
+   부모님 박스
+-------------------------- */
+
+.parents {
+  margin: 1.2rem 0 1.6rem;  /* << 요기 여백 줄임 */
+  padding: 1rem 0 1rem;
+
+  font-size: 1.05rem;
+  line-height: 1.72rem;
+  color: var(--text-main);
 
   display: flex;
   flex-direction: column;
-  gap: 1.9rem;
-
-  animation: fadeUp 0.75s ease-out;
+  gap: 0.4rem;
 }
 
-/* -------------------------
-   이름 (로즈골드 + soft glow)
-   ------------------------- */
-.w-cover {
-  .names {
-    font-weight: 600;
-    line-height: 1.28;
-    font-size: clamp(2.45rem, 7.5vw, 3.05rem);
+/* 넝쿨 라인 */
+.vine-line {
+  width: 100%;
+  max-width: 260px;
+  margin: 0.4rem auto;
+  color: var(--theme-primary);
+  opacity: 0.85;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.9rem;
-  }
-
-  /* 이름 텍스트 효과 */
-  .names span:not(.name-ornament) {
-    background: linear-gradient(
-      90deg,
-      #e8b7be 0%,
-      #ff8c94 40%,
-      #e8b7be 100%
-    );
-    -webkit-background-clip: text;
-    color: transparent;
-
-    text-shadow:
-      0 1px 3px rgba(255, 140, 148, 0.18),
-      0 0 10px rgba(255, 140, 148, 0.15);
-  }
-
-  /* 이름 사이 로맨틱 SVG 오너먼트 */
-  .name-ornament {
-    width: 5rem;
-    max-width: 22vw;
-
-    svg {
-      width: 100%;
-      height: auto;
-      color: var(--theme-primary);
-
-      animation: ornamentGlow 3s ease-in-out infinite;
-      filter: drop-shadow(0 2px 6px rgba(255, 140, 148, 0.25));
-    }
-  }
-
-  /* 날짜 & 장소 */
-  .date,
-  .place {
-    font-size: 1.18rem;
-    opacity: 0.96;
-    letter-spacing: 0.01rem;
-    margin: 0;
-  }
-
-  .place {
-    margin-top: -0.35rem;
-  }
-
-  /* -------------------------
-     부모님 박스
-     ------------------------- */
-  .parents {
-    padding: 1.6rem 0 1.4rem;
-    margin: 1.6rem 0 2.3rem;
-
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    font-size: 1.05rem;
-    line-height: 1.75rem;
-    color: var(--text-main);
-  }
-
-  /* 상·하단 로맨틱 라인 */
-  .parent-line {
+  svg {
     width: 100%;
-    max-width: 260px;
-    margin: 0.6rem auto;
-    color: var(--theme-primary);
-    opacity: 0.88;
-
-    svg {
-      display: block;
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 2px 6px rgba(255, 140, 148, 0.2));
-    }
-  }
-
-  .relation-name {
-    display: inline-flex;
-    justify-content: center;
-    font-weight: 500;
-    opacity: 0.92;
-  }
-
-  .relation-name--adjust {
-    min-width: 2.6em;
+    height: auto;
+    display: block;
   }
 }
 
+/* relation-name */
+.relation-name {
+  font-weight: 500;
+  opacity: 0.92;
+}
+
+.relation-name--adjust {
+  min-width: 2.6em;
+}
+
 /* -------------------------
-   애니메이션
-   ------------------------- */
+   Animations
+-------------------------- */
+
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes ornamentGlow {
-  0%, 100% {
-    opacity: 0.85;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
+@keyframes shimmer {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.17); }
+}
+
+@keyframes diamondGlow {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50%      { transform: scale(1.15); opacity: 1; }
 }
 
 /* -------------------------
-   모바일 최적화
-   ------------------------- */
+   Mobile
+-------------------------- */
+
 @media (max-width: 420px) {
   .w-cover {
-    gap: 1.6rem;
+    gap: 1.5rem;
+  }
 
-    .names {
-      gap: 0.7rem;
-    }
+  .diamond {
+    font-size: 1.3rem;
+  }
 
-    .name-ornament {
-      width: 3.8rem;
-    }
+  .parents {
+    margin: 1rem 0 1.4rem;
+    padding: 0.8rem 0 0.8rem;
+  }
 
-    .parent-line {
-      max-width: 220px;
-    }
-
-    .parents {
-      margin: 1.4rem 0 2rem;
-      padding: 1.2rem 0 1.2rem;
-    }
+  .vine-line {
+    max-width: 220px;
   }
 }
