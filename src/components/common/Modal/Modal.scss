@@ -1,12 +1,12 @@
 /* -------------------------------------
-   Modal Global Styles
+    Modal Global Styles
 ------------------------------------- */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
   backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.45); 
+  background: rgba(0, 0, 0, 0.45);  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,11 +16,12 @@
 }
 
 /* -------------------------------------
-   Modal Box
+    Modal Box
 ------------------------------------- */
 .modal-container {
   background: var(--theme-bg);
-  padding: 22px 20px;
+  /* ✅ 좌우 패딩 축소 (20px -> 16px) */
+  padding: 22px 16px; 
   width: 100%;
   max-width: 380px;
   border-radius: 18px;
@@ -30,7 +31,6 @@
 
   display: flex;
   flex-direction: column;
-  /* 닫기 버튼과 콘텐츠 사이의 간격을 위해 gap은 유지 */
   gap: 18px; 
 }
 
@@ -40,7 +40,7 @@
 }
 
 /* -------------------------------------
-   Global Heading & Divider Styles
+    Global Heading & Divider Styles
 ------------------------------------- */
 
 /* 모든 모달 제목에 적용될 기본 스타일 */
@@ -53,7 +53,7 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
 }
 
-/* ✅ 재사용 가능한 구분선 유틸리티 클래스 */
+/* 재사용 가능한 구분선 유틸리티 클래스 */
 .modal-divider {
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 12px;
@@ -61,7 +61,7 @@
 }
 
 /* -------------------------------------
-   Content
+    Content
 ------------------------------------- */
 .modal-content {
   width: 100%;
@@ -75,7 +75,7 @@
 }
 
 /* -------------------------------------
-   Close Button (옅은 색상, 호버 제거, 간격 조정)
+    Close Button (옅은 색상, 호버 제거, 간격 조정)
 ------------------------------------- */
 .modal-close-btn {
   width: 100%;
@@ -89,13 +89,12 @@
   cursor: pointer;
   transition: background 0.22s ease;
   
-  /* 본문 콘텐츠와의 간격 추가 (modal-container의 gap과 유사하게 18px로 설정) */
   margin-top: 18px; 
 }
 
 
 /* -------------------------------------
-   Animations
+    Animations
 ------------------------------------- */
 @keyframes overlayFadeIn {
   from { opacity: 0; }
@@ -113,11 +112,12 @@
 }
 
 /* -------------------------------------
-   RESPONSIVE 모바일 UI 개선
+    RESPONSIVE 모바일 UI 개선
 ------------------------------------- */
 @media (max-width: 360px) {
   .modal-container {
-    padding: 18px 16px;
+    /* ✅ 좌우 패딩 축소 (16px -> 12px) */
+    padding: 18px 12px;
     border-radius: 14px;
   }
 
