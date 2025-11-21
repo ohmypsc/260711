@@ -1,13 +1,14 @@
 import "./AccountModal.scss";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useContactInfo } from "@/ContactInfoProvider";
+import Button from "@/components/common/Button/Button";
 
 interface AccountModalProps {
   type: "groom" | "bride";
   onClose: () => void;
 }
 
-// ✅ 하이픈 제거: 숫자만 반환하도록 수정
+
 function formatAccountNumber(account: string) {
   if (!account) return "";
   const digits = account.replace(/\D/g, "");
@@ -49,7 +50,7 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
                   </p>
 
                   <button
-                    className="copy-btn-icon"
+                    className="w-btn ghost"
                     onClick={() => copy(item.account!)}
                   >
                     복사하기
