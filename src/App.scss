@@ -25,20 +25,23 @@ body {
    🌸 Rosegold Theme Colors
    ============================================ */
 :root {
-  --theme-bg: #fff9fb;
-  --theme-primary: #d9a6b3;
-  --theme-primary-light: #efc8d3;
-  --theme-accent: #f6dbe2;
+  --theme-bg: #ffffff;
+  --theme-primary: #ff8c94;
+  --theme-primary-light: #ffc0cb;
+  --theme-accent: #f0f8ff;
 
-  --text-main: #3d2a2a;
-  --text-light: #c9b8b8;
+  --text-main: #2c3e50;
+  --text-light: #aed8e4;
+
+  --theme-success: #4CAF50;
+  --theme-error: #f44336;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(255, 192, 203, 0.4);
 
   --section-max-width: 640px;
-
   font-family: "Noto Serif KR", serif;
   font-size: clamp(16px, 3.2vw, 20px);
 }
-
 /* ============================================
    📄 Wedding Page Wrapper
    ============================================ */
