@@ -7,7 +7,7 @@
 .break {
   display: block;
   width: 100%;
-  height: 2.5rem;
+  height: 5rem;
 }
 
 /* 각 블록 간 여백 */
@@ -59,7 +59,7 @@
 /* 부모님 라인 스타일 그대로 적용 */
 .parent-line {
   width: 100%;
-  max-width: 330px;
+  max-width: 440px;
   margin: 3rem auto;
   color: var(--theme-primary);
   opacity: 0.88;
