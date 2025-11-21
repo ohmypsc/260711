@@ -71,37 +71,7 @@ button.w-btn.outline:active {
     0 2px 4px rgba(0,0,0,0.10);
 }
 
-/* ------------------------------------------------------ */
-/* 🌷 GHOST 버튼 (복사하기) — 작고 예쁘고 깔끔하게 */
-/* ------------------------------------------------------ */
-button.w-btn.ghost {
-  padding: 0.55rem 0.85rem;
 
-  background: rgba(255,140,148,0.06);
-  color: var(--theme-primary);
-
-  border: 1px solid rgba(255,140,148,0.18);
-  border-radius: 10px;
-
-  font-size: 0.9rem;
-  font-weight: 600;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-
-  /* 작은 그림자 → 미세한 강조 */
-  box-shadow: 0 3px 6px rgba(255,140,148,0.12);
-
-  transition: all 0.22s ease;
-}
-
-button.w-btn.ghost:active {
-  background: rgba(255,140,148,0.16);
-  border-color: rgba(255,140,148,0.3);
-  transform: scale(0.95);
-  opacity: 0.95;
-}
 
 /* ------------------------------------------------------ */
 /* 🌙 Disabled */
