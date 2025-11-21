@@ -1,5 +1,5 @@
 /* -------------------------------------
-   Account Modal — ContactModal 과 톤 일치
+    AccountModal Content Styles
 ------------------------------------- */
 
 .account-modal-content {
@@ -8,80 +8,89 @@
   flex-direction: column;
   gap: 1.6rem;
   font-family: "Noto Sans KR", sans-serif;
+  padding: 0 10px;
 }
 
-/* 제목 — ContactModal과 동일 스타일 구조 */
-.modal-title {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--theme-primary);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.02rem;
+.account-modal-title {
+  /* .modal-heading 및 .modal-divider 클래스를 HTML에서 함께 적용해야 합니다. */
 }
 
-/* 구분 라인 */
+/* -------------------------------------
+    Account List
+------------------------------------- */
+
 .account-list {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1.2rem;
 }
 
-/* 한 항목 */
 .account-entry {
   padding-bottom: 1.2rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--modal-border, #f0f0f0);
 
   &:last-child {
     border-bottom: none;
   }
 }
 
-/* 관계 + 이름 — ContactModal의 스타일 톤 그대로 */
+/* -------------------------------------
+    Relation & Name
+------------------------------------- */
+
 .account-relation {
   font-size: 1rem;
-  margin-bottom: 0.4rem;
-  color: var(--text-main);
+  margin-bottom: 0.6rem; 
+  color: var(--text-main, #333); 
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
 
   .name {
-    font-weight: 600;
-    color: var(--theme-primary);
+    font-weight: 700; 
+    --theme-bright-pink: #F47F99;
+    color: var(--theme-bright-pink); 
+    font-size: 1.05rem;
   }
 }
 
-/* 계좌 박스 — ContactModal의 라인형 스타일과 비슷한 톤 */
+/* -------------------------------------
+    Account Box & Details
+------------------------------------- */
+
 .account-box {
-  background: #fdf7f8;
+  background: var(--modal-section-accent-bg, #fefafa);
   padding: 0.85rem 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(220, 180, 190, 0.28);
+  border-radius: 12px;
+  border: 1px solid var(--modal-border, #f0f0f0); 
   line-height: 1.45rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* 은행명 + 계좌번호 */
 .bank-line {
   font-size: 0.98rem;
+  font-weight: 500;
 
   strong {
-    color: var(--theme-primary);
-    font-weight: 600;
+    color: var(--theme-primary-dark, #4a4a4a); 
+    font-weight: 700;
   }
 }
 
-/* 복사 버튼 — 연락하기 모달 버튼 톤과 일치 */
+/* -------------------------------------
+    Copy Button
+------------------------------------- */
 .copy-btn {
   width: 100%;
-  margin-top: 0.7rem;
-  padding: 0.65rem;
+  margin-top: 0.8rem;
+  padding: 0.7rem;
   border-radius: 10px;
 
-  background: var(--theme-primary);
+  --theme-bright-pink: #F47F99; 
+  background: var(--theme-bright-pink);
   color: white;
 
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 600;
   border: none;
 
@@ -89,28 +98,41 @@
   transition: opacity 0.2s ease;
 
   &:active {
-    opacity: 0.75;
+    opacity: 0.85;
   }
 }
 
-/* 계좌 정보 없을 때 */
+/* -------------------------------------
+    Empty State
+------------------------------------- */
+
 .no-account {
   padding: 0.7rem 0.4rem;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.9rem;
   color: #888;
-  background: #faf7f8;
+  background: var(--modal-border, #f0f0f0);
   text-align: center;
 }
 
+/* -------------------------------------
+    RESPONSIVE
+------------------------------------- */
 @media (max-width: 360px) {
-  .modal-title {
-    font-size: 1.1rem;
+  .account-modal-content {
+    gap: 1.4rem;
   }
   .account-relation {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    .name {
+        font-size: 1rem;
+    }
   }
   .bank-line {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+  .copy-btn {
+      font-size: 0.9rem;
+      padding: 0.6rem;
   }
 }
