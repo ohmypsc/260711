@@ -9,7 +9,8 @@ export function Information() {
 
   return (
     <div className="information">
-  <h2>혼주 정보</h2>
+  <h2 className="section-title">혼주 정보</h2>
+
 
   <div className="info-buttons">
     <Button variant="outline" onClick={() => setOpenModal("groom")}>
