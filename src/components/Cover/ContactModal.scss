@@ -1,14 +1,13 @@
 /* -------------------------------------
-    ContactModal Style (폰트 상속 적용)
+    ContactModal Style (아이콘 색상 수정)
 ------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
-  /* ✅ font-family 속성을 제거하여 전역 폰트 설정을 따르도록 수정 */
   
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 18px; 
   padding: 0 10px;
 }
 
@@ -23,23 +22,12 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
 }
 
-/* 신랑측 / 신부측 제목 섹션 컨테이너 */
+/* 신랑측 / 신부측 섹션 컨테이너 */
 .contact-section {
-  padding: 10px 15px;
+  padding: 15px 15px; 
   border-radius: 12px;
   background-color: var(--modal-section-bg, #fcfcfc); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
-}
-
-/* 신랑측 / 신부측 제목 */
-.side-title {
-  margin-top: 0; 
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--theme-primary, #9c7569); 
-  border-bottom: 2px solid var(--theme-primary-light, #e9d5ce);
-  padding-bottom: 5px;
 }
 
 /* 개별 연락처 항목 */
@@ -79,19 +67,15 @@
     gap: 18px; 
 
     .icon-link {
-      --theme-accent-soft: #c8967e; 
-      color: var(--theme-accent-soft);
+      /* ✅ 아이콘 색상을 전역 텍스트 색상(진한 회색/블랙)으로 변경 */
+      color: var(--text-main, #333); 
       font-size: 1.3rem; 
       padding: 5px;
       border-radius: 50%; 
-      background-color: rgba(200, 150, 126, 0.1); 
-      line-height: 1; 
-      text-decoration: none;
-
-      transition: background-color 0.2s, transform 0.1s;
+      
 
       &:hover {
-        background-color: rgba(200, 150, 126, 0.2);
+        background-color: rgba(51, 51, 51, 0.15); /* 호버 시 약간 진하게 */
       }
       &:active {
         transform: scale(0.95);
