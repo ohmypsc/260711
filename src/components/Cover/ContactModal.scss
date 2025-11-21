@@ -1,3 +1,6 @@
+/* -------------------------------------
+    ContactModal Style (최종 - 산뜻한 분홍색, 정렬 수정)
+------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
@@ -22,7 +25,6 @@
 .contact-section {
   padding: 15px 15px; 
   border-radius: 12px;
-  /* 박스 배경색은 연한 분홍 유지 */
   background-color: var(--modal-section-accent-bg, #fefafa); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
@@ -46,10 +48,11 @@
   .relation {
     width: 110px; 
     flex: 0 0 auto; 
-    text-align: right; 
+    /* ✅ 텍스트 중앙 정렬로 변경 */
+    text-align: center; 
     
-    /* ✅ 1. 색상을 화사하고 예쁜 진한 분홍으로 변경 */
-    --theme-bright-pink: #c5658b; 
+    /* ✅ 산뜻한 분홍색 적용 */
+    --theme-bright-pink: #F47F99; 
     color: var(--theme-bright-pink); 
     opacity: 1; 
     font-size: 0.95rem; 
@@ -62,7 +65,8 @@
   .name {
     flex: 1 1 auto; 
     text-align: left; 
-    padding-left: 10px; 
+    /* ✅ padding을 늘려 관계 텍스트와 이름 사이의 간격 확장 */
+    padding-left: 20px; 
     font-weight: 600;
     
     white-space: nowrap; 
@@ -79,15 +83,14 @@
     gap: 18px; 
 
     .icon-link {
-      /* ✅ 2. 아이콘 색상도 화사한 분홍색으로 변경 */
-      --theme-bright-pink: #c5658b; 
+      /* ✅ 아이콘 색상도 산뜻한 분홍색으로 변경 */
+      --theme-bright-pink: #F47F99; 
       color: var(--theme-bright-pink); 
       
       font-size: 1.3rem; 
       padding: 5px;
       border-radius: 50%; 
       
-      /* 배경색은 중립적인 회색 톤 유지 (요청대로) */
       background-color: rgba(102, 102, 102, 0.08); 
       line-height: 1; 
       text-decoration: none;
@@ -95,8 +98,8 @@
       transition: background-color 0.2s, transform 0.1s;
 
       &:hover {
-        /* 호버 시 배경색도 분홍색 기반으로 변경 */
-        background-color: rgba(197, 101, 139, 0.15); /* #c5658b 기반의 15% 투명도 */
+        /* 호버 시 배경색을 산뜻한 분홍 기반으로 변경 */
+        background-color: rgba(244, 127, 153, 0.15); 
       }
       &:active {
         transform: scale(0.95);
@@ -111,9 +114,11 @@
 @media (max-width: 360px) {
   .contact-item .relation {
     width: 90px; 
+    /* ✅ 작은 화면에서도 중앙 정렬 유지 */
+    text-align: center; 
   }
   .contact-item .name {
-    padding-left: 5px;
+    padding-left: 15px; /* 작은 화면 패딩 조정 */
   }
   .contact-item .contact-actions {
     min-width: 80px; 
