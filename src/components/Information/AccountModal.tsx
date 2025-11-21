@@ -28,7 +28,7 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
   return (
     <Modal onClose={onClose}>
       <div className="account-modal-content">
-        <h3 className="modal-title">{title}</h3>
+        <h2 className="account-modal-title modal-heading modal-divider">{title}</h2>
 
         <div className="account-list">
           {filtered.map((item) => (
