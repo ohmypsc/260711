@@ -1,5 +1,5 @@
 /* -------------------------------------
-    ContactModal Style (레이아웃 및 아이콘 색상 재수정)
+    ContactModal Style (최종 - 박스 배경색 연한 분홍 적용)
 ------------------------------------- */
 
 .contact-modal-wrap {
@@ -25,7 +25,8 @@
 .contact-section {
   padding: 15px 15px; 
   border-radius: 12px;
-  background-color: var(--modal-section-bg, #fcfcfc); 
+  /* ✅ 배경색을 아주 연한 분홍색으로 변경 */
+  background-color: var(--modal-section-accent-bg, #fefafa); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
 
@@ -45,43 +46,46 @@
   }
 
   .relation {
-    /* ✅ flex-basis를 사용하여 최소 너비 확보 및 flex-shrink로 줄어듦 방지 */
+    /* 관계 텍스트: 분홍 계열, 진하게, 영역 고정 */
+    width: 80px; 
     flex: 0 0 auto; 
-    min-width: 60px; /* '신랑' 등 관계 표시를 위한 최소 너비 */
-    opacity: 0.75;
-    font-size: 0.9rem;
-    color: var(--text-light, #777);
+    text-align: right; 
+    
+    color: var(--theme-accent-dark, #9e5a5a); 
+    opacity: 1; 
+    font-size: 0.95rem; 
   }
 
   .name {
-    /* ✅ flex-grow를 사용하여 남은 공간을 채우되, 너무 줄어들지 않도록 조정 */
     flex: 1 1 auto; 
     text-align: left; 
-    padding-left: 15px;
+    padding-left: 10px; 
     font-weight: 600;
-    white-space: nowrap; /* 이름이 줄바꿈되지 않도록 설정 */
-    overflow: hidden; /* 넘치는 경우 숨김 */
-    text-overflow: ellipsis; /* 넘치는 경우 ... 표시 */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
   /* 전화 & 문자 아이콘 버튼 영역 */
   .contact-actions {
-    /* ✅ 아이콘 영역도 줄어들지 않도록 min-width 확보 */
     flex: 0 0 auto; 
-    min-width: 90px; /* 두 아이콘 + gap을 위한 최소 너비 */
+    min-width: 90px;
     display: flex;
     justify-content: flex-end;
     gap: 18px; 
 
     .icon-link {
-      /* ✅ 아이콘 색상을 부드러운 중간 회색으로 변경 */
-      color: var(--theme-text-icon, #666); 
+      /* 아이콘 전경색은 분홍 계열 유지 */
+      --theme-soft-pink: #a86c6c; 
+      color: var(--theme-soft-pink); 
+      
       font-size: 1.3rem; 
       padding: 5px;
       border-radius: 50%; 
       
+     
       &:hover {
-        background-color: rgba(102, 102, 102, 0.15); /* 호버 시 약간 진하게 */
+        background-color: rgba(102, 102, 102, 0.15); 
       }
       &:active {
         transform: scale(0.95);
@@ -90,7 +94,9 @@
   }
 }
 
-/* 모바일 작은 화면 보정 */
+/* -------------------------------------
+    RESPONSIVE 모바일 UI 개선
+------------------------------------- */
 @media (max-width: 360px) {
   .contact-title {
     font-size: 1.4rem;
@@ -99,10 +105,10 @@
     font-size: 0.9rem;
   }
   .contact-item .relation {
-    min-width: 50px; /* 더 작은 화면에서 관계 너비 조정 */
+    width: 70px; 
   }
   .contact-item .contact-actions {
-    min-width: 80px; /* 더 작은 화면에서 아이콘 영역 너비 조정 */
+    min-width: 80px; 
     gap: 12px;
   }
 }
