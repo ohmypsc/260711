@@ -1,38 +1,33 @@
 /* -------------------------------------
-    ContactModal Style (개선된 디자인)
-    (ModalBase 위에서 콘텐츠 스타일만 정의)
+    ContactModal Style (폰트 상속 적용)
 ------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
-  font-family: "Noto Sans KR", sans-serif;
-
+  /* ✅ font-family 속성을 제거하여 전역 폰트 설정을 따르도록 수정 */
+  
   display: flex;
   flex-direction: column;
-  gap: 18px; /* 간격 증가 */
-  padding: 0 10px; /* 좌우 여백 추가 */
+  gap: 18px;
+  padding: 0 10px;
 }
 
 /* 메인 제목 */
 .contact-title {
   text-align: center;
-  font-size: 1.5rem; /* 크기 키움 */
-  font-weight: 700; /* 굵기 키움 */
-  color: var(--theme-primary-dark, #333366); /* 더 진한 색상 */
-  margin-bottom: 0.8rem; /* 여백 증가 */
-
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--theme-primary-dark, #4a4a4a); 
+  margin-bottom: 0.8rem;
   letter-spacing: 0.05rem;
-  /* 살짝 입체적인 느낌 추가 */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
 }
 
-/* 신랑측 / 신부측 제목 섹션을 감싸는 컨테이너 */
+/* 신랑측 / 신부측 제목 섹션 컨테이너 */
 .contact-section {
   padding: 10px 15px;
   border-radius: 12px;
-  /* 부드러운 배경색 */
-  background-color: var(--modal-section-bg, #f9f9f9); 
-  /* 은은한 그림자 추가 */
+  background-color: var(--modal-section-bg, #fcfcfc); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
 
@@ -40,20 +35,20 @@
 .side-title {
   margin-top: 0; 
   margin-bottom: 0.5rem;
-  font-size: 1.1rem; /* 크기 키움 */
+  font-size: 1.1rem;
   font-weight: 700;
-  color: var(--theme-primary, #5a5a9e); /* 테마 색상 사용 */
-  border-bottom: 2px solid var(--theme-primary-light, #e0e0f0); /* 구분선 추가 */
+  color: var(--theme-primary, #9c7569); 
+  border-bottom: 2px solid var(--theme-primary-light, #e9d5ce);
   padding-bottom: 5px;
 }
 
 /* 개별 연락처 항목 */
 .contact-item {
   display: flex;
-  align-items: center; /* 수직 정렬 */
+  align-items: center; 
   justify-content: space-between;
-  padding: 0.6rem 0; /* 패딩 증가 */
-  border-bottom: 1px solid var(--modal-border, #eeeeee); /* 연한 구분선 */
+  padding: 0.6rem 0; 
+  border-bottom: 1px solid var(--modal-border, #f0f0f0);
 
   font-size: 1rem;
   color: var(--text-main, #333);
@@ -63,39 +58,40 @@
   }
 
   .relation {
-    flex: 2; /* 비율 조정 */
+    flex: 2; 
     opacity: 0.75;
     font-size: 0.9rem;
     color: var(--text-light, #777);
   }
 
   .name {
-    flex: 2; /* 비율 조정 */
-    text-align: left; /* 왼쪽 정렬 */
+    flex: 2; 
+    text-align: left; 
     padding-left: 15px;
     font-weight: 600;
   }
 
-  /* 전화 아이콘 버튼 스타일 */
-  .call-button {
-    flex: 1;
-    text-align: right;
+  /* 전화 & 문자 아이콘 버튼 영역 */
+  .contact-actions {
+    flex: 2;
     display: flex;
-    justify-content: flex-end; /* 아이콘 오른쪽 정렬 */
+    justify-content: flex-end;
+    gap: 18px; 
 
-    .phone-icon-link {
-      color: var(--theme-primary, #5a5a9e);
-      font-size: 1.3rem; /* 아이콘 크기 */
+    .icon-link {
+      --theme-accent-soft: #c8967e; 
+      color: var(--theme-accent-soft);
+      font-size: 1.3rem; 
       padding: 5px;
-      border-radius: 50%; /* 원형 배경 */
-      background-color: rgba(90, 90, 158, 0.1); /* 연한 배경색 */
-      line-height: 1; /* 아이콘 정렬 */
-      text-decoration: none; /* 하이퍼링크 밑줄 제거 */
+      border-radius: 50%; 
+      background-color: rgba(200, 150, 126, 0.1); 
+      line-height: 1; 
+      text-decoration: none;
 
       transition: background-color 0.2s, transform 0.1s;
 
       &:hover {
-        background-color: rgba(90, 90, 158, 0.2);
+        background-color: rgba(200, 150, 126, 0.2);
       }
       &:active {
         transform: scale(0.95);
