@@ -1,28 +1,20 @@
 /* -------------------------------------
-    ContactModal Style (최종 완성본 - 굵기 강화 및 간격 최소화)
+    ContactModal Style
 ------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
-  
   display: flex;
   flex-direction: column;
   gap: 18px; 
   padding: 0 10px;
 }
 
-/* 메인 제목 */
 .contact-title {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--theme-primary-dark, #4a4a4a); 
-  margin-bottom: 0.8rem;
   letter-spacing: 0.05rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
 }
 
-/* 신랑측 / 신부측 섹션 컨테이너 */
 .contact-section {
   padding: 15px 8px; 
   border-radius: 12px;
@@ -30,17 +22,14 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
 
-/* 개별 연락처 항목 */
 .contact-item {
   display: flex;
   align-items: center; 
   justify-content: space-between; 
   flex-wrap: nowrap; 
-  /* ✅ 간격을 8px로 축소하여 요소들이 더 가깝게 보이도록 조정 */
   gap: 8px; 
   padding: 0.6rem 0; 
   border-bottom: 1px solid var(--modal-border, #f0f0f0);
-
   font-size: 1.1rem; 
   color: var(--text-main, #333); 
 
@@ -52,14 +41,11 @@
     width: 110px; 
     flex: 0 0 auto; 
     text-align: center; 
-    
     --theme-bright-pink: #F47F99; 
     color: var(--theme-bright-pink); 
-    /* ✅ 관계 텍스트 굵기 강화 */
     font-weight: 600; 
     opacity: 1; 
     font-size: 0.95rem; 
-    
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; 
@@ -68,39 +54,31 @@
   .name {
     flex: 1 1 auto; 
     text-align: center; 
-    /* ✅ 이름 텍스트 굵기 강화 */
     font-weight: 700; 
-    
     padding-left: 0; 
     margin-left: 0;
     margin-right: 0;
-    
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; 
   }
 
-  /* 전화 & 문자 아이콘 버튼 영역 */
   .contact-actions {
     flex: 0 0 auto; 
     min-width: 90px;
     display: flex;
     justify-content: flex-end;
     gap: 18px; 
-    
     margin-left: 0; 
 
     .icon-link {
       color: var(--theme-icon-dark, #4a4a4a); 
       font-size: 1.3rem; 
-      
       padding: 0; 
       background-color: transparent; 
       border-radius: 0; 
-      
       line-height: 1; 
       text-decoration: none;
-
       transition: transform 0.1s;
 
       &:hover {
@@ -117,7 +95,6 @@
     RESPONSIVE 모바일 UI 개선
 ------------------------------------- */
 @media (max-width: 360px) {
-  /* ✅ 작은 화면에서도 간격 축소 */
   .contact-item {
     gap: 5px; 
     font-size: 1rem; 
