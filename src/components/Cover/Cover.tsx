@@ -29,7 +29,7 @@ export function Cover() {
       {/* 신랑·신부 이름 */}
       <h1 className="names">
         <span>{GROOM_FULLNAME}</span>
-        <span className="diamond">◆</span>
+        <span className="diamond">♥</span>
         <span>{BRIDE_FULLNAME}</span>
       </h1>
 
