@@ -1,17 +1,13 @@
 button.w-btn {
-  /* ================================
-     ✨ Common Base Styles
-  ================================ */
   position: relative;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  overflow: hidden; /* 반짝임 효과를 버튼 안으로 제한 */
+  overflow: hidden;
 
   width: 100%;
   border-radius: 12px;
-  /* 폰트 크기 및 두께 유지 */
   font-size: clamp(0.95rem, 2.8vw, 1.1rem);
   font-weight: 500;
   padding: 0.9rem 1.2rem;
@@ -22,9 +18,8 @@ button.w-btn {
 
   color: var(--text-main);
   transition: all 0.25s ease;
-  box-shadow: none; /* 기본 그림자 없음 */
+  box-shadow: none;
 
-  /* ✨ 공통 터치 반짝임 (효과 유지) */
   &::after {
     content: "";
     position: absolute;
@@ -37,7 +32,7 @@ button.w-btn {
   &:active::after {
     background: radial-gradient(
       circle at center,
-      rgba(255, 255, 255, 0.45), /* 반짝임을 조금 더 강하게 */
+      rgba(255, 255, 255, 0.45),
       transparent 70%
     );
     opacity: 1;
@@ -45,7 +40,6 @@ button.w-btn {
   }
 
   @keyframes w-btn-tap {
-    /* 애니메이션 유지 */
     0% {
       transform: scale(0.9);
       opacity: 0.7;
@@ -60,67 +54,49 @@ button.w-btn {
     }
   }
 
-  /* ================================
-     ⭐️ variant: outline (부드러운 테두리)
-  ================================ */
+  /* ⭐️ variant: outline */
   &.outline {
-    /* 1.5px 두께 테두리 유지 */
     border: 1.5px solid var(--theme-primary);
     color: var(--theme-primary);
-    background-color: var(--theme-bg); /* 배경색 변수 사용 */
-    
-    /* 부드러운 그림자 추가 */
+    background-color: var(--theme-bg);
     box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.05);
 
     &:active {
-      /* 활성화 시 색상 변수 사용 */
       background-color: var(--theme-primary);
       color: #fff;
-      /* 클릭 시 그림자 살짝 줄어듦 */
       box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
     }
   }
 
-  /* ================================
-     ⭐️ variant: filled (따뜻한 채우기)
-  ================================ */
+  /* ⭐️ variant: filled */
   &.filled {
     background-color: var(--theme-primary);
-    color: #fff; /* 흰색 텍스트 유지 */
-    
-    /* 핑크 톤의 따뜻한 그림자 추가 */
+    color: #fff;
     box-shadow: 0 6px 12px -4px var(--shadow-color);
 
     &:active {
-      /* 클릭 시 밝은 핑크로 전환 */
       background-color: var(--theme-primary-light);
-      /* 클릭 시 그림자 살짝 줄어듦 */
       box-shadow: 0 4px 8px -2px var(--shadow-color);
     }
   }
 
-  /* ================================
-     ⭐️ variant: ghost (은은한 효과)
-  ================================ */
+  /* ⭐️ variant: ghost */
   &.ghost {
     background: transparent;
     color: var(--theme-primary);
-    padding: 0.5rem 1rem; /* 고스트는 보통 패딩을 줄여 더 가벼운 느낌 */
+    padding: 0.5rem 1rem;
 
     &:active {
-      /* 클릭 시 배경색을 옅은 핑크로 변경 */
-      background-color: var(--theme-primary-light); 
+      background-color: var(--theme-primary-light);
       opacity: 0.8;
     }
   }
 
-  /* ================================
-     ❌ disabled (불투명도 유지)
-  ================================ */
+  /* ❌ disabled */
   &:disabled {
     opacity: 0.45;
     cursor: not-allowed;
     pointer-events: none;
-    box-shadow: none !important; /* disabled 상태에서는 그림자 제거 */
+    box-shadow: none !important;
   }
 }
