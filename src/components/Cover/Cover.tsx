@@ -7,10 +7,8 @@ import "./Cover.scss";
 export function Cover() {
   const [open, setOpen] = useState(false);
 
-  // 📌 전체 contactInfo 받아오기
   const contactInfo = useContactInfo();
 
-  // 🟦 신랑/신부/부모님 정보 찾기
   const groom = contactInfo.find((c) => c.id === "groom");
   const bride = contactInfo.find((c) => c.id === "bride");
   const groomFather = contactInfo.find((c) => c.id === "groom-father");
@@ -20,14 +18,23 @@ export function Cover() {
 
   return (
     <div className="w-cover">
-
+      {/* 신랑 + 아이콘 + 신부 */}
       <h1 className="names">
-        {groom?.name} <span>&</span> {bride?.name}
+        <span>{groom?.name}</span>
+
+        {/* ✨ 스파클 아이콘 (Font Awesome) */}
+        <span className="icon-between">
+          <i className="fa-solid fa-sparkles" aria-hidden="true"></i>
+        </span>
+
+        <span>{bride?.name}</span>
       </h1>
 
+      {/* 날짜 & 장소 */}
       <p className="date">2026.07.11. (토) 오전 11시</p>
       <p className="place">유성컨벤션웨딩홀 3층 그랜드홀</p>
 
+      {/* 부모님 박스 */}
       <div className="parents">
         <p>
           {groomFather?.name} · {groomMother?.name}의{" "}
@@ -42,6 +49,7 @@ export function Cover() {
         </p>
       </div>
 
+      {/* 버튼 */}
       <Button variant="outline" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
