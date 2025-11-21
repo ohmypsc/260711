@@ -34,7 +34,27 @@ export function Invitation(): JSX.Element {
           </div>
         </div>
 
-        <div className="divider-line" aria-hidden="true" />
+        <div className="divider-line parent-line">
+  <svg viewBox="0 0 320 28">
+    <path
+      d="M5 14 C80 2, 240 26, 315 14"
+      stroke="currentColor"
+      strokeWidth="0.8"
+      strokeLinecap="round"
+      strokeDasharray="2 3"
+      fill="none"
+    />
+
+    <circle cx="70" cy="11" r="1.2" fill="currentColor" />
+    <circle cx="140" cy="17" r="1.2" fill="currentColor" />
+    <circle cx="240" cy="12" r="1.2" fill="currentColor" />
+
+    <rect x="105" y="9" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 106 10)" />
+    <rect x="185" y="12" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 186 13)" />
+    <rect x="275" y="10" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 276 11)" />
+  </svg>
+</div>
+
 
         <div className="invitation-text-block our-message-section">
           <div className="inv-content">
