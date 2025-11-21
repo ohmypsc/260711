@@ -11,12 +11,12 @@ button.w-btn {
   width: 100%;
   border-radius: 14px;
 
-  font-size: clamp(1.15rem, 3.5vw, 1.45rem);  /* 🔥 글자 더 크게 */
-  font-weight: 700; /* 🔥 글자 더 두껍게 */
+  font-size: clamp(1.1rem, 3vw, 1.3rem); /* 🔥 글자 크기만 키움 */
+  font-weight: 700; /* 🔥 글자 두께만 키움 */
 
-  padding: 1.1rem 1.3rem; /* 조금 더 여유롭게 */
-  background: none;
-  border: none;
+  padding: 1rem 1.25rem; 
+  background: none; /* ✨ 기존 그대로 유지 */
+  border: none; /* ✨ 기존 그대로 유지 */
 
   color: var(--text-main);
   letter-spacing: 0.2px;
@@ -25,11 +25,9 @@ button.w-btn {
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
-/* 🌸 모바일 최적화 (작은 화면에서 폰트 더 크게, 패딩 확대) */
+/* 🌸 모바일 최적화: 딱 글자만 조금 더 크게 */
 @media (max-width: 480px) {
   button.w-btn {
-    font-size: clamp(1.28rem, 4.2vw, 1.55rem); /* 🔥 모바일 전용 더 큰 글자 */
-    padding: 1.25rem 1.4rem; /* 터치 영역 확대 */
-    border-radius: 16px; /* 모바일에서 더 부드럽게 */
+    font-size: clamp(1.2rem, 4vw, 1.4rem); /* 🔥 모바일에서만 조금 더 큼 */
   }
 }
