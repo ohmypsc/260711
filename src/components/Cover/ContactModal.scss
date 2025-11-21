@@ -1,7 +1,3 @@
-/* -------------------------------------
-   ContactModal Style
-------------------------------------- */
-
 .contact-modal-wrap {
   width: 100%;
   display: flex;
@@ -18,7 +14,8 @@
 .contact-section {
   padding: 15px 8px; 
   border-radius: 12px;
-  background-color: var(--theme-primary-light); 
+  /* 아주 옅은 핑크톤 아이보리로 변경 */
+  background-color: var(--theme-accent); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
 
@@ -71,7 +68,8 @@
     margin-left: 0; 
 
     .icon-link {
-      color: var(--text-light); 
+      /* 메인 글자색과 동일한 진한색으로 변경 */
+      color: var(--text-main); 
       font-size: 1.3rem; 
       padding: 0; 
       background-color: transparent; 
