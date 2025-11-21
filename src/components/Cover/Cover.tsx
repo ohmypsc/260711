@@ -18,30 +18,12 @@ export function Cover() {
 
   return (
     <div className="w-cover">
-      {/* 신랑/신부 이름 */}
+      {/* 신랑/신부 */}
       <h1 className="names">
         <span>{groom?.name}</span>
 
-        {/* ✨ 로맨틱 SVG 오너먼트 */}
-        <span className="name-ornament" aria-hidden="true">
-          <svg viewBox="0 0 110 32" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M5 16 C22 2, 88 2, 105 16"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <circle cx="55" cy="16" r="3.2" fill="currentColor" />
-            <path
-              d="M5 16 C22 30, 88 30, 105 16"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </svg>
-        </span>
+        {/* 중앙 심플 다이아몬드 오너먼트 */}
+        <span className="diamond" aria-hidden="true">◆</span>
 
         <span>{bride?.name}</span>
       </h1>
@@ -53,17 +35,18 @@ export function Cover() {
       {/* 부모님 박스 */}
       <div className="parents">
 
-        {/* 상단 장식 라인 */}
-        <div className="parent-line top">
-          <svg viewBox="0 0 200 28" xmlns="http://www.w3.org/2000/svg">
+        {/* 위 넝쿨 라인 */}
+        <div className="vine-line top">
+          <svg viewBox="0 0 260 28">
             <path
-              d="M10 14 C40 4, 160 4, 190 14"
+              d="M5 14 C40 5, 80 23, 130 14 C180 5, 220 23, 255 14"
               stroke="currentColor"
-              strokeWidth="1.4"
+              strokeWidth="1.3"
               fill="none"
               strokeLinecap="round"
             />
-            <circle cx="100" cy="14" r="2.6" fill="currentColor" />
+            <circle cx="42" cy="10" r="2" fill="currentColor" opacity="0.6"/>
+            <circle cx="218" cy="16" r="2" fill="currentColor" opacity="0.6"/>
           </svg>
         </div>
 
@@ -79,22 +62,22 @@ export function Cover() {
           <strong>{bride?.name}</strong>
         </p>
 
-        {/* 하단 장식 라인 */}
-        <div className="parent-line bottom">
-          <svg viewBox="0 0 200 28" xmlns="http://www.w3.org/2000/svg">
+        {/* 아래 넝쿨 라인 */}
+        <div className="vine-line bottom">
+          <svg viewBox="0 0 260 28">
             <path
-              d="M10 14 C40 24, 160 24, 190 14"
+              d="M5 14 C40 23, 80 5, 130 14 C180 23, 220 5, 255 14"
               stroke="currentColor"
-              strokeWidth="1.4"
+              strokeWidth="1.3"
               fill="none"
               strokeLinecap="round"
             />
-            <circle cx="100" cy="14" r="2.6" fill="currentColor" />
+            <circle cx="82" cy="18" r="2" fill="currentColor" opacity="0.6"/>
+            <circle cx="178" cy="6" r="2" fill="currentColor" opacity="0.6"/>
           </svg>
         </div>
       </div>
 
-      {/* 버튼 - 전역 스타일 그대로 */}
       <Button variant="outline" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
