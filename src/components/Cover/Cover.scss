@@ -86,20 +86,28 @@
   gap: 0.4rem;
 }
 
-/* 넝쿨 라인 */
-.vine-line {
+/* 혼합형 점선 곡선 장식 */
+.vine-line,
+.parent-line {
   width: 100%;
   max-width: 260px;
-  margin: 0.4rem auto;
+  margin: 0.3rem auto;
+
   color: var(--theme-primary);
-  opacity: 0.85;
+  opacity: 0.88;
 
   svg {
     width: 100%;
     height: auto;
     display: block;
+
+    /* 은은한 고급 그림자 */
+    filter: drop-shadow(0 1px 3px rgba(255, 140, 148, 0.18));
   }
 }
+
+.parent-line.top { margin-bottom: 0.5rem; }
+.parent-line.bottom { margin-top: 0.5rem; }
 
 /* relation-name */
 .relation-name {
