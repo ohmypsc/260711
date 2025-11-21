@@ -1,20 +1,12 @@
-.w-invitation-message {
+.w-invitation {
   color: var(--text-main);
   text-align: center;
-}
-
-.section-title {
-  font-size: 1.8rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.05rem;
-  color: var(--text-main);
 }
 
 .break {
   display: block;
   width: 100%;
-  height: 2.5rem;
+  height: 2.5rem; 
 }
 
 .invitation-text-block {
@@ -63,7 +55,8 @@
 }
 
 .our-message-section {
-  margin-bottom: 0;
+
+  margin-bottom: 3rem; 
 }
 
 .our-message-section p {
@@ -77,26 +70,10 @@
     font-weight: 500;
 }
 
-.sender-info {
-  margin-top: 4rem;
-  font-size: 0.95rem;
-  color: var(--text-main);
-}
 
-.sender-info p {
-    margin: 0.3rem 0;
-}
-
-.sender-info .date-mention {
-    font-weight: 500;
-    opacity: 0.9;
-}
 
 @media (max-width: 420px) {
-
-  .section-title {
-    font-size: 1.6rem;
-  }
+  
 
   .inv-content p {
     font-size: 0.95rem;
