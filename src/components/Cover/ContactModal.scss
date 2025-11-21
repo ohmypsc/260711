@@ -1,18 +1,14 @@
-/* -------------------------------------
-    ContactModal Style (최종 완성본 - 이름 크기 확대 및 간격 단순화)
-------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
-  padding: 0 10px;
   
   display: flex;
   flex-direction: column;
   gap: 18px; 
+  padding: 0 10px;
 }
 
-/* ... (contact-title, contact-section 스타일 생략) */
-
+/* 메인 제목 */
 .contact-title {
   text-align: center;
   font-size: 1.5rem;
@@ -23,7 +19,9 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
 }
 
+/* 신랑측 / 신부측 섹션 컨테이너 */
 .contact-section {
+  /* 이름 잘림 방지 및 공간 확보를 위해 가로 패딩 8px로 축소 */
   padding: 15px 8px; 
   border-radius: 12px;
   background-color: var(--modal-section-accent-bg, #fefafa); 
@@ -36,12 +34,12 @@
   align-items: center; 
   justify-content: space-between; 
   flex-wrap: nowrap; 
-  /* ✅ 간격을 15px에서 12px로 살짝 줄여 더 붙어 보이게 조정 */
+  /* ✅ 요소 간 적절한 간격 (12px) 설정 */
   gap: 12px; 
   padding: 0.6rem 0; 
   border-bottom: 1px solid var(--modal-border, #f0f0f0);
 
-  /* ✅ 이름 크기 확대를 위해 폰트 사이즈 조정 */
+  /* ✅ 이름 크기 확대를 위해 기본 폰트 사이즈 조정 */
   font-size: 1.1rem; 
   color: var(--text-main, #333); 
 
@@ -54,10 +52,10 @@
     flex: 0 0 auto; 
     text-align: center; 
     
+    /* 분홍색 유지 및 관계 폰트 사이즈 유지 */
     --theme-bright-pink: #F47F99; 
     color: var(--theme-bright-pink); 
     opacity: 1; 
-    /* ✅ 관계 폰트 크기는 그대로 유지 (대비 효과) */
     font-size: 0.95rem; 
     
     white-space: nowrap; 
@@ -67,13 +65,15 @@
 
   .name {
     flex: 1 1 auto; 
+    /* ✅ 이름 중앙 정렬 */
+    text-align: center; 
+    /* 폰트 굵기 조정 */
+    font-weight: 500; 
+    
+    /* 간격은 gap이 담당하므로 padding, margin 제거 */
     padding-left: 0; 
     margin-left: 0;
     margin-right: 0;
-
-    text-align: center; 
-    /* ✅ 폰트 굵기를 600에서 500으로 낮춰 이름 영역의 부담 감소 */
-    font-weight: 500; 
     
     white-space: nowrap; 
     overflow: hidden; 
@@ -88,9 +88,10 @@
     justify-content: flex-end;
     gap: 18px; 
     
-    margin-left: 0; 
+    margin-left: 0; /* 간격은 gap이 담당 */
 
     .icon-link {
+      /* ✅ 아이콘 색상 짙은 회색 및 배경 제거 */
       color: var(--theme-icon-dark, #4a4a4a); 
       font-size: 1.3rem; 
       
@@ -118,8 +119,8 @@
 ------------------------------------- */
 @media (max-width: 360px) {
   .contact-item {
-    gap: 8px; /* 작은 화면에서 간격 추가 축소 */
-    font-size: 1rem; /* 작은 화면 이름 크기 조정 */
+    gap: 8px; 
+    font-size: 1rem; 
   }
   .contact-item .relation {
     width: 80px; 
