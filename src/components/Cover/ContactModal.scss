@@ -1,9 +1,10 @@
 /* -------------------------------------
-    ContactModal Style (최종 - 텍스트 래핑/밀림 방지 강화)
+    ContactModal Style (아이콘 색상 수정)
 ------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
+  
   display: flex;
   flex-direction: column;
   gap: 18px; 
@@ -25,18 +26,15 @@
 .contact-section {
   padding: 15px 15px; 
   border-radius: 12px;
-  background-color: var(--modal-section-accent-bg, #fefafa); 
+  background-color: var(--modal-section-bg, #fcfcfc); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
 
 /* 개별 연락처 항목 */
 .contact-item {
-  /* 플렉스 래핑 절대 금지 */
   display: flex;
   align-items: center; 
   justify-content: space-between;
-  flex-wrap: nowrap; 
-  
   padding: 0.6rem 0; 
   border-bottom: 1px solid var(--modal-border, #f0f0f0);
 
@@ -48,56 +46,35 @@
   }
 
   .relation {
-    /* ✅ 1. 너비 증가 및 고정 (긴 관계명 수용) */
-    width: 95px; 
-    flex: 0 0 auto; 
-    text-align: right; 
-    
-    /* ✅ 2. 텍스트 자체의 줄바꿈 절대 방지 및 넘칠 경우 ... 처리 */
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-
-    color: var(--theme-accent-dark, #9e5a5a); 
-    opacity: 1; 
-    font-size: 0.95rem; 
+    flex: 2; 
+    opacity: 0.75;
+    font-size: 0.9rem;
+    color: var(--text-light, #777);
   }
 
   .name {
-    flex: 1 1 auto; 
+    flex: 2; 
     text-align: left; 
-    padding-left: 10px; 
+    padding-left: 15px;
     font-weight: 600;
-    /* ✅ name에도 overflow 처리를 유지하여, relation이 밀어낼 경우 대비 */
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
   }
 
   /* 전화 & 문자 아이콘 버튼 영역 */
   .contact-actions {
-    flex: 0 0 auto; 
-    min-width: 90px;
+    flex: 2;
     display: flex;
     justify-content: flex-end;
     gap: 18px; 
 
     .icon-link {
-      --theme-soft-pink: #a86c6c; 
-      color: var(--theme-soft-pink); 
-      
+      /* ✅ 아이콘 색상을 전역 텍스트 색상(진한 회색/블랙)으로 변경 */
+      color: var(--text-main, #333); 
       font-size: 1.3rem; 
       padding: 5px;
       border-radius: 50%; 
       
-      background-color: rgba(102, 102, 102, 0.08); 
-      line-height: 1; 
-      text-decoration: none;
-
-      transition: background-color 0.2s, transform 0.1s;
-
       &:hover {
-        background-color: rgba(102, 102, 102, 0.15); 
+        background-color: rgba(51, 51, 51, 0.15); /* 호버 시 약간 진하게 */
       }
       &:active {
         transform: scale(0.95);
@@ -106,15 +83,12 @@
   }
 }
 
-/* -------------------------------------
-    RESPONSIVE 모바일 UI 개선
-------------------------------------- */
+/* 모바일 작은 화면 보정 */
 @media (max-width: 360px) {
-  .contact-item .relation {
-    width: 80px; /* 작은 화면에서 너비 재조정 */
+  .contact-title {
+    font-size: 1.4rem;
   }
-  .contact-item .contact-actions {
-    min-width: 80px; 
-    gap: 12px;
+  .contact-item {
+    font-size: 0.9rem;
   }
 }
