@@ -1,34 +1,44 @@
-.w-invitation {
-  color: var(--text-main);
-  text-align: center;
+.w-invitation,
+.invitation {
+  text-align: center; /* 전체 중앙 정렬 */
 }
 
+/* 제목과 본문 사이 여백 */
 .break {
   display: block;
   width: 100%;
-  height: 2.5rem; 
+  height: 2.5rem;
 }
 
+/* 각 블록 간 여백 */
 .invitation-text-block {
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
+/* 한 문단 */
 .inv-content {
   margin-bottom: 1.5rem;
 }
 
+/* 모든 내용 가운데 정렬 + 어절 단위 줄바꿈 */
 .inv-content p {
   margin: 0.4rem 0;
-  font-size: 1.0rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.7;
   letter-spacing: 0.02rem;
   color: var(--text-main);
   opacity: 0.85;
+  text-align: center;
+
+  /* 🔥 어절(단어)로 줄바꿈 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
+/* 시(詩) 영역 */
 .poetry-section {
-    padding: 0 0.5rem;
+  padding: 0 0.5rem;
 }
 
 .poetry-section .inv-content p {
@@ -37,26 +47,34 @@
   opacity: 0.95;
 }
 
+/* 시 마지막 줄 (작가/출처) */
 .inv-content.poet {
   margin-top: 2rem;
   font-size: 0.85rem;
-  font-style: normal;
   color: var(--text-light);
   text-align: right;
   padding-right: 0.5rem;
 }
 
-.divider-line {
-  width: 50px;
-  height: 1px;
-  background-color: var(--theme-primary);
+/* 부모님 라인 스타일 그대로 적용 */
+.parent-line {
+  width: 100%;
+  max-width: 330px;
   margin: 3rem auto;
-  opacity: 0.7;
+  color: var(--theme-primary);
+  opacity: 0.88;
+
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 1px 3px rgba(255, 140, 148, 0.18));
+  }
 }
 
+/* 초대글 섹션 */
 .our-message-section {
-
-  margin-bottom: 3rem; 
+  margin-bottom: 3rem;
 }
 
 .our-message-section p {
@@ -65,16 +83,14 @@
   opacity: 1;
 }
 
+/* 마지막 문장 강조 */
 .our-message-section .last-line {
-    margin-top: 1.8rem;
-    font-weight: 500;
+  margin-top: 1.8rem;
+  font-weight: 500;
 }
 
-
-
+/* 모바일 대응 */
 @media (max-width: 420px) {
-  
-
   .inv-content p {
     font-size: 0.95rem;
   }
