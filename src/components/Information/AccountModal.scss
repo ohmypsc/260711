@@ -1,5 +1,5 @@
 /* -------------------------------------
-    AccountModal Content Styles (최종: 심플 & 왼쪽 정렬)
+    AccountModal Content Styles (최종: 미니멀 & 심플)
 ------------------------------------- */
 
 .account-modal-content {
@@ -17,16 +17,14 @@
 .account-list {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* 항목 간격을 더 압축 */
+  gap: 16px; /* 여백으로 항목을 구분하기 위해 간격 확보 */
 }
 
-/* 박스 형태 제거, 심플한 구분선만 남김 */
 .account-entry {
-  padding: 10px 0; /* 상하 패딩 최소화 */
-  border-bottom: 1px solid var(--modal-border-light, #e0e0e0); /* 더 연한 구분선 */
+  padding: 0; /* 모든 구분선 스타일 제거 */
   
   &:last-child {
-    border-bottom: none;
+    padding-bottom: 0;
   }
 }
 
@@ -36,7 +34,7 @@
 
 .account-relation {
   font-size: 1rem;
-  margin-bottom: 8px; /* 계좌 정보와 간격 */
+  margin-bottom: 6px; /* 계좌 정보와 간격 최소화 */
   color: var(--text-main, #333); 
   display: flex;
   align-items: center;
@@ -55,27 +53,21 @@
 ------------------------------------- */
 
 .account-info-line {
-    /* 배경 박스 제거, 정렬 왼쪽으로 변경 */
     display: flex;
-    justify-content: flex-start; /* ✅ 왼쪽 정렬 */
+    justify-content: flex-start;
     align-items: center;
-    padding: 4px 0; /* 패딩 최소화 */
-    /* background, box-shadow 제거 */
+    padding: 0; /* 패딩 최소화 */
 }
 
 .bank-line {
   font-size: 0.95rem;
   color: var(--text-main, #333);
-  
-  /* ✅ 왼쪽 정렬 기본 */
   text-align: left;
-  
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   flex-grow: 1; 
   
-  /* 계좌번호 텍스트 자체를 강조 */
   .account-number {
       font-weight: 500;
       color: var(--text-main-dark, #4a4a4a);
@@ -97,7 +89,7 @@
 .copy-btn-icon {
   flex-shrink: 0;
   margin-left: 12px;
-  padding: 5px 8px; /* 버튼 크기 조정 */
+  padding: 5px 8px;
   border-radius: 6px;
   
   --theme-bright-pink: #F47F99; 
@@ -137,7 +129,7 @@
 ------------------------------------- */
 @media (max-width: 360px) {
   .account-entry {
-    padding: 8px 0;
+    padding: 0;
   }
   .account-relation {
     font-size: 0.95rem;
