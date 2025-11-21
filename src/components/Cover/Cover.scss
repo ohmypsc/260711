@@ -1,5 +1,5 @@
 /* ============================================
-   🌸 Wedding Cover — High-end Full Decor
+   🌸 Wedding Cover — Romantic Elite Edition
    ============================================ */
 
 .w-cover {
@@ -11,11 +11,12 @@
   flex-direction: column;
   gap: 1.9rem;
 
-  // 살짝 부드러운 등장 애니메이션
-  animation: w-cover-fadeUp 0.7s ease-out;
+  animation: fadeUp 0.75s ease-out;
 }
 
-/* 신랑·신부 이름 */
+/* -------------------------
+   이름 (로즈골드 + soft glow)
+   ------------------------- */
 .w-cover {
   .names {
     font-weight: 600;
@@ -28,67 +29,79 @@
     gap: 0.9rem;
   }
 
-  /* 이름 텍스트 효과 (로즈골드 그라데이션 + 아주 은은한 glow) */
-  .names span:not(.icon-between) {
+  /* 이름 텍스트 효과 */
+  .names span:not(.name-ornament) {
     background: linear-gradient(
       90deg,
-      #e7b3b9 0%,
-      #ff8c94 45%,
-      #e7b3b9 100%
+      #e8b7be 0%,
+      #ff8c94 40%,
+      #e8b7be 100%
     );
     -webkit-background-clip: text;
     color: transparent;
 
     text-shadow:
-      0 1px 3px rgba(255, 140, 148, 0.16),
-      0 0 10px rgba(255, 140, 148, 0.12);
+      0 1px 3px rgba(255, 140, 148, 0.18),
+      0 0 10px rgba(255, 140, 148, 0.15);
   }
 
-  /* 이름 사이 아이콘 */
-  .icon-between {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  /* 이름 사이 로맨틱 SVG 오너먼트 */
+  .name-ornament {
+    width: 5rem;
+    max-width: 22vw;
 
-    i {
-      font-size: 1.4rem;
+    svg {
+      width: 100%;
+      height: auto;
       color: var(--theme-primary);
-      opacity: 0.9;
-      transform: translateY(1px);
 
-      // 은은한 반짝임
-      animation: iconTwinkle 2.4s ease-in-out infinite;
+      animation: ornamentGlow 3s ease-in-out infinite;
+      filter: drop-shadow(0 2px 6px rgba(255, 140, 148, 0.25));
     }
   }
 
-  /* 날짜 / 장소 - 좀 더 크고, 서로 더 가까이 */
+  /* 날짜 & 장소 */
   .date,
   .place {
-    font-size: 1.16rem;
+    font-size: 1.18rem;
     opacity: 0.96;
     letter-spacing: 0.01rem;
     margin: 0;
   }
 
   .place {
-    margin-top: -0.3rem;
+    margin-top: -0.35rem;
   }
 
-  /* 부모님 정보 박스 - 라인만 사용하는 고급 엘레강스 스타일 */
+  /* -------------------------
+     부모님 박스
+     ------------------------- */
   .parents {
-    padding: 1.4rem 0 1.3rem;
-    border-top: 1px solid rgba(255, 140, 148, 0.35);
-    border-bottom: 1px solid rgba(255, 140, 148, 0.35);
+    padding: 1.6rem 0 1.4rem;
+    margin: 1.6rem 0 2.3rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
     font-size: 1.05rem;
     line-height: 1.75rem;
     color: var(--text-main);
-    letter-spacing: 0.01rem;
+  }
 
-    margin: 1.6rem 0 2.1rem;
+  /* 상·하단 로맨틱 라인 */
+  .parent-line {
+    width: 100%;
+    max-width: 260px;
+    margin: 0.6rem auto;
+    color: var(--theme-primary);
+    opacity: 0.88;
 
-    p {
-      margin: 0.45rem 0;
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 2px 6px rgba(255, 140, 148, 0.2));
     }
   }
 
@@ -104,11 +117,10 @@
   }
 }
 
-/* ===========================
-   Animations
-   =========================== */
-
-@keyframes w-cover-fadeUp {
+/* -------------------------
+   애니메이션
+   ------------------------- */
+@keyframes fadeUp {
   from {
     opacity: 0;
     transform: translateY(14px);
@@ -119,23 +131,20 @@
   }
 }
 
-@keyframes iconTwinkle {
-  0%,
-  100% {
+@keyframes ornamentGlow {
+  0%, 100% {
     opacity: 0.85;
-    transform: scale(1) translateY(1px);
-    filter: drop-shadow(0 0 0 rgba(255, 140, 148, 0));
+    transform: scale(1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.12) translateY(1px);
-    filter: drop-shadow(0 0 6px rgba(255, 140, 148, 0.55));
+    transform: scale(1.05);
   }
 }
 
-/* ===========================
-   Mobile
-   =========================== */
+/* -------------------------
+   모바일 최적화
+   ------------------------- */
 @media (max-width: 420px) {
   .w-cover {
     gap: 1.6rem;
@@ -144,13 +153,17 @@
       gap: 0.7rem;
     }
 
-    .icon-between i {
-      font-size: 1.25rem;
+    .name-ornament {
+      width: 3.8rem;
+    }
+
+    .parent-line {
+      max-width: 220px;
     }
 
     .parents {
-      margin: 1.3rem 0 1.9rem;
-      padding: 1.25rem 0 1.25rem;
+      margin: 1.4rem 0 2rem;
+      padding: 1.2rem 0 1.2rem;
     }
   }
 }
