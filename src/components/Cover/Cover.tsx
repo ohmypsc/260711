@@ -25,7 +25,7 @@ export function Cover() {
         {groom?.name} <span>&</span> {bride?.name}
       </h1>
 
-      <p className="date">2026.07.11 (토) 오전 11시</p>
+      <p className="date">2026.07.11. (토) 오전 11시</p>
       <p className="place">유성컨벤션웨딩홀 3층 그랜드홀</p>
 
       <div className="parents">
