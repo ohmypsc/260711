@@ -1,5 +1,5 @@
 /* -------------------------------------
-    AccountModal Content Styles (최종: 미니멀 & 심플)
+   AccountModal Content Styles (최종: 미니멀 & 심플)
 ------------------------------------- */
 
 .account-modal-content {
@@ -11,7 +11,7 @@
 }
 
 /* -------------------------------------
-    Account List & Entry
+   Account List & Entry
 ------------------------------------- */
 
 .account-list {
@@ -29,27 +29,26 @@
 }
 
 /* -------------------------------------
-    Name & Relation
+   Name & Relation
 ------------------------------------- */
 
 .account-relation {
   font-size: 1rem;
   margin-bottom: 4px; 
-  --theme-bright-pink: #F47F99; 
-  color: var(--theme-bright-pink); 
+  color: var(--theme-primary); 
   display: flex;
   align-items: center;
   gap: 0.5rem;
   
   .name {
     font-weight: 700;
-    color: var(--text-main-dark, #4a4a4a); 
+    color: var(--text-main); 
     font-size: 1.05rem;
   }
 }
 
 /* -------------------------------------
-    Account Info Line
+   Account Info Line
 ------------------------------------- */
 
 .account-info-line {
@@ -62,7 +61,7 @@
 
 .bank-line {
   font-size: 0.95rem;
-  color: var(--text-main, #333);
+  color: var(--text-main);
   text-align: left;
   
   flex-grow: 0;
@@ -71,13 +70,13 @@
   white-space: nowrap; 
   
   .account-number {
-      font-weight: 500;
-      color: var(--text-main-dark, #4a4a4a);
-      margin-left: 8px;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-left: 8px;
   }
 
   strong {
-    color: var(--theme-primary-dark, #4a4a4a); 
+    color: var(--text-main); 
     font-weight: 700;
     font-size: 1rem;
     margin-right: 6px;
@@ -85,22 +84,20 @@
 }
 
 /* -------------------------------------
-    Copy Button (✅ 크기 확대)
+   Copy Button
 ------------------------------------- */
 
 .copy-btn-icon {
   flex-shrink: 0;
-  /* 버튼이 커진 만큼 왼쪽 마진 조정 */
   margin-left: 14px; 
-  /* ✅ 패딩을 늘려 버튼 영역 확대 */
   padding: 8px 10px;
   border-radius: 6px;
   
-  --theme-bright-pink: #F47F99; 
-  background: var(--theme-bright-pink);
-  color: white;
+  /* 옅은 핑크를 기본 배경색으로 설정 */
+  background: var(--theme-primary-light);
+  /* 짙은 텍스트 색상으로 가독성 확보 */
+  color: var(--text-main); 
 
-  /* ✅ 폰트 크기 확대 */
   font-size: 0.9rem; 
   font-weight: 600;
   border: none;
@@ -109,7 +106,9 @@
   transition: opacity 0.2s ease, transform 0.1s;
 
   &:hover {
-      background: #E56F88;
+    /* 호버 시 메인 핑크로 전환 */
+    background: var(--theme-primary);
+    color: #fff; /* 배경이 짙어지므로 흰색 텍스트 */
   }
   &:active {
     transform: scale(0.95);
@@ -117,27 +116,27 @@
 }
 
 /* -------------------------------------
-    Empty State
+   Empty State
 ------------------------------------- */
 
 .no-account {
   padding: 8px 0;
   border-radius: 6px;
   font-size: 0.9rem;
-  color: #888;
-  background: #fcfcfc;
+  color: var(--text-light);
+  background: var(--theme-accent); 
   text-align: center;
 }
 
 /* -------------------------------------
-    RESPONSIVE
+   RESPONSIVE
 ------------------------------------- */
 @media (max-width: 360px) {
   .account-entry {
     padding: 0;
   }
   .account-list {
-      gap: 8px;
+    gap: 8px;
   }
   .account-relation {
     font-size: 0.95rem;
@@ -145,13 +144,12 @@
   .bank-line {
     font-size: 0.9rem;
     .account-number {
-        font-size: 0.95rem;
+      font-size: 0.95rem;
     }
   }
   .copy-btn-icon {
-      /* ✅ 모바일에서도 패딩과 폰트 크기 조정 */
-      font-size: 0.85rem;
-      padding: 6px 8px; 
-      margin-left: 10px;
+    font-size: 0.85rem;
+    padding: 6px 8px; 
+    margin-left: 10px;
   }
 }
