@@ -81,9 +81,7 @@
       text-decoration: none;
       transition: transform 0.1s;
 
-      &:hover {
-        background-color: transparent; 
-      }
+    
       &:active {
         transform: scale(0.95);
       }
