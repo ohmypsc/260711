@@ -22,8 +22,8 @@ export function Cover() {
       <h1 className="names">
         <span>{groom?.name}</span>
 
-        {/* 중앙 심플 다이아몬드 오너먼트 */}
-        <span className="diamond" aria-hidden="true">◆</span>
+
+        <span className="diamond" aria-hidden="true">♥</span>
 
         <span>{bride?.name}</span>
       </h1>
@@ -35,48 +35,52 @@ export function Cover() {
       {/* 부모님 박스 */}
       <div className="parents">
 
-        {/* 위 넝쿨 라인 */}
-        <div className="vine-line top">
-          <svg viewBox="0 0 260 28">
-            <path
-              d="M5 14 C40 5, 80 23, 130 14 C180 5, 220 23, 255 14"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <circle cx="42" cy="10" r="2" fill="currentColor" opacity="0.6"/>
-            <circle cx="218" cy="16" r="2" fill="currentColor" opacity="0.6"/>
-          </svg>
-        </div>
+        {/* 상단 혼합형 라인 */}
+<div className="parent-line top">
+  <svg viewBox="0 0 260 24">
+    <path
+      d="M5 12 C60 2, 200 22, 255 12"
+      stroke="currentColor"
+      strokeWidth="0.8"
+      fill="none"
+      strokeLinecap="round"
+      strokeDasharray="2 3"
+    />
+    <!-- 작은 점 ● -->
+    <circle cx="40" cy="10" r="1.2" fill="currentColor" />
+    <circle cx="90" cy="14" r="1.2" fill="currentColor" />
+    <circle cx="160" cy="11" r="1.2" fill="currentColor" />
 
-        <p>
-          {groomFather?.name} · {groomMother?.name}의{" "}
-          <span className="relation-name relation-name--adjust">아들</span>{" "}
-          <strong>{groom?.name}</strong>
-        </p>
+    <!-- 작은 다이아 ◆ -->
+    <rect x="62" y="8" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 63 9)" />
+    <rect x="125" y="10" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 126 11)" />
+    <rect x="200" y="9" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 201 10)" />
+  </svg>
+</div>
 
-        <p className="daughter">
-          {brideFather?.name} · {brideMother?.name}의{" "}
-          <span className="relation-name relation-name--adjust">딸</span>{" "}
-          <strong>{bride?.name}</strong>
-        </p>
+{/* 하단 혼합형 라인 */}
+<div className="parent-line bottom">
+  <svg viewBox="0 0 260 24">
+    <path
+      d="M5 12 C60 22, 200 2, 255 12"
+      stroke="currentColor"
+      strokeWidth="0.8"
+      fill="none"
+      strokeLinecap="round"
+      strokeDasharray="2 3"
+    />
+    <!-- 작은 점 ● -->
+    <circle cx="50" cy="13" r="1.2" fill="currentColor" />
+    <circle cx="120" cy="9" r="1.2" fill="currentColor" />
+    <circle cx="185" cy="15" r="1.2" fill="currentColor" />
 
-        {/* 아래 넝쿨 라인 */}
-        <div className="vine-line bottom">
-          <svg viewBox="0 0 260 28">
-            <path
-              d="M5 14 C40 23, 80 5, 130 14 C180 23, 220 5, 255 14"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <circle cx="82" cy="18" r="2" fill="currentColor" opacity="0.6"/>
-            <circle cx="178" cy="6" r="2" fill="currentColor" opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
+    <!-- 작은 다이아 ◆ -->
+    <rect x="75" y="11" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 76 12)" />
+    <rect x="145" y="7" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 146 8)" />
+    <rect x="215" y="13" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 216 14)" />
+  </svg>
+</div>
+
 
       <Button variant="outline" onClick={() => setOpen(true)}>
         축하 인사 전하기
