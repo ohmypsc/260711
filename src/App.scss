@@ -67,26 +67,10 @@ section {
   width: 100%;
 }
 
-
 .section-title {
-  font-size: 1.6rem;
-  font-weight: 400; /* 부드러운 제목 두께 */
-  margin-bottom: 1.8rem;
+  font-size: 1.4rem;  
+  font-weight: 400;    
+  margin-bottom: 1.5rem;
   text-align: center;
-  letter-spacing: 0.03rem;
+  letter-spacing: 0.02rem;
   color: var(--text-main);
-
-  position: relative;
-  padding-bottom: 0.8rem;
-}
-
-.section-title::after {
-  content: "";
-  display: block;
-  width: 48px;
-  height: 2px;
-  background-color: var(--theme-primary-light);
-  margin: 0.8rem auto 0;
-  border-radius: 2px;
-  opacity: 0.8;
-}
