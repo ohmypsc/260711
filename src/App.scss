@@ -28,20 +28,21 @@ body {
   --theme-bg: #ffffff;
   --theme-primary: #ff8c94;
   --theme-primary-light: #ffc0cb;
-  --theme-accent: #f0f8ff;
+  --theme-accent: #f8f8f8;
 
-  --text-main: #2c3e50;
-  --text-light: #aed8e4;
-
+  --text-main: #333333;
+  --text-light: #aaaaaa;
+  
   --theme-success: #4CAF50;
   --theme-error: #f44336;
-  --border-color: #e0e0e0;
-  --shadow-color: rgba(255, 192, 203, 0.4);
+  --border-color: #eeeeee;
+  --shadow-color: rgba(255, 140, 148, 0.25);
 
   --section-max-width: 640px;
   font-family: "Noto Serif KR", serif;
   font-size: clamp(16px, 3.2vw, 20px);
 }
+
 /* ============================================
    📄 Wedding Page Wrapper
    ============================================ */
