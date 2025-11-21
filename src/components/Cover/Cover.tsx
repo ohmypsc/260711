@@ -21,8 +21,6 @@ export function Cover() {
   return (
     <div className="w-cover">
 
-      <p className="tagline">초대합니다</p>
-
       <h1 className="names">
         {groom?.name} <span>&</span> {bride?.name}
       </h1>
