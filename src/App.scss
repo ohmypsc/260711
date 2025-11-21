@@ -27,6 +27,8 @@ body {
 
 /* 전체 페이지 */
 .wedding-page {
+  position: relative;  /* ⭐ 추가 */
+  z-index: 2;          /* ⭐ 추가 → 꽃잎(canvas) 뒤로 보내지 않음 */
   background-color: var(--theme-bg);
   width: 100%;
   overflow-x: hidden;
