@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 import "./Button.scss";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "outline" | "ghost";
+  variant?: "outline" ;
   children: ReactNode;
 }
 
