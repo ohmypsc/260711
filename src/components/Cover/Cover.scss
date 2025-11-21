@@ -1,5 +1,5 @@
 /* ============================================
-   🌸 Wedding Cover — Refined Elegant Style
+   🌸 Wedding Cover — High-end Full Decor
    ============================================ */
 
 .w-cover {
@@ -10,122 +10,147 @@
   display: flex;
   flex-direction: column;
   gap: 1.9rem;
+
+  // 살짝 부드러운 등장 애니메이션
+  animation: w-cover-fadeUp 0.7s ease-out;
 }
 
-/* -------------------------------
-   Names
--------------------------------- */
-.w-cover .names {
-  font-weight: 600;
-  line-height: 1.28;
-  font-size: clamp(2.45rem, 7.5vw, 3.05rem);
+/* 신랑·신부 이름 */
+.w-cover {
+  .names {
+    font-weight: 600;
+    line-height: 1.28;
+    font-size: clamp(2.45rem, 7.5vw, 3.05rem);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.85rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  /* 이름 텍스트 효과 (로즈골드 그라데이션 + 아주 은은한 glow) */
+  .names span:not(.icon-between) {
+    background: linear-gradient(
+      90deg,
+      #e7b3b9 0%,
+      #ff8c94 45%,
+      #e7b3b9 100%
+    );
+    -webkit-background-clip: text;
+    color: transparent;
+
+    text-shadow:
+      0 1px 3px rgba(255, 140, 148, 0.16),
+      0 0 10px rgba(255, 140, 148, 0.12);
+  }
+
+  /* 이름 사이 아이콘 */
+  .icon-between {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 1.4rem;
+      color: var(--theme-primary);
+      opacity: 0.9;
+      transform: translateY(1px);
+
+      // 은은한 반짝임
+      animation: iconTwinkle 2.4s ease-in-out infinite;
+    }
+  }
+
+  /* 날짜 / 장소 - 좀 더 크고, 서로 더 가까이 */
+  .date,
+  .place {
+    font-size: 1.16rem;
+    opacity: 0.96;
+    letter-spacing: 0.01rem;
+    margin: 0;
+  }
+
+  .place {
+    margin-top: -0.3rem;
+  }
+
+  /* 부모님 정보 박스 - 라인만 사용하는 고급 엘레강스 스타일 */
+  .parents {
+    padding: 1.4rem 0 1.3rem;
+    border-top: 1px solid rgba(255, 140, 148, 0.35);
+    border-bottom: 1px solid rgba(255, 140, 148, 0.35);
+
+    font-size: 1.05rem;
+    line-height: 1.75rem;
+    color: var(--text-main);
+    letter-spacing: 0.01rem;
+
+    margin: 1.6rem 0 2.1rem;
+
+    p {
+      margin: 0.45rem 0;
+    }
+  }
+
+  .relation-name {
+    display: inline-flex;
+    justify-content: center;
+    font-weight: 500;
+    opacity: 0.92;
+  }
+
+  .relation-name--adjust {
+    min-width: 2.6em;
+  }
 }
 
-/* 이름 컬러 포인트만 */
-.w-cover .names span:not(.icon-between) {
-  color: var(--theme-primary);
-  padding: 0 0.2rem;
-}
+/* ===========================
+   Animations
+   =========================== */
 
-/* 밑줄 완전 제거 */
-.w-cover .names span::after {
-  display: none !important;
-}
-
-/* -------------------------------
-   Name Icon — 프리미엄 반짝
--------------------------------- */
-.w-cover .icon-between i {
-  font-size: 1.3rem;
-  color: var(--theme-primary);
-  opacity: 0.9;
-  transform: translateY(1px);
-
-  /* 은은한 반짝임 */
-  animation: iconTwinkle 2.4s ease-in-out infinite;
+@keyframes w-cover-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes iconTwinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.85;
     transform: scale(1) translateY(1px);
+    filter: drop-shadow(0 0 0 rgba(255, 140, 148, 0));
   }
   50% {
     opacity: 1;
-    transform: scale(1.15) translateY(1px);
-    filter: drop-shadow(0 0 6px rgba(255, 140, 148, 0.5));
+    transform: scale(1.12) translateY(1px);
+    filter: drop-shadow(0 0 6px rgba(255, 140, 148, 0.55));
   }
 }
 
-/* -------------------------------
-   Date / Place (더 가까이 + 고급스럽게)
--------------------------------- */
-.w-cover .date,
-.w-cover .place {
-  font-size: 1.16rem;
-  opacity: 0.96;
-  letter-spacing: 0.01rem;
-  margin: 0;
-}
-
-.w-cover .place {
-  margin-top: -0.3rem;
-}
-
-/* -------------------------------
-   Parents Box — 고급 엘레강스 스타일
--------------------------------- */
-.w-cover .parents {
-  padding: 1.4rem 0 1.3rem;
-
-  /* 박스처럼 보이지 않게 → 선만 */
-  border-top: 1px solid rgba(255, 140, 148, 0.35);
-  border-bottom: 1px solid rgba(255, 140, 148, 0.35);
-
-  font-size: 1.05rem;
-  line-height: 1.75rem;
-  color: var(--text-main);
-
-  /* 고급스러운 여백 */
-  margin: 1.6rem 0 2.1rem;
-}
-
-/* 점선이나 그림자 없이 깔끔하게 */
-.w-cover .parents p {
-  margin: 0.45rem 0;
-}
-
-/* relation name */
-.w-cover .relation-name {
-  display: inline-flex;
-  justify-content: center;
-  font-weight: 500;
-  opacity: 0.92;
-}
-
-.w-cover .relation-name--adjust {
-  min-width: 2.6em;
-}
-
-/* -------------------------------
+/* ===========================
    Mobile
--------------------------------- */
+   =========================== */
 @media (max-width: 420px) {
   .w-cover {
-    gap: 1.55rem;
-  }
+    gap: 1.6rem;
 
-  .w-cover .icon-between i {
-    font-size: 1.15rem;
-  }
+    .names {
+      gap: 0.7rem;
+    }
 
-  .w-cover .parents {
-    margin: 1.3rem 0 1.9rem;
-    padding: 1.25rem 0 1.25rem;
+    .icon-between i {
+      font-size: 1.25rem;
+    }
+
+    .parents {
+      margin: 1.3rem 0 1.9rem;
+      padding: 1.25rem 0 1.25rem;
+    }
   }
 }
