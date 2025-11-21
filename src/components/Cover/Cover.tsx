@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { ContactModal } from "@/components/Cover/ContactModal";
-import { useContactInfo } from "@/contexts/ContactInfoContext"; 
+import { SomeValue } from '@/ContactInfoProvider';
 import "./Cover.scss";
 
 export function Cover() {
