@@ -50,5 +50,3 @@ export function Invitation(): JSX.Element {
     </section>
   );
 }
-
-export default Invitation;
