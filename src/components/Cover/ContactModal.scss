@@ -1,10 +1,6 @@
-/* -------------------------------------
-    ContactModal Style (아이콘 색상 수정)
-------------------------------------- */
 
 .contact-modal-wrap {
   width: 100%;
-  
   display: flex;
   flex-direction: column;
   gap: 18px; 
@@ -26,7 +22,8 @@
 .contact-section {
   padding: 15px 15px; 
   border-radius: 12px;
-  background-color: var(--modal-section-bg, #fcfcfc); 
+  /* 박스 배경색은 연한 분홍 유지 */
+  background-color: var(--modal-section-accent-bg, #fefafa); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
 }
 
@@ -35,6 +32,7 @@
   display: flex;
   align-items: center; 
   justify-content: space-between;
+  flex-wrap: nowrap; 
   padding: 0.6rem 0; 
   border-bottom: 1px solid var(--modal-border, #f0f0f0);
 
@@ -46,35 +44,59 @@
   }
 
   .relation {
-    flex: 2; 
-    opacity: 0.75;
-    font-size: 0.9rem;
-    color: var(--text-light, #777);
+    width: 110px; 
+    flex: 0 0 auto; 
+    text-align: right; 
+    
+    /* ✅ 1. 색상을 화사하고 예쁜 진한 분홍으로 변경 */
+    --theme-bright-pink: #c5658b; 
+    color: var(--theme-bright-pink); 
+    opacity: 1; 
+    font-size: 0.95rem; 
+    
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
   .name {
-    flex: 2; 
+    flex: 1 1 auto; 
     text-align: left; 
-    padding-left: 15px;
+    padding-left: 10px; 
     font-weight: 600;
+    
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
   /* 전화 & 문자 아이콘 버튼 영역 */
   .contact-actions {
-    flex: 2;
+    flex: 0 0 auto; 
+    min-width: 90px;
     display: flex;
     justify-content: flex-end;
     gap: 18px; 
 
     .icon-link {
-      /* ✅ 아이콘 색상을 전역 텍스트 색상(진한 회색/블랙)으로 변경 */
-      color: var(--text-main, #333); 
+      /* ✅ 2. 아이콘 색상도 화사한 분홍색으로 변경 */
+      --theme-bright-pink: #c5658b; 
+      color: var(--theme-bright-pink); 
+      
       font-size: 1.3rem; 
       padding: 5px;
       border-radius: 50%; 
       
+      /* 배경색은 중립적인 회색 톤 유지 (요청대로) */
+      background-color: rgba(102, 102, 102, 0.08); 
+      line-height: 1; 
+      text-decoration: none;
+
+      transition: background-color 0.2s, transform 0.1s;
+
       &:hover {
-        background-color: rgba(51, 51, 51, 0.15); /* 호버 시 약간 진하게 */
+        /* 호버 시 배경색도 분홍색 기반으로 변경 */
+        background-color: rgba(197, 101, 139, 0.15); /* #c5658b 기반의 15% 투명도 */
       }
       &:active {
         transform: scale(0.95);
@@ -83,8 +105,20 @@
   }
 }
 
-/* 모바일 작은 화면 보정 */
+/* -------------------------------------
+    RESPONSIVE 모바일 UI 개선
+------------------------------------- */
 @media (max-width: 360px) {
+  .contact-item .relation {
+    width: 90px; 
+  }
+  .contact-item .name {
+    padding-left: 5px;
+  }
+  .contact-item .contact-actions {
+    min-width: 80px; 
+    gap: 12px;
+  }
   .contact-title {
     font-size: 1.4rem;
   }
