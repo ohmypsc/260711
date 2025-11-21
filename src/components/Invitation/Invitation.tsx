@@ -8,9 +8,6 @@ export function Invitation(): JSX.Element {
         
         <h2 className="section-title">모시는 글</h2>
 
-        {/* 제목과 내용 사이의 큰 여백을 위한 요소 */}
-        <div className="break" aria-hidden="true" />
-
         {/* 1. 시(詩) 인용 부분 */}
         <div className="invitation-text-block poetry-section">
           <div className="inv-content">
