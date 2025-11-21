@@ -88,8 +88,12 @@
 }
 
 .relation-name--adjust {
-  min-width: 2.6em;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 3.5em; /* 저 사람이 사용한 바로 그 값 */
 }
+
 
 /* -------------------------
    긴 장식 라인
