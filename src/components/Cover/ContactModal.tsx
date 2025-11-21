@@ -19,7 +19,7 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
   return (
     <Modal onClose={onClose}>
       <div className="contact-modal-wrap">
-        <h2 className="contact-title">💍 축하 인사 전하기</h2>
+        <h2 className="contact-title">💍연락하기</h2>
 
         <div className="contact-section">
           
