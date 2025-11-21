@@ -46,12 +46,12 @@ export function Cover() {
       strokeLinecap="round"
       strokeDasharray="2 3"
     />
-    <!-- 작은 점 ● -->
+
     <circle cx="40" cy="10" r="1.2" fill="currentColor" />
     <circle cx="90" cy="14" r="1.2" fill="currentColor" />
     <circle cx="160" cy="11" r="1.2" fill="currentColor" />
 
-    <!-- 작은 다이아 ◆ -->
+
     <rect x="62" y="8" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 63 9)" />
     <rect x="125" y="10" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 126 11)" />
     <rect x="200" y="9" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 201 10)" />
@@ -69,12 +69,12 @@ export function Cover() {
       strokeLinecap="round"
       strokeDasharray="2 3"
     />
-    <!-- 작은 점 ● -->
+
     <circle cx="50" cy="13" r="1.2" fill="currentColor" />
     <circle cx="120" cy="9" r="1.2" fill="currentColor" />
     <circle cx="185" cy="15" r="1.2" fill="currentColor" />
 
-    <!-- 작은 다이아 ◆ -->
+
     <rect x="75" y="11" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 76 12)" />
     <rect x="145" y="7" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 146 8)" />
     <rect x="215" y="13" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 216 14)" />
