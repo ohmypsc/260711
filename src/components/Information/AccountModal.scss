@@ -83,37 +83,6 @@
   }
 }
 
-/* -------------------------------------
-   Copy Button
-------------------------------------- */
-
-.copy-btn-icon {
-  flex-shrink: 0;
-  margin-left: 14px; 
-  padding: 8px 10px;
-  border-radius: 6px;
-  
-  /* 옅은 핑크를 기본 배경색으로 설정 */
-  background: var(--theme-primary-light);
-  /* 짙은 텍스트 색상으로 가독성 확보 */
-  color: var(--text-main); 
-
-  font-size: 0.9rem; 
-  font-weight: 600;
-  border: none;
-  
-  cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.1s;
-
-  &:hover {
-    /* 호버 시 메인 핑크로 전환 */
-    background: var(--theme-primary);
-    color: #fff; /* 배경이 짙어지므로 흰색 텍스트 */
-  }
-  &:active {
-    transform: scale(0.95);
-  }
-}
 
 /* -------------------------------------
    Empty State
