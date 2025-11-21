@@ -7,10 +7,11 @@ interface AccountModalProps {
   onClose: () => void;
 }
 
+// ✅ 하이픈 제거: 숫자만 반환하도록 수정
 function formatAccountNumber(account: string) {
   if (!account) return "";
   const digits = account.replace(/\D/g, "");
-  return digits.replace(/(\d{4})(?=\d)/g, "$1-");
+  return digits; 
 }
 
 export function AccountModal({ type, onClose }: AccountModalProps) {
@@ -38,18 +39,20 @@ export function AccountModal({ type, onClose }: AccountModalProps) {
               </p>
 
               {item.bank && item.account ? (
-                // ✅ 수평 배치 컨테이너
                 <div className="account-info-line">
                   <p className="bank-line">
-                    <strong>{item.bank}</strong>{" "}
-                    {formatAccountNumber(item.account)}
+                    <strong>{item.bank}</strong>
+                    {/* ✅ 계좌번호만 별도 span으로 분리하여 SCSS에서 스타일링 */}
+                    <span className="account-number">
+                       {formatAccountNumber(item.account)}
+                    </span>
                   </p>
 
                   <button
                     className="copy-btn-icon"
                     onClick={() => copy(item.account!)}
                   >
-                    복사
+                    복사하기
                   </button>
                 </div>
               ) : (
