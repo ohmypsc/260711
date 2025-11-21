@@ -6,7 +6,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px; 
+  gap: 16px; /* 메인 콘텐츠 간격 소폭 축소 (20px -> 16px) */
   padding: 0 10px;
 }
 
@@ -17,11 +17,11 @@
 .account-list {
   display: flex;
   flex-direction: column;
-  gap: 16px; /* 여백으로 항목을 구분하기 위해 간격 확보 */
+  gap: 10px; /* ✅ 항목 간 간격 축소 (16px -> 10px) */
 }
 
 .account-entry {
-  padding: 0; /* 모든 구분선 스타일 제거 */
+  padding: 0; 
   
   &:last-child {
     padding-bottom: 0;
@@ -34,39 +34,41 @@
 
 .account-relation {
   font-size: 1rem;
-  margin-bottom: 6px; /* 계좌 정보와 간격 최소화 */
-  color: var(--text-main, #333); 
+  margin-bottom: 4px; /* ✅ 이름/계좌 정보 간격 축소 (6px -> 4px) */
+  --theme-bright-pink: #F47F99; 
+  color: var(--theme-bright-pink); 
   display: flex;
   align-items: center;
   gap: 0.5rem;
   
   .name {
     font-weight: 700;
-    --theme-bright-pink: #F47F99;
-    color: var(--theme-bright-pink); 
+    color: var(--text-main-dark, #4a4a4a); 
     font-size: 1.05rem;
   }
 }
 
 /* -------------------------------------
-    Account Info Line (계좌 정보 행)
+    Account Info Line
 ------------------------------------- */
 
 .account-info-line {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    padding: 0; /* 패딩 최소화 */
+    padding: 0; 
+    flex-wrap: nowrap; 
 }
 
 .bank-line {
   font-size: 0.95rem;
   color: var(--text-main, #333);
   text-align: left;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  flex-grow: 1; 
+  
+  flex-grow: 0;
+  flex-shrink: 1;
+  min-width: 150px; 
+  white-space: nowrap; 
   
   .account-number {
       font-weight: 500;
@@ -130,6 +132,9 @@
 @media (max-width: 360px) {
   .account-entry {
     padding: 0;
+  }
+  .account-list {
+      gap: 8px; /* 모바일에서 더 압축 */
   }
   .account-relation {
     font-size: 0.95rem;
