@@ -1,4 +1,13 @@
-/* 장소/주소 (지도 위) */
+.location-container {
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ===========================
+   📍 Venue Info (지도 위)
+   =========================== */
+
 .venue-info {
   text-align: center;
   margin: -1rem 0 1.2rem;
@@ -30,7 +39,10 @@
   }
 }
 
-/* 지도 래퍼 */
+/* ===========================
+   🗺 Map + Lock UI
+   =========================== */
+
 .map-wrapper {
   position: relative;
   margin: 0 auto 1rem;
@@ -40,7 +52,6 @@
   border: 1px solid var(--border-color);
 }
 
-/* 지도 */
 .map-area {
   width: 100%;
   height: 350px;
@@ -55,7 +66,7 @@
   background: transparent;
 }
 
-/* ✅ 안내 박스 더 예쁘게 */
+/* 잠금 안내 */
 .lock-message {
   position: absolute;
   left: 50%;
@@ -86,12 +97,12 @@
   }
 }
 
-/* ✅ 자물쇠 버튼 TOP_LEFT로 이동 + 줌 컨트롤과 겹침 방지 */
+/* 자물쇠 버튼 (TOP_LEFT / 줌 컨트롤과 겹침 없음) */
 .map-lock-button {
   position: absolute;
   left: 10px;
   top: 10px;
-  z-index: 10; /* 줌 컨트롤보다 위로 */
+  z-index: 10;
   width: 42px;
   height: 42px;
   border-radius: 999px;
@@ -101,7 +112,9 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: transform 0.12s ease, background-color 0.2s ease, color 0.2s ease;
+  transition: transform 0.12s ease,
+              background-color 0.2s ease,
+              color 0.2s ease;
 
   &:active {
     transform: scale(0.95);
@@ -114,9 +127,154 @@
   }
 }
 
-/* 모바일 높이 */
+/* ===========================
+   🧭 Navigation Buttons (모바일 전용 / no hover)
+   =========================== */
+
+.navi-buttons-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin: 1.2rem 0 2.4rem;
+}
+
+.navi-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+
+  padding: 0.95rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.01rem;
+
+  background: #fff;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+
+  cursor: pointer;
+  transition: background-color 0.18s ease,
+              transform 0.12s ease,
+              border-color 0.18s ease;
+
+  i {
+    font-size: 1.05em;
+    transform: translateY(-0.5px);
+  }
+
+  &:active {
+    transform: translateY(1px) scale(0.98);
+  }
+}
+
+/* 네이버 */
+.navi-button.naver {
+  border-color: rgba(3, 199, 90, 0.55);
+  color: #03c75a;
+  background: rgba(3, 199, 90, 0.04);
+
+  &:active {
+    background: rgba(3, 199, 90, 0.1);
+    border-color: rgba(3, 199, 90, 0.9);
+  }
+}
+
+/* 카카오 */
+.navi-button.kakao {
+  border-color: var(--theme-primary-light);
+  color: var(--text-main);
+  background: rgba(255, 140, 148, 0.05);
+
+  &:active {
+    background: rgba(255, 140, 148, 0.12);
+    border-color: var(--theme-primary);
+  }
+}
+
+/* T맵 */
+.navi-button.tmap {
+  border-color: rgba(0, 128, 255, 0.5);
+  color: #0080ff;
+  background: rgba(0, 128, 255, 0.04);
+
+  &:active {
+    background: rgba(0, 128, 255, 0.1);
+    border-color: rgba(0, 128, 255, 0.9);
+  }
+}
+
+/* ===========================
+   🚏 Transport Info
+   =========================== */
+
+.transport-info {
+  display: grid;
+  gap: 1.7rem;
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.45rem;
+
+    i {
+      margin-right: 0.35rem;
+      color: var(--theme-primary);
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 1.8;
+    font-size: 0.95rem;
+    color: var(--text-main);
+
+    li {
+      margin-bottom: 0.25rem;
+      position: relative;
+      padding-left: 0.9rem;
+
+      &::before {
+        content: "•";
+        color: var(--theme-primary);
+        font-weight: 800;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      strong {
+        font-weight: 700;
+        color: var(--text-main);
+      }
+    }
+  }
+}
+
+/* ===========================
+   📱 Mobile
+   =========================== */
+
 @media (max-width: 640px) {
   .map-area {
     height: 280px;
+  }
+
+  .navi-buttons-wrapper {
+    gap: 0.5rem;
+  }
+
+  .navi-button {
+    padding: 0.8rem 0.35rem;
+    font-size: 0.85rem;
+    border-radius: 10px;
+  }
+
+  .transport-info {
+    gap: 1.4rem;
   }
 }
