@@ -260,8 +260,9 @@ export const Location = () => {
         </button>
 
         <button onClick={handleTMap} className="navi-button tmap">
-          <i className="fa-solid fa-location-crosshairs" /> T맵
-        </button>
+  <i className="fa-solid fa-t" />
+  T맵
+</button>
       </div>
 
       {/* 교통 안내 */}
