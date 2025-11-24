@@ -5,6 +5,7 @@ import { Invitation } from "@/components/Invitation/Invitation";
 import { Calendar } from "@/components/Calendar/Calendar";
 import { Location } from "@/components/Location/Location"; 
 import { Account } from "@/components/Account/Account";
+import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook"; 
 
 export default function MainWeddingPage() {
@@ -63,6 +64,12 @@ export default function MainWeddingPage() {
         <section id="account">
           <div className="section-inner">
             <Account />
+          </div>
+        </section>
+
+         <section id="attendance">
+          <div className="section-inner">
+            <Attendance />
           </div>
         </section>
 
