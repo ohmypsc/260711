@@ -189,9 +189,43 @@
   font-size: clamp(1.9rem, 7vw, 2.5rem);
   font-weight: 700;
   line-height: 1;
-  color: var(--theme-primary);
   letter-spacing: 0.02rem;
+
+  /* ✅ 로즈골드 그라데이션 텍스트 */
+  background: linear-gradient(
+    180deg,
+    var(--theme-primary) 0%,
+    #ffb1b7 55%,
+    var(--theme-primary) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* ✅ 아주 얇은 글로우 */
+  text-shadow:
+    0 0 6px rgba(255, 140, 148, 0.20),
+    0 0 14px rgba(255, 192, 203, 0.18);
+
+  /* ✅ 미세한 “반짝이는 느낌” */
+  animation: numberGlow 6s ease-in-out infinite;
 }
+
+@keyframes numberGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 4px rgba(255, 140, 148, 0.15),
+      0 0 10px rgba(255, 192, 203, 0.12);
+    transform: translateY(0);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(255, 140, 148, 0.26),
+      0 0 18px rgba(255, 192, 203, 0.22);
+    transform: translateY(-1px); /* ✅ 아주 살짝 숨쉬는 느낌 */
+  }
+}
+
 
 .unit {
   font-size: 0.82rem;
