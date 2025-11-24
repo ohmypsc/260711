@@ -23,42 +23,48 @@ export function PhotoUpload() {
     setLoading(true);
     setProgress({ done: 0, total: files.length });
 
-    try {
-      let done = 0;
+    const failed: string[] = [];
+    let done = 0;
 
-      for (const file of files) {
+    for (const file of files) {
+      try {
         if (!file.type.startsWith("image/")) {
-          // 이미지가 아닌 건 건너뛰기
-          done++;
-          setProgress({ done, total: files.length });
+          failed.push(`${file.name} (이미지 아님)`);
           continue;
         }
 
-        // ✅ 자동 압축(필요 시)
         const optimized = await compressIfNeeded(file);
 
         const ext = optimized.type.includes("png") ? "png" : "jpg";
-        const filename =
-          `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+        const filename = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
 
         const { error } = await supabase.storage
           .from(BUCKET)
           .upload(filename, optimized, { upsert: false });
 
         if (error) throw error;
-
+      } catch (err: any) {
+        console.error("Upload failed:", file.name, err);
+        failed.push(`${file.name} (${err?.message ?? "알 수 없는 오류"})`);
+      } finally {
         done++;
         setProgress({ done, total: files.length });
+        // 모바일에서 연속 업로드 안정성용 텀
+        await new Promise((r) => setTimeout(r, 150));
       }
+    }
 
-      alert("사진이 업로드되었습니다! 감사합니다 😊");
-      e.target.value = "";
-    } catch (err) {
-      console.error(err);
-      alert("업로드 중 오류가 발생했습니다. 다시 시도해주세요.");
-    } finally {
-      setLoading(false);
-      setProgress(null);
+    setLoading(false);
+    setProgress(null);
+    e.target.value = "";
+
+    if (failed.length === 0) {
+      alert("사진이 모두 업로드되었습니다! 감사합니다 😊");
+    } else {
+      alert(
+        `일부 사진 업로드가 실패했어요.\n\n${failed.join("\n")}\n\n` +
+        `다시 시도하거나 JPG로 변환 후 올려주세요.`
+      );
     }
   };
 
@@ -75,7 +81,7 @@ export function PhotoUpload() {
         ref={fileRef}
         type="file"
         accept="image/*"
-        multiple              // ✅ 여러 장 선택
+        multiple
         onChange={onChangeFile}
         style={{ display: "none" }}
       />
@@ -99,7 +105,6 @@ async function compressIfNeeded(file: File): Promise<File> {
   if (sizeMB <= MAX_UPLOAD_MB) return file; // 5MB 이하면 그대로
 
   const img = await loadImage(file);
-
   let { width, height } = img;
 
   const longSide = Math.max(width, height);
@@ -112,12 +117,15 @@ async function compressIfNeeded(file: File): Promise<File> {
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
-  const ctx = canvas.getContext("2d")!;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return file; // 극단적 예외 보호
+
   ctx.drawImage(img, 0, 0, width, height);
 
-  const blob: Blob = await new Promise((resolve) =>
+  const blob: Blob = await new Promise((resolve, reject) =>
     canvas.toBlob(
-      (b) => resolve(b!),
+      (b) => (b ? resolve(b) : reject(new Error("이미지 변환 실패"))),
       "image/jpeg",
       JPEG_QUALITY
     )
@@ -137,7 +145,10 @@ function loadImage(file: File): Promise<HTMLImageElement> {
       URL.revokeObjectURL(url);
       resolve(img);
     };
-    img.onerror = reject;
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("이미지 로드 실패"));
+    };
     img.src = url;
   });
 }
