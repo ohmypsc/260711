@@ -1,0 +1,176 @@
+.admin-page {
+  padding: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+
+  .admin-title {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--text-main);
+  }
+
+  .admin-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      border-radius: 8px;
+      border: 1px solid var(--light-grey-color);
+      background: var(--white-color);
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+
+      &.active {
+        background: var(--theme-primary);
+        border-color: var(--theme-primary);
+        color: #fff;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .admin-loading {
+    text-align: center;
+    padding: 12px 0;
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+
+  .admin-box {
+    background: var(--white-color);
+    border: 1px solid var(--light-grey-color);
+    border-radius: 10px;
+    padding: 12px;
+  }
+}
+
+/* ==============================
+   ✅ 관리자 사진(썸네일/삭제) 스타일
+============================== */
+
+.admin-photos {
+  .admin-photos__title {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .admin-photos__actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .admin-photos__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .admin-photos__card {
+    background: var(--white-color);
+    border: 1px solid var(--light-grey-color);
+    border-radius: 8px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .admin-photos__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 6px 8px;
+    align-items: center;
+
+    .name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      word-break: break-all;
+    }
+
+    .sub {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    .meta-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .mini-btn {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      border: 1px solid var(--light-grey-color);
+      background: var(--white-color);
+      cursor: pointer;
+
+      &.danger {
+        background: var(--theme-primary);
+        border-color: var(--theme-primary);
+        color: #fff;
+      }
+    }
+  }
+
+  .admin-photos__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+
+    .page-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--light-grey-color);
+      border-radius: 6px;
+      background: var(--white-color);
+      font-size: 0.9rem;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+    }
+
+    .page-info {
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+  }
+}
+
+/* ==============================
+   모바일에서 2열로 보이게
+============================== */
+@media (max-width: 420px) {
+  .admin-photos {
+    .admin-photos__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
