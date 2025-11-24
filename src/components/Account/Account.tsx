@@ -7,20 +7,20 @@ import { useContactInfo } from "@/ContactInfoProvider";
 
 type ModalType = null | "groom" | "bride";
 
-export function Information() {
+export function Account() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
 
   return (
-    <div className="information">
+    <div className="account">
       <h2 className="section-title">마음 전하실 곳</h2>
 
-      <p className="information__desc">
+      <p className="account__desc">
         참석이 어려워 직접 축하해 주식 어려운 분들을 위해 계좌번호를 기재하였습니다.
         <br />
         넓은 마음으로 양해 부탁드립니다.
       </p>
 
-      <div className="info-buttons">
+      <div className="account-buttons">
         <Button variant="outline" onClick={() => setOpenModal("groom")}>
           신랑 측 계좌번호 보기
         </Button>
@@ -38,7 +38,7 @@ export function Information() {
 }
 
 /* ------------------------------------------------------------------
-   AccountModal (Information 내부로 통합)
+   AccountModal (내부 컴포넌트)
 ------------------------------------------------------------------ */
 
 interface AccountModalProps {
