@@ -5,6 +5,7 @@ import { Invitation } from "@/components/Invitation/Invitation";
 import { Calendar } from "@/components/Calendar/Calendar";
 import { Location } from "@/components/Location/Location"; 
 import { Account } from "@/components/Account/Account";
+import { GuestBook } from "@/components/guestbook/GuestBook"; 
 
 export default function MainWeddingPage() {
   useEffect(() => {
@@ -62,6 +63,12 @@ export default function MainWeddingPage() {
         <section id="account">
           <div className="section-inner">
             <Account />
+          </div>
+        </section>
+
+        <section id="guestbook">
+          <div className="section-inner">
+            <GuestBook />
           </div>
         </section>
 
