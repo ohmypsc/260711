@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Button } from "@/component/common/Button/Button"
-import { useModal } from "@/component/common/Modal/Modal"
+import { Button } from "@/components/common/Button/Button"
+import { useModal } from "@/components/common/Modal/Modal"
 import { supabase } from "@/supabaseClient"
 import "./guestbook.scss"
 
