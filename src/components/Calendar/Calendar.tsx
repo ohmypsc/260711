@@ -5,7 +5,7 @@ import { useContactInfo } from "@/ContactInfoProvider";
 // ✅ 결혼식 날짜 (KST 기준)
 const WEDDING = {
   year: 2026,
-  month: 7, // 1~12
+  month: 7,
   day: 11,
   hour: 11,
   minute: 0,
@@ -17,7 +17,7 @@ function pad(n: number) {
   return n.toString().padStart(2, "0");
 }
 
-// ✅ "오늘인지"를 KST(Asia/Seoul) 기준으로 판별
+// ✅ KST 기준 "오늘" 판별
 function isSameKstDate(a: Date, b: Date) {
   const fmt = (d: Date) =>
     new Intl.DateTimeFormat("ko-KR", {
@@ -39,7 +39,6 @@ export const Calendar = () => {
 
   const { year, month, day: weddingDay, hour, minute } = WEDDING;
 
-  // ✅ 결혼식 Date 객체 (KST로 해석되도록 +09:00 포함)
   const weddingDate = useMemo(() => {
     const m = pad(month);
     const d = pad(weddingDay);
@@ -61,7 +60,6 @@ export const Calendar = () => {
   const countdownText = useMemo(() => {
     const diffMs = weddingDate.getTime() - now.getTime();
 
-    // 남았을 때
     if (diffMs > 0) {
       let totalSec = Math.floor(diffMs / 1000);
 
@@ -77,14 +75,11 @@ export const Calendar = () => {
       return `${groomName}와 ${brideName}의 결혼식이 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초 남았습니다.`;
     }
 
-    // 당일 (시간이 지났어도 같은 날이면 "오늘")
     if (isSameKstDate(now, weddingDate)) {
       return `${groomName}와 ${brideName}의 결혼식이 오늘입니다.`;
     }
 
-    // 지난 후
-    const passedMs = Math.abs(diffMs);
-    const passedDays = Math.floor(passedMs / (24 * 3600 * 1000));
+    const passedDays = Math.floor(Math.abs(diffMs) / (24 * 3600 * 1000));
     return `${groomName}와 ${brideName}의 결혼식이 ${passedDays}일 지났습니다.`;
   }, [now, weddingDate, groomName, brideName]);
 
@@ -92,15 +87,14 @@ export const Calendar = () => {
   // ✅ Calendar Grid
   // =========================
   const calendarGrid = useMemo(() => {
-    const monthIndex = month - 1; // JS Date 0~11
+    const monthIndex = month - 1;
     const firstDate = new Date(year, monthIndex, 1);
     const lastDate = new Date(year, monthIndex + 1, 0);
 
-    const firstWeekday = firstDate.getDay(); // 0(일)~6(토)
+    const firstWeekday = firstDate.getDay();
     const daysInMonth = lastDate.getDate();
 
     const cells: Array<{ type: "empty" | "day"; value?: number }> = [];
-
     for (let i = 0; i < firstWeekday; i++) cells.push({ type: "empty" });
     for (let d = 1; d <= daysInMonth; d++) cells.push({ type: "day", value: d });
     while (cells.length % 7 !== 0) cells.push({ type: "empty" });
@@ -116,18 +110,16 @@ export const Calendar = () => {
     <div className="calendar-container">
       <h2 className="section-title">캘린더</h2>
 
-      {/* ✅ Countdown */}
-      <p className="countdown-text">{countdownText}</p>
-
-      {/* 상단 날짜/시간 */}
-      <div className="calendar-header">
-        <div className="calendar-date">
-          {year}년 {month}월 {weddingDay}일 토요일
+      {/* ✅ 감각적인 헤더 */}
+      <div className="calendar-top">
+        <div className="calendar-month">
+          {year}. {pad(month)}
         </div>
-        <div className="calendar-time">오전 {timeText}</div>
+        <div className="calendar-sub">
+          {month}월 {weddingDay}일 토요일 · 오전 {timeText}
+        </div>
       </div>
 
-      {/* 달력 */}
       <div className="calendar-box">
         {/* 요일 헤더 */}
         <div className="calendar-weekdays">
@@ -143,7 +135,7 @@ export const Calendar = () => {
           ))}
         </div>
 
-        {/* 날짜 그리드 */}
+        {/* 날짜 */}
         <div className="calendar-weeks">
           {calendarGrid.map((week, wi) => (
             <div className="calendar-week" key={wi}>
@@ -162,10 +154,8 @@ export const Calendar = () => {
                     }
                     key={ci}
                   >
-                    {/* 숫자 레이어 */}
                     <span className="day-number">{d}</span>
 
-                    {/* ✅ 11일 하트: 숫자 위에 투명 겹침 + 두근 효과 */}
                     {isWeddingDay && (
                       <span className="heart pulse" aria-hidden>
                         ♥
@@ -178,6 +168,9 @@ export const Calendar = () => {
           ))}
         </div>
       </div>
+
+      {/* ✅ 카운트다운 맨 아래 */}
+      <p className="countdown-text">{countdownText}</p>
     </div>
   );
 };
