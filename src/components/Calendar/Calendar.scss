@@ -4,46 +4,36 @@
   width: 100%;
 }
 
-/* Countdown 문구 */
-.countdown-text {
+/* 상단(월/날짜) */
+.calendar-top {
   text-align: center;
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: var(--text-main);
-  margin: -0.3rem 0 1.4rem;
-  padding: 0 0.5rem;
-  word-break: keep-all;
-}
-
-/* 상단 날짜/시간 */
-.calendar-header {
-  text-align: center;
-  margin: 0 0 1.4rem;
+  margin: -0.2rem 0 1.2rem;
   display: grid;
-  gap: 0.35rem;
-  color: var(--text-main);
+  gap: 0.4rem;
 
-  .calendar-date {
-    font-size: 1.05rem;
+  .calendar-month {
+    font-size: 1.25rem;
     font-weight: 600;
-    letter-spacing: 0.02rem;
+    letter-spacing: 0.08rem;
+    color: var(--text-main);
   }
 
-  .calendar-time {
+  .calendar-sub {
     font-size: 0.95rem;
     color: var(--text-light);
+    letter-spacing: 0.02rem;
   }
 }
 
 /* 달력 박스 */
 .calendar-box {
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   background: #fff;
 }
 
-/* ✅ 요일 헤더: 전역 옅은 색(var--theme-accent) 사용 */
+/* 요일 헤더: 전역 옅은톤 활용 */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -53,9 +43,10 @@
   .weekday {
     text-align: center;
     padding: 0.7rem 0;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--text-main);
+    letter-spacing: 0.02rem;
   }
 
   .weekday.sun {
@@ -67,7 +58,6 @@
   }
 }
 
-/* 주 단위 */
 .calendar-weeks {
   display: grid;
 }
@@ -78,17 +68,18 @@
   grid-template-columns: repeat(7, 1fr);
 }
 
-/* 날짜 셀(담백) */
+/* 셀: 더 여백감 있고 깔끔하게 */
 .calendar-cell {
-  height: 56px;
+  height: 58px;
   display: grid;
   place-items: center;
   font-size: 0.95rem;
   color: var(--text-main);
-  border-right: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
   background: #fff;
   position: relative;
+
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 
   &:nth-child(7n) {
     border-right: none;
@@ -99,10 +90,12 @@
   background: #fff;
 }
 
-/* 숫자 레이어(하트보다 위) */
+/* 숫자 레이어 */
 .day-number {
   position: relative;
   z-index: 2;
+  font-weight: 500;
+  letter-spacing: 0.01rem;
 }
 
 /* 결혼식 날짜도 숫자 강조 없음 */
@@ -112,37 +105,55 @@
   background: #fff;
 }
 
-/* ✅ 11일 하트: 숫자 위 투명 겹침 */
+/* ✅ 11일 하트: 숫자 위에 투명 겹침 */
 .heart {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   z-index: 1;
-  font-size: 2.1rem;
+  font-size: 2.25rem;
   color: var(--theme-primary);
-  opacity: 0.18;
+  opacity: 0.16;
   pointer-events: none;
 }
 
-/* 두근거림 */
+/* 두근두근 */
 .heart.pulse {
-  animation: heartPulse 1.25s ease-in-out infinite;
+  animation: heartPulse 1.35s ease-in-out infinite;
   transform-origin: center;
 }
 
 @keyframes heartPulse {
-  0%   { transform: scale(0.95); opacity: 0.14; }
-  40%  { transform: scale(1.18); opacity: 0.22; }
-  70%  { transform: scale(0.9);  opacity: 0.18; }
-  100% { transform: scale(0.95); opacity: 0.14; }
+  0%   { transform: scale(0.92); opacity: 0.11; }
+  45%  { transform: scale(1.18); opacity: 0.2; }
+  75%  { transform: scale(0.96); opacity: 0.16; }
+  100% { transform: scale(0.92); opacity: 0.11; }
+}
+
+/* ✅ 카운트다운(맨 아래) */
+.countdown-text {
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-main);
+  margin: 1.35rem 0 0;
+  padding: 0 0.6rem;
+  word-break: keep-all;
+  letter-spacing: 0.01rem;
 }
 
 /* 모바일 */
 @media (max-width: 640px) {
-  .countdown-text {
-    font-size: 0.9rem;
-    margin-bottom: 1.2rem;
+  .calendar-top {
+    margin-bottom: 1rem;
+
+    .calendar-month {
+      font-size: 1.15rem;
+    }
+    .calendar-sub {
+      font-size: 0.9rem;
+    }
   }
 
   .calendar-cell {
@@ -150,11 +161,12 @@
     font-size: 0.88rem;
   }
 
-  .calendar-header .calendar-date {
-    font-size: 1rem;
+  .heart {
+    font-size: 1.9rem;
   }
 
-  .heart {
-    font-size: 1.8rem;
+  .countdown-text {
+    font-size: 0.88rem;
+    margin-top: 1.1rem;
   }
 }
