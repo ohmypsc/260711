@@ -1,0 +1,157 @@
+/* Location.scss - 오시는 길 컴포넌트 스타일 */
+
+.location-container {
+    max-width: var(--section-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* 지도 영역 */
+.map-area {
+    width: 100%;
+    height: 350px; /* 지도 높이 설정 */
+    margin: 2rem auto;
+    border-radius: 12px;
+    overflow: hidden; /* 지도 모서리 라운딩 적용 */
+    box-shadow: 0 6px 20px var(--shadow-color);
+}
+
+/* 길 찾기 버튼 래퍼 */
+.navi-buttons-wrapper {
+    display: flex;
+    gap: 0.6rem; 
+    margin: 1.5rem 0 3rem 0; 
+}
+
+.navi-button {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0.5rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.2s;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+/* 네이버 지도 (녹색) */
+.navi-button.naver {
+    background-color: #03c75a;
+    color: #ffffff;
+}
+/* 카카오내비 (노란색 - 테마에 맞춰 로즈골드 톤으로 약간 조정) */
+.navi-button.kakao {
+    background-color: var(--theme-primary-light); /* 밝은 로즈골드 */
+    color: var(--text-main); 
+    box-shadow: 0 3px 10px rgba(255, 140, 148, 0.1);
+}
+/* T맵 (파란색) */
+.navi-button.tmap {
+    background-color: #0080ff;
+    color: #ffffff;
+}
+
+/* 상세 정보 */
+.location-details {
+    padding: 0 0.5rem;
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--theme-primary);
+        margin-bottom: 0.8rem;
+    }
+
+    .address-text {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px dashed var(--border-color);
+        font-size: 1.05rem;
+    }
+
+    .copy-button {
+        background: var(--theme-accent);
+        color: var(--text-light);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: var(--theme-primary-light);
+            color: var(--text-main);
+        }
+    }
+}
+
+.transport-info {
+    display: grid;
+    gap: 2rem;
+    
+    h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 0.5rem;
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        line-height: 1.8;
+        font-size: 0.95rem;
+        color: var(--text-light);
+        
+        li {
+            margin-bottom: 0.2rem;
+            color: var(--text-main);
+            
+            &::before {
+                content: "•";
+                color: var(--theme-primary);
+                font-weight: bold;
+                display: inline-block;
+                width: 1em;
+                margin-left: -1em;
+            }
+        }
+    }
+}
+
+
+/* 모바일 레이아웃 조정 */
+@media (max-width: 640px) {
+    .map-area {
+        height: 280px;
+        margin: 1.5rem auto;
+    }
+    
+    .navi-button {
+        padding: 0.8rem 0.3rem;
+        font-size: 0.85rem;
+    }
+
+    .transport-info {
+        gap: 1.5rem;
+    }
+}
+
+/* 폰트어썸 아이콘을 사용한다고 가정하고 스타일 추가 */
+.navi-button i {
+    font-size: 1.1em;
+}
