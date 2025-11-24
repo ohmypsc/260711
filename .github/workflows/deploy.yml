@@ -29,43 +29,44 @@ jobs:
       # 🔥 GitHub Secrets → .env.production 생성
       - name: Create .env.production
         run: |
-          echo "VITE_GROOM_NAME=${{ secrets.VITE_GROOM_NAME }}" >> .env.production
-          echo "VITE_GROOM_PHONE=${{ secrets.VITE_GROOM_PHONE }}" >> .env.production
-          echo "VITE_GROOM_BANK=${{ secrets.VITE_GROOM_BANK }}" >> .env.production
-          echo "VITE_GROOM_ACCOUNT=${{ secrets.VITE_GROOM_ACCOUNT }}" >> .env.production
+          cat << 'EOF' > .env.production
+          VITE_GROOM_NAME=${{ secrets.VITE_GROOM_NAME }}
+          VITE_GROOM_PHONE=${{ secrets.VITE_GROOM_PHONE }}
+          VITE_GROOM_BANK=${{ secrets.VITE_GROOM_BANK }}
+          VITE_GROOM_ACCOUNT=${{ secrets.VITE_GROOM_ACCOUNT }}
 
-          echo "VITE_GROOM_FATHER_NAME=${{ secrets.VITE_GROOM_FATHER_NAME }}" >> .env.production
-          echo "VITE_GROOM_FATHER_PHONE=${{ secrets.VITE_GROOM_FATHER_PHONE }}" >> .env.production
-          echo "VITE_GROOM_FATHER_BANK=${{ secrets.VITE_GROOM_FATHER_BANK }}" >> .env.production
-          echo "VITE_GROOM_FATHER_ACCOUNT=${{ secrets.VITE_GROOM_FATHER_ACCOUNT }}" >> .env.production
+          VITE_GROOM_FATHER_NAME=${{ secrets.VITE_GROOM_FATHER_NAME }}
+          VITE_GROOM_FATHER_PHONE=${{ secrets.VITE_GROOM_FATHER_PHONE }}
+          VITE_GROOM_FATHER_BANK=${{ secrets.VITE_GROOM_FATHER_BANK }}
+          VITE_GROOM_FATHER_ACCOUNT=${{ secrets.VITE_GROOM_FATHER_ACCOUNT }}
 
-          echo "VITE_GROOM_MOTHER_NAME=${{ secrets.VITE_GROOM_MOTHER_NAME }}" >> .env.production
-          echo "VITE_GROOM_MOTHER_PHONE=${{ secrets.VITE_GROOM_MOTHER_PHONE }}" >> .env.production
-          echo "VITE_GROOM_MOTHER_BANK=${{ secrets.VITE_GROOM_MOTHER_BANK }}" >> .env.production
-          echo "VITE_GROOM_MOTHER_ACCOUNT=${{ secrets.VITE_GROOM_MOTHER_ACCOUNT }}" >> .env.production
+          VITE_GROOM_MOTHER_NAME=${{ secrets.VITE_GROOM_MOTHER_NAME }}
+          VITE_GROOM_MOTHER_PHONE=${{ secrets.VITE_GROOM_MOTHER_PHONE }}
+          VITE_GROOM_MOTHER_BANK=${{ secrets.VITE_GROOM_MOTHER_BANK }}
+          VITE_GROOM_MOTHER_ACCOUNT=${{ secrets.VITE_GROOM_MOTHER_ACCOUNT }}
 
-          echo "VITE_BRIDE_NAME=${{ secrets.VITE_BRIDE_NAME }}" >> .env.production
-          echo "VITE_BRIDE_PHONE=${{ secrets.VITE_BRIDE_PHONE }}" >> .env.production
-          echo "VITE_BRIDE_BANK=${{ secrets.VITE_BRIDE_BANK }}" >> .env.production
-          echo "VITE_BRIDE_ACCOUNT=${{ secrets.VITE_BRIDE_ACCOUNT }}" >> .env.production
+          VITE_BRIDE_NAME=${{ secrets.VITE_BRIDE_NAME }}
+          VITE_BRIDE_PHONE=${{ secrets.VITE_BRIDE_PHONE }}
+          VITE_BRIDE_BANK=${{ secrets.VITE_BRIDE_BANK }}
+          VITE_BRIDE_ACCOUNT=${{ secrets.VITE_BRIDE_ACCOUNT }}
 
-          echo "VITE_BRIDE_FATHER_NAME=${{ secrets.VITE_BRIDE_FATHER_NAME }}" >> .env.production
-          echo "VITE_BRIDE_FATHER_PHONE=${{ secrets.VITE_BRIDE_FATHER_PHONE }}" >> .env.production
-          echo "VITE_BRIDE_FATHER_BANK=${{ secrets.VITE_BRIDE_FATHER_BANK }}" >> .env.production
-          echo "VITE_BRIDE_FATHER_ACCOUNT=${{ secrets.VITE_BRIDE_FATHER_ACCOUNT }}" >> .env.production
+          VITE_BRIDE_FATHER_NAME=${{ secrets.VITE_BRIDE_FATHER_NAME }}
+          VITE_BRIDE_FATHER_PHONE=${{ secrets.VITE_BRIDE_FATHER_PHONE }}
+          VITE_BRIDE_FATHER_BANK=${{ secrets.VITE_BRIDE_FATHER_BANK }}
+          VITE_BRIDE_FATHER_ACCOUNT=${{ secrets.VITE_BRIDE_FATHER_ACCOUNT }}
 
-          echo "VITE_BRIDE_MOTHER_NAME=${{ secrets.VITE_BRIDE_MOTHER_NAME }}" >> .env.production
-          echo "VITE_BRIDE_MOTHER_PHONE=${{ secrets.VITE_BRIDE_MOTHER_PHONE }}" >> .env.production
-          echo "VITE_BRIDE_MOTHER_BANK=${{ secrets.VITE_BRIDE_MOTHER_BANK }}" >> .env.production
-          echo "VITE_BRIDE_MOTHER_ACCOUNT=${{ secrets.VITE_BRIDE_MOTHER_ACCOUNT }}" >> .env.production
+          VITE_BRIDE_MOTHER_NAME=${{ secrets.VITE_BRIDE_MOTHER_NAME }}
+          VITE_BRIDE_MOTHER_PHONE=${{ secrets.VITE_BRIDE_MOTHER_PHONE }}
+          VITE_BRIDE_MOTHER_BANK=${{ secrets.VITE_BRIDE_MOTHER_BANK }}
+          VITE_BRIDE_MOTHER_ACCOUNT=${{ secrets.VITE_BRIDE_MOTHER_ACCOUNT }}
 
-          # 기존에 있던 다른 환경변수도 그대로 추가 가능
-          echo "VITE_KAKAO_SDK_JS_KEY=${{ secrets.VITE_KAKAO_SDK_JS_KEY }}" >> .env.production
-          echo "VITE_NAVER_MAP_CLIENT_ID=${{ secrets.VITE_NAVER_MAP_CLIENT_ID }}" >> .env.production
-          echo "VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}" >> .env.production
-          echo "VITE_STATIC_ONLY=${{ secrets.VITE_STATIC_ONLY }}" >> .env.production
-          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env.production
-          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env.production
+          VITE_KAKAO_SDK_JS_KEY=${{ secrets.VITE_KAKAO_SDK_JS_KEY }}
+          VITE_NAVER_MAP_CLIENT_ID=${{ secrets.VITE_NAVER_MAP_CLIENT_ID }}
+          VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
+          VITE_STATIC_ONLY=${{ secrets.VITE_STATIC_ONLY }}
+          VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
+          EOF
 
       - name: Install dependencies
         run: npm install
