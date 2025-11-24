@@ -225,8 +225,8 @@ export const Location = () => {
                   <i className="fa-solid fa-lock" /> 지도 잠금 중
                 </div>
                 <div className="lock-message-sub">
-                  스크롤이 편하도록 잠가두었어요.<br />
-                  왼쪽 위 자물쇠를 눌러 확대해보세요.
+                  지도를 확대/축소하시려면<br />
+                  왼쪽 위 자물쇠를 눌러 주세요.
                 </div>
               </div>
             )}
