@@ -1,352 +1,383 @@
-import { useState, useEffect } from "react";
-import { supabase } from "./supabaseClient";
+import { useEffect, useMemo, useState } from "react";
+import "./AdminPage.scss";
 
-/** 타입 정의 */
-interface Guestbook {
-  id: string;
+import { Button } from "@/components/common/Button/Button";
+import { Modal } from "@/components/common/Modal/Modal";
+import { supabase } from "@/supabaseClient";
+
+type Meal = "yes" | "no" | "unknown";
+type Side = "groom" | "bride";
+
+type AttendanceRow = {
+  id: number;
+  name: string;
+  phone: string;
+  side: Side;
+  count: number;
+  meal: Meal;
+  created_at: string;
+};
+
+type GuestbookRow = {
+  id: number;
   name: string;
   content: string;
   created_at: string;
-}
+};
 
-interface Attendance {
-  id: string;
-  name: string;
-  side: "groom" | "bride";
-  meal: "yes" | "no" | "undecided";
-  count: number;
-  created_at: string;
-}
+const ADMIN_STORAGE_KEY = "admin_authed";
+const ADMIN_CODE = import.meta.env.VITE_ADMIN_CODE || ""; // 없으면 빈 문자열
 
-interface Photo {
-  id: string;
-  name: string;
-  url: string;
-  path: string;
-  created_at: string;
-}
+const mealLabel = (m: Meal) =>
+  m === "yes" ? "식사 예정" : m === "no" ? "식사 안 함" : "식사 미정";
 
-/** 환경변수 비밀번호 (하드코딩 방지) */
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PW;
+export function AdminPage() {
+  const [adminOk, setAdminOk] = useState(false);
+  const [needAuthModal, setNeedAuthModal] = useState(false);
 
-export default function AdminPage() {
-  const [password, setPassword] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
+  const [attendance, setAttendance] = useState<AttendanceRow[]>([]);
+  const [guestbook, setGuestbook] = useState<GuestbookRow[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [guestbook, setGuestbook] = useState<Guestbook[]>([]);
-  const [attendance, setAttendance] = useState<Attendance[]>([]);
-  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [tab, setTab] = useState<"attendance" | "guestbook">("attendance");
 
-  /* ---------------- Login ---------------- */
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password.trim() === ADMIN_PASSWORD) {
-      setAuthenticated(true);
+  // ✅ URL에 #admin 있으면 관리자 페이지 모드
+  const isAdminRoute = useMemo(
+    () => window.location.hash.includes("admin"),
+    []
+  );
+
+  // ✅ 관리자 인증 상태 로드
+  useEffect(() => {
+    if (!isAdminRoute) return;
+
+    const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
+    if (stored === "true") {
+      setAdminOk(true);
     } else {
-      alert("비밀번호가 올바르지 않습니다.");
+      setNeedAuthModal(true);
+    }
+  }, [isAdminRoute]);
+
+  // ✅ 데이터 로드
+  const loadAll = async () => {
+    setLoading(true);
+    try {
+      const [attRes, gbRes] = await Promise.all([
+        supabase
+          .from("attendance")
+          .select("id, name, phone, side, count, meal, created_at")
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("guestbook")
+          .select("id, name, content, created_at")
+          .order("created_at", { ascending: false }),
+      ]);
+
+      if (attRes.error) throw attRes.error;
+      if (gbRes.error) throw gbRes.error;
+
+      setAttendance((attRes.data ?? []) as AttendanceRow[]);
+      setGuestbook((gbRes.data ?? []) as GuestbookRow[]);
+    } catch (e) {
+      console.error(e);
+      alert("관리자 데이터 로딩에 실패했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  /* ---------------- Load Data ---------------- */
   useEffect(() => {
-    if (!authenticated) return;
+    if (adminOk && isAdminRoute) loadAll();
+  }, [adminOk, isAdminRoute]);
 
-    let mounted = true;
+  if (!isAdminRoute) return null;
 
-    (async () => {
-      const { data: g } = await supabase
-        .from("guestbook")
-        .select("*")
-        .order("created_at", { ascending: false });
+  return (
+    <section className="admin-page">
+      <h2 className="section-title">관리자 페이지</h2>
 
-      const { data: a } = await supabase
-        .from("attendance")
-        .select("*")
-        .order("created_at", { ascending: false });
+      {!adminOk && needAuthModal && (
+        <AdminAuthModal
+          onClose={() => setNeedAuthModal(false)}
+          onSuccess={() => {
+            localStorage.setItem(ADMIN_STORAGE_KEY, "true");
+            setAdminOk(true);
+            setNeedAuthModal(false);
+          }}
+        />
+      )}
 
-      const { data: p } = await supabase
-        .from("gallery")
-        .select("*")
-        .order("created_at", { ascending: false });
+      {adminOk && (
+        <>
+          <div className="admin-actions">
+            <Button variant="outline" onClick={loadAll} disabled={loading}>
+              새로고침
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                localStorage.removeItem(ADMIN_STORAGE_KEY);
+                setAdminOk(false);
+                setNeedAuthModal(true);
+              }}
+            >
+              로그아웃
+            </Button>
+          </div>
 
-      if (mounted) {
-        setGuestbook(g ?? []);
-        setAttendance(a ?? []);
-        setPhotos(p ?? []);
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [authenticated]);
-
-  /* ---------------- Delete Photo ---------------- */
-  const deletePhoto = async (id: string, path: string) => {
-    const ok = confirm("사진을 삭제하시겠습니까?");
-    if (!ok) return;
-
-    await supabase.from("gallery").delete().eq("id", id);
-    await supabase.storage.from("photos").remove([path]);
-
-    // reload
-    const { data: newPhotos } = await supabase
-      .from("gallery")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    setPhotos(newPhotos ?? []);
-  };
-
-  /* 로그인 화면 */
-  if (!authenticated) {
-    return (
-      <div style={loginStyle.wrap}>
-        <div style={loginStyle.card}>
-          <h2 style={loginStyle.title}>관리자 로그인</h2>
-
-          <form onSubmit={handleLogin}>
-            <input
-              type="password"
-              placeholder="비밀번호 입력"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={loginStyle.input}
-            />
-            <button type="submit" style={loginStyle.button}>
-              로그인
+          <div className="admin-tabs">
+            <button
+              className={`tab ${tab === "attendance" ? "active" : ""}`}
+              onClick={() => setTab("attendance")}
+            >
+              참석여부 ({attendance.length})
             </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
-  /* 관리자 페이지 */
-  return (
-    <div style={ui.container}>
-      <h1 style={ui.mainTitle}>💒 관리자 페이지</h1>
-
-      {/* 방명록 */}
-      <Section title="📖 방명록 목록">
-        {guestbook.length === 0 ? (
-          <Empty />
-        ) : (
-          <div style={ui.grid}>
-            {guestbook.map((g) => (
-              <Card key={g.id}>
-                <h3 style={ui.cardName}>🧡 {g.name}</h3>
-                <p style={ui.cardContent}>{g.content}</p>
-                <p style={ui.cardDate}>
-                  {new Date(g.created_at).toLocaleString()}
-                </p>
-              </Card>
-            ))}
+            <button
+              className={`tab ${tab === "guestbook" ? "active" : ""}`}
+              onClick={() => setTab("guestbook")}
+            >
+              방명록 ({guestbook.length})
+            </button>
           </div>
-        )}
-      </Section>
 
-      {/* 참석 의사 */}
-      <Section title="💌 참석 의사 목록">
-        {attendance.length === 0 ? (
-          <Empty />
-        ) : (
-          <div style={ui.grid}>
-            {attendance.map((a) => (
-              <Card key={a.id}>
-                <h3 style={ui.cardName}>
-                  🎉 {a.name} ({a.side === "groom" ? "신랑 측" : "신부 측"})
-                </h3>
-                <p>🍽 식사: {mealText(a.meal)}</p>
-                <p>👥 인원: {a.count}명</p>
-                <p style={ui.cardDate}>
-                  {new Date(a.created_at).toLocaleString()}
-                </p>
-              </Card>
-            ))}
-          </div>
-        )}
-      </Section>
-
-      {/* 사진 목록 */}
-      <Section title="🖼 하객 사진 목록">
-        {photos.length === 0 ? (
-          <Empty />
-        ) : (
-          <div style={ui.photoGrid}>
-            {photos.map((p) => (
-              <div key={p.id} style={ui.photoCard}>
-                <img src={p.url} style={ui.photo} />
-                <div style={ui.photoInfo}>
-                  <span>{p.name}</span>
-                  <span style={ui.cardDate}>
-                    {new Date(p.created_at).toLocaleString()}
-                  </span>
-                  <button
-                    style={ui.deleteBtn}
-                    onClick={() => deletePhoto(p.id, p.path)}
-                  >
-                    삭제
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </Section>
-    </div>
-  );
-}
-
-/* ------------------- 공통 컴포넌트 ------------------- */
-
-function Section(props: { title: string; children: React.ReactNode }) {
-  return (
-    <section style={ui.section}>
-      <h2 style={ui.sectionTitle}>{props.title}</h2>
-      {props.children}
+          {loading ? (
+            <div className="admin-loading">불러오는 중…</div>
+          ) : tab === "attendance" ? (
+            <AttendanceAdmin attendance={attendance} />
+          ) : (
+            <GuestbookAdmin guestbook={guestbook} />
+          )}
+        </>
+      )}
     </section>
   );
 }
 
-function Card(props: { children: React.ReactNode }) {
-  return <div style={ui.card}>{props.children}</div>;
+/* ------------------------------------------------------------------
+   관리자 인증 모달
+------------------------------------------------------------------ */
+
+function AdminAuthModal({
+  onClose,
+  onSuccess,
+}: {
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [code, setCode] = useState("");
+
+  return (
+    <Modal onClose={onClose}>
+      <div className="admin-modal">
+        <h2 className="modal-heading modal-divider">관리자 인증</h2>
+
+        <p className="admin-modal__desc">관리자 코드를 입력해주세요.</p>
+
+        <input
+          type="password"
+          placeholder="관리자 코드"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        />
+
+        <div className="admin-modal__actions">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (!ADMIN_CODE) {
+                alert("VITE_ADMIN_CODE가 설정되어 있지 않습니다.");
+                return;
+              }
+              if (code.trim() !== ADMIN_CODE) {
+                alert("코드가 올바르지 않습니다.");
+                return;
+              }
+              onSuccess();
+            }}
+          >
+            확인
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
 }
 
-function Empty() {
-  return <p style={ui.empty}>아직 데이터가 없습니다.</p>;
+/* ------------------------------------------------------------------
+   Attendance 관리자 뷰
+------------------------------------------------------------------ */
+
+function AttendanceAdmin({ attendance }: { attendance: AttendanceRow[] }) {
+  const totalCount = attendance.reduce((sum, r) => sum + (r.count || 0), 0);
+  const groomCount = attendance
+    .filter((r) => r.side === "groom")
+    .reduce((s, r) => s + r.count, 0);
+  const brideCount = attendance
+    .filter((r) => r.side === "bride")
+    .reduce((s, r) => s + r.count, 0);
+
+  const mealYes = attendance
+    .filter((r) => r.meal === "yes")
+    .reduce((s, r) => s + r.count, 0);
+  const mealNo = attendance
+    .filter((r) => r.meal === "no")
+    .reduce((s, r) => s + r.count, 0);
+  const mealUnknown = attendance
+    .filter((r) => r.meal === "unknown")
+    .reduce((s, r) => s + r.count, 0);
+
+  const downloadCSV = () => {
+    const header = ["id", "name", "phone", "side", "count", "meal", "created_at"];
+    const rows = attendance.map((r) => [
+      r.id,
+      r.name,
+      r.phone,
+      r.side,
+      r.count,
+      r.meal,
+      r.created_at,
+    ]);
+
+    const csv = [header, ...rows]
+      .map((line) =>
+        line.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")
+      )
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "attendance.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="admin-box">
+      <div className="admin-summary">
+        <div className="sum-item">
+          <div className="label">총 참석 인원</div>
+          <div className="value">{totalCount}명</div>
+        </div>
+        <div className="sum-item">
+          <div className="label">신랑 측</div>
+          <div className="value">{groomCount}명</div>
+        </div>
+        <div className="sum-item">
+          <div className="label">신부 측</div>
+          <div className="value">{brideCount}명</div>
+        </div>
+        <div className="sum-item">
+          <div className="label">식사 예정</div>
+          <div className="value">{mealYes}명</div>
+        </div>
+        <div className="sum-item">
+          <div className="label">식사 안 함</div>
+          <div className="value">{mealNo}명</div>
+        </div>
+        <div className="sum-item">
+          <div className="label">식사 미정</div>
+          <div className="value">{mealUnknown}명</div>
+        </div>
+      </div>
+
+      <div className="admin-sub-actions">
+        <Button variant="outline" onClick={downloadCSV}>
+          CSV 다운로드
+        </Button>
+      </div>
+
+      <div className="admin-list">
+        {attendance.map((r) => (
+          <div key={r.id} className="admin-row">
+            <div className="row-top">
+              <span className="name">{r.name}</span>
+              <span className="badge">
+                {r.side === "groom" ? "신랑 측" : "신부 측"}
+              </span>
+            </div>
+
+            <div className="row-mid">
+              <div className="meta">전화번호: {r.phone}</div>
+              <div className="meta">인원: {r.count}명</div>
+              <div className="meta">식사: {mealLabel(r.meal)}</div>
+            </div>
+
+            <div className="row-bottom">
+              {new Date(r.created_at).toLocaleString()}
+            </div>
+          </div>
+        ))}
+
+        {attendance.length === 0 && (
+          <div className="empty">아직 참석 응답이 없습니다.</div>
+        )}
+      </div>
+    </div>
+  );
 }
 
-function mealText(meal: string) {
-  return {
-    yes: "예정",
-    undecided: "미정",
-    no: "불참",
-  }[meal] ?? "-";
+/* ------------------------------------------------------------------
+   Guestbook 관리자 뷰
+------------------------------------------------------------------ */
+
+function GuestbookAdmin({ guestbook }: { guestbook: GuestbookRow[] }) {
+  const downloadCSV = () => {
+    const header = ["id", "name", "content", "created_at"];
+    const rows = guestbook.map((r) => [
+      r.id,
+      r.name,
+      r.content,
+      r.created_at,
+    ]);
+
+    const csv = [header, ...rows]
+      .map((line) =>
+        line.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")
+      )
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "guestbook.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="admin-box">
+      <div className="admin-sub-actions">
+        <Button variant="outline" onClick={downloadCSV}>
+          CSV 다운로드
+        </Button>
+      </div>
+
+      <div className="admin-list">
+        {guestbook.map((r) => (
+          <div key={r.id} className="admin-row">
+            <div className="row-top">
+              <span className="name">{r.name}</span>
+              <span className="badge">방명록</span>
+            </div>
+
+            <div className="row-mid">
+              <div className="content">{r.content}</div>
+            </div>
+
+            <div className="row-bottom">
+              {new Date(r.created_at).toLocaleString()}
+            </div>
+          </div>
+        ))}
+
+        {guestbook.length === 0 && (
+          <div className="empty">아직 방명록이 없습니다.</div>
+        )}
+      </div>
+    </div>
+  );
 }
-
-/* ------------------- 스타일 ------------------- */
-
-const ui = {
-  container: {
-    padding: "20px 12px",
-    background: "#fff9f8",
-    minHeight: "100vh",
-    fontFamily: "Noto Sans KR",
-  },
-  mainTitle: {
-    textAlign: "center",
-    marginBottom: 30,
-    color: "#C47B85",
-    fontWeight: 600,
-  },
-
-  section: { marginBottom: 50 },
-  sectionTitle: {
-    marginBottom: 16,
-    color: "#A45F6D",
-    fontWeight: 600,
-  },
-
-  grid: {
-    display: "grid",
-    gap: 14,
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-  },
-
-  card: {
-    background: "white",
-    padding: "16px 18px",
-    borderRadius: 12,
-    boxShadow: "0 3px 16px rgba(0,0,0,0.08)",
-  },
-
-  cardName: {
-    fontWeight: 700,
-    marginBottom: 6,
-  },
-
-  cardContent: {
-    marginBottom: 10,
-    lineHeight: 1.45,
-  },
-
-  cardDate: {
-    color: "#888",
-    fontSize: 12,
-  },
-
-  empty: {
-    textAlign: "center",
-    color: "#999",
-    padding: 20,
-  },
-
-  /* 사진 */
-  photoGrid: {
-    display: "grid",
-    gap: 12,
-    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-  },
-  photoCard: {
-    background: "white",
-    borderRadius: 12,
-    overflow: "hidden",
-    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-  },
-  photo: { width: "100%", display: "block" },
-  photoInfo: {
-    padding: "10px 12px",
-    display: "flex",
-    flexDirection: "column",
-    gap: 6,
-    fontSize: 14,
-  },
-  deleteBtn: {
-    alignSelf: "flex-end",
-    padding: "4px 8px",
-    background: "#E57373",
-    color: "white",
-    border: "none",
-    borderRadius: 6,
-    cursor: "pointer",
-    fontSize: 12,
-  },
-};
-
-/* 로그인 스타일 */
-const loginStyle = {
-  wrap: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    background: "#FFF7F8",
-  },
-  card: {
-    background: "white",
-    padding: 30,
-    width: "90%",
-    maxWidth: 380,
-    borderRadius: 14,
-    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-    textAlign: "center" as const,
-  },
-  title: { marginBottom: 14, color: "#C47B85", fontWeight: 600 },
-  input: {
-    width: "100%",
-    padding: "12px 14px",
-    borderRadius: 8,
-    border: "1px solid #ccc",
-    marginBottom: 14,
-  },
-  button: {
-    width: "100%",
-    padding: "12px 14px",
-    borderRadius: 8,
-    background: "#C47B85",
-    color: "white",
-    border: "none",
-    fontWeight: 600,
-  },
-};
