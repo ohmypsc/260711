@@ -112,13 +112,14 @@ export const Calendar = () => {
   const timeText = minute === 0 ? `${hour}시` : `${hour}시 ${minute}분`;
 
   return (
-    <div className="calendar-container">
-      <h2 className="section-title">예식 안내</h2>
-
-      {/* ✅ 1) 날짜/요일/시간 한 줄 크게 */}
-      <div className="calendar-topline">
-        {year}년 {month}월 {weddingDay}일 토요일 오전 {timeText}
-      </div>
+    <div className="calendar-topline">
+  <span className="topline-date">
+    {year}년 {month}월 {weddingDay}일
+  </span>
+  <span className="topline-rest">
+    {" "}토요일 오전 {timeText}
+  </span>
+</div>
 
       {/* 달력 */}
       <div
