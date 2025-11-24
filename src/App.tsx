@@ -6,7 +6,7 @@ import { ContactInfoProvider } from "@/ContactInfoProvider";
 
 // 페이지 컴포넌트
 import MainWeddingPage from "@/index";
-import AdminPage from "@/AdminPage";
+import {AdminPage} from "@/AdminPage";
 
 // 전역 스타일
 import "./App.scss";
