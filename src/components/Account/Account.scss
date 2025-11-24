@@ -1,0 +1,173 @@
+.information {
+  text-align: center;
+
+  .information__desc {
+    margin: 12px 0 20px;
+    line-height: 1.6;
+  }
+
+  .info-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+}
+
+/* -------------------------------------
+   AccountModal Content Styles (미니멀 & 심플)
+------------------------------------- */
+
+.account-modal-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 10px;
+}
+
+/* -------------------------------------
+   Account List & Entry
+------------------------------------- */
+
+.account-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.account-entry {
+  padding: 0;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+/* -------------------------------------
+   Name & Relation
+------------------------------------- */
+
+.account-relation {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  color: var(--theme-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .name {
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 1.05rem;
+  }
+}
+
+/* -------------------------------------
+   Account Info Line
+------------------------------------- */
+
+.account-info-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  flex-wrap: nowrap;
+}
+
+.bank-line {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  text-align: left;
+
+  flex-grow: 0;
+  flex-shrink: 1;
+  min-width: 150px;
+  white-space: nowrap;
+
+  .account-number {
+    font-weight: 500;
+    color: var(--text-main);
+    margin-left: 8px;
+  }
+
+  strong {
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-right: 6px;
+  }
+}
+
+/* -------------------------------------
+   Empty State
+------------------------------------- */
+
+.no-account {
+  padding: 8px 0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  background: var(--theme-accent);
+  text-align: center;
+}
+
+/* -------------------------------------
+   Copy Button
+------------------------------------- */
+
+.copy-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+
+  background: var(--theme-primary);
+  color: #fff;
+  border: none;
+
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--theme-primary-dark);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+@media (max-width: 360px) {
+  .copy-btn {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+  }
+
+  .account-entry {
+    padding: 0;
+  }
+
+  .account-list {
+    gap: 8px;
+  }
+
+  .account-relation {
+    font-size: 0.95rem;
+  }
+
+  .bank-line {
+    font-size: 0.9rem;
+
+    .account-number {
+      font-size: 0.95rem;
+    }
+  }
+
+  .copy-btn-icon {
+    font-size: 0.85rem;
+    padding: 6px 8px;
+    margin-left: 10px;
+  }
+}
