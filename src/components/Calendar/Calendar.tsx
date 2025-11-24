@@ -109,7 +109,7 @@ export const Calendar = () => {
 
       {/* ✅ 날짜/요일/시간 한 줄 */}
       <div className="calendar-topline">
-        {year}년 {month}월 {weddingDay}일 토요일 오전 {timeText}
+        {year}. {month}. {weddingDay}. (토) 오전 {hour}시
       </div>
 
       {/* ✅ 요일 헤더 (가로) */}
