@@ -163,7 +163,7 @@ export const Calendar = () => {
                     {/* ✅ 3) 11일 하트 겹치기 + 느릿한 펄스 */}
                     {isWeddingDay && (
                       <span className="heart pulse" aria-hidden>
-                        ♥
+                       <i className="fa-solid fa-heart" />
                       </span>
                     )}
                   </div>
