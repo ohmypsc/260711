@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
 import { Cover } from "@/components/Cover/Cover";
 import { Invitation } from "@/components/Invitation/Invitation";
+import { Location } from "../components/Location/Location"; 
 import { Information } from "@/components/Information/Information";
 
 export default function MainWeddingPage() {
@@ -43,6 +44,12 @@ export default function MainWeddingPage() {
         <section id="invitation">
           <div className="section-inner">
             <Invitation />
+          </div>
+        </section>
+
+      <section id="location">
+          <div className="section-inner">
+            <Location />
           </div>
         </section>
         
