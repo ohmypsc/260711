@@ -2,7 +2,6 @@ import React, { useMemo, useEffect, useState } from "react";
 import "./Calendar.scss";
 import { useContactInfo } from "@/ContactInfoProvider";
 
-// ✅ 결혼식 날짜 (KST 기준)
 const WEDDING = {
   year: 2026,
   month: 7,
@@ -17,7 +16,6 @@ function pad(n: number) {
   return n.toString().padStart(2, "0");
 }
 
-// ✅ KST 기준 "오늘" 판별
 function isSameKstDate(a: Date, b: Date) {
   const fmt = (d: Date) =>
     new Intl.DateTimeFormat("ko-KR", {
@@ -48,10 +46,9 @@ export const Calendar = () => {
   }, [year, month, weddingDay, hour, minute]);
 
   // =========================
-  // ✅ Countdown Logic
+  // Countdown
   // =========================
   const [now, setNow] = useState<Date>(new Date());
-
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(id);
@@ -60,7 +57,6 @@ export const Calendar = () => {
   const countdown = useMemo(() => {
     const diffMs = weddingDate.getTime() - now.getTime();
 
-    // 미래
     if (diffMs > 0) {
       let totalSec = Math.floor(diffMs / 1000);
 
@@ -76,18 +72,16 @@ export const Calendar = () => {
       return { mode: "future" as const, days, hours, minutes, seconds };
     }
 
-    // 오늘
     if (isSameKstDate(now, weddingDate)) {
       return { mode: "today" as const };
     }
 
-    // 과거
     const passedDays = Math.floor(Math.abs(diffMs) / (24 * 3600 * 1000));
     return { mode: "past" as const, passedDays };
   }, [now, weddingDate]);
 
   // =========================
-  // ✅ Calendar Grid
+  // Calendar grid
   // =========================
   const calendarGrid = useMemo(() => {
     const monthIndex = month - 1;
@@ -107,40 +101,33 @@ export const Calendar = () => {
     return weeks;
   }, [year, month]);
 
-  const rows = calendarGrid.length;
-
   const timeText = minute === 0 ? `${hour}시` : `${hour}시 ${minute}분`;
 
   return (
-    <div className="calendar-topline">
-  <span className="topline-date">
-    {year}년 {month}월 {weddingDay}일
-  </span>
-  <span className="topline-rest">
-    {" "}토요일 오전 {timeText}
-  </span>
-</div>
+    <div className="calendar-container">
+      <h2 className="section-title">캘린더</h2>
 
-      {/* 달력 */}
-      <div
-        className="calendar-box"
-        style={{ ["--rows" as any]: rows }}
-      >
-        {/* 요일 헤더 */}
-        <div className="calendar-weekdays">
-          {WEEKDAYS.map((w, i) => (
-            <div
-              key={w}
-              className={
-                "weekday" + (i === 0 ? " sun" : "") + (i === 6 ? " sat" : "")
-              }
-            >
-              {w}
-            </div>
-          ))}
-        </div>
+      {/* ✅ 날짜/요일/시간 한 줄 */}
+      <div className="calendar-topline">
+        {year}년 {month}월 {weddingDay}일 토요일 오전 {timeText}
+      </div>
 
-        {/* 날짜 그리드 */}
+      {/* ✅ 요일 헤더 (가로) */}
+      <div className="calendar-weekdays">
+        {WEEKDAYS.map((w, i) => (
+          <div
+            key={w}
+            className={
+              "weekday" + (i === 0 ? " sun" : "") + (i === 6 ? " sat" : "")
+            }
+          >
+            {w}
+          </div>
+        ))}
+      </div>
+
+      {/* ✅ 달력 본문 (선/테두리 없음) */}
+      <div className="calendar-box">
         <div className="calendar-weeks">
           {calendarGrid.map((week, wi) => (
             <div className="calendar-week" key={wi}>
@@ -161,10 +148,10 @@ export const Calendar = () => {
                   >
                     <span className="day-number">{d}</span>
 
-                    {/* ✅ 3) 11일 하트 겹치기 + 느릿한 펄스 */}
+                    {/* ✅ 11일 하트: 투명 겹침 + 감성 펄스 */}
                     {isWeddingDay && (
                       <span className="heart pulse" aria-hidden>
-                       <i className="fa-solid fa-heart" />
+                        <i className="fa-solid fa-heart" />
                       </span>
                     )}
                   </div>
@@ -175,7 +162,7 @@ export const Calendar = () => {
         </div>
       </div>
 
-      {/* ✅ 4) 카운트다운 3줄 */}
+      {/* ✅ 카운트다운 3줄 */}
       <div className="countdown-wrap">
         <div className="countdown-line1">
           {groomName}과 {brideName}의 결혼식이
@@ -183,7 +170,7 @@ export const Calendar = () => {
 
         <div className="countdown-line2">
           {countdown.mode === "future" && (
-            <div className="countdown-values" aria-label="카운트다운">
+            <div className="countdown-values">
               <div className="unit-block">
                 <span className="num">{countdown.days}</span>
                 <span className="unit">일</span>
