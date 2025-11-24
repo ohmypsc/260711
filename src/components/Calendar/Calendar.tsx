@@ -177,7 +177,7 @@ export const Calendar = () => {
       {/* ✅ 4) 카운트다운 3줄 */}
       <div className="countdown-wrap">
         <div className="countdown-line1">
-          {groomName}와 {brideName}의 결혼식이
+          {groomName}과 {brideName}의 결혼식이
         </div>
 
         <div className="countdown-line2">
