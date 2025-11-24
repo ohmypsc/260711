@@ -35,8 +35,7 @@ function loadNaverMapSdk(clientId: string) {
     script.async = true;
     script.defer = true;
 
-    // ✅ callback 방식이 가장 안정적
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&callback=${CALLBACK_NAME}`;
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}&callback=${CALLBACK_NAME}`;
 
     script.onerror = () => {
       reject(new Error("네이버 지도 SDK 스크립트 로드 실패"));
