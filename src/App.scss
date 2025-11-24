@@ -75,3 +75,195 @@ section {
   letter-spacing: 0.02rem;
   color: var(--text-main);
 }
+
+
+/* ==============================
+   ✅ 관리자 페이지 최소 스타일(전역에 붙여넣기)
+   - AdminPage.scss 없이도 보기 좋게
+============================== */
+
+.admin-page {
+  text-align: center;
+  padding: 10px 0;
+
+  .section-title {
+    margin-bottom: 6px;
+  }
+
+  .admin-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .admin-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+
+    .tab {
+      padding: 6px 12px;
+      border: 1px solid var(--light-grey-color);
+      border-radius: 6px;
+      background: var(--white-color);
+      font-size: 0.9rem;
+      cursor: pointer;
+
+      &.active {
+        background: var(--theme-primary);
+        color: #fff;
+        border-color: var(--theme-primary);
+      }
+    }
+  }
+
+  .admin-loading {
+    margin-top: 18px;
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+}
+
+.admin-box {
+  text-align: left;
+  margin-top: 14px;
+}
+
+/* 요약 카드 */
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+
+  .sum-item {
+    background: var(--white-color);
+    border: 1px solid var(--light-grey-color);
+    border-radius: 8px;
+    padding: 8px 10px;
+
+    .label {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+  }
+}
+
+/* CSV 버튼 영역 */
+.admin-sub-actions {
+  margin: 10px 0;
+
+  button {
+    width: 100%;
+  }
+}
+
+/* 목록 카드 */
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .admin-row {
+    background: var(--white-color);
+    border: 1px solid var(--light-grey-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .name {
+        font-weight: 700;
+        color: var(--theme-primary);
+        font-size: 0.95rem;
+      }
+
+      .badge {
+        font-size: 0.8rem;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: var(--theme-accent);
+        color: var(--text-main);
+        white-space: nowrap;
+      }
+    }
+
+    .row-mid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+
+      .meta {
+        font-size: 0.9rem;
+        color: var(--text-main);
+      }
+
+      .content {
+        grid-column: 1 / -1;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+    }
+
+    .row-bottom {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-align: right;
+    }
+  }
+
+  .empty {
+    text-align: center;
+    padding: 12px 0;
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
+}
+
+/* 관리자 인증 모달 */
+.admin-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 6px;
+
+  .admin-modal__desc {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    text-align: center;
+  }
+
+  input {
+    padding: 0.7rem;
+    border: 1px solid var(--light-grey-color);
+    border-radius: 0.4rem;
+    font-family: "MapoGoldenPier";
+    font-size: 0.95rem;
+  }
+
+  .admin-modal__actions button {
+    width: 100%;
+  }
+}
+/* ==============================
+   ✅ 관리자 페이지 최소 스타일(전역에 붙여넣기)
+   - AdminPage.scss 없이도 보기 좋게
+============================== */
