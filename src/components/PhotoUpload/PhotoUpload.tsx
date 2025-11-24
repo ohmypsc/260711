@@ -5,9 +5,11 @@ import { Button } from "@/components/common/Button/Button";
 import { supabase } from "@/supabaseClient";
 
 const BUCKET = "wedding-photos";
-const MAX_UPLOAD_MB = 5;      // 최종 업로드 목표 용량
-const MAX_LONG_SIDE = 1920;   // 긴 변 리사이즈
-const JPEG_QUALITY = 0.75;    // JPEG 품질(0~1)
+const MAX_UPLOAD_MB = 5;
+const MAX_LONG_SIDE = 1920;
+const JPEG_QUALITY = 0.75;
+
+const THUMBS_PER_PAGE = 24;
 
 type PhotoThumb = {
   name: string;
@@ -18,23 +20,31 @@ type PhotoThumb = {
 export function PhotoUpload() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [progress, setProgress] =
+    useState<{ done: number; total: number } | null>(null);
 
   const [thumbs, setThumbs] = useState<PhotoThumb[]>([]);
   const [thumbLoading, setThumbLoading] = useState(true);
 
+  // ✅ 페이지네이션 state
+  const [page, setPage] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
+
   const onPick = () => fileRef.current?.click();
 
-  // ✅ 버킷에서 최근 사진 가져오기
-  const loadThumbs = async () => {
+  // ✅ 버킷에서 페이지 단위로 사진 가져오기
+  const loadThumbs = async (targetPage = page) => {
     setThumbLoading(true);
     try {
+      const offset = targetPage * THUMBS_PER_PAGE;
+
       const { data, error } = await supabase.storage
         .from(BUCKET)
         .list("", {
-          limit: 24, // 최근 24장만
+          limit: THUMBS_PER_PAGE,
+          offset, // ✅ 페이지 오프셋
           sortBy: { column: "created_at", order: "desc" },
-        });
+        } as any); // Supabase 타입에서 offset 없다고 뜨면 any로 무시
 
       if (error) throw error;
 
@@ -53,16 +63,20 @@ export function PhotoUpload() {
         });
 
       setThumbs(list);
+      setPage(targetPage);
+
+      // ✅ 다음 페이지 존재 여부(현재 페이지가 꽉 찼으면 다음이 있다고 간주)
+      setHasNext(list.length === THUMBS_PER_PAGE);
     } catch (e) {
       console.error(e);
-      // 썸네일 실패는 서비스 핵심이 아니니까 alert 안 띄움
     } finally {
       setThumbLoading(false);
     }
   };
 
   useEffect(() => {
-    loadThumbs();
+    loadThumbs(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +99,9 @@ export function PhotoUpload() {
         const optimized = await compressIfNeeded(file);
 
         const ext = optimized.type.includes("png") ? "png" : "jpg";
-        const filename = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+        const filename = `${Date.now()}_${Math.random()
+          .toString(36)
+          .slice(2)}.${ext}`;
 
         const { error } = await supabase.storage
           .from(BUCKET)
@@ -106,15 +122,15 @@ export function PhotoUpload() {
     setProgress(null);
     e.target.value = "";
 
-    // ✅ 업로드 끝나면 썸네일 다시 로드
-    loadThumbs();
+    // ✅ 업로드 후 "첫 페이지" 다시 로드
+    loadThumbs(0);
 
     if (failed.length === 0) {
       alert("사진이 모두 업로드되었습니다! 감사합니다 😊");
     } else {
       alert(
         `일부 사진 업로드가 실패했어요.\n\n${failed.join("\n")}\n\n` +
-        `다시 시도하거나 JPG로 변환 후 올려주세요.`
+          `다시 시도하거나 JPG로 변환 후 올려주세요.`
       );
     }
   };
@@ -154,20 +170,43 @@ export function PhotoUpload() {
         ) : thumbs.length === 0 ? (
           <div className="thumbs__empty">아직 업로드된 사진이 없습니다.</div>
         ) : (
-          <div className="thumbs__grid">
-            {thumbs.map((t) => (
-              <a
-                key={t.name}
-                href={t.url}
-                target="_blank"
-                rel="noreferrer"
-                className="thumb"
-                title={t.name}
+          <>
+            <div className="thumbs__grid">
+              {thumbs.map((t) => (
+                <a
+                  key={t.name}
+                  href={t.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="thumb"
+                  title={t.name}
+                >
+                  <img src={t.url} alt="uploaded" loading="lazy" />
+                </a>
+              ))}
+            </div>
+
+            {/* ✅ 페이지네이션 */}
+            <div className="thumbs__pagination">
+              <button
+                className="page-btn"
+                disabled={page === 0 || thumbLoading}
+                onClick={() => loadThumbs(page - 1)}
               >
-                <img src={t.url} alt="uploaded" loading="lazy" />
-              </a>
-            ))}
-          </div>
+                이전
+              </button>
+
+              <div className="page-info">{page + 1} 페이지</div>
+
+              <button
+                className="page-btn"
+                disabled={!hasNext || thumbLoading}
+                onClick={() => loadThumbs(page + 1)}
+              >
+                다음
+              </button>
+            </div>
+          </>
         )}
       </div>
     </section>
@@ -175,7 +214,7 @@ export function PhotoUpload() {
 }
 
 /* -----------------------------------------------------------
-   자동 압축/리사이즈 (라이브러리 X)
+   자동 압축/리사이즈
 ----------------------------------------------------------- */
 async function compressIfNeeded(file: File): Promise<File> {
   const sizeMB = file.size / (1024 * 1024);
