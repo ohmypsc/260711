@@ -7,7 +7,6 @@ import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
 
 export default function MainWeddingPage() {
-
   useEffect(() => {
     let lastTouchTime = 0;
 
@@ -49,12 +48,12 @@ export default function MainWeddingPage() {
         </section>
 
         <section id="calendar">
-  <div className="section-inner">
-    <Calendar />
-  </div>
-</section>
+          <div className="section-inner">
+            <Calendar />
+          </div>
+        </section>
         
-      <section id="location">
+        <section id="location">
           <div className="section-inner">
             <Location />
           </div>
@@ -67,9 +66,7 @@ export default function MainWeddingPage() {
         </section>
 
       </main>
-
       <BgEffect />
-      
     </>
   );
 }
