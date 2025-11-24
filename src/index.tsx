@@ -60,9 +60,9 @@ export default function MainWeddingPage() {
           </div>
         </section>
         
-        <section id="Account">
+        <section id="account">
           <div className="section-inner">
-            <Account />
+            <account />
           </div>
         </section>
 
