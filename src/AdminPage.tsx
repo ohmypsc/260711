@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import "./AdminPage.scss";
 
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
@@ -26,14 +25,14 @@ type GuestbookRow = {
 };
 
 const ADMIN_STORAGE_KEY = "admin_authed";
-const ADMIN_CODE = import.meta.env.VITE_ADMIN_CODE || ""; // 없으면 빈 문자열
+const ADMIN_CODE = import.meta.env.VITE_ADMIN_CODE || "";
 
 const mealLabel = (m: Meal) =>
   m === "yes" ? "식사 예정" : m === "no" ? "식사 안 함" : "식사 미정";
 
 export function AdminPage() {
   const [adminOk, setAdminOk] = useState(false);
-  const [needAuthModal, setNeedAuthModal] = useState(false);
+  const [needAuthModal, setNeedAuthModal] = useState(true);
 
   const [attendance, setAttendance] = useState<AttendanceRow[]>([]);
   const [guestbook, setGuestbook] = useState<GuestbookRow[]>([]);
@@ -41,23 +40,14 @@ export function AdminPage() {
 
   const [tab, setTab] = useState<"attendance" | "guestbook">("attendance");
 
-  // ✅ URL에 #admin 있으면 관리자 페이지 모드
-  const isAdminRoute = useMemo(
-    () => window.location.hash.includes("admin"),
-    []
-  );
-
   // ✅ 관리자 인증 상태 로드
   useEffect(() => {
-    if (!isAdminRoute) return;
-
     const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
     if (stored === "true") {
       setAdminOk(true);
-    } else {
-      setNeedAuthModal(true);
+      setNeedAuthModal(false);
     }
-  }, [isAdminRoute]);
+  }, []);
 
   // ✅ 데이터 로드
   const loadAll = async () => {
@@ -88,10 +78,8 @@ export function AdminPage() {
   };
 
   useEffect(() => {
-    if (adminOk && isAdminRoute) loadAll();
-  }, [adminOk, isAdminRoute]);
-
-  if (!isAdminRoute) return null;
+    if (adminOk) loadAll();
+  }, [adminOk]);
 
   return (
     <section className="admin-page">
