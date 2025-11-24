@@ -57,9 +57,10 @@ export const Calendar = () => {
     return () => window.clearInterval(id);
   }, []);
 
-  const countdownText = useMemo(() => {
+  const countdown = useMemo(() => {
     const diffMs = weddingDate.getTime() - now.getTime();
 
+    // 미래
     if (diffMs > 0) {
       let totalSec = Math.floor(diffMs / 1000);
 
@@ -72,16 +73,18 @@ export const Calendar = () => {
       const minutes = Math.floor(totalSec / 60);
       const seconds = totalSec % 60;
 
-      return `${groomName}과 ${brideName}의 결혼식이 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초 남았습니다.`;
+      return { mode: "future" as const, days, hours, minutes, seconds };
     }
 
+    // 오늘
     if (isSameKstDate(now, weddingDate)) {
-      return `${groomName}과 ${brideName}의 결혼식이 오늘입니다.`;
+      return { mode: "today" as const };
     }
 
+    // 과거
     const passedDays = Math.floor(Math.abs(diffMs) / (24 * 3600 * 1000));
-    return `${groomName}과 ${brideName}의 결혼식이 ${passedDays}일 지났습니다.`;
-  }, [now, weddingDate, groomName, brideName]);
+    return { mode: "past" as const, passedDays };
+  }, [now, weddingDate]);
 
   // =========================
   // ✅ Calendar Grid
@@ -104,23 +107,24 @@ export const Calendar = () => {
     return weeks;
   }, [year, month]);
 
+  const rows = calendarGrid.length;
+
   const timeText = minute === 0 ? `${hour}시` : `${hour}시 ${minute}분`;
 
   return (
     <div className="calendar-container">
-      <h2 className="section-title">예식 안내</h2>
+      <h2 className="section-title">캘린더</h2>
 
-      {/* ✅ 감각적인 헤더 */}
-      <div className="calendar-top">
-        <div className="calendar-month">
-          {year}. {pad(month)}
-        </div>
-        <div className="calendar-sub">
-          {month}월 {weddingDay}일 토요일 · 오전 {timeText}
-        </div>
+      {/* ✅ 1) 날짜/요일/시간 한 줄 크게 */}
+      <div className="calendar-topline">
+        {year}년 {month}월 {weddingDay}일 토요일 오전 {timeText}
       </div>
 
-      <div className="calendar-box">
+      {/* 달력 */}
+      <div
+        className="calendar-box"
+        style={{ ["--rows" as any]: rows }}
+      >
         {/* 요일 헤더 */}
         <div className="calendar-weekdays">
           {WEEKDAYS.map((w, i) => (
@@ -135,7 +139,7 @@ export const Calendar = () => {
           ))}
         </div>
 
-        {/* 날짜 */}
+        {/* 날짜 그리드 */}
         <div className="calendar-weeks">
           {calendarGrid.map((week, wi) => (
             <div className="calendar-week" key={wi}>
@@ -156,6 +160,7 @@ export const Calendar = () => {
                   >
                     <span className="day-number">{d}</span>
 
+                    {/* ✅ 3) 11일 하트 겹치기 + 느릿한 펄스 */}
                     {isWeddingDay && (
                       <span className="heart pulse" aria-hidden>
                         ♥
@@ -169,8 +174,49 @@ export const Calendar = () => {
         </div>
       </div>
 
-      {/* ✅ 카운트다운 맨 아래 */}
-      <p className="countdown-text">{countdownText}</p>
+      {/* ✅ 4) 카운트다운 3줄 */}
+      <div className="countdown-wrap">
+        <div className="countdown-line1">
+          {groomName}와 {brideName}의 결혼식이
+        </div>
+
+        <div className="countdown-line2">
+          {countdown.mode === "future" && (
+            <div className="countdown-values" aria-label="카운트다운">
+              <div className="unit-block">
+                <span className="num">{countdown.days}</span>
+                <span className="unit">일</span>
+              </div>
+              <div className="unit-block">
+                <span className="num">{countdown.hours}</span>
+                <span className="unit">시간</span>
+              </div>
+              <div className="unit-block">
+                <span className="num">{countdown.minutes}</span>
+                <span className="unit">분</span>
+              </div>
+              <div className="unit-block">
+                <span className="num">{countdown.seconds}</span>
+                <span className="unit">초</span>
+              </div>
+            </div>
+          )}
+
+          {countdown.mode === "today" && (
+            <div className="countdown-status">오늘입니다.</div>
+          )}
+
+          {countdown.mode === "past" && (
+            <div className="countdown-status">
+              {countdown.passedDays}일 지났습니다.
+            </div>
+          )}
+        </div>
+
+        <div className="countdown-line3">
+          {countdown.mode === "future" ? "남았습니다." : "\u00A0"}
+        </div>
+      </div>
     </div>
   );
 };
