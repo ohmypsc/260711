@@ -7,7 +7,7 @@ import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook"; 
-import { GuestBook } from "@/components/PhotoUpload/PhotoUpload"; 
+import { PhotoUpload } from "@/components/PhotoUpload/PhotoUpload"; 
 import { AdminPage } from "./AdminPage";
 
 export default function MainWeddingPage() {
