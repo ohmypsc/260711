@@ -4,7 +4,7 @@ import "./AdminPage.scss";
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
-import { AdminPhotos } from "@/components/Admin/AdminPhotos"; // ✅ 사진 관리자 컴포넌트
+import { AdminPhotos } from "@/AdminPhotos"; 
 
 type Meal = "yes" | "no" | "unknown";
 type Side = "groom" | "bride";
