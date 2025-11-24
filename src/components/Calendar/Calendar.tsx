@@ -72,15 +72,15 @@ export const Calendar = () => {
       const minutes = Math.floor(totalSec / 60);
       const seconds = totalSec % 60;
 
-      return `${groomName}와 ${brideName}의 결혼식이 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초 남았습니다.`;
+      return `${groomName}과 ${brideName}의 결혼식이 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초 남았습니다.`;
     }
 
     if (isSameKstDate(now, weddingDate)) {
-      return `${groomName}와 ${brideName}의 결혼식이 오늘입니다.`;
+      return `${groomName}과 ${brideName}의 결혼식이 오늘입니다.`;
     }
 
     const passedDays = Math.floor(Math.abs(diffMs) / (24 * 3600 * 1000));
-    return `${groomName}와 ${brideName}의 결혼식이 ${passedDays}일 지났습니다.`;
+    return `${groomName}과 ${brideName}의 결혼식이 ${passedDays}일 지났습니다.`;
   }, [now, weddingDate, groomName, brideName]);
 
   // =========================
@@ -108,7 +108,7 @@ export const Calendar = () => {
 
   return (
     <div className="calendar-container">
-      <h2 className="section-title">캘린더</h2>
+      <h2 className="section-title">예식 안내</h2>
 
       {/* ✅ 감각적인 헤더 */}
       <div className="calendar-top">
