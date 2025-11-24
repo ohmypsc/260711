@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import "./AdminPage.scss";
 
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
+import { AdminPhotos } from "@/components/Admin/AdminPhotos"; // ✅ 사진 관리자 컴포넌트
 
 type Meal = "yes" | "no" | "unknown";
 type Side = "groom" | "bride";
@@ -38,7 +40,8 @@ export function AdminPage() {
   const [guestbook, setGuestbook] = useState<GuestbookRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [tab, setTab] = useState<"attendance" | "guestbook">("attendance");
+  const [tab, setTab] =
+    useState<"attendance" | "guestbook" | "photos">("attendance");
 
   // ✅ 관리자 인증 상태 로드
   useEffect(() => {
@@ -49,7 +52,7 @@ export function AdminPage() {
     }
   }, []);
 
-  // ✅ 데이터 로드
+  // ✅ 데이터 로드(참석/방명록만)
   const loadAll = async () => {
     setLoading(true);
     try {
@@ -114,6 +117,7 @@ export function AdminPage() {
             </Button>
           </div>
 
+          {/* ✅ 탭 3개 */}
           <div className="admin-tabs">
             <button
               className={`tab ${tab === "attendance" ? "active" : ""}`}
@@ -127,9 +131,18 @@ export function AdminPage() {
             >
               방명록 ({guestbook.length})
             </button>
+            <button
+              className={`tab ${tab === "photos" ? "active" : ""}`}
+              onClick={() => setTab("photos")}
+            >
+              사진
+            </button>
           </div>
 
-          {loading ? (
+          {/* ✅ 탭 내용 */}
+          {tab === "photos" ? (
+            <AdminPhotos />
+          ) : loading ? (
             <div className="admin-loading">불러오는 중…</div>
           ) : tab === "attendance" ? (
             <AttendanceAdmin attendance={attendance} />
@@ -369,5 +382,3 @@ function GuestbookAdmin({ guestbook }: { guestbook: GuestbookRow[] }) {
     </div>
   );
 }
-
-export default AdminPage;
