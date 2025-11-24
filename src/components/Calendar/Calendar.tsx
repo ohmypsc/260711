@@ -113,7 +113,7 @@ export const Calendar = () => {
 
   return (
     <div className="calendar-container">
-      <h2 className="section-title">캘린더</h2>
+      <h2 className="section-title">예식 안내</h2>
 
       {/* ✅ 1) 날짜/요일/시간 한 줄 크게 */}
       <div className="calendar-topline">
