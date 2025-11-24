@@ -261,7 +261,7 @@ export const Location = () => {
 
         <button onClick={handleTMap} className="navi-button tmap">
   <i className="fa-solid fa-t" />
-  T맵
+  티맵
 </button>
       </div>
 
