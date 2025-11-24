@@ -119,7 +119,7 @@
 }
 
 /* ===========================
-   🧭 Navigation Buttons (브랜드 컬러 / no hover)
+   🧭 Navigation Buttons (outlined + light fill / no hover)
    =========================== */
 
 .navi-buttons-wrapper {
@@ -129,30 +129,37 @@
   margin: 1.2rem 0 2.4rem;
 }
 
-/* ✅ 줄바꿈 방지 + 버튼 기본 */
 .navi-button {
   min-width: 0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 0.45rem;
 
+  gap: 0.45rem;
   padding: 0.95rem 0.4rem;
   border-radius: 12px;
-  font-size: 0.9rem;     /* 약간 줄여서 1줄 유지 */
+
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.01rem;
-  white-space: nowrap;  /* ✅ 텍스트 줄바꿈 방지 */
+  white-space: nowrap;
 
-  border: 1px solid transparent;
-  color: #fff;
+  background: #fff; /* 기본값, 각 버튼에서 덮어씀 */
+  border: 1.5px solid transparent; /* 각 버튼에서 덮어씀 */
+  color: var(--text-main);
+
+  /* ✅ 데스크톱/모바일 baseline 통일 */
+  line-height: 1;              /* 텍스트 줄높이 고정 */
+  vertical-align: middle;      /* flex 안에서도 안정 */
 
   cursor: pointer;
   transition: transform 0.12s ease, opacity 0.18s ease;
 
   i {
     font-size: 1.05em;
-    transform: translateY(-0.5px);
+    line-height: 1;       /* ✅ 아이콘 줄높이도 동일 */
+    transform: none;      /* ✅ translate 제거 → 베이스라인 맞춤 */
+    display: inline-block;
   }
 
   &:active {
@@ -161,30 +168,45 @@
   }
 }
 
-/* 네이버: 공식 초록 */
+/* 네이버: 테두리 초록 + 연한 초록 fill */
 .navi-button.naver {
-  background: #03c75a;
-}
+  border-color: rgba(3, 199, 90, 0.65);
+  color: #03c75a;
+  background: rgba(3, 199, 90, 0.06);
 
-/* 카카오내비: 카카오 옐로우 + 가독성 위해 글자/아이콘 검정 */
-.navi-button.kakao {
-  background: #fee500;
-  color: #191919;
-
-  i {
-    color: #191919;
+  &:active {
+    background: rgba(3, 199, 90, 0.12);
+    border-color: rgba(3, 199, 90, 0.9);
   }
 }
 
-/* T맵: 공식 블루 */
-.navi-button.tmap {
-  background: #0080ff;
+/* 카카오: 테두리 노랑 + 연한 노랑 fill */
+.navi-button.kakao {
+  border-color: rgba(254, 229, 0, 0.9);
+  color: #191919;
+  background: rgba(254, 229, 0, 0.18);
 
-  /* ✅ T 로고 느낌 강화 */
+  i { color: #191919; }
+
+  &:active {
+    background: rgba(254, 229, 0, 0.28);
+  }
+}
+
+/* T맵: 테두리 파랑 + 연한 파랑 fill + T 아이콘 강조 */
+.navi-button.tmap {
+  border-color: rgba(0, 128, 255, 0.65);
+  color: #0080ff;
+  background: rgba(0, 128, 255, 0.06);
+
   i {
-    font-weight: 900;
-    font-size: 1.15em;
-    transform: translateY(-0.5px);
+    font-weight: 900;   /* ✅ ‘T’ 로고처럼 진하게 */
+    font-size: 1.12em; /* ✅ 살짝만 키움 */
+  }
+
+  &:active {
+    background: rgba(0, 128, 255, 0.12);
+    border-color: rgba(0, 128, 255, 0.9);
   }
 }
 
