@@ -208,6 +208,12 @@
 
 /* 모바일 */
 @media (max-width: 640px) {
+
+  .countdown-line1,
+  .countdown-line3 {
+    font-size: 1rem;
+  }
+  
   .calendar-cell {
     height: 48px;
     font-size: 0.9rem;
