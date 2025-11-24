@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./PhotoUpload.scss";
 
 import { Button } from "@/components/common/Button/Button";
@@ -9,12 +9,61 @@ const MAX_UPLOAD_MB = 5;      // 최종 업로드 목표 용량
 const MAX_LONG_SIDE = 1920;   // 긴 변 리사이즈
 const JPEG_QUALITY = 0.75;    // JPEG 품질(0~1)
 
+type PhotoThumb = {
+  name: string;
+  url: string;
+  created_at: string;
+};
+
 export function PhotoUpload() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
 
+  const [thumbs, setThumbs] = useState<PhotoThumb[]>([]);
+  const [thumbLoading, setThumbLoading] = useState(true);
+
   const onPick = () => fileRef.current?.click();
+
+  // ✅ 버킷에서 최근 사진 가져오기
+  const loadThumbs = async () => {
+    setThumbLoading(true);
+    try {
+      const { data, error } = await supabase.storage
+        .from(BUCKET)
+        .list("", {
+          limit: 24, // 최근 24장만
+          sortBy: { column: "created_at", order: "desc" },
+        });
+
+      if (error) throw error;
+
+      const list = (data ?? [])
+        .filter((f) => f.name && !f.name.startsWith("."))
+        .map((f) => {
+          const { data: urlData } = supabase.storage
+            .from(BUCKET)
+            .getPublicUrl(f.name);
+
+          return {
+            name: f.name,
+            url: urlData.publicUrl,
+            created_at: f.created_at ?? "",
+          };
+        });
+
+      setThumbs(list);
+    } catch (e) {
+      console.error(e);
+      // 썸네일 실패는 서비스 핵심이 아니니까 alert 안 띄움
+    } finally {
+      setThumbLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadThumbs();
+  }, []);
 
   const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
@@ -49,7 +98,6 @@ export function PhotoUpload() {
       } finally {
         done++;
         setProgress({ done, total: files.length });
-        // 모바일에서 연속 업로드 안정성용 텀
         await new Promise((r) => setTimeout(r, 150));
       }
     }
@@ -57,6 +105,9 @@ export function PhotoUpload() {
     setLoading(false);
     setProgress(null);
     e.target.value = "";
+
+    // ✅ 업로드 끝나면 썸네일 다시 로드
+    loadThumbs();
 
     if (failed.length === 0) {
       alert("사진이 모두 업로드되었습니다! 감사합니다 😊");
@@ -93,6 +144,32 @@ export function PhotoUpload() {
             : "업로드 중..."
           : "사진 여러 장 업로드하기"}
       </Button>
+
+      {/* ✅ 썸네일 갤러리 */}
+      <div className="thumbs">
+        <div className="thumbs__title">최근 업로드된 사진</div>
+
+        {thumbLoading ? (
+          <div className="thumbs__loading">불러오는 중…</div>
+        ) : thumbs.length === 0 ? (
+          <div className="thumbs__empty">아직 업로드된 사진이 없습니다.</div>
+        ) : (
+          <div className="thumbs__grid">
+            {thumbs.map((t) => (
+              <a
+                key={t.name}
+                href={t.url}
+                target="_blank"
+                rel="noreferrer"
+                className="thumb"
+                title={t.name}
+              >
+                <img src={t.url} alt="uploaded" loading="lazy" />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
@@ -102,7 +179,7 @@ export function PhotoUpload() {
 ----------------------------------------------------------- */
 async function compressIfNeeded(file: File): Promise<File> {
   const sizeMB = file.size / (1024 * 1024);
-  if (sizeMB <= MAX_UPLOAD_MB) return file; // 5MB 이하면 그대로
+  if (sizeMB <= MAX_UPLOAD_MB) return file;
 
   const img = await loadImage(file);
   let { width, height } = img;
@@ -119,7 +196,7 @@ async function compressIfNeeded(file: File): Promise<File> {
   canvas.height = height;
 
   const ctx = canvas.getContext("2d");
-  if (!ctx) return file; // 극단적 예외 보호
+  if (!ctx) return file;
 
   ctx.drawImage(img, 0, 0, width, height);
 
