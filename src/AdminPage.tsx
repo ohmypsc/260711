@@ -369,3 +369,5 @@ function GuestbookAdmin({ guestbook }: { guestbook: GuestbookRow[] }) {
     </div>
   );
 }
+
+export default AdminPage;
