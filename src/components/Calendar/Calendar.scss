@@ -7,23 +7,23 @@
 /* ✅ 날짜/요일/시간 한 줄 + 얇고 예쁜 구분선 */
 .calendar-topline {
   text-align: center;
-  margin: -0.1rem 0 0.9rem;
+  margin: -0.1rem 0 1.6rem; /* ✅ 아래 여백 더 크게 */
   font-weight: 600;
   color: var(--text-main);
   letter-spacing: 0.02rem;
-  font-size: clamp(1.12rem, 4vw, 1.5rem);
+  font-size: 1.5rem;
   line-height: 1.4;
   word-break: keep-all;
 
   position: relative;
-  padding-bottom: 0.7rem;
+  padding-bottom: 1.05rem;/* ✅ 선과 글자 사이 더 띄움 */
 
   &::after {
     content: "";
     position: absolute;
     left: 18%;
     right: 18%;
-    bottom: 0.15rem;
+    bottom: 0.25rem;
     height: 1px;
     background: linear-gradient(
       to right,
@@ -159,7 +159,7 @@
 /* 1,3줄은 기본 텍스트색 */
 .countdown-line1,
 .countdown-line3 {
-  font-size: 0.98rem;
+  font-size: 1.2rem;
   color: var(--text-main);
 }
 
