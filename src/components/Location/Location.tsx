@@ -7,11 +7,13 @@ const DEST_LAT = 36.3562313;  // 위도
 const DEST_LNG = 127.3514617; // 경도
 const ADDRESS_TEXT = "대전 유성구 온천북로 77, 유성컨벤션웨딩홀 3층 그랜드홀";
 
-// ✅ 네이버 지도 키 (ncpKeyId 로드)
+// ✅ 네이버 지도 키 (신규 Maps: ncpKeyId 로드)
 const NAVER_MAP_KEY = import.meta.env.VITE_NAVER_MAP_CLIENT_ID || "";
 
 /**
  * ✅ 네이버 지도 SDK callback 방식 로더
+ * - 중복 로드 방지
+ * - SDK 준비 완료 후에만 resolve
  */
 function loadNaverMapSdk(keyId: string) {
   if (window.naver?.maps) return Promise.resolve();
@@ -49,10 +51,12 @@ export const Location = () => {
   const mapDomRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
 
+  // ✅ 기본 잠금 상태
   const [locked, setLocked] = useState(true);
   const [showLockMessage, setShowLockMessage] = useState(false);
   const lockMessageTimeout = useRef<number | null>(null);
 
+  // 지도 초기화 (1회)
   useEffect(() => {
     if (!NAVER_MAP_KEY) {
       console.error("🚫 VITE_NAVER_MAP_CLIENT_ID가 없습니다.");
@@ -74,7 +78,7 @@ export const Location = () => {
             position: window.naver.maps.Position.TOP_RIGHT,
           },
 
-          // ✅ 기본 잠금
+          // ✅ 잠금 기본 옵션(스크롤 우선)
           draggable: false,
           scrollWheel: false,
           pinchZoom: false,
@@ -97,6 +101,7 @@ export const Location = () => {
     };
   }, []);
 
+  // 잠금/해제 시 옵션만 갱신 (지도 재생성 X)
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
@@ -109,6 +114,7 @@ export const Location = () => {
     });
   }, [locked]);
 
+  // 잠금 상태에서 터치하면 안내만
   const handleLockMessage = () => {
     setShowLockMessage(true);
     if (lockMessageTimeout.current) clearTimeout(lockMessageTimeout.current);
@@ -118,7 +124,10 @@ export const Location = () => {
     );
   };
 
-  // ✅ 목적지만 자동 길찾기
+  // =========================
+  // ✅ 길찾기 버튼 (목적지만 자동)
+  // =========================
+
   const handleNaverMap = () => {
     const appUrl = `nmap://route/walk?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(
       DEST_NAME
@@ -148,18 +157,12 @@ export const Location = () => {
     window.location.href = url;
   };
 
-  const handleCopyAddress = () => {
-    navigator.clipboard.writeText(ADDRESS_TEXT).catch(() => {});
-  };
-
   return (
     <div className="location-container">
-      {/* 타이틀에 아이콘 살짝 */}
-      <h2 className="section-title">
-        <i className="fa-solid fa-location-dot title-icon" /> 오시는 길
-      </h2>
+      {/* ✅ 타이틀 아이콘 제거 */}
+      <h2 className="section-title">오시는 길</h2>
 
-      {/* 지도 + 잠금 */}
+      {/* ✅ 지도 + 잠금 UI */}
       <div className="map-wrapper">
         {locked && (
           <div
@@ -197,46 +200,43 @@ export const Location = () => {
         <div ref={mapDomRef} className="map-area" />
       </div>
 
-      {/* 길찾기 버튼 */}
+      {/* ✅ 길찾기 버튼 */}
       <div className="navi-buttons-wrapper">
         <button onClick={handleNaverMap} className="navi-button naver">
-          <i className="fa-solid fa-map" /> 네이버 지도
+          <i className="fa-solid fa-n" /> 네이버 지도
         </button>
+
         <button onClick={handleKakaoNavi} className="navi-button kakao">
-          <i className="fa-solid fa-car-side" /> 카카오내비
+          <i className="fa-solid fa-comment" /> 카카오내비
         </button>
+
         <button onClick={handleTMap} className="navi-button tmap">
-          <i className="fa-solid fa-route" /> T맵
+          <i className="fa-solid fa-location-crosshairs" /> T맵
         </button>
       </div>
 
-      {/* 상세 주소/교통 */}
+      {/* ✅ 상세 주소/교통 */}
       <div className="location-details">
         <h3>
-          <i className="fa-solid fa-church details-icon" /> {DEST_NAME}
+          <i className="fa-solid fa-building-columns details-icon" /> {DEST_NAME}
         </h3>
 
         <p className="address-text">
-          <span>
-            <i className="fa-solid fa-map-pin address-icon" />
-            대전 유성구 온천북로 77
-          </span>
-          <button className="copy-button" onClick={handleCopyAddress}>
-            <i className="fa-regular fa-copy" /> 복사
-          </button>
+          <i className="fa-solid fa-location-dot address-icon" />
+          대전 유성구 온천북로 77
         </p>
 
         <div className="transport-info">
           <div>
             <h4>
-              <i className="fa-solid fa-bus" /> 대중교통 이용 시
+              <i className="fa-solid fa-bus-simple" /> 대중교통 이용 시
             </h4>
             <ul>
               <li>
-                <strong>지하철:</strong> 돌다리 얘기 넣어 말아
+                <strong>지하철:</strong> 1호선 현충원역 하차 후 택시/도보 이동
               </li>
               <li>
-                <strong>버스:</strong> 고민고민고민
+                <strong>버스:</strong> 유성컨벤션 인근 정류장 하차 후 도보 이동
               </li>
             </ul>
           </div>
