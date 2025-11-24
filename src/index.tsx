@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
 import { Cover } from "@/components/Cover/Cover";
 import { Invitation } from "@/components/Invitation/Invitation";
-import { Location } from "../components/Location/Location"; 
+import { Location } from "@/components/Location/Location"; 
 import { Information } from "@/components/Information/Information";
 
 export default function MainWeddingPage() {
