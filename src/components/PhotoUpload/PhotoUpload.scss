@@ -1,0 +1,16 @@
+.photo-upload {
+  text-align: center;
+  margin-top: 8px;
+
+  .photo-upload__desc {
+    margin: 12px 0 18px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    color: var(--text-main);
+  }
+
+  /* 업로드 버튼 */
+  .w-btn {
+    width: 100%;
+  }
+}
