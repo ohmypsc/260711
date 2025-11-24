@@ -4,10 +4,21 @@
   width: 100%;
 }
 
+/* Countdown 문구 */
+.countdown-text {
+  text-align: center;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--text-main);
+  margin: -0.3rem 0 1.4rem;
+  padding: 0 0.5rem;
+  word-break: keep-all;
+}
+
 /* 상단 날짜/시간 */
 .calendar-header {
   text-align: center;
-  margin: -0.5rem 0 1.4rem;
+  margin: 0 0 1.4rem;
   display: grid;
   gap: 0.35rem;
   color: var(--text-main);
@@ -32,7 +43,7 @@
   background: #fff;
 }
 
-/* 요일 헤더 */
+/* ✅ 요일 헤더: 전역 옅은 색(var--theme-accent) 사용 */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -67,7 +78,7 @@
   grid-template-columns: repeat(7, 1fr);
 }
 
-/* 셀 */
+/* 날짜 셀(담백) */
 .calendar-cell {
   height: 56px;
   display: grid;
@@ -76,10 +87,11 @@
   color: var(--text-main);
   border-right: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
+  background: #fff;
   position: relative;
 
   &:nth-child(7n) {
-    border-right: none; // 마지막 열
+    border-right: none;
   }
 }
 
@@ -87,29 +99,52 @@
   background: #fff;
 }
 
-/* 기본 날짜 */
-.calendar-cell.day {
+/* 숫자 레이어(하트보다 위) */
+.day-number {
+  position: relative;
+  z-index: 2;
+}
+
+/* 결혼식 날짜도 숫자 강조 없음 */
+.calendar-cell.day.wedding {
+  font-weight: 400;
+  color: var(--text-main);
   background: #fff;
 }
 
-/* ✅ 결혼식 날짜 강조 */
-.calendar-cell.day.wedding {
-  background: rgba(255, 140, 148, 0.12);
+/* ✅ 11일 하트: 숫자 위 투명 겹침 */
+.heart {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  font-size: 2.1rem;
   color: var(--theme-primary);
-  font-weight: 800;
-  border-color: rgba(255, 140, 148, 0.5);
+  opacity: 0.18;
+  pointer-events: none;
+}
 
-  .heart {
-    position: absolute;
-    bottom: 6px;
-    font-size: 0.75rem;
-    color: var(--theme-primary);
-    opacity: 0.9;
-  }
+/* 두근거림 */
+.heart.pulse {
+  animation: heartPulse 1.25s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes heartPulse {
+  0%   { transform: scale(0.95); opacity: 0.14; }
+  40%  { transform: scale(1.18); opacity: 0.22; }
+  70%  { transform: scale(0.9);  opacity: 0.18; }
+  100% { transform: scale(0.95); opacity: 0.14; }
 }
 
 /* 모바일 */
 @media (max-width: 640px) {
+  .countdown-text {
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
   .calendar-cell {
     height: 48px;
     font-size: 0.88rem;
@@ -117,5 +152,9 @@
 
   .calendar-header .calendar-date {
     font-size: 1rem;
+  }
+
+  .heart {
+    font-size: 1.8rem;
   }
 }
