@@ -7,6 +7,7 @@ import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook"; 
+import { GuestBook } from "@/components/PhotoUpload/PhotoUpload"; 
 import { AdminPage } from "./AdminPage";
 
 export default function MainWeddingPage() {
@@ -79,6 +80,14 @@ export default function MainWeddingPage() {
             <GuestBook />
           </div>
         </section>
+
+        <section id="photoupload">
+          <div className="section-inner">
+            <PhotoUpload />
+          </div>
+        </section>
+
+        
 
       </main>
       <BgEffect />
