@@ -7,16 +7,18 @@
 /* ✅ 날짜/요일/시간 한 줄 + 얇고 예쁜 구분선 */
 .calendar-topline {
   text-align: center;
-  margin: -0.1rem 0 1.6rem; /* ✅ 아래 여백 더 크게 */
+  margin: -0.1rem 0 1.6rem;
   font-weight: 600;
   color: var(--text-main);
-  letter-spacing: 0.02rem;
-  font-size: 1.5rem;
-  line-height: 1.4;
-  word-break: keep-all;
+  letter-spacing: 0.01rem;
+  font-size: clamp(1.05rem, 3.8vw, 1.45rem); /* ✅ 모바일에서 자동 축소 */
+  line-height: 1.2;
+  white-space: nowrap;   /* ✅ 한 줄 강제 */
+  overflow: hidden;      /* ✅ 혹시 넘치면 잘라줌 */
+  text-overflow: ellipsis;
 
   position: relative;
-  padding-bottom: 1.05rem;/* ✅ 선과 글자 사이 더 띄움 */
+  padding-bottom: 1.05rem;
 
   &::after {
     content: "";
@@ -114,7 +116,6 @@
   pointer-events: none;
 }
 
-/* 아이콘 크기 상속 */
 .heart i {
   font-size: 1em;
   line-height: 1;
@@ -122,7 +123,6 @@
   filter: drop-shadow(0 0 0 rgba(255,140,148,0));
 }
 
-/* 숨 쉬듯 천천히 + 미세 틸트 + 은은 글로우 */
 .heart.pulse {
   animation: heartBreath 5.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   transform-origin: center;
@@ -137,7 +137,7 @@
   45% {
     transform: scale(1.10) translateY(-1px) rotate(1deg);
     opacity: 0.40;
-    filter: drop-shadow(0 0 8px rgba(255,140,148,0.35));
+    filter: drop-shadow(0 0 6px rgba(255,140,148,0.30));
   }
   100% {
     transform: scale(0.96) translateY(1px) rotate(-1deg);
@@ -184,14 +184,13 @@
   gap: 0.25rem;
 }
 
-/* ✅ 숫자 색 예쁘게 */
+/* ✅ 숫자 효과: 번지는 글로우/애니메이션 제거, 그라데이션만 */
 .num {
   font-size: clamp(1.9rem, 7vw, 2.5rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.02rem;
 
-  /* ✅ 로즈골드 그라데이션 텍스트 */
   background: linear-gradient(
     180deg,
     var(--theme-primary) 0%,
@@ -202,30 +201,9 @@
   background-clip: text;
   color: transparent;
 
-  /* ✅ 아주 얇은 글로우 */
-  text-shadow:
-    0 0 6px rgba(255, 140, 148, 0.20),
-    0 0 14px rgba(255, 192, 203, 0.18);
-
-  /* ✅ 미세한 “반짝이는 느낌” */
-  animation: numberGlow 6s ease-in-out infinite;
+  text-shadow: none;  /* ✅ 번짐 제거 */
+  animation: none;    /* ✅ 반짝임 제거 */
 }
-
-@keyframes numberGlow {
-  0%, 100% {
-    text-shadow:
-      0 0 4px rgba(255, 140, 148, 0.15),
-      0 0 10px rgba(255, 192, 203, 0.12);
-    transform: translateY(0);
-  }
-  50% {
-    text-shadow:
-      0 0 8px rgba(255, 140, 148, 0.26),
-      0 0 18px rgba(255, 192, 203, 0.22);
-    transform: translateY(-1px); /* ✅ 아주 살짝 숨쉬는 느낌 */
-  }
-}
-
 
 .unit {
   font-size: 0.82rem;
@@ -242,12 +220,15 @@
 
 /* 모바일 */
 @media (max-width: 640px) {
-
   .countdown-line1,
   .countdown-line3 {
     font-size: 1rem;
   }
-  
+
+  .calendar-weekdays .weekday {
+    font-size: 0.82rem;
+  }
+
   .calendar-cell {
     height: 48px;
     font-size: 0.9rem;
