@@ -130,14 +130,21 @@
   display: grid;
   place-items: center;
   z-index: 1;
-  font-size: 2.35rem;
+  font-size: 2.35rem;              /* 하트 크기 */
   color: var(--theme-primary);
-  opacity: 0.28; /* 조금 더 진하게 */
+  opacity: 0.28;                   /* 투명도 */
   pointer-events: none;
 }
 
+/* 폰트어썸 아이콘이 부모 크기를 그대로 쓰도록 */
+.heart i {
+  font-size: 1em;                  /* 부모(.heart) 크기 그대로 */
+  line-height: 1;
+  display: inline-block;
+}
+
 .heart.pulse {
-  animation: heartPulse 4s ease-in-out infinite; /* 아주 느릿느릿 */
+  animation: heartPulse 4s ease-in-out infinite;  /* 아주 느릿느릿 */
   transform-origin: center;
 }
 
