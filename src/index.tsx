@@ -4,7 +4,7 @@ import { Cover } from "@/components/Cover/Cover";
 import { Invitation } from "@/components/Invitation/Invitation";
 import { Calendar } from "@/components/Calendar/Calendar";
 import { Location } from "@/components/Location/Location"; 
-import { Information } from "@/components/Information/Information";
+import { Account } from "@/components/Account/Account";
 
 export default function MainWeddingPage() {
 
@@ -60,9 +60,9 @@ export default function MainWeddingPage() {
           </div>
         </section>
         
-        <section id="information">
+        <section id="Account">
           <div className="section-inner">
-            <Information />
+            <Account />
           </div>
         </section>
 
