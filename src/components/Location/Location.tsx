@@ -1,43 +1,47 @@
 import React, { useEffect, useRef } from "react";
 import "./Location.scss";
 
-// === 맵 정보 변수 (실제 결혼식장 정보로 변경하세요!) ===
-const DEST_NAME = "유성컨벤션웨딩홀";
-const DEST_LAT = 36.368316;
-const DEST_LNG = 127.387123;
-
-const ADDRESS_TEXT =
-  "대전광역시 유성구 엑스포로 324, 유성컨벤션웨딩홀 3층 그랜드홀";
-// ===============================================
+// ✅ 유성컨벤션 실제 정보
+const DEST_NAME = "유성컨벤션웨딩홀 3층 그랜드홀";
+const DEST_LAT = 36.3562313;  // 위도
+const DEST_LNG = 127.3514617; // 경도
+const ADDRESS_TEXT = "대전 유성구 온천북로 77, 유성컨벤션웨딩홀 3층 그랜드홀";
 
 // ✅ 네이버 지도 클라이언트 ID (ncpClientId)
 const NAVER_MAP_CLIENT_ID = import.meta.env.VITE_NAVER_MAP_CLIENT_ID || "";
 
-// ✅ 네이버 지도 SDK 로더 (ncpClientId 기준)
+/**
+ * ✅ 네이버 지도 SDK를 "callback 방식"으로 1번만 안전하게 로드
+ * - StrictMode / 중복 렌더에도 안전
+ * - SDK 준비 완료 후에만 resolve
+ */
 function loadNaverMapSdk(clientId: string) {
-  if (window.naver && window.naver.maps) return Promise.resolve();
-  if ((window as any).__naverMapLoadingPromise)
-    return (window as any).__naverMapLoadingPromise;
+  if (window.naver?.maps) return Promise.resolve();
+
+  if ((window as any).__naverMapLoadingPromise) {
+    return (window as any).__naverMapLoadingPromise as Promise<void>;
+  }
 
   const promise = new Promise<void>((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&autoload=false`;
-    script.async = true;
+    const CALLBACK_NAME = "__naverMapInitCallback";
 
-    script.onload = () => {
-      if (!window.naver || !window.naver.maps) {
-        reject(
-          new Error(
-            "네이버 지도 SDK 로드 실패: Client ID/도메인 설정을 확인하세요."
-          )
-        );
-        return;
-      }
-      window.naver.maps.load(() => resolve());
+    // 이미 콜백이 세팅돼 있으면 덮어쓰기 방지
+    (window as any)[CALLBACK_NAME] = () => {
+      resolve();
+      delete (window as any)[CALLBACK_NAME];
     };
 
-    script.onerror = () =>
+    const script = document.createElement("script");
+    script.async = true;
+    script.defer = true;
+
+    // ✅ callback 방식이 가장 안정적
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&callback=${CALLBACK_NAME}`;
+
+    script.onerror = () => {
       reject(new Error("네이버 지도 SDK 스크립트 로드 실패"));
+      delete (window as any)[CALLBACK_NAME];
+    };
 
     document.head.appendChild(script);
   });
@@ -49,7 +53,6 @@ function loadNaverMapSdk(clientId: string) {
 export const Location = () => {
   const mapRef = useRef<HTMLDivElement>(null);
 
-  // 1) 지도 로드/초기화
   useEffect(() => {
     if (!NAVER_MAP_CLIENT_ID) {
       console.error(
@@ -58,13 +61,15 @@ export const Location = () => {
       return;
     }
 
+    let map: any = null;
+
     loadNaverMapSdk(NAVER_MAP_CLIENT_ID)
       .then(() => {
         if (!mapRef.current) return;
 
         const center = new window.naver.maps.LatLng(DEST_LAT, DEST_LNG);
 
-        const map = new window.naver.maps.Map(mapRef.current, {
+        map = new window.naver.maps.Map(mapRef.current, {
           center,
           zoom: 16,
           minZoom: 10,
@@ -81,6 +86,11 @@ export const Location = () => {
         });
       })
       .catch((err) => console.error("네이버 지도 초기화 오류:", err));
+
+    // (선택) 언마운트 시 정리
+    return () => {
+      map = null;
+    };
   }, []);
 
   // =========================
@@ -156,7 +166,7 @@ export const Location = () => {
         <h3>📍 {DEST_NAME}</h3>
 
         <p className="address-text">
-          {ADDRESS_TEXT.split(",")[0]} (3층 그랜드홀)
+          대전 유성구 온천북로 77
           <button className="copy-button" onClick={handleCopyAddress}>
             복사
           </button>
@@ -166,20 +176,20 @@ export const Location = () => {
           <h4>🚌 대중교통 이용 시</h4>
           <ul>
             <li>
-              <strong>지하철:</strong> 1호선 현충원역 하차 후 셔틀버스 또는 택시 이용
+              <strong>지하철:</strong> 1호선 현충원역 하차 후 택시/도보 이동
             </li>
             <li>
-              <strong>시내버스:</strong> 604, 705, 911번 (유성컨벤션센터 정류장 하차)
+              <strong>시내버스:</strong> 유성컨벤션 인근 정류장 하차 후 도보 이동
             </li>
           </ul>
 
           <h4>🚗 자가용 이용 시</h4>
           <ul>
             <li>
-              <strong>주차장:</strong> 컨벤션 전용 지하/지상 주차장 이용 (약 500대 수용)
+              <strong>주차장:</strong> 컨벤션 전용 주차장 이용
             </li>
             <li>
-              <strong>주차권:</strong> 2시간 무료 주차권 제공
+              <strong>주차권:</strong> 예식장 무료 주차 제공
             </li>
           </ul>
         </div>
@@ -192,5 +202,6 @@ declare global {
   interface Window {
     naver: any;
     __naverMapLoadingPromise?: Promise<void>;
+    __naverMapInitCallback?: () => void;
   }
 }
