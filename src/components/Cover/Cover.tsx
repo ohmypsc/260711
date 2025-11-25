@@ -108,7 +108,7 @@ export function Cover() {
 
       </div>
 
-      <Button variant="solid" onClick={() => setOpen(true)}> 
+      <Button variant="basic" onClick={() => setOpen(true)}> 
         축하 인사 전하기
       </Button>
 
