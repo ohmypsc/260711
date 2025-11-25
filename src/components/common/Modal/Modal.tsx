@@ -56,7 +56,7 @@ export function Modal({ onClose, children }: ModalProps) {
 
         <div className="modal-footer">
           {/* ✅ 전역 버튼 재사용 */}
-          <Button variant="soft" onClick={handleClose}>
+          <Button variant="close" onClick={handleClose}>
             닫기
           </Button>
         </div>
