@@ -24,37 +24,31 @@ body {
   line-height: 1.65;
 }
 
-/* ============================================
-   🌸 Blush Rose + Warm Neutral Theme Colors
-   (옅은 분홍 꽃잎 배경에 맞춘 고급/깔끔 톤)
-   ============================================ */
 :root {
-  /* Background */
-  --theme-bg: #FCFBFA;            /* 아주 옅은 아이보리 화이트 */
-  --theme-accent: #F4F5F7;        /* 섹션/카드 구분용 뉴트럴 */
+  /* Background: 밝고 따뜻한 여름 화이트 */
+  --theme-bg: #FFFEFC;            /* 맑은 크림 화이트 */
+  --theme-accent: #F6F7F9;        /* 거의 그레이에 가까운 쿨 뉴트럴 */
 
-  /* Primary (꽃잎 톤에 맞춘 저채도 블러시 로즈) */
-  --theme-primary: #D9A1A7;       /* 톤다운 로즈 */
-  --theme-primary-light: #EAC7CB; /* hover/약한 강조 */
+  /* Primary: 페탈과 맞지만 과하지 않은 ‘로즈 베이지’ */
+  --theme-primary: #E7A3A9;       /* 핑크+베이지 섞인 은은한 로즈 */
+  --theme-primary-light: #F2C7CB; /* 라이트 블러시 */
 
-  /* Text */
-  --text-main: #1F1F22;           /* 선명한 차콜 */
-  --text-light: #8E9096;          /* 고급스러운 그레이 */
+  /* Text: 너무 무겁지 않은 선명한 차콜 */
+  --text-main: #242428;
+  --text-light: #8F9097;
 
   /* Status */
-  --theme-success: #3C8466;       /* 차분한 그린 */
-  --theme-error: #D25B5B;         /* 톤다운 레드 */
+  --theme-success: #469C7A;
+  --theme-error: #E06B6B;
 
-  /* UI */
-  --border-color: #E7E5E3;        
-  --shadow-color: rgba(31, 31, 34, 0.08); /* 핑크 그림자 X → 차콜 */
+  /* UI: 라인 깔끔, 그림자는 ‘햇살처럼’ 아주 약한 로즈 톤 */
+  --border-color: #EEECEF;
+  --shadow-color: rgba(231, 163, 169, 0.16);
 
-  /* Layout */
   --section-max-width: 640px;
 
-  /* Typography */
   font-family: "Noto Serif KR", serif;
-  font-size: clamp(17px, 3.4vw, 21px); /* ✅ 조금만 더 커진 기본 폰트 */
+  font-size: clamp(17px, 3.4vw, 21px);
 }
 
 /* ============================================
