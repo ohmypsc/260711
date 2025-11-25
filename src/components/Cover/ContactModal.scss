@@ -2,84 +2,112 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px; 
-  padding: 0 2px;
+  gap: 10px;
+  /* ❌ 전역에서 이미 패딩 있으므로 개별 wrap padding 제거 */
 }
 
-.contact-title {
-  letter-spacing: 0.05rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
+/* 전역 modal-subtitle은 그대로 두고,
+   ContactModal에서만 간격 살짝 보정 */
+.contact-subtitle {
+  margin-top: -6px;
+  margin-bottom: 6px;
 }
 
+/* 신랑/신부 측 구분 라벨 (ContactModal 전용) */
+.contact-section-label {
+  align-self: center;
+  font-size: 0.92rem;
+  color: var(--text-light);
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--border-color);
+}
+
+/* 섹션 카드 */
 .contact-section {
-  padding: 15px 8px; 
+  padding: 15px 8px; /* ✅ 카드 내부 여백(콘텐츠용)은 유지 */
   border-radius: 12px;
-  /* 아주 옅은 핑크톤 아이보리로 변경 */
-  background-color: var(--theme-accent); 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+  background-color: var(--theme-accent);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  display: flex;
+  flex-direction: column;
 }
 
+/* 리스트 아이템 */
 .contact-item {
   display: flex;
-  align-items: center; 
-  justify-content: space-between; 
-  flex-wrap: nowrap; 
-  gap: 8px; 
-  padding: 0.6rem 0; 
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 0.65rem 0;
   border-bottom: 1px solid var(--border-color);
-  font-size: 1.1rem; 
-  color: var(--text-main); 
+  font-size: 1.1rem;
+  color: var(--text-main);
 
   &:last-child {
     border-bottom: none;
   }
 
   .relation {
-    width: 110px; 
-    flex: 0 0 auto; 
-    text-align: center; 
-    color: var(--theme-primary); 
-    font-weight: 600; 
-    opacity: 1; 
-    font-size: 0.95rem; 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
+    width: 110px;
+    flex: 0 0 auto;
+    text-align: center;
+    color: var(--theme-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .name {
-    flex: 1 1 auto; 
-    text-align: center; 
-    font-weight: 700; 
-    padding-left: 0; 
-    margin-left: 0;
-    margin-right: 0;
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
+    flex: 1 1 auto;
+    text-align: center;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .contact-actions {
-    flex: 0 0 auto; 
-    min-width: 90px;
+    flex: 0 0 auto;
+    min-width: 96px;
     display: flex;
     justify-content: flex-end;
-    gap: 18px; 
-    margin-left: 0; 
+    gap: 12px;
 
     .icon-link {
-      /* 메인 글자색과 동일한 진한색으로 변경 */
-      color: var(--text-main); 
-      font-size: 1.3rem; 
-      padding: 0; 
-      background-color: transparent; 
-      border-radius: 0; 
-      line-height: 1; 
+      color: var(--text-main);
+      font-size: 1.25rem;
       text-decoration: none;
-      transition: transform 0.1s;
+      line-height: 1;
+
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+      transition: transform 0.12s ease, background 0.12s ease;
 
       &:active {
-        transform: scale(0.95);
+        transform: scale(0.94);
+        background: rgba(255, 255, 255, 1);
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          transform: translateY(-1px);
+          background: rgba(255, 255, 255, 1);
+        }
       }
     }
   }
@@ -90,22 +118,23 @@
 ------------------------------------- */
 @media (max-width: 360px) {
   .contact-item {
-    gap: 5px; 
-    font-size: 1rem; 
+    gap: 5px;
+    font-size: 1rem;
   }
+
   .contact-item .relation {
-    width: 80px; 
-    text-align: center; 
+    width: 80px;
     font-size: 0.9rem;
   }
-  .contact-item .name {
-    text-align: center; 
-  }
+
   .contact-item .contact-actions {
-    min-width: 80px; 
-    gap: 12px;
-  }
-  .contact-title {
-    font-size: 1.4rem;
+    min-width: 84px;
+    gap: 8px;
+
+    .icon-link {
+      width: 34px;
+      height: 34px;
+      font-size: 1.15rem;
+    }
   }
 }
