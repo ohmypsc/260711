@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import "./AdminPage.scss";
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
