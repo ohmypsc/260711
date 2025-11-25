@@ -214,7 +214,7 @@ export function PhotoUpload() {
         style={{ display: "none" }}
       />
 
-      <Button variant="outline" onClick={onPick} disabled={loading}>
+      <Button variant="basic" onClick={onPick} disabled={loading}>
         {loading
           ? progress
             ? `업로드 중... (${progress.done}/${progress.total})`
