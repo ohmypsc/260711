@@ -26,13 +26,11 @@ export function PhotoUpload() {
   const [thumbs, setThumbs] = useState<PhotoThumb[]>([]);
   const [thumbLoading, setThumbLoading] = useState(true);
 
-  // ✅ 페이지네이션 state
   const [page, setPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
 
   const onPick = () => fileRef.current?.click();
 
-  // ✅ 버킷에서 페이지 단위로 사진 가져오기
   const loadThumbs = async (targetPage = page) => {
     setThumbLoading(true);
     try {
@@ -42,9 +40,9 @@ export function PhotoUpload() {
         .from(BUCKET)
         .list("", {
           limit: THUMBS_PER_PAGE,
-          offset, // ✅ 페이지 오프셋
+          offset,
           sortBy: { column: "created_at", order: "desc" },
-        } as any); // Supabase 타입에서 offset 없다고 뜨면 any로 무시
+        } as any);
 
       if (error) throw error;
 
@@ -64,8 +62,6 @@ export function PhotoUpload() {
 
       setThumbs(list);
       setPage(targetPage);
-
-      // ✅ 다음 페이지 존재 여부(현재 페이지가 꽉 찼으면 다음이 있다고 간주)
       setHasNext(list.length === THUMBS_PER_PAGE);
     } catch (e) {
       console.error(e);
@@ -98,7 +94,20 @@ export function PhotoUpload() {
 
         const optimized = await compressIfNeeded(file);
 
-        const ext = optimized.type.includes("png") ? "png" : "jpg";
+        // ✅ HEIC/HEIF면 확장자 유지, 아니면 png/jpg로
+        const isHeic =
+          optimized.type === "image/heic" ||
+          optimized.type === "image/heif" ||
+          /\.heic$/i.test(optimized.name) ||
+          /\.heif$/i.test(optimized.name);
+
+        let ext = "jpg";
+        if (isHeic) {
+          ext = (optimized.name.split(".").pop() || "heic").toLowerCase();
+        } else if (optimized.type.includes("png")) {
+          ext = "png";
+        }
+
         const filename = `${Date.now()}_${Math.random()
           .toString(36)
           .slice(2)}.${ext}`;
@@ -122,7 +131,7 @@ export function PhotoUpload() {
     setProgress(null);
     e.target.value = "";
 
-    // ✅ 업로드 후 "첫 페이지" 다시 로드
+    // 업로드 후 첫 페이지 다시 로드
     loadThumbs(0);
 
     if (failed.length === 0) {
@@ -161,7 +170,7 @@ export function PhotoUpload() {
           : "사진 여러 장 업로드하기"}
       </Button>
 
-      {/* ✅ 썸네일 갤러리 */}
+      {/* 썸네일 갤러리 */}
       <div className="thumbs">
         <div className="thumbs__title">최근 업로드된 사진</div>
 
@@ -186,7 +195,7 @@ export function PhotoUpload() {
               ))}
             </div>
 
-            {/* ✅ 페이지네이션 */}
+            {/* 페이지네이션 */}
             <div className="thumbs__pagination">
               <button
                 className="page-btn"
@@ -215,9 +224,20 @@ export function PhotoUpload() {
 
 /* -----------------------------------------------------------
    자동 압축/리사이즈
+   ✅ HEIC/HEIF는 압축 시도 안 하고 원본 업로드
 ----------------------------------------------------------- */
 async function compressIfNeeded(file: File): Promise<File> {
   const sizeMB = file.size / (1024 * 1024);
+
+  const isHeic =
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    /\.heic$/i.test(file.name) ||
+    /\.heif$/i.test(file.name);
+
+  // ✅ HEIC는 브라우저 캔버스 변환이 실패할 수 있으니 그대로 업로드
+  if (isHeic) return file;
+
   if (sizeMB <= MAX_UPLOAD_MB) return file;
 
   const img = await loadImage(file);
