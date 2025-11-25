@@ -108,7 +108,7 @@ export const BgEffect = () => {
     const img = new Image();
     img.src = petalUrl;
 
-    const count = Math.floor((window.innerWidth * window.innerHeight) / 38000);
+    const count = Math.floor((window.innerWidth * window.innerHeight) / 25000);
 
     img.onload = () => {
       petalsRef.current = Array.from({ length: count }, () => {
