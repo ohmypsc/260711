@@ -43,7 +43,11 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
   return (
     <Modal onClose={onClose}>
       <div className="contact-modal-wrap">
-        <h2 className="contact-title modal-heading modal-divider">연락하기</h2>
+        <h2 className="contact-title modal-title">연락하기</h2>
+        <p className="contact-subtitle modal-subtitle">
+          전화, 문자 메시지로 축하 인사를 전해 보세요.
+        </p>
+
         {renderSection(groomSide)}
         {renderSection(brideSide)}
       </div>
