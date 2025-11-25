@@ -56,8 +56,23 @@
 }
 
 /* ============================================
-   Heading & Divider
+   ✅ Modal Title System (통일된 제목 스타일)
+   - 모달 제목에 .modal-title만 붙이면 끝
    ============================================ */
+.modal-title {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.02em;
+
+  /* divider 효과 포함 */
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 기존 클래스도 호환 유지 (다른 모달에서 쓰고 있으면 그대로 동작) */
 .modal-heading {
   text-align: center;
   font-size: 1.35rem;
@@ -70,6 +85,15 @@
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 8px;
   margin-bottom: 4px;
+}
+
+/* 필요 시 부제목 */
+.modal-subtitle {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-light);
+  margin-top: -4px;
+  letter-spacing: 0.01em;
 }
 
 /* ============================================
@@ -120,7 +144,12 @@
     gap: 8px;
   }
 
+  .modal-title,
   .modal-heading {
     font-size: 1.25rem;
+  }
+
+  .modal-subtitle {
+    font-size: 0.9rem;
   }
 }
