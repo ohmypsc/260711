@@ -80,12 +80,12 @@ export function Attendance() {
       </p>
 
       <div className="attendance-buttons">
-        <Button variant="outline" onClick={() => setOpenModal("write")}>
+        <Button variant="basic" onClick={() => setOpenModal("write")}>
           참석여부 확인하기
         </Button>
 
         {!hasMyRows && (
-          <Button variant="outline" onClick={() => setOpenModal("find")}>
+          <Button variant="basic" onClick={() => setOpenModal("find")}>
             내 응답 찾기
           </Button>
         )}
@@ -318,7 +318,7 @@ function WriteAttendanceModal({
           </select>
 
           <div className="attendance-form__actions">
-            <Button variant="outline" type="submit" disabled={loading}>
+            <Button variant="submit" type="submit" disabled={loading}>
               저장하기
             </Button>
           </div>
@@ -408,7 +408,7 @@ function FindAttendanceModal({
           />
 
           <div className="attendance-form__actions">
-            <Button variant="outline" type="submit" disabled={loading}>
+            <Button variant="submit" type="submit" disabled={loading}>
               찾기
             </Button>
           </div>
@@ -590,7 +590,7 @@ function DeleteAttendanceModal({
           }}
         >
           <div className="attendance-form__actions">
-            <Button variant="outline" type="submit" disabled={loading}>
+            <Button variant="submit" type="submit" disabled={loading}>
               삭제하기
             </Button>
           </div>
