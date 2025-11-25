@@ -19,28 +19,42 @@ body {
 
   width: 100%;
   background-color: var(--theme-bg); /* 모바일/PC 일관 배경 */
+
+  /* ✅ 기본 폰트 커진 만큼 줄간격도 살짝 여유 */
+  line-height: 1.65;
 }
 
 /* ============================================
-   🌸 Rosegold Theme Colors
+   🌸 Blush Rose + Warm Neutral Theme Colors
+   (옅은 분홍 꽃잎 배경에 맞춘 고급/깔끔 톤)
    ============================================ */
 :root {
-  --theme-bg: #ffffff;
-  --theme-primary: #ff8c94;
-  --theme-primary-light: #ffc0cb;
-  --theme-accent: #f8f8f8;
+  /* Background */
+  --theme-bg: #FCFBFA;            /* 아주 옅은 아이보리 화이트 */
+  --theme-accent: #F4F5F7;        /* 섹션/카드 구분용 뉴트럴 */
 
-  --text-main: #333333;
-  --text-light: #aaaaaa;
-  
-  --theme-success: #4CAF50;
-  --theme-error: #f44336;
-  --border-color: #eeeeee;
-  --shadow-color: rgba(255, 140, 148, 0.25);
+  /* Primary (꽃잎 톤에 맞춘 저채도 블러시 로즈) */
+  --theme-primary: #D9A1A7;       /* 톤다운 로즈 */
+  --theme-primary-light: #EAC7CB; /* hover/약한 강조 */
 
+  /* Text */
+  --text-main: #1F1F22;           /* 선명한 차콜 */
+  --text-light: #8E9096;          /* 고급스러운 그레이 */
+
+  /* Status */
+  --theme-success: #3C8466;       /* 차분한 그린 */
+  --theme-error: #D25B5B;         /* 톤다운 레드 */
+
+  /* UI */
+  --border-color: #E7E5E3;        
+  --shadow-color: rgba(31, 31, 34, 0.08); /* 핑크 그림자 X → 차콜 */
+
+  /* Layout */
   --section-max-width: 640px;
+
+  /* Typography */
   font-family: "Noto Serif KR", serif;
-  font-size: clamp(16px, 3.2vw, 20px);
+  font-size: clamp(17px, 3.4vw, 21px); /* ✅ 조금만 더 커진 기본 폰트 */
 }
 
 /* ============================================
@@ -68,8 +82,8 @@ section {
 }
 
 .section-title {
-  font-size: 2rem;  
-  font-weight: 400;    
+  font-size: 2rem;
+  font-weight: 400;
   margin-bottom: 2.5rem;
   text-align: center;
   letter-spacing: 0.02rem;
