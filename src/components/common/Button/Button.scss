@@ -42,11 +42,11 @@ button.w-btn {
     transform 0.12s ease;
 }
 
-/* ✅ 데스크톱에서 버튼이 커 보이는 문제 해결 */
+/* ✅ 데스크톱에서 버튼이 커 보이는 문제 1단계 더 축소 */
 @media (min-width: 768px) {
   button.w-btn {
-    font-size: 1.02rem;   /* 데스크톱에서 더 아담하게 */
-    padding: 0.78rem 1rem;
+    font-size: 1rem;          
+    padding: 0.72rem 0.95rem; 
     border-radius: 10px;
   }
 }
