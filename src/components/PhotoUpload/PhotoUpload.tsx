@@ -19,6 +19,8 @@ type PhotoThumb = {
 
 export function PhotoUpload() {
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const [uploaderName, setUploaderName] = useState("");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] =
     useState<{ done: number; total: number } | null>(null);
@@ -29,7 +31,13 @@ export function PhotoUpload() {
   const [page, setPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
 
-  const onPick = () => fileRef.current?.click();
+  const onPick = () => {
+    if (!uploaderName.trim()) {
+      alert("이름을 먼저 입력해주세요.");
+      return;
+    }
+    fileRef.current?.click();
+  };
 
   const loadThumbs = async (targetPage = page) => {
     setThumbLoading(true);
@@ -79,6 +87,13 @@ export function PhotoUpload() {
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;
 
+    const name = uploaderName.trim();
+    if (!name) {
+      alert("이름이 비어있습니다. 다시 입력해주세요.");
+      e.target.value = "";
+      return;
+    }
+
     setLoading(true);
     setProgress({ done: 0, total: files.length });
 
@@ -86,6 +101,7 @@ export function PhotoUpload() {
     let done = 0;
 
     for (const file of files) {
+      let filename = "";
       try {
         if (!file.type.startsWith("image/")) {
           failed.push(`${file.name} (이미지 아님)`);
@@ -108,18 +124,43 @@ export function PhotoUpload() {
           ext = "png";
         }
 
-        const filename = `${Date.now()}_${Math.random()
+        filename = `${Date.now()}_${Math.random()
           .toString(36)
           .slice(2)}.${ext}`;
 
-        const { error } = await supabase.storage
+        // 1) 스토리지 업로드
+        const { error: upErr } = await supabase.storage
           .from(BUCKET)
           .upload(filename, optimized, { upsert: false });
 
-        if (error) throw error;
+        if (upErr) throw upErr;
+
+        // 2) 메타 저장 (photo_meta)
+        const { error: metaErr } = await supabase
+          .from("photo_meta")
+          .insert([
+            {
+              file_name: filename,
+              uploader_name: name,
+              created_at: new Date().toISOString(),
+            },
+          ]);
+
+        // 메타 저장 실패는 업로드 자체를 실패로 보진 않되, 사용자에게 알려줌
+        if (metaErr) {
+          console.warn("photo_meta insert failed:", metaErr);
+          failed.push(`${file.name} (업로드는 됐지만 이름 저장 실패)`);
+        }
       } catch (err: any) {
         console.error("Upload failed:", file.name, err);
         failed.push(`${file.name} (${err?.message ?? "알 수 없는 오류"})`);
+
+        // 업로드가 실패했으면 filename이 생성됐을 수도 있으니 혹시 남아있으면 제거 시도
+        if (filename) {
+          try {
+            await supabase.storage.from(BUCKET).remove([filename]);
+          } catch {}
+        }
       } finally {
         done++;
         setProgress({ done, total: files.length });
@@ -153,10 +194,21 @@ export function PhotoUpload() {
         여러 장을 한 번에 선택해도 자동으로 최적화되어 업로드됩니다.
       </p>
 
+      {/* ✅ 이름 입력 */}
+      <div className="photo-upload__name">
+        <input
+          type="text"
+          placeholder="이름을 입력해주세요"
+          value={uploaderName}
+          onChange={(e) => setUploaderName(e.target.value)}
+          disabled={loading}
+        />
+      </div>
+
       <input
         ref={fileRef}
         type="file"
-        accept="image/*"
+        accept="image/*,.heic,.heif"
         multiple
         onChange={onChangeFile}
         style={{ display: "none" }}
@@ -170,7 +222,7 @@ export function PhotoUpload() {
           : "사진 여러 장 업로드하기"}
       </Button>
 
-      {/* 썸네일 갤러리 */}
+      {/* ✅ 썸네일 갤러리 */}
       <div className="thumbs">
         <div className="thumbs__title">최근 업로드된 사진</div>
 
@@ -195,7 +247,7 @@ export function PhotoUpload() {
               ))}
             </div>
 
-            {/* 페이지네이션 */}
+            {/* ✅ 페이지네이션 */}
             <div className="thumbs__pagination">
               <button
                 className="page-btn"
@@ -235,7 +287,6 @@ async function compressIfNeeded(file: File): Promise<File> {
     /\.heic$/i.test(file.name) ||
     /\.heif$/i.test(file.name);
 
-  // ✅ HEIC는 브라우저 캔버스 변환이 실패할 수 있으니 그대로 업로드
   if (isHeic) return file;
 
   if (sizeMB <= MAX_UPLOAD_MB) return file;
