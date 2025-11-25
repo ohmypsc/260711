@@ -67,7 +67,7 @@ function AccountModal({ type, onClose }: AccountModalProps) {
   return (
     <Modal onClose={onClose}>
       <div className="account-modal-content">
-        <h2 className="account-modal-title modal-heading modal-divider">
+        <h2 className="account-modal-title modal-title">
           {title}
         </h2>
 
