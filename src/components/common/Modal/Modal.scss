@@ -1,129 +1,126 @@
-/* -------------------------------------
-    Modal Global Styles
-------------------------------------- */
+/* ============================================
+   Modal Global Styles (Mobile-first / Elegant)
+   ============================================ */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.45);  
+
+  /* ✅ 어둠 과하지 않게, 화사한 웨딩 톤 */
+  background: rgba(20, 20, 24, 0.34);
+  backdrop-filter: blur(9px) saturate(115%);
+  -webkit-backdrop-filter: blur(9px) saturate(115%);
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 10000;
-  animation: overlayFadeIn 0.25s ease forwards;
-  padding: 24px;
+  padding: 16px;
+
+  animation: overlayFadeIn 0.2s ease forwards;
 }
 
-/* -------------------------------------
-    Modal Box
-------------------------------------- */
+/* ============================================
+   Modal Box
+   ============================================ */
 .modal-container {
-  background: var(--theme-bg);
-  /* ✅ 좌우 패딩 축소 */
-  padding: 10px 10px; 
   width: 100%;
-  max-width: 380px;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px var(--shadow-color); 
-  animation: modalShow 0.28s cubic-bezier(0.25, 0.46, 0.45, 1) forwards;
+  max-width: 420px;
+
+  background: var(--theme-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+
+  /* ✅ 여백 축소 */
+  padding: 16px 14px;
+
+  /* ✅ 가벼운 카드 그림자 */
+  box-shadow:
+    0 12px 34px var(--shadow-color),
+    0 1px 4px rgba(0, 0, 0, 0.05);
+
+  animation: modalShow 0.24s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
   transform-origin: center;
 
   display: flex;
   flex-direction: column;
-  gap: 18px; 
+
+  /* ✅ gap도 줄임 */
+  gap: 10px;
 }
 
 /* 닫힐 때 애니메이션 */
 .modal-container.closing {
-  animation: modalHide 0.22s ease forwards;
+  animation: modalHide 0.18s ease forwards;
 }
 
-/* -------------------------------------
-    Global Heading & Divider Styles
-------------------------------------- */
-
-/* 모든 모달 제목에 적용될 기본 스타일 */
+/* ============================================
+   Heading & Divider
+   ============================================ */
 .modal-heading {
   text-align: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-main); 
-  letter-spacing: 0.05rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.02em;
 }
 
-/* 재사용 가능한 구분선 유틸리티 클래스 */
 .modal-divider {
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 12px;
-  margin-bottom: 18px;
+  padding-bottom: 8px;
+  margin-bottom: 4px;
 }
 
-/* -------------------------------------
-    Content
-------------------------------------- */
+/* ============================================
+   Content
+   ============================================ */
 .modal-content {
   width: 100%;
 }
 
-/* null 데이터 표시 시 */
 .null-text {
   color: var(--text-light);
-  font-size: 14px;
+  font-size: 0.9rem;
   font-style: italic;
 }
 
-/* -------------------------------------
-    Close Button (옅은 색상, 호버 제거, 간격 조정)
-------------------------------------- */
-.modal-close-btn {
-  width: 100%;
-  padding: 12px;
-  background: var(--text-light); 
-  border: none;
-  border-radius: 12px;
-  color: var(--text-main); 
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.22s ease;
-  
-  margin-top: 18px; 
+/* ============================================
+   Footer (전역 버튼 배치용)
+   ============================================ */
+.modal-footer {
+  margin-top: 6px; /* 콘텐츠랑 살짝만 분리 */
 }
 
-
-/* -------------------------------------
-    Animations
-------------------------------------- */
+/* ============================================
+   Animations
+   ============================================ */
 @keyframes overlayFadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 @keyframes modalShow {
-  0% { opacity: 0; transform: translateY(20px) scale(0.92); }
+  0%   { opacity: 0; transform: translateY(10px) scale(0.97); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes modalHide {
-  0% { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(16px) scale(0.9); }
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(8px) scale(0.97); }
 }
 
-/* -------------------------------------
-    RESPONSIVE 모바일 UI 개선
-------------------------------------- */
+/* ============================================
+   Responsive (Small phones)
+   ============================================ */
 @media (max-width: 360px) {
   .modal-container {
-    /* ✅ 좌우 패딩 축소 (16px -> 12px) */
-    padding: 18px 12px;
+    padding: 14px 12px;
     border-radius: 14px;
+    gap: 8px;
   }
 
-  .modal-close-btn {
-    padding: 10px;
-    font-size: 14px;
-    margin-top: 14px; 
+  .modal-heading {
+    font-size: 1.25rem;
   }
 }
