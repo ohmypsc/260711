@@ -21,11 +21,11 @@ export function Account() {
       </p>
 
       <div className="account-buttons">
-        <Button variant="outline" onClick={() => setOpenModal("groom")}>
+        <Button variant="basic" onClick={() => setOpenModal("groom")}>
           신랑 측 계좌번호 보기
         </Button>
 
-        <Button variant="outline" onClick={() => setOpenModal("bride")}>
+        <Button variant="basic" onClick={() => setOpenModal("bride")}>
           신부 측 계좌번호 보기
         </Button>
       </div>
