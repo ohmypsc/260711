@@ -39,8 +39,10 @@
   border: 1px solid var(--border-color);
   border-radius: 16px;
 
+  /* ✅ 여백 축소 */
   padding: 16px 14px;
 
+  /* ✅ 가벼운 카드 그림자 */
   box-shadow:
     0 12px 34px var(--shadow-color),
     0 1px 4px rgba(0, 0, 0, 0.05);
@@ -55,12 +57,13 @@
   margin: 0 auto;
 }
 
+/* 닫힐 때 애니메이션 */
 .modal-container.closing {
   animation: modalHide 0.18s ease forwards;
 }
 
 /* ============================================
-   ✅ Title System (표준: 제목 + 부제목만 유지)
+   ✅ Title System (표준: 제목/부제목만)
    ============================================ */
 
 /* ✅ 표준 제목: 구분선 포함 */
@@ -83,23 +86,6 @@
   color: var(--text-light);
   margin-top: -4px;
   letter-spacing: 0.01em;
-}
-
-/* --------------------------------------------
-   ⚠️ Legacy 호환 (기존 모달 안 깨지게 유지)
-   - 앞으로는 modal-title / modal-subtitle만 사용 권장
-   -------------------------------------------- */
-
-/* 예전 제목 클래스: modal-title과 동일하게 렌더링 */
-.modal-heading {
-  @extend .modal-title;
-}
-
-/* 예전 divider 클래스: 혹시 단독 사용된 경우 대비 */
-.modal-divider {
-  padding-bottom: 8px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid var(--border-color);
 }
 
 /* ============================================
@@ -150,8 +136,7 @@
     gap: 8px;
   }
 
-  .modal-title,
-  .modal-heading {
+  .modal-title {
     font-size: 1.25rem;
   }
 
