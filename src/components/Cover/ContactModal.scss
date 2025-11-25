@@ -3,32 +3,18 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* ❌ 전역에서 이미 패딩 있으므로 개별 wrap padding 제거 */
+  /* ✅ 전역 모달 패딩만 사용 (개별 wrap 여백 없음) */
 }
 
-/* 전역 modal-subtitle은 그대로 두고,
-   ContactModal에서만 간격 살짝 보정 */
+/* ✅ 부제목 간격만 ContactModal 전용으로 미세 조정 */
 .contact-subtitle {
   margin-top: -6px;
   margin-bottom: 6px;
 }
 
-/* 신랑/신부 측 구분 라벨 (ContactModal 전용) */
-.contact-section-label {
-  align-self: center;
-  font-size: 0.92rem;
-  color: var(--text-light);
-  letter-spacing: 0.04em;
-  margin-bottom: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid var(--border-color);
-}
-
 /* 섹션 카드 */
 .contact-section {
-  padding: 15px 8px; /* ✅ 카드 내부 여백(콘텐츠용)은 유지 */
+  padding: 15px 8px; /* 카드 내부 여백(콘텐츠용) */
   border-radius: 12px;
   background-color: var(--theme-accent);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
@@ -44,7 +30,7 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   gap: 8px;
-  padding: 0.65rem 0;
+  padding: 0.65rem 0; 
   border-bottom: 1px solid var(--border-color);
   font-size: 1.1rem;
   color: var(--text-main);
