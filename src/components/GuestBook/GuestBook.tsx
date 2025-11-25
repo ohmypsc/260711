@@ -98,7 +98,7 @@ export function GuestBook() {
 
       {/* 작성 버튼 */}
       <div className="guestbook__actions">
-        <Button variant="outline" onClick={() => setOpenModal("write")}>
+        <Button variant="basic" onClick={() => setOpenModal("write")}>
           방명록 작성하기
         </Button>
       </div>
@@ -107,7 +107,7 @@ export function GuestBook() {
       <div className="guestbook-list">
         {posts.length === 0 && (
           <div className="guestbook-empty">
-            아직 작성된 방명록이 없습니다.
+            첫 방명록을 작성해 주세요 💖
           </div>
         )}
 
@@ -275,7 +275,7 @@ function WriteGuestBookModal({
           />
 
           <div className="guestbook-form__actions">
-            <Button variant="outline" type="submit" disabled={loading}>
+            <Button variant="submit" type="submit" disabled={loading}>
               저장하기
             </Button>
           </div>
@@ -358,7 +358,7 @@ function DeleteGuestBookModal({
           />
 
           <div className="guestbook-form__actions">
-            <Button variant="outline" type="submit" disabled={loading}>
+            <Button variant="submit" type="submit" disabled={loading}>
               삭제하기
             </Button>
           </div>
