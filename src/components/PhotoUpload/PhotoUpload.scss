@@ -9,6 +9,22 @@
     color: var(--text-main);
   }
 
+  /* ✅ 이름 입력 영역 */
+  .photo-upload__name {
+    margin: 0 0 10px 0;
+
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid var(--light-grey-color);
+      border-radius: 0.4rem;
+      font-family: "MapoGoldenPier";
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      background: var(--white-color);
+    }
+  }
+
   .w-btn {
     width: 100%;
   }
