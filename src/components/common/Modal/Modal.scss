@@ -163,3 +163,13 @@
     font-size: 0.9rem;
   }
 }
+
+
+/* ✅ 모달 위치 보정용 wrapper */
+.modal-positioner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  will-change: transform; /* 부드러운 이동 */
+}
