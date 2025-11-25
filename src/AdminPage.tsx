@@ -17,7 +17,10 @@ type PhotoItem = {
 
 type ViewMode = "page" | "all";
 
-export function AdminPhotos() {
+/* ======================================================
+   ✅ AdminPhotos (내부 컴포넌트 - 파일 밖으로 export 안 함)
+   ====================================================== */
+function AdminPhotos() {
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -295,9 +298,7 @@ export function AdminPhotos() {
               return (
                 <div
                   key={p.name}
-                  className={`admin-photos__card ${
-                    checked ? "selected" : ""
-                  }`}
+                  className={`admin-photos__card ${checked ? "selected" : ""}`}
                 >
                   <label className="check">
                     <input
@@ -369,5 +370,17 @@ export function AdminPhotos() {
         </>
       )}
     </section>
+  );
+}
+
+/* ======================================================
+   ✅ AdminPage (파일에서 유일하게 export되는 컴포넌트)
+   App.tsx에서 { AdminPage }로 import 가능
+   ====================================================== */
+export function AdminPage() {
+  return (
+    <div className="admin-page">
+      <AdminPhotos />
+    </div>
   );
 }
