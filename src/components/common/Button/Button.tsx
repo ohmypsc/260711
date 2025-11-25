@@ -2,17 +2,17 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 import "./Button.scss";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** 
-   * solid  : 메인 CTA (가장 고급/깔끔)
-   * soft   : 서브 액션 (은은한 포인트)
-   * outline: 선택/토글 (가벼운 라인)
+  /**
+   * basic  : 커버 메인 '입장' 버튼 (가장 예쁘고 주인공)
+   * submit : 모달 안 '제출/확인' 버튼
+   * close  : 모달 안 '닫기/취소' 버튼
    */
-  variant?: "solid" | "soft" | "outline";
+  variant?: "basic" | "submit" | "close";
   children: ReactNode;
 }
 
 export const Button = ({
-  variant = "solid",
+  variant = "basic",
   children,
   className = "",
   ...rest
