@@ -174,3 +174,53 @@
     }
   }
 }
+
+.admin-photos {
+  .admin-photos__card {
+    position: relative;
+
+    &.selected {
+      outline: 2px solid var(--theme-primary);
+      border-radius: 8px;
+    }
+
+    .check {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 3;
+
+      input {
+        display: none;
+      }
+
+      span {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--text-light);
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+      }
+
+      input:checked + span {
+        background: var(--theme-primary);
+        border-color: var(--theme-primary);
+      }
+
+      input:checked + span::after {
+        content: "✓";
+        position: absolute;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -55%);
+      }
+    }
+  }
+}
+
