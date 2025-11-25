@@ -6,6 +6,10 @@
   position: fixed;
   inset: 0;
 
+  /* ✅ body 폭/스크롤바 유무와 무관하게 '진짜 뷰포트' 기준으로 고정 */
+  width: 100dvw;
+  height: 100dvh;
+
   /* ✅ 어둠 과하지 않게, 화사한 웨딩 톤 */
   background: rgba(20, 20, 24, 0.34);
   backdrop-filter: blur(9px) saturate(115%);
@@ -19,6 +23,9 @@
   padding: 16px;
 
   animation: overlayFadeIn 0.2s ease forwards;
+
+  /* ✅ 혹시 모를 모바일 가로 흔들림 방지 */
+  overflow-x: hidden;
 }
 
 /* ============================================
@@ -48,6 +55,9 @@
 
   /* ✅ gap도 줄임 */
   gap: 10px;
+
+  /* ✅ overlay가 flex 중앙이어도, 내부는 스스로 중앙 유지 */
+  margin: 0 auto;
 }
 
 /* 닫힐 때 애니메이션 */
