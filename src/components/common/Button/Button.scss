@@ -15,12 +15,15 @@ button.w-btn {
 
   border-radius: 12px;
 
-  /* ✅ 가독성: 살짝 큼직 + 안정적인 두께 */
-  font-size: clamp(1.06rem, 2.8vw, 1.22rem);
+  /* ✅ 가독성 유지하면서 살짝만 낮춤 */
+  font-size: clamp(1.02rem, 2.6vw, 1.16rem);
   font-weight: 600;
   letter-spacing: 0.01em;
+  line-height: 1.2;
 
-  padding: 1rem 1.2rem;
+  /* ✅ 화면 커질수록 높이 과해지지 않게 자동 조절 */
+  padding: clamp(0.88rem, 2.2vw, 0.98rem)
+           clamp(1.0rem, 3vw, 1.15rem);
 
   border: 1px solid transparent;
   color: var(--text-main);
@@ -37,6 +40,15 @@ button.w-btn {
     border-color 0.22s ease,
     box-shadow 0.22s ease,
     transform 0.12s ease;
+}
+
+/* ✅ 데스크톱에서 버튼이 커 보이는 문제 해결 */
+@media (min-width: 768px) {
+  button.w-btn {
+    font-size: 1.02rem;   /* 데스크톱에서 더 아담하게 */
+    padding: 0.78rem 1rem;
+    border-radius: 10px;
+  }
 }
 
 /* ✅ 포커스 링: 은은하고 깔끔 */
