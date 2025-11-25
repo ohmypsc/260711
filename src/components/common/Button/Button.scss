@@ -1,34 +1,54 @@
-/* 🌸 버튼 기본 스타일 - 감성 강화 */
+/* ============================================
+   🌸 Wedding Button (Mobile-first / Elegant + Clean)
+   ============================================ */
+
 button.w-btn {
   font-family: inherit;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  overflow: hidden;
 
   position: relative;
   width: 100%;
-  border-radius: 14px; /* 살짝 더 둥글게 */
 
-  /* 🔥 글자 크기만 크게 + 두께 강화 */
-  font-size: clamp(1.1rem, 3vw, 1.3rem);
-  font-weight: 700;
+  /* ✅ 모바일에서 더 고급스러운 라운드 */
+  border-radius: 12px;
 
-  padding: 1rem 1.25rem; /* 더 여유 있는 패딩 */
-  background: none;
-  border: none;
+  /* ✅ 가독성 중심: 살짝 큼직 + 과하지 않은 두께 */
+  font-size: clamp(1.06rem, 2.8vw, 1.22rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
 
+  /* ✅ 손가락 터치용 여유 */
+  padding: 1rem 1.2rem;
+
+  background: transparent;
+  border: 1px solid transparent;
   color: var(--text-main);
-  letter-spacing: 0.2px;
 
-  transition: all 0.28s ease;
+  /* ✅ 미세한 입체감만 (깔끔 + 고급) */
+  box-shadow:
+    0 6px 18px var(--shadow-color),
+    0 1px 2px rgba(0, 0, 0, 0.03);
 
-  /* 부드러운 양각 느낌 */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  transition:
+    background-color 0.22s ease,
+    color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.12s ease;
 }
 
-/* 🌸 리플 효과 */
+/* ✅ 키보드/접근성 포커스 (모바일에서도 가끔 필요) */
+button.w-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(217, 161, 167, 0.22),
+    0 6px 18px var(--shadow-color);
+}
+
+/* 🌸 리플 효과: 은은하고 고급스럽게 */
 button.w-btn::after {
   content: "";
   position: absolute;
@@ -39,46 +59,48 @@ button.w-btn::after {
 }
 
 button.w-btn:active::after {
-  background: radial-gradient(circle, rgba(255,255,255,0.45), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent 70%);
   opacity: 1;
-  animation: w-btn-tap 0.35s ease-out forwards;
+  animation: w-btn-tap 0.32s ease-out forwards;
 }
 
 @keyframes w-btn-tap {
-  0%   { transform: scale(0.8); opacity: 0.7; }
-  60%  { transform: scale(1.25); opacity: 0.3; }
-  100% { transform: scale(1.35); opacity: 0; }
+  0%   { transform: scale(0.92); opacity: 0.55; }
+  70%  { transform: scale(1.12); opacity: 0.22; }
+  100% { transform: scale(1.22); opacity: 0; }
 }
 
-/* ------------------------------------------------------ */
-/* 🌹 OUTLINE 버튼 — "고급스러운 웨딩카드 버튼" 느낌 */
-/* ------------------------------------------------------ */
+/* ------------------------------------------------------
+   🌹 OUTLINE 버튼 — Mobile Elegant Outline
+   ------------------------------------------------------ */
 button.w-btn.outline {
-  background: #fff;
-  border: 1.8px solid var(--theme-primary);
-  color: var(--theme-primary);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--theme-primary);
+  border-width: 1.4px;
 
-  /* 고급진 미세한 입체감 */
-  box-shadow:
-    0 8px 20px rgba(255,140,148,0.12),
-    0 2px 6px rgba(0,0,0,0.04);
+  color: var(--theme-primary);
 }
 
-button.w-btn.outline:active {
+/* ✅ Active(터치 피드백): 확실하지만 과하지 않게 */
+button.w-btn.outline:active:not(:disabled) {
   background: var(--theme-primary);
   color: #fff;
-  transform: scale(0.97);
+  transform: scale(0.985);
+
   box-shadow:
-    0 4px 12px rgba(255,140,148,0.18),
-    0 2px 4px rgba(0,0,0,0.10);
+    0 4px 12px rgba(31, 31, 34, 0.10);
 }
 
-/* ------------------------------------------------------ */
-/* 🌙 Disabled */
-/* ------------------------------------------------------ */
+/* ------------------------------------------------------
+   🌙 Disabled
+   ------------------------------------------------------ */
 button.w-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
   box-shadow: none !important;
+
+  background: var(--theme-accent);
+  border-color: var(--border-color);
+  color: var(--text-light);
 }
