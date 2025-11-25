@@ -18,7 +18,12 @@ body {
   overflow-y: auto;
 
   width: 100%;
-  background-color: var(--theme-bg); /* 모바일/PC 일관 배경 */
+  background:
+    radial-gradient(120% 140% at 10% -10%,
+      #ffffff 0%,
+      var(--theme-bg) 58%,
+      var(--theme-accent) 100%
+    ); /* 모바일/PC 일관 배경 */
 
   /* ✅ 기본 폰트 커진 만큼 줄간격도 살짝 여유 */
   line-height: 1.65;
@@ -26,8 +31,8 @@ body {
 
 :root {
   /* Background: 밝고 따뜻한 여름 화이트 */
-  --theme-bg: #FFFEFC;            /* 맑은 크림 화이트 */
-  --theme-accent: #F6F7F9;        /* 거의 그레이에 가까운 쿨 뉴트럴 */
+  --theme-bg: #FBFAF7;            /* 맑은 크림 화이트 */
+  --theme-accent: #F2F3F6;        /* 거의 그레이에 가까운 쿨 뉴트럴 */
 
   /* Primary: 페탈과 맞지만 과하지 않은 ‘로즈 베이지’ */
   --theme-primary: #E7A3A9;       /* 핑크+베이지 섞인 은은한 로즈 */
@@ -42,7 +47,7 @@ body {
   --theme-error: #E06B6B;
 
   /* UI: 라인 깔끔, 그림자는 ‘햇살처럼’ 아주 약한 로즈 톤 */
-  --border-color: #EEECEF;
+  --border-color: #E6E4E8;
   --shadow-color: rgba(231, 163, 169, 0.16);
 
   --section-max-width: 640px;
@@ -56,7 +61,12 @@ body {
    ============================================ */
 .wedding-page {
   position: relative; /* 꽃잎 레이어와의 stacking 안정화 */
-  background-color: var(--theme-bg);
+  background:
+    radial-gradient(120% 140% at 10% -10%,
+      #ffffff 0%,
+      var(--theme-bg) 58%,
+      var(--theme-accent) 100%
+    );
   width: 100%;
   overflow-x: hidden;
 }
