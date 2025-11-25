@@ -2,25 +2,34 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  /* ✅ 전역 모달 패딩만 사용 (개별 wrap 여백 없음) */
+  gap: 0; /* ✅ 구간별 간격을 margin으로 따로 제어 */
 }
 
-/* ✅ 부제목 간격만 ContactModal 전용으로 미세 조정 */
+/* 1) 제목 ↔ 부제목: 가깝게 */
+.contact-modal-wrap .modal-title {
+  margin-bottom: 2px;
+}
+
+/* 2) 부제목 ↔ 섹션: 멀게 */
 .contact-subtitle {
-  margin-top: -6px;
-  margin-bottom: 6px;
+  margin-top: 0;        /* 제목과 최대한 붙게 */
+  margin-bottom: 14px;  /* 섹션 시작 전 여유 */
 }
 
 /* 섹션 카드 */
 .contact-section {
-  padding: 15px 8px; /* 카드 내부 여백(콘텐츠용) */
+  padding: 15px 8px;
   border-radius: 12px;
   background-color: var(--theme-accent);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
   display: flex;
   flex-direction: column;
+}
+
+/* 3) 섹션 ↔ 섹션: 가깝게 */
+.contact-section + .contact-section {
+  margin-top: 6px;
 }
 
 /* 리스트 아이템 */
@@ -30,7 +39,7 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   gap: 8px;
-  padding: 0.65rem 0; 
+  padding: 0.65rem 0;
   border-bottom: 1px solid var(--border-color);
   font-size: 1.1rem;
   color: var(--text-main);
@@ -122,5 +131,10 @@
       height: 34px;
       font-size: 1.15rem;
     }
+  }
+
+  /* 작은 폰에서는 부제목-섹션 간격 살짝만 줄여도 균형 좋음 */
+  .contact-subtitle {
+    margin-bottom: 12px;
   }
 }
