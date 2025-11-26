@@ -25,6 +25,7 @@ export function Cover() {
 
   return (
     <div className="w-cover">
+
       {/* 신랑·신부 이름 */}
       <h1 className="names">
         <span>{GROOM_FULLNAME}</span>
@@ -38,68 +39,53 @@ export function Cover() {
 
       {/* 부모님 박스 */}
       <div className="family-section">
-        {/* 상단 긴 장식 라인 ✅ (넝쿨 흐름 + 자유로운 잎 방향) */}
+
+        {/* 상단 긴 장식 라인 ✅ (선 없이 잎만으로 구성된 미니멀 넝쿨) */}
         <div className="parent-line top">
-          <svg viewBox="0 0 320 32" aria-hidden="true">
-            {/* 메인 넝쿨 라인: 자연스러운 S-리듬 */}
-            <path
-              d="M6 18
-                 C58 4, 118 8, 160 14
-                 C208 21, 262 24, 314 12"
-              stroke="currentColor"
-              strokeWidth="0.85"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-              opacity="0.9"
-            />
-
-            {/* 넝쿨 잔가지(아주 미세한 보조 줄기) */}
-            <path
-              d="M86 12 C92 10, 96 8, 101 6"
-              stroke="currentColor"
-              strokeWidth="0.5"
-              strokeLinecap="round"
-              fill="none"
-              opacity="0.35"
-            />
-            <path
-              d="M214 17 C220 19, 226 20, 232 22"
-              stroke="currentColor"
-              strokeWidth="0.5"
-              strokeLinecap="round"
-              fill="none"
-              opacity="0.35"
-            />
-
-            {/* 잎사귀: 라인 따라 방향/각도/크기 다르게 + 일부 살짝 분리 */}
-            <g fill="currentColor" opacity="0.6">
-              {/* left leaf (살짝 위로 틀어진) */}
+          <svg viewBox="0 0 320 28" aria-hidden="true">
+            <g fill="currentColor" opacity="0.75">
+              {/* 왼쪽에서 오른쪽으로 “흐르는” 잎 리듬 */}
               <path
-                d="M70 12 C66 8, 59 9, 58 12 C59 15, 66 16, 70 12 Z"
-                transform="rotate(-22 64 12)"
+                d="M42 16 C36 11, 26 12, 25 16 C26 20, 36 21, 42 16 Z"
+                transform="rotate(-18 33.5 16)"
+                opacity="0.7"
               />
-              {/* left-mid leaf (길쭉, 반대 방향) */}
               <path
-                d="M105 10 C101 5, 92 7, 92 11 C94 15, 102 14, 105 10 Z"
-                transform="rotate(14 98 10)"
+                d="M78 13 C72 7, 60 9, 60 14 C62 19, 74 18, 78 13 Z"
+                transform="rotate(12 69 13)"
               />
-              {/* tiny sprout (라인에서 조금 떠 있음) */}
               <path
-                d="M138 8 C136 6, 132 6, 131 8 C132 10, 136 10, 138 8 Z"
-                transform="rotate(-8 134.5 8)"
+                d="M112 18 C106 12, 96 13, 95 18 C96 23, 106 23, 112 18 Z"
+                transform="rotate(-8 103.5 18)"
+                opacity="0.65"
+              />
+              <path
+                d="M148 11 C144 7, 136 8, 136 11 C137 14, 145 14, 148 11 Z"
+                transform="rotate(20 142 11)"
+                opacity="0.55"
+              />
+
+              {/* 중앙 근처 작은 새싹(살짝 떠 있는 느낌) */}
+              <path
+                d="M165 8 C163 6, 159 6, 158 8 C159 10, 163 10, 165 8 Z"
+                transform="rotate(-10 161.5 8)"
                 opacity="0.5"
               />
-              {/* right-mid leaf (아래쪽으로 툭 꺾인 느낌) */}
+
+              {/* 오른쪽으로 갈수록 잎이 살짝 커졌다가 가벼워지는 리듬 */}
               <path
-                d="M214 16 C219 12, 227 13, 228 17 C226 21, 218 20, 214 16 Z"
-                transform="rotate(26 221 16)"
+                d="M192 18 C198 12, 208 13, 209 18 C208 23, 198 23, 192 18 Z"
+                transform="rotate(10 200.5 18)"
+                opacity="0.65"
               />
-              {/* right leaf (살짝 분리 + 바람 방향) */}
               <path
-                d="M262 19 C268 15, 276 16, 277 20 C275 24, 267 23, 262 19 Z"
-                transform="rotate(-12 269.5 19)"
-                opacity="0.55"
+                d="M228 12 C234 7, 246 9, 246 14 C244 19, 232 17, 228 12 Z"
+                transform="rotate(-16 237 12)"
+              />
+              <path
+                d="M264 17 C270 12, 280 13, 281 17 C280 21, 270 22, 264 17 Z"
+                transform="rotate(8 272.5 17)"
+                opacity="0.7"
               />
             </g>
           </svg>
@@ -123,75 +109,58 @@ export function Cover() {
         </div>
         {/* END */}
 
-        {/* 하단 긴 장식 라인 ✅ (넝쿨 흐름 + 자유로운 잎 방향) */}
+        {/* 하단 긴 장식 라인 ✅ (선 없이 잎만, 상단과 리듬 통일) */}
         <div className="parent-line bottom">
-          <svg viewBox="0 0 320 32" aria-hidden="true">
-            {/* 메인 넝쿨 라인 */}
-            <path
-              d="M6 14
-                 C58 28, 118 24, 160 18
-                 C208 11, 262 8, 314 20"
-              stroke="currentColor"
-              strokeWidth="0.85"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-              opacity="0.9"
-            />
-
-            {/* 넝쿨 잔가지 */}
-            <path
-              d="M86 20 C92 22, 96 24, 101 26"
-              stroke="currentColor"
-              strokeWidth="0.5"
-              strokeLinecap="round"
-              fill="none"
-              opacity="0.35"
-            />
-            <path
-              d="M214 15 C220 13, 226 12, 232 10"
-              stroke="currentColor"
-              strokeWidth="0.5"
-              strokeLinecap="round"
-              fill="none"
-              opacity="0.35"
-            />
-
-            {/* 잎사귀 */}
-            <g fill="currentColor" opacity="0.6">
-              {/* left leaf */}
+          <svg viewBox="0 0 320 28" aria-hidden="true">
+            <g fill="currentColor" opacity="0.75">
               <path
-                d="M70 20 C66 24, 59 23, 58 20 C59 17, 66 16, 70 20 Z"
-                transform="rotate(20 64 20)"
+                d="M42 12 C36 17, 26 16, 25 12 C26 8, 36 7, 42 12 Z"
+                transform="rotate(18 33.5 12)"
+                opacity="0.7"
               />
-              {/* left-mid leaf */}
               <path
-                d="M105 22 C101 27, 92 25, 92 21 C94 17, 102 18, 105 22 Z"
-                transform="rotate(-16 98 22)"
+                d="M78 15 C72 21, 60 19, 60 14 C62 9, 74 10, 78 15 Z"
+                transform="rotate(-12 69 15)"
               />
-              {/* tiny sprout (살짝 분리) */}
               <path
-                d="M138 24 C136 26, 132 26, 131 24 C132 22, 136 22, 138 24 Z"
-                transform="rotate(10 134.5 24)"
+                d="M112 10 C106 16, 96 15, 95 10 C96 5, 106 5, 112 10 Z"
+                transform="rotate(8 103.5 10)"
+                opacity="0.65"
+              />
+              <path
+                d="M148 17 C144 21, 136 20, 136 17 C137 14, 145 14, 148 17 Z"
+                transform="rotate(-20 142 17)"
+                opacity="0.55"
+              />
+
+              {/* 중앙 근처 작은 새싹 */}
+              <path
+                d="M165 20 C163 22, 159 22, 158 20 C159 18, 163 18, 165 20 Z"
+                transform="rotate(10 161.5 20)"
                 opacity="0.5"
               />
-              {/* right-mid leaf */}
+
               <path
-                d="M214 16 C219 20, 227 19, 228 15 C226 11, 218 12, 214 16 Z"
-                transform="rotate(-24 221 16)"
+                d="M192 10 C198 16, 208 15, 209 10 C208 5, 198 5, 192 10 Z"
+                transform="rotate(-10 200.5 10)"
+                opacity="0.65"
               />
-              {/* right leaf */}
               <path
-                d="M262 12 C268 16, 276 15, 277 11 C275 7, 267 8, 262 12 Z"
-                transform="rotate(12 269.5 12)"
-                opacity="0.55"
+                d="M228 16 C234 21, 246 19, 246 14 C244 9, 232 11, 228 16 Z"
+                transform="rotate(16 237 16)"
+              />
+              <path
+                d="M264 11 C270 16, 280 15, 281 11 C280 7, 270 6, 264 11 Z"
+                transform="rotate(-8 272.5 11)"
+                opacity="0.7"
               />
             </g>
           </svg>
         </div>
+
       </div>
 
-      <Button variant="basic" onClick={() => setOpen(true)}>
+      <Button variant="basic" onClick={() => setOpen(true)}> 
         축하 인사 전하기
       </Button>
 
