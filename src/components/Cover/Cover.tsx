@@ -4,266 +4,104 @@ import { ContactModal } from "@/components/Cover/ContactModal";
 import { useContactInfo } from "@/ContactInfoProvider";
 import "./Cover.scss";
 
+function LeafLine({ variant }: { variant: "top" | "bottom" }) {
+  return (
+    <div className={`parent-line ${variant}`}>
+      <svg viewBox="0 0 320 34" aria-hidden="true" preserveAspectRatio="none">
+        {variant === "top" ? (
+          <g fill="currentColor">
+            <path d="M18 20 C16 17, 11 17, 10 20 C11 23, 16 23, 18 20 Z" transform="translate(14 20) rotate(-14) scale(1.0) translate(-14 -20)" opacity="0.54" />
+            <path d="M36 16 C34 13, 29 13, 28 16 C29 19, 34 19, 36 16 Z" transform="translate(32 16) rotate(16) scale(0.8) translate(-32 -16)" opacity="0.38" />
+            <path d="M54 21 C52 18, 47 18, 46 21 C47 24, 52 24, 54 21 Z" transform="translate(50 21) rotate(-6) scale(0.95) translate(-50 -21)" opacity="0.5" />
+            <path d="M72 15 C70 12, 65 12, 64 15 C65 18, 70 18, 72 15 Z" transform="translate(68 15) rotate(22) scale(0.85) translate(-68 -15)" opacity="0.44" />
+            <path d="M92 20 C90 17, 84 17, 83 20 C84 23, 90 23, 92 20 Z" transform="translate(87.5 20) rotate(-12) scale(1.02) translate(-87.5 -20)" opacity="0.56" />
+            <path d="M110 14 C108 11, 103 11, 102 14 C103 17, 108 17, 110 14 Z" transform="translate(106 14) rotate(6) scale(0.75) translate(-106 -14)" opacity="0.34" />
+            <path d="M128 18 C126 15, 121 15, 120 18 C121 21, 126 21, 128 18 Z" transform="translate(124 18) rotate(-20) scale(0.95) translate(-124 -18)" opacity="0.48" />
+
+            <path d="M148 15 C146 12, 141 12, 140 15 C141 18, 146 18, 148 15 Z" transform="translate(144 15) rotate(12) scale(0.9) translate(-144 -15)" opacity="0.46" />
+            <path d="M166 18 C164 15, 159 15, 158 18 C159 21, 164 21, 166 18 Z" transform="translate(162 18) rotate(-16) scale(0.9) translate(-162 -18)" opacity="0.46" />
+            <path d="M184 14 C182 11, 177 11, 176 14 C177 17, 182 17, 184 14 Z" transform="translate(180 14) rotate(-10) scale(0.88) translate(-180 -14)" opacity="0.44" />
+
+            <path d="M202 19 C200 16, 194 16, 193 19 C194 22, 200 22, 202 19 Z" transform="translate(197.5 19) rotate(10) scale(1.02) translate(-197.5 -19)" opacity="0.56" />
+            <path d="M220 15 C218 12, 213 12, 212 15 C213 18, 218 18, 220 15 Z" transform="translate(216 15) rotate(-18) scale(0.8) translate(-216 -15)" opacity="0.36" />
+            <path d="M238 20 C236 17, 231 17, 230 20 C231 23, 236 23, 238 20 Z" transform="translate(234 20) rotate(20) scale(0.96) translate(-234 -20)" opacity="0.5" />
+            <path d="M256 16 C254 13, 249 13, 248 16 C249 19, 254 19, 256 16 Z" transform="translate(252 16) rotate(-6) scale(0.82) translate(-252 -16)" opacity="0.4" />
+            <path d="M274 22 C272 19, 267 19, 266 22 C267 25, 272 25, 274 22 Z" transform="translate(270 22) rotate(14) scale(0.98) translate(-270 -22)" opacity="0.52" />
+            <path d="M292 19 C290 16, 285 16, 284 19 C285 22, 290 22, 292 19 Z" transform="translate(288 19) rotate(-10) scale(1.0) translate(-288 -19)" opacity="0.54" />
+
+            <path d="M56 8 C54 6, 51 6, 50 8 C51 10, 54 10, 56 8 Z" transform="translate(53 8) rotate(22) scale(0.55) translate(-53 -8)" opacity="0.16" />
+            <path d="M262 7 C260 5, 257 5, 256 7 C257 9, 260 9, 262 7 Z" transform="translate(259 7) rotate(-16) scale(0.55) translate(-259 -7)" opacity="0.16" />
+          </g>
+        ) : (
+          <g fill="currentColor">
+            <path d="M22 12 C20 15, 15 15, 14 12 C15 9, 20 9, 22 12 Z" transform="translate(18 12) rotate(18) scale(0.9) translate(-18 -12)" opacity="0.48" />
+            <path d="M42 19 C40 22, 35 22, 34 19 C35 16, 40 16, 42 19 Z" transform="translate(38 19) rotate(-8) scale(1.05) translate(-38 -19)" opacity="0.58" />
+            <path d="M62 14 C60 17, 55 17, 54 14 C55 11, 60 11, 62 14 Z" transform="translate(58 14) rotate(6) scale(0.78) translate(-58 -14)" opacity="0.34" />
+            <path d="M82 20 C80 23, 75 23, 74 20 C75 17, 80 17, 82 20 Z" transform="translate(78 20) rotate(-20) scale(1.02) translate(-78 -20)" opacity="0.56" />
+            <path d="M102 17 C100 20, 94 20, 93 17 C94 14, 100 14, 102 17 Z" transform="translate(97.5 17) rotate(12) scale(0.9) translate(-97.5 -17)" opacity="0.46" />
+
+            <path d="M126 22 C124 25, 119 25, 118 22 C119 19, 124 19, 126 22 Z" transform="translate(122 22) rotate(-4) scale(1.05) translate(-122 -22)" opacity="0.62" />
+            <path d="M146 16 C144 19, 139 19, 138 16 C139 13, 144 13, 146 16 Z" transform="translate(142 16) rotate(14) scale(0.85) translate(-142 -16)" opacity="0.4" />
+            <path d="M166 22 C164 25, 159 25, 158 22 C159 19, 164 19, 166 22 Z" transform="translate(162 22) rotate(-22) scale(0.95) translate(-162 -22)" opacity="0.5" />
+            <path d="M184 18 C182 21, 177 21, 176 18 C177 15, 182 15, 184 18 Z" transform="translate(180 18) rotate(26) scale(0.9) translate(-180 -18)" opacity="0.46" />
+
+            <path d="M202 21 C200 24, 194 24, 193 21 C194 18, 200 18, 202 21 Z" transform="translate(197.5 21) rotate(-8) scale(0.98) translate(-197.5 -21)" opacity="0.52" />
+            <path d="M222 15 C220 18, 215 18, 214 15 C215 12, 220 12, 222 15 Z" transform="translate(218 15) rotate(20) scale(0.85) translate(-218 -15)" opacity="0.4" />
+            <path d="M242 20 C240 23, 235 23, 234 20 C235 17, 240 17, 242 20 Z" transform="translate(238 20) rotate(-12) scale(1.02) translate(-238 -20)" opacity="0.56" />
+            <path d="M262 14 C260 17, 255 17, 254 14 C255 11, 260 11, 262 14 Z" transform="translate(258 14) rotate(-16) scale(0.8) translate(-258 -14)" opacity="0.34" />
+            <path d="M282 18 C280 21, 275 21, 274 18 C275 15, 280 15, 282 18 Z" transform="translate(278 18) rotate(8) scale(0.92) translate(-278 -18)" opacity="0.46" />
+            <path d="M300 17 C298 20, 293 20, 292 17 C293 14, 298 14, 300 17 Z" transform="translate(296 17) rotate(-6) scale(1.0) translate(-296 -17)" opacity="0.52" />
+
+            <path d="M92 30 C90 32, 87 32, 86 30 C87 28, 90 28, 92 30 Z" transform="translate(89 30) rotate(-12) scale(0.55) translate(-89 -30)" opacity="0.16" />
+            <path d="M254 29 C252 31, 249 31, 248 29 C249 27, 252 27, 254 29 Z" transform="translate(251 29) rotate(18) scale(0.55) translate(-251 -29)" opacity="0.16" />
+          </g>
+        )}
+      </svg>
+    </div>
+  );
+}
+
 export function Cover() {
   const [open, setOpen] = useState(false);
-
   const info = useContactInfo();
 
-  const GROOM = info.find((c) => c.id === "groom");
-  const BRIDE = info.find((c) => c.id === "bride");
+  const getName = (id: string) => info.find((c) => c.id === id)?.name;
 
-  const GROOM_FATHER = info.find((c) => c.id === "groom-father")?.name;
-  const GROOM_MOTHER = info.find((c) => c.id === "groom-mother")?.name;
-  const BRIDE_FATHER = info.find((c) => c.id === "bride-father")?.name;
-  const BRIDE_MOTHER = info.find((c) => c.id === "bride-mother")?.name;
+  const GROOM_FULLNAME = getName("groom");
+  const BRIDE_FULLNAME = getName("bride");
 
-  const GROOM_TITLE = "아들";
-  const BRIDE_TITLE = "딸";
-
-  const GROOM_FULLNAME = GROOM?.name;
-  const BRIDE_FULLNAME = BRIDE?.name;
+  const GROOM_FATHER = getName("groom-father");
+  const GROOM_MOTHER = getName("groom-mother");
+  const BRIDE_FATHER = getName("bride-father");
+  const BRIDE_MOTHER = getName("bride-mother");
 
   return (
     <div className="w-cover">
-      {/* 신랑·신부 이름 */}
       <h1 className="names">
         <span>{GROOM_FULLNAME}</span>
         <span className="diamond">♥</span>
         <span>{BRIDE_FULLNAME}</span>
       </h1>
 
-      {/* 날짜/장소 */}
       <p className="date">2026.07.11. (토) 오전 11시</p>
       <p className="place">유성컨벤션웨딩홀 3층 그랜드홀</p>
 
-      {/* 부모님 박스 */}
       <div className="family-section">
-        {/* 상단 긴 장식 라인 ✅ (잎-only / 완만한 아치 / 굵기 균일 / 비대칭 리듬) */}
-        <div className="parent-line top">
-          <svg viewBox="0 0 320 34" aria-hidden="true">
-            <g fill="currentColor">
-              {/* TOP FLOW: 큰/중간/작은 잎을 전 구간에 분산 */}
-              <path
-                d="M18 20 C16 17, 11 17, 10 20 C11 23, 16 23, 18 20 Z"
-                transform="translate(14 20) rotate(-14) scale(1.0) translate(-14 -20)"
-                opacity="0.54"
-              />
-              <path
-                d="M36 16 C34 13, 29 13, 28 16 C29 19, 34 19, 36 16 Z"
-                transform="translate(32 16) rotate(16) scale(0.8) translate(-32 -16)"
-                opacity="0.38"
-              />
-              <path
-                d="M54 21 C52 18, 47 18, 46 21 C47 24, 52 24, 54 21 Z"
-                transform="translate(50 21) rotate(-6) scale(0.95) translate(-50 -21)"
-                opacity="0.5"
-              />
-              <path
-                d="M72 15 C70 12, 65 12, 64 15 C65 18, 70 18, 72 15 Z"
-                transform="translate(68 15) rotate(22) scale(0.85) translate(-68 -15)"
-                opacity="0.44"
-              />
-              <path
-                d="M92 20 C90 17, 84 17, 83 20 C84 23, 90 23, 92 20 Z"
-                transform="translate(87.5 20) rotate(-12) scale(1.02) translate(-87.5 -20)"
-                opacity="0.56"
-              />
-              <path
-                d="M110 14 C108 11, 103 11, 102 14 C103 17, 108 17, 110 14 Z"
-                transform="translate(106 14) rotate(6) scale(0.75) translate(-106 -14)"
-                opacity="0.34"
-              />
-              <path
-                d="M128 18 C126 15, 121 15, 120 18 C121 21, 126 21, 128 18 Z"
-                transform="translate(124 18) rotate(-20) scale(0.95) translate(-124 -18)"
-                opacity="0.48"
-              />
+        <LeafLine variant="top" />
 
-              {/* 중앙은 “몰림 금지” — 중간 크기만 리듬 */}
-              <path
-                d="M148 15 C146 12, 141 12, 140 15 C141 18, 146 18, 148 15 Z"
-                transform="translate(144 15) rotate(12) scale(0.9) translate(-144 -15)"
-                opacity="0.46"
-              />
-              <path
-                d="M166 18 C164 15, 159 15, 158 18 C159 21, 164 21, 166 18 Z"
-                transform="translate(162 18) rotate(-16) scale(0.9) translate(-162 -18)"
-                opacity="0.46"
-              />
-              <path
-                d="M184 14 C182 11, 177 11, 176 14 C177 17, 182 17, 184 14 Z"
-                transform="translate(180 14) rotate(-10) scale(0.88) translate(-180 -14)"
-                opacity="0.44"
-              />
-
-              {/* RIGHT FLOW */}
-              <path
-                d="M202 19 C200 16, 194 16, 193 19 C194 22, 200 22, 202 19 Z"
-                transform="translate(197.5 19) rotate(10) scale(1.02) translate(-197.5 -19)"
-                opacity="0.56"
-              />
-              <path
-                d="M220 15 C218 12, 213 12, 212 15 C213 18, 218 18, 220 15 Z"
-                transform="translate(216 15) rotate(-18) scale(0.8) translate(-216 -15)"
-                opacity="0.36"
-              />
-              <path
-                d="M238 20 C236 17, 231 17, 230 20 C231 23, 236 23, 238 20 Z"
-                transform="translate(234 20) rotate(20) scale(0.96) translate(-234 -20)"
-                opacity="0.5"
-              />
-              <path
-                d="M256 16 C254 13, 249 13, 248 16 C249 19, 254 19, 256 16 Z"
-                transform="translate(252 16) rotate(-6) scale(0.82) translate(-252 -16)"
-                opacity="0.4"
-              />
-              <path
-                d="M274 22 C272 19, 267 19, 266 22 C267 25, 272 25, 274 22 Z"
-                transform="translate(270 22) rotate(14) scale(0.98) translate(-270 -22)"
-                opacity="0.52"
-              />
-              <path
-                d="M292 19 C290 16, 285 16, 284 19 C285 22, 290 22, 292 19 Z"
-                transform="translate(288 19) rotate(-10) scale(1.0) translate(-288 -19)"
-                opacity="0.54"
-              />
-
-              {/* 흩날림 미세 잎(중앙X, 끝에만) */}
-              <path
-                d="M56 8 C54 6, 51 6, 50 8 C51 10, 54 10, 56 8 Z"
-                transform="translate(53 8) rotate(22) scale(0.55) translate(-53 -8)"
-                opacity="0.16"
-              />
-              <path
-                d="M262 7 C260 5, 257 5, 256 7 C257 9, 260 9, 262 7 Z"
-                transform="translate(259 7) rotate(-16) scale(0.55) translate(-259 -7)"
-                opacity="0.16"
-              />
-            </g>
-          </svg>
-        </div>
-
-        {/* 부모님 정보 — 공백 포함 절대 수정 금지 구역 */}
         <div className="name">
-          <span className="parent-names">
-            {GROOM_FATHER} · {GROOM_MOTHER}의
-          </span>{" "}
-          <span className="relation-name relation-name--adjust">
-            {GROOM_TITLE}
-          </span>{" "}
+          <span className="parent-names">{GROOM_FATHER} · {GROOM_MOTHER}의</span>{" "}
+          <span className="relation-name relation-name--adjust">아들</span>{" "}
           {GROOM_FULLNAME}
         </div>
 
         <div className="name">
-          <span className="parent-names">
-            {BRIDE_FATHER} · {BRIDE_MOTHER}의
-          </span>{" "}
-          <span className="relation-name relation-name--adjust">
-            {BRIDE_TITLE}
-          </span>{" "}
+          <span className="parent-names">{BRIDE_FATHER} · {BRIDE_MOTHER}의</span>{" "}
+          <span className="relation-name relation-name--adjust">딸</span>{" "}
           {BRIDE_FULLNAME}
         </div>
-        {/* END */}
 
-        {/* 하단 긴 장식 라인 ✅ (상단과 다르게: 더 낮게 깔린 완만 아치 / 비대칭 / 균일 굵기) */}
-        <div className="parent-line bottom">
-          <svg viewBox="0 0 320 34" aria-hidden="true">
-            <g fill="currentColor">
-              {/* BOTTOM FLOW: 상단과 다른 고저/밀도 */}
-              <path
-                d="M22 12 C20 15, 15 15, 14 12 C15 9, 20 9, 22 12 Z"
-                transform="translate(18 12) rotate(18) scale(0.9) translate(-18 -12)"
-                opacity="0.48"
-              />
-              <path
-                d="M42 19 C40 22, 35 22, 34 19 C35 16, 40 16, 42 19 Z"
-                transform="translate(38 19) rotate(-8) scale(1.05) translate(-38 -19)"
-                opacity="0.58"
-              />
-              <path
-                d="M62 14 C60 17, 55 17, 54 14 C55 11, 60 11, 62 14 Z"
-                transform="translate(58 14) rotate(6) scale(0.78) translate(-58 -14)"
-                opacity="0.34"
-              />
-              <path
-                d="M82 20 C80 23, 75 23, 74 20 C75 17, 80 17, 82 20 Z"
-                transform="translate(78 20) rotate(-20) scale(1.02) translate(-78 -20)"
-                opacity="0.56"
-              />
-              <path
-                d="M102 17 C100 20, 94 20, 93 17 C94 14, 100 14, 102 17 Z"
-                transform="translate(97.5 17) rotate(12) scale(0.9) translate(-97.5 -17)"
-                opacity="0.46"
-              />
-
-              {/* 바텀 중앙은 살짝 ‘무게감’만 주되 몰리지 않게 분산 */}
-              <path
-                d="M126 22 C124 25, 119 25, 118 22 C119 19, 124 19, 126 22 Z"
-                transform="translate(122 22) rotate(-4) scale(1.05) translate(-122 -22)"
-                opacity="0.62"
-              />
-              <path
-                d="M146 16 C144 19, 139 19, 138 16 C139 13, 144 13, 146 16 Z"
-                transform="translate(142 16) rotate(14) scale(0.85) translate(-142 -16)"
-                opacity="0.4"
-              />
-              <path
-                d="M166 22 C164 25, 159 25, 158 22 C159 19, 164 19, 166 22 Z"
-                transform="translate(162 22) rotate(-22) scale(0.95) translate(-162 -22)"
-                opacity="0.5"
-              />
-              <path
-                d="M184 18 C182 21, 177 21, 176 18 C177 15, 182 15, 184 18 Z"
-                transform="translate(180 18) rotate(26) scale(0.9) translate(-180 -18)"
-                opacity="0.46"
-              />
-
-              {/* RIGHT FLOW */}
-              <path
-                d="M202 21 C200 24, 194 24, 193 21 C194 18, 200 18, 202 21 Z"
-                transform="translate(197.5 21) rotate(-8) scale(0.98) translate(-197.5 -21)"
-                opacity="0.52"
-              />
-              <path
-                d="M222 15 C220 18, 215 18, 214 15 C215 12, 220 12, 222 15 Z"
-                transform="translate(218 15) rotate(20) scale(0.85) translate(-218 -15)"
-                opacity="0.4"
-              />
-              <path
-                d="M242 20 C240 23, 235 23, 234 20 C235 17, 240 17, 242 20 Z"
-                transform="translate(238 20) rotate(-12) scale(1.02) translate(-238 -20)"
-                opacity="0.56"
-              />
-              <path
-                d="M262 14 C260 17, 255 17, 254 14 C255 11, 260 11, 262 14 Z"
-                transform="translate(258 14) rotate(-16) scale(0.8) translate(-258 -14)"
-                opacity="0.34"
-              />
-              <path
-                d="M282 18 C280 21, 275 21, 274 18 C275 15, 280 15, 282 18 Z"
-                transform="translate(278 18) rotate(8) scale(0.92) translate(-278 -18)"
-                opacity="0.46"
-              />
-              <path
-                d="M300 17 C298 20, 293 20, 292 17 C293 14, 298 14, 300 17 Z"
-                transform="translate(296 17) rotate(-6) scale(1.0) translate(-296 -17)"
-                opacity="0.52"
-              />
-
-              {/* 흩날림 미세 잎(바텀은 아래쪽에만) */}
-              <path
-                d="M92 30 C90 32, 87 32, 86 30 C87 28, 90 28, 92 30 Z"
-                transform="translate(89 30) rotate(-12) scale(0.55) translate(-89 -30)"
-                opacity="0.16"
-              />
-              <path
-                d="M254 29 C252 31, 249 31, 248 29 C249 27, 252 27, 254 29 Z"
-                transform="translate(251 29) rotate(18) scale(0.55) translate(-251 -29)"
-                opacity="0.16"
-              />
-            </g>
-          </svg>
-        </div>
+        <LeafLine variant="bottom" />
       </div>
 
       <Button variant="basic" onClick={() => setOpen(true)}>
