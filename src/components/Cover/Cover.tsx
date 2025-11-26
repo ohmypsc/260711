@@ -41,106 +41,93 @@ export function Cover() {
         {/* 상단 긴 장식 라인 ✅ (더 원만한 아치 + 비대칭 리듬) */}
         <div className="parent-line top">
           <svg viewBox="0 0 320 34" aria-hidden="true">
-            <g fill="currentColor">
-              {/* TOP: 높낮이 변화가 부드러운 “완만한 아치” 흐름 */}
-              <path
-                d="M18 20 C16 17, 11 17, 10 20 C11 23, 16 23, 18 20 Z"
-                transform="translate(14 20) rotate(-18) scale(0.9) translate(-14 -20)"
-                opacity="0.44"
-              />
-              <path
-                d="M38 16 C36 13, 31 13, 30 16 C31 19, 36 19, 38 16 Z"
-                transform="translate(34 16) rotate(12) scale(1.1) translate(-34 -16)"
-                opacity="0.66"
-              />
-              <path
-                d="M58 21 C56 18, 51 18, 50 21 C51 24, 56 24, 58 21 Z"
-                transform="translate(54 21) rotate(-6) scale(0.82) translate(-54 -21)"
-                opacity="0.36"
-              />
-              <path
-                d="M78 15 C76 12, 71 12, 70 15 C71 18, 76 18, 78 15 Z"
-                transform="translate(74 15) rotate(22) scale(1.02) translate(-74 -15)"
-                opacity="0.6"
-              />
-              <path
-                d="M98 19 C96 16, 90 16, 89 19 C90 22, 96 22, 98 19 Z"
-                transform="translate(93.5 19) rotate(-14) scale(0.92) translate(-93.5 -19)"
-                opacity="0.5"
-              />
-              <path
-                d="M118 14 C116 11, 111 11, 110 14 C111 17, 116 17, 118 14 Z"
-                transform="translate(114 14) rotate(6) scale(0.8) translate(-114 -14)"
-                opacity="0.34"
-              />
-              <path
-                d="M140 18 C138 15, 133 15, 132 18 C133 21, 138 21, 140 18 Z"
-                transform="translate(136 18) rotate(-24) scale(1.05) translate(-136 -18)"
-                opacity="0.58"
-              />
+  <g fill="currentColor">
+    {/* LEFT: 큰/작은 섞어서 시작 굵기 확보 */}
+    <path d="M18 20 C16 17, 11 17, 10 20 C11 23, 16 23, 18 20 Z"
+      transform="translate(14 20) rotate(-16) scale(1.05) translate(-14 -20)"
+      opacity="0.58"
+    />
+    <path d="M36 15 C34 12, 29 12, 28 15 C29 18, 34 18, 36 15 Z"
+      transform="translate(32 15) rotate(18) scale(0.78) translate(-32 -15)"
+      opacity="0.38"
+    />
+    <path d="M54 22 C52 19, 47 19, 46 22 C47 25, 52 25, 54 22 Z"
+      transform="translate(50 22) rotate(-6) scale(0.92) translate(-50 -22)"
+      opacity="0.5"
+    />
+    <path d="M72 14 C70 11, 65 11, 64 14 C65 17, 70 17, 72 14 Z"
+      transform="translate(68 14) rotate(26) scale(0.85) translate(-68 -14)"
+      opacity="0.44"
+    />
 
-              {/* 중앙 근처: 작고 옅은 잎이 “자르르” */}
-              <path
-                d="M158 12 C156 10, 153 10, 152 12 C153 14, 156 14, 158 12 Z"
-                transform="translate(155 12) rotate(14) scale(0.65) translate(-155 -12)"
-                opacity="0.24"
-              />
-              <path
-                d="M170 16 C168 14, 165 14, 164 16 C165 18, 168 18, 170 16 Z"
-                transform="translate(167 16) rotate(-18) scale(0.7) translate(-167 -16)"
-                opacity="0.3"
-              />
-              <path
-                d="M182 11 C180 9, 177 9, 176 11 C177 13, 180 13, 182 11 Z"
-                transform="translate(179 11) rotate(-32) scale(0.6) translate(-179 -11)"
-                opacity="0.22"
-              />
-              <path
-                d="M194 18 C192 16, 189 16, 188 18 C189 20, 192 20, 194 18 Z"
-                transform="translate(191 18) rotate(20) scale(0.72) translate(-191 -18)"
-                opacity="0.28"
-              />
+    {/* LEFT-MID */}
+    <path d="M90 19 C88 16, 82 16, 81 19 C82 22, 88 22, 90 19 Z"
+      transform="translate(85.5 19) rotate(-12) scale(1.02) translate(-85.5 -19)"
+      opacity="0.56"
+    />
+    <path d="M108 13 C106 10, 101 10, 100 13 C101 16, 106 16, 108 13 Z"
+      transform="translate(104 13) rotate(8) scale(0.74) translate(-104 -13)"
+      opacity="0.34"
+    />
+    <path d="M126 18 C124 15, 119 15, 118 18 C119 21, 124 21, 126 18 Z"
+      transform="translate(122 18) rotate(-22) scale(0.95) translate(-122 -18)"
+      opacity="0.48"
+    />
 
-              {/* 오른쪽: 완만하게 내려왔다가 살짝 올라오는 자유 아치 */}
-              <path
-                d="M210 16 C208 13, 203 13, 202 16 C203 19, 208 19, 210 16 Z"
-                transform="translate(206 16) rotate(8) scale(0.9) translate(-206 -16)"
-                opacity="0.5"
-              />
-              <path
-                d="M230 20 C228 17, 223 17, 222 20 C223 23, 228 23, 230 20 Z"
-                transform="translate(226 20) rotate(-16) scale(1.15) translate(-226 -20)"
-                opacity="0.64"
-              />
-              <path
-                d="M250 17 C248 14, 243 14, 242 17 C243 20, 248 20, 250 17 Z"
-                transform="translate(246 17) rotate(4) scale(0.8) translate(-246 -17)"
-                opacity="0.38"
-              />
-              <path
-                d="M270 22 C268 19, 263 19, 262 22 C263 25, 268 25, 270 22 Z"
-                transform="translate(266 22) rotate(18) scale(1.0) translate(-266 -22)"
-                opacity="0.56"
-              />
-              <path
-                d="M292 19 C290 16, 285 16, 284 19 C285 22, 290 22, 292 19 Z"
-                transform="translate(288 19) rotate(-10) scale(0.92) translate(-288 -19)"
-                opacity="0.46"
-              />
+    {/* CENTER: 몰리지 않게 “중간 크기”로만 간격 유지 */}
+    <path d="M148 14 C146 11, 141 11, 140 14 C141 17, 146 17, 148 14 Z"
+      transform="translate(144 14) rotate(14) scale(0.9) translate(-144 -14)"
+      opacity="0.46"
+    />
+    <path d="M166 18 C164 15, 159 15, 158 18 C159 21, 164 21, 166 18 Z"
+      transform="translate(162 18) rotate(-18) scale(0.9) translate(-162 -18)"
+      opacity="0.46"
+    />
+    <path d="M184 13 C182 10, 177 10, 176 13 C177 16, 182 16, 184 13 Z"
+      transform="translate(180 13) rotate(-10) scale(0.88) translate(-180 -13)"
+      opacity="0.44"
+    />
 
-              {/* 흩날림 보조 잎(탑은 살짝 위쪽으로) */}
-              <path
-                d="M86 7 C84 5, 81 5, 80 7 C81 9, 84 9, 86 7 Z"
-                transform="translate(83 7) rotate(28) scale(0.55) translate(-83 -7)"
-                opacity="0.16"
-              />
-              <path
-                d="M244 9 C242 7, 239 7, 238 9 C239 11, 242 11, 244 9 Z"
-                transform="translate(241 9) rotate(-12) scale(0.6) translate(-241 -9)"
-                opacity="0.18"
-              />
-            </g>
-          </svg>
+    {/* RIGHT-MID */}
+    <path d="M202 19 C200 16, 194 16, 193 19 C194 22, 200 22, 202 19 Z"
+      transform="translate(197.5 19) rotate(10) scale(1.02) translate(-197.5 -19)"
+      opacity="0.56"
+    />
+    <path d="M220 14 C218 11, 213 11, 212 14 C213 17, 218 17, 220 14 Z"
+      transform="translate(216 14) rotate(-20) scale(0.78) translate(-216 -14)"
+      opacity="0.36"
+    />
+    <path d="M238 20 C236 17, 231 17, 230 20 C231 23, 236 23, 238 20 Z"
+      transform="translate(234 20) rotate(22) scale(0.96) translate(-234 -20)"
+      opacity="0.5"
+    />
+
+    {/* RIGHT: 끝도 굵기 유지하면서 자연스럽게 마무리 */}
+    <path d="M256 15 C254 12, 249 12, 248 15 C249 18, 254 18, 256 15 Z"
+      transform="translate(252 15) rotate(-6) scale(0.82) translate(-252 -15)"
+      opacity="0.4"
+    />
+    <path d="M274 22 C272 19, 267 19, 266 22 C267 25, 272 25, 274 22 Z"
+      transform="translate(270 22) rotate(16) scale(0.98) translate(-270 -22)"
+      opacity="0.52"
+    />
+    <path d="M292 18 C290 15, 285 15, 284 18 C285 21, 290 21, 292 18 Z"
+      transform="translate(288 18) rotate(-12) scale(1.05) translate(-288 -18)"
+      opacity="0.58"
+    />
+
+    {/* 아주 미세한 흩날림 2개 (중앙 X, 좌우 끝에만) */}
+    <path d="M58 8 C56 6, 53 6, 52 8 C53 10, 56 10, 58 8 Z"
+      transform="translate(55 8) rotate(24) scale(0.55) translate(-55 -8)"
+      opacity="0.18"
+    />
+    <path d="M260 7 C258 5, 255 5, 254 7 C255 9, 258 9, 260 7 Z"
+      transform="translate(257 7) rotate(-18) scale(0.55) translate(-257 -7)"
+      opacity="0.18"
+    />
+  </g>
+</svg>
+
         </div>
 
         {/* 부모님 정보 — 공백 포함 절대 수정 금지 구역 */}
