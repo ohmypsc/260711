@@ -25,7 +25,6 @@ export function Cover() {
 
   return (
     <div className="w-cover">
-
       {/* 신랑·신부 이름 */}
       <h1 className="names">
         <span>{GROOM_FULLNAME}</span>
@@ -39,15 +38,14 @@ export function Cover() {
 
       {/* 부모님 박스 */}
       <div className="family-section">
-
-        {/* 상단 긴 장식 라인 ✅ (자연스러운 넝쿨 곡선 + 미세 잎) */}
+        {/* 상단 긴 장식 라인 ✅ (자유분방 + 일부 잎 살짝 분리) */}
         <div className="parent-line top">
-          <svg viewBox="0 0 320 26" aria-hidden="true">
-            {/* 메인 넝쿨 라인: 자연스럽게 흐르는 단일 곡선 */}
+          <svg viewBox="0 0 320 30" aria-hidden="true">
+            {/* 메인 넝쿨 라인: 자연스럽게 흐르는 리듬 */}
             <path
-              d="M8 14
-                 C70 4, 120 6, 160 12
-                 C205 19, 250 20, 312 12"
+              d="M6 16
+                 C55 3, 120 7, 160 13
+                 C205 20, 260 23, 314 11"
               stroke="currentColor"
               strokeWidth="0.85"
               strokeLinecap="round"
@@ -56,16 +54,28 @@ export function Cover() {
               opacity="0.9"
             />
 
-            {/* 잎사귀: 라인 흐름 따라 아주 작게 3~4개 */}
+            {/* 잎사귀: 규칙 X, 일부는 라인에서 살짝 떨어뜨림 */}
             <g fill="currentColor" opacity="0.55">
-              {/* left leaf */}
-              <path d="M74 10 C70 7, 64 8, 63 11 C64 14, 70 14, 74 10 Z" />
-              {/* left-mid leaf */}
-              <path d="M118 9 C114 6, 109 7, 108 10 C109 13, 114 13, 118 9 Z" />
-              {/* right-mid leaf */}
-              <path d="M208 13 C212 10, 218 11, 219 14 C218 17, 212 17, 208 13 Z" />
-              {/* right leaf */}
-              <path d="M252 14 C256 11, 262 12, 263 15 C262 18, 256 18, 252 14 Z" />
+              {/* left small leaf (on line) */}
+              <path d="M58 9 C54 6, 48 7, 47 10 C49 13, 55 13, 58 9 Z" />
+              {/* left-mid leaf (on line, longer) */}
+              <path d="M108 8 C103 4, 95 6, 95 10 C97 14, 105 13, 108 8 Z" />
+
+              {/* tiny sprout leaf (detached, 살짝 위로 떠 있음) */}
+              <path
+                d="M145 9 C143 7, 139 7, 138 9 C139 11, 143 11, 145 9 Z"
+                transform="rotate(-8 141.5 9)"
+                opacity="0.5"
+              />
+
+              {/* right-mid leaf (on line, flipped 느낌) */}
+              <path d="M214 14 C218 10, 226 11, 227 15 C225 19, 217 18, 214 14 Z" />
+
+              {/* right leaf (detached, 라인에서 살짝 아래로) */}
+              <path
+                d="M266 18 C271 14, 279 15, 280 19 C278 23, 270 22, 266 18 Z"
+                transform="rotate(6 273 18)"
+              />
             </g>
           </svg>
         </div>
@@ -88,14 +98,14 @@ export function Cover() {
         </div>
         {/* END */}
 
-        {/* 하단 긴 장식 라인 ✅ (자연스러운 넝쿨 곡선 + 미세 잎) */}
+        {/* 하단 긴 장식 라인 ✅ (자유분방 + 일부 잎 살짝 분리) */}
         <div className="parent-line bottom">
-          <svg viewBox="0 0 320 26" aria-hidden="true">
+          <svg viewBox="0 0 320 30" aria-hidden="true">
             {/* 메인 넝쿨 라인 */}
             <path
-              d="M8 12
-                 C70 22, 120 20, 160 14
-                 C205 7, 250 6, 312 14"
+              d="M6 14
+                 C55 27, 120 23, 160 17
+                 C205 9, 260 6, 314 18"
               stroke="currentColor"
               strokeWidth="0.85"
               strokeLinecap="round"
@@ -106,18 +116,29 @@ export function Cover() {
 
             {/* 잎사귀 */}
             <g fill="currentColor" opacity="0.55">
-              {/* left leaf */}
-              <path d="M74 16 C70 19, 64 18, 63 15 C64 12, 70 12, 74 16 Z" />
-              {/* left-mid leaf */}
-              <path d="M118 17 C114 20, 109 19, 108 16 C109 13, 114 13, 118 17 Z" />
-              {/* right-mid leaf */}
-              <path d="M208 13 C212 16, 218 15, 219 12 C218 9, 212 9, 208 13 Z" />
-              {/* right leaf */}
-              <path d="M252 12 C256 15, 262 14, 263 11 C262 8, 256 8, 252 12 Z" />
+              {/* left small leaf (on line) */}
+              <path d="M58 21 C54 24, 48 23, 47 20 C49 17, 55 17, 58 21 Z" />
+              {/* left-mid leaf (on line, longer) */}
+              <path d="M108 22 C103 26, 95 24, 95 20 C97 16, 105 17, 108 22 Z" />
+
+              {/* tiny sprout leaf (detached, 살짝 아래로 떠 있음) */}
+              <path
+                d="M145 20 C143 22, 139 22, 138 20 C139 18, 143 18, 145 20 Z"
+                transform="rotate(10 141.5 20)"
+                opacity="0.5"
+              />
+
+              {/* right-mid leaf (on line) */}
+              <path d="M214 16 C218 20, 226 19, 227 15 C225 11, 217 12, 214 16 Z" />
+
+              {/* right leaf (detached, 살짝 위로) */}
+              <path
+                d="M266 11 C271 15, 279 14, 280 10 C278 6, 270 7, 266 11 Z"
+                transform="rotate(-6 273 11)"
+              />
             </g>
           </svg>
         </div>
-
       </div>
 
       <Button variant="basic" onClick={() => setOpen(true)}>
