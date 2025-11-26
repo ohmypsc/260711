@@ -18,7 +18,7 @@ function LeafDivider() {
             opacity="0.42"
           />
 
-          {/* LEFT FLOW: 커버 느낌 유지 + 약간 더 가벼운 시작 */}
+          {/* LEFT FLOW */}
           <path
             d="M20 19 C18 16, 13 16, 12 19 C13 22, 18 22, 20 19 Z"
             transform="translate(16 19) rotate(-18) scale(0.95) translate(-16 -19)"
@@ -45,7 +45,7 @@ function LeafDivider() {
             opacity="0.54"
           />
 
-          {/* MID: 중앙 몰림 없이 잎 크기/농도 살짝 변주 */}
+          {/* MID */}
           <path
             d="M122 16 C120 13, 115 13, 114 16 C115 19, 120 19, 122 16 Z"
             transform="translate(118 16) rotate(8) scale(0.82) translate(-118 -16)"
@@ -72,7 +72,7 @@ function LeafDivider() {
             opacity="0.4"
           />
 
-          {/* RIGHT FLOW: 조금 더 완만하게 퍼지는 마무리 */}
+          {/* RIGHT FLOW */}
           <path
             d="M214 19 C212 16, 206 16, 205 19 C206 22, 212 22, 214 19 Z"
             transform="translate(209.5 19) rotate(10) scale(1.0) translate(-209.5 -19)"
@@ -99,7 +99,7 @@ function LeafDivider() {
             opacity="0.52"
           />
 
-          {/* 흩날림 미세 잎(끝/중간에 아주 소량) */}
+          {/* 흩날림 */}
           <path
             d="M66 7 C64 5, 61 5, 60 7 C61 9, 64 9, 66 7 Z"
             transform="translate(63 7) rotate(26) scale(0.55) translate(-63 -7)"
@@ -116,7 +116,6 @@ function LeafDivider() {
   );
 }
 
-
 export function Invitation(): JSX.Element {
   return (
     <section className="invitation">
@@ -126,36 +125,37 @@ export function Invitation(): JSX.Element {
         {/* 1. 시(詩) 인용 부분 */}
         <div className="invitation-text-block poetry-section">
           <div className="inv-content">
-            나는 오래된 거리처럼 너를 사랑하고<br />
-            별들은 벌들처럼 웅성거리고<br />
+            <p>나는 오래된 거리처럼 너를 사랑하고</p>
+            <p>별들은 벌들처럼 웅성거리고</p>
           </div>
 
           <div className="inv-content">
-            여름에는 작은 은색 드럼을 치는 것처럼<br />
-            네 손바닥을 두드리는 비를 줄게<br />
-            과거에게 그랬듯 미래에게도 아첨하지 않을게<br />
+            <p>여름에는 작은 은색 드럼을 치는 것처럼</p>
+            <p>네 손바닥을 두드리는 비를 줄게</p>
+            <p>과거에게 그랬듯 미래에게도 아첨하지 않을게</p>
           </div>
 
           <div className="inv-content">
-            어린 시절 순결한 비누 거품 속에서 우리가 했던 맹세들을 찾아<br />
-            너의 팔에 모두 적어줄게<br />
+            <p>어린 시절 순결한 비누 거품 속에서 우리가 했던 맹세들을 찾아</p>
+            <p>너의 팔에 모두 적어줄게</p>
           </div>
 
           <div className="inv-content poet">
-            진은영, &lt;청혼&gt; 중
+            <p>진은영, &lt;청혼&gt; 중</p>
           </div>
         </div>
 
-        {/* divider line ✅ Cover와 동일한 잎 라인 */}
+        {/* divider line */}
         <LeafDivider />
 
+        {/* 2. 우리 초대글 */}
         <div className="invitation-text-block our-message-section">
           <div className="inv-content">
-            오래된 거리처럼 익숙하지만,<br />
-            여름비도 즐겁게 맞고,<br />
-            시간의 흐름에 기대지 않고 서로에게 최선을 다하며,<br />
-            어린 시절 순수한 마음으로 서로를 대하는 부부가 되고자 합니다.<br />
-            이 시작을 함께해 주신다면 더없이 감사하겠습니다.<br />
+            <p>오래된 거리처럼 익숙하지만,</p>
+            <p>여름비도 즐겁게 맞고,</p>
+            <p>시간의 흐름에 기대지 않고 서로에게 최선을 다하며,</p>
+            <p>어린 시절 순수한 마음으로 서로를 대하는 부부가 되고자 합니다.</p>
+            <p>이 시작을 함께해 주신다면 더없이 감사하겠습니다.</p>
           </div>
         </div>
       </div>
