@@ -125,27 +125,29 @@
   filter: drop-shadow(0 0 0 rgba(255,140,148,0));
 }
 
-/* ✅ 카운트다운 3줄 (고급 + 흔하지 않은 미니멀: 장식 없음, 숫자 자체만) */
+/* =========================
+   Countdown (NEW DESIGN)
+   가독성 최우선 + 고급/미니멀
+   ========================= */
+
 .countdown-wrap {
-  margin-top: 1.9rem;
+  margin-top: 2rem;
   text-align: center;
   display: grid;
-  gap: 0.7rem;
-  letter-spacing: 0.01rem;
+  gap: 0.65rem;
   color: var(--text-main);
+  letter-spacing: 0.01rem;
 }
 
-/* 1,3줄: 얇고 단정 */
+/* 1,3줄: 너무 얇지 않게, 단정하게 */
 .countdown-line1,
 .countdown-line3 {
   width: 100%;
   display: block;
   text-align: center;
-
-  font-size: clamp(1.02rem, 3.4vw, 1.2rem);
+  font-size: clamp(1.02rem, 3.3vw, 1.2rem);
   font-weight: 500;
-  color: var(--text-main);
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 /* 2줄 중앙 정렬 */
@@ -154,74 +156,68 @@
   justify-content: center;
 }
 
-/* 캡슐/배경 없음 */
+/* 배경/캡슐 없이 숫자만 또렷하게 정렬 */
 .countdown-values {
   display: inline-flex;
-  gap: 1rem;
   align-items: flex-end;
+  gap: 0.9rem;
   padding: 0;
   background: transparent;
-  border-radius: 0;
 }
 
-/* 숫자+단위 촘촘하게 */
+/* 숫자+단위를 “한 덩어리”로, 간격 타이트 */
 .unit-block {
-  position: relative;
   display: inline-flex;
-  align-items: flex-end;
-  gap: 0.08rem;
-  padding: 0.04rem 0;
+  align-items: baseline;     /* ✅ 숫자와 단위 baseline 정렬 → 가독성↑ */
+  gap: 0.1rem;               /* ✅ 너무 떨어져 보이지 않게 */
+  padding: 0.05rem 0;
 }
 
+/* ✅ 숫자: ‘선명 + 고급’ 타이포 */
 .num {
-  position: relative;
-
-  font-size: clamp(1.8rem, 6.4vw, 2.35rem);
-  font-weight: 850;
+  font-size: clamp(1.85rem, 6.2vw, 2.45rem);
+  font-weight: 900;
   line-height: 1;
-  letter-spacing: 0.015rem;
+  letter-spacing: 0.01rem;
   font-variant-numeric: tabular-nums;
 
-  /* ✅ 속이 비어 보이지 않게: 밝은 구간을 좁히고 중앙 톤 강화 */
+  /* ✅ 읽기 좋은 고대비 그라데이션 (속 빈 느낌 없음) */
   background: linear-gradient(
     180deg,
-    #ff5f6d 0%,                 /* 진한 시작 */
-    var(--theme-primary) 35%,   /* 중심을 진하게 */
-    #ff9aa4 55%,                /* 밝은 구간 '짧게' */
-    var(--theme-primary) 75%,   /* 다시 진하게 잡아줌 */
-    #ff5f6d 100%                /* 끝도 진하게 */
+    #ff4f5f 0%,
+    var(--theme-primary) 45%,
+    #ff7f8c 70%,
+    var(--theme-primary) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 
-  /* ✅ 아주 미세한 라운드 외곽(속 차 보이는 효과) */
-  -webkit-text-stroke: 0.25px rgba(255, 85, 100, 0.45);
+  /* ✅ 아주 얇은 스트로크로 윤곽 확보 */
+  -webkit-text-stroke: 0.45px rgba(255, 70, 88, 0.55);
 
-  /* ✅ 하이라이트+바닥 명암으로 “채워진” 느낌 */
+  /* ✅ 글로우 없이 또렷한 입체감만 */
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.85),
-    0 2px 5px rgba(255, 90, 105, 0.18);
+    0 1px 0 rgba(255, 255, 255, 0.9),
+    0 3px 8px rgba(255, 80, 95, 0.18);
 
   animation: none;
 }
 
-
-
-/* 단위: 숫자에 붙고 단정하게 */
+/* ✅ 단위: 작지만 읽히게, 숫자에 딱 붙는 비율 */
 .unit {
-  font-size: 0.74rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--text-light);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   transform: translateY(-1px);
   white-space: nowrap;
 }
 
+/* 상태 문구 */
 .countdown-status {
-  font-size: clamp(0.98rem, 3.2vw, 1.1rem);
+  font-size: clamp(0.98rem, 3.2vw, 1.12rem);
   font-weight: 600;
-  color: var(--text-main);
   opacity: 0.95;
 }
 
@@ -246,11 +242,11 @@
   }
 
   .countdown-values {
-    gap: 0.85rem;
+    gap: 0.7rem;
   }
 
   .unit {
-    font-size: 0.7rem;
+    font-size: 0.74rem;
     transform: translateY(-0.5px);
   }
 
