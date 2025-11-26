@@ -3,10 +3,6 @@
   text-align: center;
 }
 
-/* 
-  ✅ 섹션 전체 여백은 전역에 맡김
-  - .invitation / .section-inner 에 margin, padding 추가하지 않음
-*/
 
 /* =========================
    Typography base
@@ -29,6 +25,7 @@
 
   word-break: keep-all;
   overflow-wrap: break-word;
+  line-break: loose; 
 }
 
 /* React에서 <br/>로만 줄바꿈하니
