@@ -81,7 +81,7 @@ section {
 .section-inner {
   max-width: var(--section-max-width);
   margin: 0 auto;
-  padding: 0 1rem; /* 내부 여백만 */
+  padding: 0 0.5rem; /* 내부 여백만 */
   width: 100%;
 }
 
