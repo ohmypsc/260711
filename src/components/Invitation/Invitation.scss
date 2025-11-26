@@ -24,7 +24,6 @@
   opacity: 0.85;
   text-align: center;
 
-  /* 🔥 어절(단어)로 줄바꿈 */
   word-break: keep-all;
   overflow-wrap: break-word;
 }
@@ -49,20 +48,24 @@
   padding-right: 0.5rem;
 }
 
-/* divider 라인 ✅ (잎-only 스타일에 맞게 여백/폭 조정) */
+/* divider 라인 ✅ (좌우 끝까지 꽉 차게) */
 .parent-line {
   width: 100%;
-  max-width: 100%
-  margin: 2.2rem auto; /* ✅ 기존 3rem → 살짝 줄임 */
+  max-width: 100%;     /* ✅ 제한 제거 */
+  margin: 2.2rem auto;
   color: var(--theme-primary);
   opacity: 0.9;
 
-  svg {
-    width: 100%;
-    height: auto;
-    display: block;
-    filter: drop-shadow(0 1px 2px rgba(255, 140, 148, 0.14));
-  }
+  padding: 0 0.2rem;   /* ✅ section-inner 패딩 끝까지 자연스럽게 */
+  box-sizing: border-box;
+}
+
+/* ✅ 중첩 대신 평면 선택자로 안전하게 */
+.parent-line svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(255, 140, 148, 0.14));
 }
 
 /* 초대글 섹션 */
@@ -97,7 +100,7 @@
   }
 
   .parent-line {
-    max-width: 300px;
     margin: 1.9rem auto;
+    padding: 0;
   }
 }
