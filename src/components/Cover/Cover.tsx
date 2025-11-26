@@ -5,11 +5,44 @@ import { useContactInfo } from "@/ContactInfoProvider";
 import "./Cover.scss";
 
 function LeafLine({ variant }: { variant: "top" | "bottom" }) {
+  const EndCaps =
+    variant === "top" ? (
+      <>
+        {/* ✅ TOP 양끝 고정 잎(길이 기준점) */}
+        <path
+          d="M10 19 C8 16, 3 16, 2 19 C3 22, 8 22, 10 19 Z"
+          transform="translate(6 19) rotate(-8) scale(0.9) translate(-6 -19)"
+          opacity="0.42"
+        />
+        <path
+          d="M318 19 C316 16, 311 16, 310 19 C311 22, 316 22, 318 19 Z"
+          transform="translate(314 19) rotate(10) scale(0.9) translate(-314 -19)"
+          opacity="0.42"
+        />
+      </>
+    ) : (
+      <>
+        {/* ✅ BOTTOM 양끝 고정 잎(TOP과 동일 크기/농도) */}
+        <path
+          d="M10 19 C8 16, 3 16, 2 19 C3 22, 8 22, 10 19 Z"
+          transform="translate(6 19) rotate(6) scale(0.9) translate(-6 -19)"
+          opacity="0.42"
+        />
+        <path
+          d="M318 19 C316 16, 311 16, 310 19 C311 22, 316 22, 318 19 Z"
+          transform="translate(314 19) rotate(-8) scale(0.9) translate(-314 -19)"
+          opacity="0.42"
+        />
+      </>
+    );
+
   return (
     <div className={`parent-line ${variant}`}>
       <svg viewBox="0 0 320 34" aria-hidden="true" preserveAspectRatio="none">
         {variant === "top" ? (
           <g fill="currentColor">
+            {EndCaps}
+
             <path d="M18 20 C16 17, 11 17, 10 20 C11 23, 16 23, 18 20 Z" transform="translate(14 20) rotate(-14) scale(1.0) translate(-14 -20)" opacity="0.54" />
             <path d="M36 16 C34 13, 29 13, 28 16 C29 19, 34 19, 36 16 Z" transform="translate(32 16) rotate(16) scale(0.8) translate(-32 -16)" opacity="0.38" />
             <path d="M54 21 C52 18, 47 18, 46 21 C47 24, 52 24, 54 21 Z" transform="translate(50 21) rotate(-6) scale(0.95) translate(-50 -21)" opacity="0.5" />
@@ -34,6 +67,8 @@ function LeafLine({ variant }: { variant: "top" | "bottom" }) {
           </g>
         ) : (
           <g fill="currentColor">
+            {EndCaps}
+
             <path d="M22 12 C20 15, 15 15, 14 12 C15 9, 20 9, 22 12 Z" transform="translate(18 12) rotate(18) scale(0.9) translate(-18 -12)" opacity="0.48" />
             <path d="M42 19 C40 22, 35 22, 34 19 C35 16, 40 16, 42 19 Z" transform="translate(38 19) rotate(-8) scale(1.05) translate(-38 -19)" opacity="0.58" />
             <path d="M62 14 C60 17, 55 17, 54 14 C55 11, 60 11, 62 14 Z" transform="translate(58 14) rotate(6) scale(0.78) translate(-58 -14)" opacity="0.34" />
@@ -90,13 +125,17 @@ export function Cover() {
         <LeafLine variant="top" />
 
         <div className="name">
-          <span className="parent-names">{GROOM_FATHER} · {GROOM_MOTHER}의</span>{" "}
+          <span className="parent-names">
+            {GROOM_FATHER} · {GROOM_MOTHER}의
+          </span>{" "}
           <span className="relation-name relation-name--adjust">아들</span>{" "}
           {GROOM_FULLNAME}
         </div>
 
         <div className="name">
-          <span className="parent-names">{BRIDE_FATHER} · {BRIDE_MOTHER}의</span>{" "}
+          <span className="parent-names">
+            {BRIDE_FATHER} · {BRIDE_MOTHER}의
+          </span>{" "}
           <span className="relation-name relation-name--adjust">딸</span>{" "}
           {BRIDE_FULLNAME}
         </div>
