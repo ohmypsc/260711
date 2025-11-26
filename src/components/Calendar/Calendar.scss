@@ -121,8 +121,8 @@
 }
 
 /* =========================
-   Countdown (FINAL)
-   가독성 + 실키 숫자
+   Countdown (TUNED)
+   가독성 + 실키 숫자 + 은은한 튀는 효과
    ========================= */
 
 .countdown-wrap {
@@ -164,10 +164,12 @@
   padding: 0.04rem 0;
 }
 
-/* ✅ 숫자: “진짜 색”으로 선명하게 + 실키 하이라이트 레이어 */
+/* ✅ 숫자: 크기 살짝 업 + 실키 하이라이트 + 숨쉬는 미세 애니메이션 */
 .num {
   position: relative;
-  font-size: clamp(1.85rem, 6.2vw, 2.45rem);
+
+  /* ✅ 기존보다 약 10% 정도 시원하게 */
+  font-size: clamp(2.05rem, 6.8vw, 2.75rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0.005rem;
@@ -180,9 +182,13 @@
   text-shadow:
     0 1px 0 var(--theme-bg),
     0 2px 6px var(--shadow-color);
+
+  /* ✅ 숫자 자체가 아주 은은하게 “튀는” 느낌 */
+  animation: numBreath 4.8s ease-in-out infinite;
+  transform-origin: center bottom;
 }
 
-/* 실키한 광택(전역 색만) */
+/* ✅ 실키한 광택(전역 색만) + 살짝 흐르는 느낌 */
 .num::after {
   content: "";
   position: absolute;
@@ -199,8 +205,10 @@
   background-clip: text;
   color: transparent;
 
-  opacity: 0.7;
+  opacity: 0.8;
   pointer-events: none;
+
+  animation: silkDrift 4.8s ease-in-out infinite;
 }
 
 .unit {
@@ -216,6 +224,30 @@
   font-size: clamp(0.98rem, 3.2vw, 1.12rem);
   font-weight: 600;
   opacity: 0.95;
+}
+
+/* ✅ 은은한 ‘숨쉬는’ 숫자 애니메이션 */
+@keyframes numBreath {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    filter: saturate(1) contrast(1);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.045);
+    filter: saturate(1.06) contrast(1.03);
+  }
+}
+
+/* ✅ 실키 하이라이트가 미세하게 이동 */
+@keyframes silkDrift {
+  0%, 100% {
+    transform: translateY(0px);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
 }
 
 /* 모바일 */
@@ -247,12 +279,13 @@
     transform: translateY(-0.5px);
   }
 
+  /* ✅ 모바일도 살짝 키운 비율 */
   .num {
-    font-size: clamp(1.55rem, 7.2vw, 2.05rem);
+    font-size: clamp(1.75rem, 7.6vw, 2.3rem);
     letter-spacing: 0.003rem;
   }
 
   .num::after {
-    opacity: 0.68;
+    opacity: 0.78;
   }
 }
