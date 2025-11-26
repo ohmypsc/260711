@@ -8,8 +8,7 @@
   width: 100%;
   text-align: center;
 
-  /* ✅ 이 문구 길이에 맞춰 한 줄 꽉 채우는 스케일 */
-  font-size: clamp(1.45rem, 6.2vw, 2.15rem);
+  font-size: clamp(1.15rem, 5.0vw, 1.75rem);
 
   line-height: 1.22;
   font-weight: 600;
@@ -19,13 +18,13 @@
   overflow: hidden;
   text-overflow: clip;
 
-  padding: 0 0.2rem 1.15rem; /* ✅ 좌우 여백 최소화 */
+  padding: 0 0.25rem 1.1rem;
   position: relative;
 
   &::after {
     content: "";
     position: absolute;
-    left: 4%;   /* ✅ 밑줄도 거의 끝까지 */
+    left: 4%;
     right: 4%;
     bottom: 0.25rem;
     height: 1px;
@@ -39,6 +38,7 @@
     opacity: 0.9;
   }
 }
+
 
 
 /* ✅ 요일 헤더: 가로 정렬 + 일/토 색 */
