@@ -3,63 +3,55 @@
   text-align: center;
 }
 
-
 /* =========================
-   Typography base
+   Typography base (line-height only)
 ========================= */
+
+/* 각 inv-content는 "문단 덩어리" 역할 */
 .invitation .inv-content {
-  /* 문단 덩어리 리듬 */
-  display: grid;
-  gap: 0.35rem;   /* 내부 줄 간격(줄/줄 사이) */
+  margin: 0;                 /* ✅ 문단 덩어리 자체 여백 없음 */
 }
 
-.invitation .inv-content p,
-.invitation .inv-content {
+/* p(한 줄) 스타일 */
+.invitation .inv-content p {
+  margin: 0;                 /* ✅ p 자체 margin 제거 */
   font-size: 1rem;
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.6;          /* ✅ 줄 간격은 이것만으로 제어 */
   letter-spacing: 0.02rem;
   color: var(--text-main);
   opacity: 0.88;
   text-align: center;
 
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  line-break: loose; 
+  word-break: keep-all;      /* ✅ 어절 단위 줄바꿈 */
+  overflow-wrap: break-word; /* ✅ 아주 긴 텍스트만 예외 */
+  line-break: loose;         /* ✅ 한글 줄바꿈 자연스럽게 */
 }
 
-/* React에서 <br/>로만 줄바꿈하니
-   .inv-content 자체도 p처럼 보이게 정돈 */
-.invitation .inv-content {
-  margin: 0; /* 덩어리 자체는 기본 0 */
-}
-
-/* 문단 덩어리 간 간격 (내부 요소용) */
+/* "문단 덩어리" 사이 간격 (내부 요소용) */
 .invitation-text-block {
   display: grid;
-  gap: 1.25rem;  /* 문단(덩어리) 사이 여백 */
+  gap: 1rem;                 /* ✅ 문단 덩어리 간 리듬 */
 }
 
 /* =========================
    Poetry section
 ========================= */
 .poetry-section {
-  /* 섹션 내부에서만 공기감 */
   display: grid;
-  gap: 1.1rem;
+  gap: 0.9rem;               /* ✅ 시 문단끼리만 살짝 */
 }
 
-.poetry-section .inv-content {
-  font-weight: 300;
+.poetry-section .inv-content p {
   font-style: italic;
+  font-weight: 300;
   opacity: 0.95;
-  line-height: 1.8;
+  line-height: 1.65;         /* ✅ 시는 좀 더 촘촘하고 부드럽게 */
   letter-spacing: 0.015rem;
-  color: var(--text-main);
 }
 
 /* 시 마지막 줄(작가/출처) */
-.inv-content.poet {
+.inv-content.poet p {
   font-style: normal;
   font-weight: 400;
   opacity: 0.75;
@@ -68,8 +60,8 @@
   text-align: right;
   letter-spacing: 0.01rem;
 
-  /* ✅ 내부 구분을 위한 최소 여백만 */
-  margin-top: 0.9rem;
+  /* ✅ 내부 구분용 최소 간격 */
+  margin-top: 0.8rem;
 }
 
 /* =========================
@@ -80,8 +72,8 @@
   color: var(--theme-primary);
   opacity: 0.9;
 
-  /* ✅ 섹션 여백 아님: 콘텐츠 구분용 내부 간격 */
-  margin: 1.6rem 0;
+  /* ✅ 섹션 여백 아님: 내부 흐름 구분 정도만 */
+  margin: 1.4rem 0;
 }
 
 .parent-line svg {
@@ -96,25 +88,20 @@
 ========================= */
 .our-message-section {
   display: grid;
-  gap: 0.9rem; /* 본문 덩어리 내부 리듬 */
+  gap: 0.8rem;               /* ✅ 본문 문단 덩어리 리듬 */
 }
 
-.our-message-section .inv-content {
+.our-message-section .inv-content p {
   font-size: 1.04rem;
   font-weight: 400;
   opacity: 1;
-  line-height: 1.85;
+  line-height: 1.7;          /* ✅ 본문은 살짝 더 여유 */
   letter-spacing: 0.02rem;
-}
-
-.our-message-section .inv-content:last-child {
-  /* 본문 마지막 문단을 살짝 정돈 */
-  opacity: 0.98;
 }
 
 /* 마지막 문장(강조용 클래스가 들어올 때만) */
 .our-message-section .last-line {
-  margin-top: 1rem;
+  margin-top: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.03rem;
   opacity: 1;
@@ -124,27 +111,34 @@
    Mobile
 ========================= */
 @media (max-width: 420px) {
-  .invitation .inv-content,
   .invitation .inv-content p {
     font-size: 0.96rem;
-    line-height: 1.7;
+    line-height: 1.55;
   }
 
-  .poetry-section .inv-content {
+  .poetry-section .inv-content p {
     font-size: 0.95rem;
-    line-height: 1.75;
+    line-height: 1.6;
   }
 
-  .our-message-section .inv-content {
+  .our-message-section .inv-content p {
     font-size: 1rem;
-    line-height: 1.8;
+    line-height: 1.65;
   }
 
   .parent-line {
-    margin: 1.35rem 0;
+    margin: 1.2rem 0;
   }
 
   .invitation-text-block {
-    gap: 1.05rem;
+    gap: 0.9rem;
+  }
+
+  .poetry-section {
+    gap: 0.8rem;
+  }
+
+  .our-message-section {
+    gap: 0.7rem;
   }
 }
