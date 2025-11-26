@@ -1,11 +1,11 @@
-import React from 'react';
-import './Invitation.scss'; 
+import React from "react";
+import "./Invitation.scss";
 
 export function Invitation(): JSX.Element {
   return (
     <section className="invitation">
       <div className="section-inner">
-        
+
         <h2 className="section-title">모시는 글</h2>
 
         {/* 1. 시(詩) 인용 부분 */}
@@ -33,24 +33,108 @@ export function Invitation(): JSX.Element {
 
         </div>
 
+        {/* divider line ✅ (선 없이 잎이 흩날리며 완만한 곡선을 만드는 느낌) */}
         <div className="divider-line parent-line">
-          <svg viewBox="0 0 320 28">
-            <path
-              d="M5 14 C80 2, 240 26, 315 14"
-              stroke="currentColor"
-              strokeWidth="0.8"
-              strokeLinecap="round"
-              strokeDasharray="2 3"
-              fill="none"
-            />
+          <svg viewBox="0 0 320 34" aria-hidden="true">
+            <g fill="currentColor">
+              {/* TOP 느낌의 완만한 아치 리듬(잎-only) */}
+              <path
+                d="M18 20 C16 17, 11 17, 10 20 C11 23, 16 23, 18 20 Z"
+                transform="translate(14 20) rotate(-18) scale(0.9) translate(-14 -20)"
+                opacity="0.44"
+              />
+              <path
+                d="M38 16 C36 13, 31 13, 30 16 C31 19, 36 19, 38 16 Z"
+                transform="translate(34 16) rotate(12) scale(1.1) translate(-34 -16)"
+                opacity="0.66"
+              />
+              <path
+                d="M58 21 C56 18, 51 18, 50 21 C51 24, 56 24, 58 21 Z"
+                transform="translate(54 21) rotate(-6) scale(0.82) translate(-54 -21)"
+                opacity="0.36"
+              />
+              <path
+                d="M78 15 C76 12, 71 12, 70 15 C71 18, 76 18, 78 15 Z"
+                transform="translate(74 15) rotate(22) scale(1.02) translate(-74 -15)"
+                opacity="0.6"
+              />
+              <path
+                d="M98 19 C96 16, 90 16, 89 19 C90 22, 96 22, 98 19 Z"
+                transform="translate(93.5 19) rotate(-14) scale(0.92) translate(-93.5 -19)"
+                opacity="0.5"
+              />
+              <path
+                d="M118 14 C116 11, 111 11, 110 14 C111 17, 116 17, 118 14 Z"
+                transform="translate(114 14) rotate(6) scale(0.8) translate(-114 -14)"
+                opacity="0.34"
+              />
+              <path
+                d="M140 18 C138 15, 133 15, 132 18 C133 21, 138 21, 140 18 Z"
+                transform="translate(136 18) rotate(-24) scale(1.05) translate(-136 -18)"
+                opacity="0.58"
+              />
 
-            <circle cx="70" cy="11" r="1.2" fill="currentColor" />
-            <circle cx="140" cy="17" r="1.2" fill="currentColor" />
-            <circle cx="240" cy="12" r="1.2" fill="currentColor" />
+              {/* 중앙 근처: 작고 옅은 잎이 “자르르” */}
+              <path
+                d="M158 12 C156 10, 153 10, 152 12 C153 14, 156 14, 158 12 Z"
+                transform="translate(155 12) rotate(14) scale(0.65) translate(-155 -12)"
+                opacity="0.24"
+              />
+              <path
+                d="M170 16 C168 14, 165 14, 164 16 C165 18, 168 18, 170 16 Z"
+                transform="translate(167 16) rotate(-18) scale(0.7) translate(-167 -16)"
+                opacity="0.3"
+              />
+              <path
+                d="M182 11 C180 9, 177 9, 176 11 C177 13, 180 13, 182 11 Z"
+                transform="translate(179 11) rotate(-32) scale(0.6) translate(-179 -11)"
+                opacity="0.22"
+              />
+              <path
+                d="M194 18 C192 16, 189 16, 188 18 C189 20, 192 20, 194 18 Z"
+                transform="translate(191 18) rotate(20) scale(0.72) translate(-191 -18)"
+                opacity="0.28"
+              />
 
-            <rect x="105" y="9" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 106 10)" />
-            <rect x="185" y="12" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 186 13)" />
-            <rect x="275" y="10" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 276 11)" />
+              {/* 오른쪽: 완만하게 퍼지는 끝맺음 */}
+              <path
+                d="M210 16 C208 13, 203 13, 202 16 C203 19, 208 19, 210 16 Z"
+                transform="translate(206 16) rotate(8) scale(0.9) translate(-206 -16)"
+                opacity="0.5"
+              />
+              <path
+                d="M230 20 C228 17, 223 17, 222 20 C223 23, 228 23, 230 20 Z"
+                transform="translate(226 20) rotate(-16) scale(1.15) translate(-226 -20)"
+                opacity="0.64"
+              />
+              <path
+                d="M250 17 C248 14, 243 14, 242 17 C243 20, 248 20, 250 17 Z"
+                transform="translate(246 17) rotate(4) scale(0.8) translate(-246 -17)"
+                opacity="0.38"
+              />
+              <path
+                d="M270 22 C268 19, 263 19, 262 22 C263 25, 268 25, 270 22 Z"
+                transform="translate(266 22) rotate(18) scale(1.0) translate(-266 -22)"
+                opacity="0.56"
+              />
+              <path
+                d="M292 19 C290 16, 285 16, 284 19 C285 22, 290 22, 292 19 Z"
+                transform="translate(288 19) rotate(-10) scale(0.92) translate(-288 -19)"
+                opacity="0.46"
+              />
+
+              {/* 흩날림 보조 잎 */}
+              <path
+                d="M86 7 C84 5, 81 5, 80 7 C81 9, 84 9, 86 7 Z"
+                transform="translate(83 7) rotate(28) scale(0.55) translate(-83 -7)"
+                opacity="0.16"
+              />
+              <path
+                d="M244 9 C242 7, 239 7, 238 9 C239 11, 242 11, 244 9 Z"
+                transform="translate(241 9) rotate(-12) scale(0.6) translate(-241 -9)"
+                opacity="0.18"
+              />
+            </g>
           </svg>
         </div>
 
@@ -61,7 +145,6 @@ export function Invitation(): JSX.Element {
             시간의 흐름에 기대지 않고 서로에게 최선을 다하며,<br />
             어린 시절 순수한 마음으로 서로를 대하는 부부가 되고자 합니다.<br />
             이 시작을 함께해 주신다면 더없이 감사하겠습니다.<br />
-
           </div>
         </div>
 
