@@ -4,7 +4,7 @@
   width: 100%;
 }
 
-/* ✅ 날짜/요일/시간 탑라인 */
+/* 탑라인 */
 .calendar-topline {
   width: 100%;
   text-align: center;
@@ -40,7 +40,7 @@
   }
 }
 
-/* ✅ 요일 헤더: 가로 정렬 + 일/토 색 */
+/* 요일 헤더 */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -56,16 +56,11 @@
     padding: 0.35rem 0;
   }
 
-  .weekday.sun {
-    color: #e74c3c;
-  }
-
-  .weekday.sat {
-    color: #3b82f6;
-  }
+  .weekday.sun { color: #e74c3c; }
+  .weekday.sat { color: #3b82f6; }
 }
 
-/* ✅ 달력 본문: 무테두리/무선 */
+/* 달력 본문 */
 .calendar-box {
   background: transparent;
 }
@@ -105,7 +100,7 @@
   font-weight: 500;
 }
 
-/* ✅ 11일 하트: 폰트어썸 (펄스 제거, 고정 하트만) */
+/* 11일 하트(고정) */
 .heart {
   position: absolute;
   inset: 0;
@@ -126,8 +121,8 @@
 }
 
 /* =========================
-   Countdown (NEW DESIGN)
-   가독성 최우선 + 고급/미니멀
+   Countdown (FINAL)
+   가독성 + 실키 숫자
    ========================= */
 
 .countdown-wrap {
@@ -139,7 +134,6 @@
   letter-spacing: 0.01rem;
 }
 
-/* 1,3줄: 너무 얇지 않게, 단정하게 */
 .countdown-line1,
 .countdown-line3 {
   width: 100%;
@@ -150,13 +144,11 @@
   opacity: 0.95;
 }
 
-/* 2줄 중앙 정렬 */
 .countdown-line2 {
   display: flex;
   justify-content: center;
 }
 
-/* 배경/캡슐 없이 숫자만 또렷하게 정렬 */
 .countdown-values {
   display: inline-flex;
   align-items: flex-end;
@@ -165,59 +157,61 @@
   background: transparent;
 }
 
-/* 숫자+단위를 “한 덩어리”로, 간격 타이트 */
 .unit-block {
   display: inline-flex;
-  align-items: baseline;     /* ✅ 숫자와 단위 baseline 정렬 → 가독성↑ */
-  gap: 0.1rem;               /* ✅ 너무 떨어져 보이지 않게 */
-  padding: 0.05rem 0;
+  align-items: baseline;
+  gap: 0.08rem;
+  padding: 0.04rem 0;
 }
 
+/* ✅ 숫자: “진짜 색”으로 선명하게 + 실키 하이라이트 레이어 */
 .num {
+  position: relative;
   font-size: clamp(1.85rem, 6.2vw, 2.45rem);
   font-weight: 900;
   line-height: 1;
-  letter-spacing: 0.01rem;
+  letter-spacing: 0.005rem;
   font-variant-numeric: tabular-nums;
 
-  /* ✅ 전체 톤을 진하게: 전역색(primary + text-main)만 섞음 */
+  /* 가독성은 컬러로 확보 */
+  color: var(--theme-primary);
+
+  /* 과하지 않은 선명도 보정 */
+  text-shadow:
+    0 1px 0 var(--theme-bg),
+    0 2px 6px var(--shadow-color);
+}
+
+/* 실키한 광택(전역 색만) */
+.num::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
   background: linear-gradient(
     180deg,
-    var(--text-main) 0%,          /* 위: 또렷한 딥 톤 */
-    var(--theme-primary) 40%,     /* 중간: 로즈 */
-    var(--theme-primary-light) 60%,
-    var(--theme-primary) 80%,
-    var(--text-main) 100%         /* 아래: 다시 딥 톤 */
+    var(--theme-primary-light) 0%,
+    transparent 48%,
+    var(--theme-primary) 100%
   );
+
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 
-  /* ✅ 테두리 느낌 제거 유지 */
-  -webkit-text-stroke: 0;
-
-  /* ✅ 전역 그림자로 살짝만 선명도 보정 */
-  text-shadow:
-    0 1px 0 var(--theme-bg),
-    0 2px 6px var(--shadow-color);
-
-  animation: none;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
-
-
-
-/* ✅ 단위: 작지만 읽히게, 숫자에 딱 붙는 비율 */
 .unit {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--text-light);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   transform: translateY(-1px);
   white-space: nowrap;
 }
 
-/* 상태 문구 */
 .countdown-status {
   font-size: clamp(0.98rem, 3.2vw, 1.12rem);
   font-weight: 600;
@@ -255,6 +249,10 @@
 
   .num {
     font-size: clamp(1.55rem, 7.2vw, 2.05rem);
-    letter-spacing: 0.01rem;
+    letter-spacing: 0.003rem;
+  }
+
+  .num::after {
+    opacity: 0.68;
   }
 }
