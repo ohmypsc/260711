@@ -40,34 +40,33 @@ export function Cover() {
       {/* 부모님 박스 */}
       <div className="family-section">
 
-        {/* 상단 긴 장식 라인 ✅ (잎사귀 미니멀) */}
+        {/* 상단 긴 장식 라인 ✅ (자연스러운 넝쿨 곡선 + 미세 잎) */}
         <div className="parent-line top">
-          <svg viewBox="0 0 320 24" aria-hidden="true">
-            {/* 단일 곡선 */}
+          <svg viewBox="0 0 320 26" aria-hidden="true">
+            {/* 메인 넝쿨 라인: 자연스럽게 흐르는 단일 곡선 */}
             <path
-              d="M10 12 C90 5, 230 5, 310 12"
+              d="M8 14
+                 C70 4, 120 6, 160 12
+                 C205 19, 250 20, 312 12"
               stroke="currentColor"
-              strokeWidth="0.9"
+              strokeWidth="0.85"
               strokeLinecap="round"
+              strokeLinejoin="round"
               fill="none"
               opacity="0.9"
             />
 
-            {/* 중앙 아주 작은 잎 2개 */}
-            <path
-              d="M156 12
-                 C152 9, 148 9, 147 12
-                 C148 15, 152 15, 156 12 Z"
-              fill="currentColor"
-              opacity="0.55"
-            />
-            <path
-              d="M164 12
-                 C168 9, 172 9, 173 12
-                 C172 15, 168 15, 164 12 Z"
-              fill="currentColor"
-              opacity="0.55"
-            />
+            {/* 잎사귀: 라인 흐름 따라 아주 작게 3~4개 */}
+            <g fill="currentColor" opacity="0.55">
+              {/* left leaf */}
+              <path d="M74 10 C70 7, 64 8, 63 11 C64 14, 70 14, 74 10 Z" />
+              {/* left-mid leaf */}
+              <path d="M118 9 C114 6, 109 7, 108 10 C109 13, 114 13, 118 9 Z" />
+              {/* right-mid leaf */}
+              <path d="M208 13 C212 10, 218 11, 219 14 C218 17, 212 17, 208 13 Z" />
+              {/* right leaf */}
+              <path d="M252 14 C256 11, 262 12, 263 15 C262 18, 256 18, 252 14 Z" />
+            </g>
           </svg>
         </div>
 
@@ -89,40 +88,39 @@ export function Cover() {
         </div>
         {/* END */}
 
-        {/* 하단 긴 장식 라인 ✅ (잎사귀 미니멀) */}
+        {/* 하단 긴 장식 라인 ✅ (자연스러운 넝쿨 곡선 + 미세 잎) */}
         <div className="parent-line bottom">
-          <svg viewBox="0 0 320 24" aria-hidden="true">
-            {/* 단일 곡선 */}
+          <svg viewBox="0 0 320 26" aria-hidden="true">
+            {/* 메인 넝쿨 라인 */}
             <path
-              d="M10 12 C90 19, 230 19, 310 12"
+              d="M8 12
+                 C70 22, 120 20, 160 14
+                 C205 7, 250 6, 312 14"
               stroke="currentColor"
-              strokeWidth="0.9"
+              strokeWidth="0.85"
               strokeLinecap="round"
+              strokeLinejoin="round"
               fill="none"
               opacity="0.9"
             />
 
-            {/* 중앙 아주 작은 잎 2개 */}
-            <path
-              d="M156 12
-                 C152 9, 148 9, 147 12
-                 C148 15, 152 15, 156 12 Z"
-              fill="currentColor"
-              opacity="0.55"
-            />
-            <path
-              d="M164 12
-                 C168 9, 172 9, 173 12
-                 C172 15, 168 15, 164 12 Z"
-              fill="currentColor"
-              opacity="0.55"
-            />
+            {/* 잎사귀 */}
+            <g fill="currentColor" opacity="0.55">
+              {/* left leaf */}
+              <path d="M74 16 C70 19, 64 18, 63 15 C64 12, 70 12, 74 16 Z" />
+              {/* left-mid leaf */}
+              <path d="M118 17 C114 20, 109 19, 108 16 C109 13, 114 13, 118 17 Z" />
+              {/* right-mid leaf */}
+              <path d="M208 13 C212 16, 218 15, 219 12 C218 9, 212 9, 208 13 Z" />
+              {/* right leaf */}
+              <path d="M252 12 C256 15, 262 14, 263 11 C262 8, 256 8, 252 12 Z" />
+            </g>
           </svg>
         </div>
 
       </div>
 
-      <Button variant="basic" onClick={() => setOpen(true)}> 
+      <Button variant="basic" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
 
