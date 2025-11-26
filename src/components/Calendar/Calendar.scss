@@ -180,29 +180,30 @@
   letter-spacing: 0.01rem;
   font-variant-numeric: tabular-nums;
 
-  /* ✅ 전역 컬러만 사용한 '딥' 그라데이션 */
+  /* ✅ 전체 톤을 진하게: 전역색(primary + text-main)만 섞음 */
   background: linear-gradient(
     180deg,
-    var(--theme-primary) 0%,
-    var(--theme-primary) 38%,
-    var(--theme-primary-light) 55%,
-    var(--theme-primary) 72%,
-    var(--theme-primary) 100%
+    var(--text-main) 0%,          /* 위: 또렷한 딥 톤 */
+    var(--theme-primary) 40%,     /* 중간: 로즈 */
+    var(--theme-primary-light) 60%,
+    var(--theme-primary) 80%,
+    var(--text-main) 100%         /* 아래: 다시 딥 톤 */
   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 
-  /* ✅ 테두리 없음 */
+  /* ✅ 테두리 느낌 제거 유지 */
   -webkit-text-stroke: 0;
 
-  /* ✅ 전역 텍스트/그림자 변수로 선명도만 보정 */
+  /* ✅ 전역 그림자로 살짝만 선명도 보정 */
   text-shadow:
-    0 1px 0 var(--theme-bg),       /* 위쪽 하이라이트 */
-    0 2px 6px var(--shadow-color); /* 아래쪽 얕은 깊이 */
+    0 1px 0 var(--theme-bg),
+    0 2px 6px var(--shadow-color);
 
   animation: none;
 }
+
 
 
 
