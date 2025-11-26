@@ -64,18 +64,18 @@
 }
 
 /* -------------------------
-   부모님 박스
+   부모님 박스  ✅ (여백 축소 반영)
 -------------------------- */
 .family-section {
-  margin: 1.1rem 0 1.5rem;
-  padding: 0.8rem 0 0.8rem;
+  margin: 0.75rem 0 1.05rem;   /* ✅ 위/아래 여백 줄임 */
+  padding: 0.55rem 0 0.55rem;  /* ✅ 내부 패딩 줄임 */
 
   font-size: 1.05rem;
   line-height: 1.72rem;
 
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.35rem;                /* ✅ 줄 간격 살짝 타이트 */
 }
 
 .name {
@@ -90,34 +90,33 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  min-width: 2.6em; 
+  min-width: 2.6em;
 }
 
-
 /* -------------------------
-   긴 장식 라인
+   긴 장식 라인 ✅ (잎사귀 미니멀 라인)
 -------------------------- */
 .parent-line {
   width: 100%;
-  max-width: 330px; /* 화면에 꽉 차게 */
-  margin: 0.35rem auto;
+  max-width: 320px;
+  margin: 0.2rem auto;         /* ✅ 라인 위/아래 여백 축소 */
 
   color: var(--theme-primary);
-  opacity: 0.88;
+  opacity: 0.9;
 
   svg {
     width: 100%;
     height: auto;
     display: block;
-    filter: drop-shadow(0 1px 3px rgba(255,140,148,0.18));
+    filter: drop-shadow(0 1px 2px rgba(255,140,148,0.14));
   }
 }
 
 .parent-line.top {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.35rem;      /* ✅ 위쪽 라인 아래 여백 축소 */
 }
 .parent-line.bottom {
-  margin-top: 0.6rem;
+  margin-top: 0.35rem;         /* ✅ 아래쪽 라인 위 여백 축소 */
 }
 
 /* -------------------------
@@ -144,9 +143,11 @@
 @media (max-width: 420px) {
   .w-cover { gap: 1.5rem; }
   .diamond { font-size: 1.3rem; }
-  .parent-line { max-width: 270px; }
+  .parent-line { max-width: 260px; }
+
   .family-section {
-    margin: 1rem 0 1.4rem;
-    padding: 0.7rem 0 0.7rem;
+    margin: 0.65rem 0 0.95rem; /* ✅ 모바일도 같이 타이트 */
+    padding: 0.5rem 0 0.5rem;
+    gap: 0.3rem;
   }
 }
