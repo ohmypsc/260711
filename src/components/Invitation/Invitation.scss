@@ -55,9 +55,6 @@
   margin: 2.2rem auto;
   color: var(--theme-primary);
   opacity: 0.9;
-
-  padding: 0 0.2rem;   /* ✅ section-inner 패딩 끝까지 자연스럽게 */
-  box-sizing: border-box;
 }
 
 /* ✅ 중첩 대신 평면 선택자로 안전하게 */
