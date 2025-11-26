@@ -52,7 +52,7 @@
 /* divider 라인 ✅ (잎-only 스타일에 맞게 여백/폭 조정) */
 .parent-line {
   width: 100%;
-  max-width: 360px;   /* ✅ 잎 라인이라 조금 컴팩트하게 */
+  max-width: 100%
   margin: 2.2rem auto; /* ✅ 기존 3rem → 살짝 줄임 */
   color: var(--theme-primary);
   opacity: 0.9;
