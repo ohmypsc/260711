@@ -98,7 +98,7 @@
 -------------------------- */
 .parent-line {
   width: 100%;
-  max-width: 320px;
+  max-width: 100%;
   margin: 0.2rem auto;         /* ✅ 라인 위/아래 여백 축소 */
 
   color: var(--theme-primary);
@@ -143,7 +143,7 @@
 @media (max-width: 420px) {
   .w-cover { gap: 1.5rem; }
   .diamond { font-size: 1.3rem; }
-  .parent-line { max-width: 260px; }
+  .parent-line { max-width: 100%; }
 
   .family-section {
     margin: 0.65rem 0 0.95rem; /* ✅ 모바일도 같이 타이트 */
