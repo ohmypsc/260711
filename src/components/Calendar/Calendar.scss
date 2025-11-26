@@ -107,7 +107,7 @@
   font-weight: 500;
 }
 
-/* ✅ 11일 하트: 폰트어썸 + 감성 펄스 */
+/* ✅ 11일 하트: 폰트어썸 */
 .heart {
   position: absolute;
   inset: 0;
@@ -127,28 +127,6 @@
   filter: drop-shadow(0 0 0 rgba(255,140,148,0));
 }
 
-.heart.pulse {
-  animation: heartBreath 5.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  transform-origin: center;
-}
-
-@keyframes heartBreath {
-  0% {
-    transform: scale(0.96) translateY(1px) rotate(-1deg);
-    opacity: 0.22;
-    filter: drop-shadow(0 0 0 rgba(255,140,148,0));
-  }
-  45% {
-    transform: scale(1.10) translateY(-1px) rotate(1deg);
-    opacity: 0.40;
-    filter: drop-shadow(0 0 6px rgba(255,140,148,0.30));
-  }
-  100% {
-    transform: scale(0.96) translateY(1px) rotate(-1deg);
-    opacity: 0.22;
-    filter: drop-shadow(0 0 0 rgba(255,140,148,0));
-  }
-}
 
 /* ✅ 카운트다운 3줄 */
 .countdown-wrap {
