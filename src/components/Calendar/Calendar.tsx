@@ -148,7 +148,7 @@ export const Calendar = () => {
                   >
                     <span className="day-number">{d}</span>
 
-                    {/* ✅ 11일 하트:}
+                    {/* ✅ 11일 하트:*/}
                     {isWeddingDay && (
                       <span className="heart" aria-hidden>
                         <i className="fa-solid fa-heart" />
