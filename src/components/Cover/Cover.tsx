@@ -40,53 +40,43 @@ export function Cover() {
       {/* 부모님 박스 */}
       <div className="family-section">
 
-        {/* 상단 긴 장식 라인 ✅ (선 없이 잎만으로 구성된 미니멀 넝쿨) */}
+        {/* 상단 긴 장식 라인 ✅ (선 없이, 작은 잎들이 자르르 흐르는 느낌 / 방향 자유) */}
         <div className="parent-line top">
-          <svg viewBox="0 0 320 28" aria-hidden="true">
-            <g fill="currentColor" opacity="0.75">
-              {/* 왼쪽에서 오른쪽으로 “흐르는” 잎 리듬 */}
-              <path
-                d="M42 16 C36 11, 26 12, 25 16 C26 20, 36 21, 42 16 Z"
-                transform="rotate(-18 33.5 16)"
-                opacity="0.7"
-              />
-              <path
-                d="M78 13 C72 7, 60 9, 60 14 C62 19, 74 18, 78 13 Z"
-                transform="rotate(12 69 13)"
-              />
-              <path
-                d="M112 18 C106 12, 96 13, 95 18 C96 23, 106 23, 112 18 Z"
-                transform="rotate(-8 103.5 18)"
-                opacity="0.65"
-              />
-              <path
-                d="M148 11 C144 7, 136 8, 136 11 C137 14, 145 14, 148 11 Z"
-                transform="rotate(20 142 11)"
-                opacity="0.55"
-              />
+          <svg viewBox="0 0 320 30" aria-hidden="true">
+            <g fill="currentColor" opacity="0.72">
+              {/* 왼쪽 → 오른쪽으로 “사선 흐름”을 타는 작은 잎들 */}
+              <path d="M26 18 C24 15, 19 15, 18 18 C19 21, 24 21, 26 18 Z"
+                    transform="rotate(-35 22 18)" opacity="0.55" />
+              <path d="M48 13 C46 10, 41 10, 40 13 C41 16, 46 16, 48 13 Z"
+                    transform="rotate(18 44 13)" opacity="0.6" />
+              <path d="M70 19 C68 16, 63 16, 62 19 C63 22, 68 22, 70 19 Z"
+                    transform="rotate(-10 66 19)" opacity="0.5" />
+              <path d="M92 11 C90 8, 85 9, 84 11 C85 14, 90 14, 92 11 Z"
+                    transform="rotate(32 88 11)" opacity="0.62" />
+              <path d="M114 17 C112 14, 106 14, 105 17 C106 20, 112 20, 114 17 Z"
+                    transform="rotate(-22 109.5 17)" opacity="0.56" />
+              <path d="M138 12 C136 9, 131 9, 130 12 C131 15, 136 15, 138 12 Z"
+                    transform="rotate(8 134 12)" opacity="0.48" />
 
-              {/* 중앙 근처 작은 새싹(살짝 떠 있는 느낌) */}
-              <path
-                d="M165 8 C163 6, 159 6, 158 8 C159 10, 163 10, 165 8 Z"
-                transform="rotate(-10 161.5 8)"
-                opacity="0.5"
-              />
+              {/* 중앙 근처: 더 촘촘하고 작은 잎 리듬 */}
+              <path d="M158 9 C156 7, 153 7, 152 9 C153 11, 156 11, 158 9 Z"
+                    transform="rotate(-18 155 9)" opacity="0.45" />
+              <path d="M170 15 C168 13, 165 13, 164 15 C165 17, 168 17, 170 15 Z"
+                    transform="rotate(26 167 15)" opacity="0.5" />
+              <path d="M184 10 C182 8, 179 8, 178 10 C179 12, 182 12, 184 10 Z"
+                    transform="rotate(-40 181 10)" opacity="0.42" />
 
-              {/* 오른쪽으로 갈수록 잎이 살짝 커졌다가 가벼워지는 리듬 */}
-              <path
-                d="M192 18 C198 12, 208 13, 209 18 C208 23, 198 23, 192 18 Z"
-                transform="rotate(10 200.5 18)"
-                opacity="0.65"
-              />
-              <path
-                d="M228 12 C234 7, 246 9, 246 14 C244 19, 232 17, 228 12 Z"
-                transform="rotate(-16 237 12)"
-              />
-              <path
-                d="M264 17 C270 12, 280 13, 281 17 C280 21, 270 22, 264 17 Z"
-                transform="rotate(8 272.5 17)"
-                opacity="0.7"
-              />
+              {/* 오른쪽으로 갈수록 가볍게 흩어지는 느낌 */}
+              <path d="M206 18 C204 15, 199 15, 198 18 C199 21, 204 21, 206 18 Z"
+                    transform="rotate(14 202 18)" opacity="0.55" />
+              <path d="M230 12 C228 9, 223 9, 222 12 C223 15, 228 15, 230 12 Z"
+                    transform="rotate(-28 226 12)" opacity="0.6" />
+              <path d="M254 19 C252 16, 247 16, 246 19 C247 22, 252 22, 254 19 Z"
+                    transform="rotate(6 250 19)" opacity="0.5" />
+              <path d="M280 13 C278 10, 273 10, 272 13 C273 16, 278 16, 280 13 Z"
+                    transform="rotate(38 276 13)" opacity="0.58" />
+              <path d="M300 18 C298 15, 293 15, 292 18 C293 21, 298 21, 300 18 Z"
+                    transform="rotate(-12 296 18)" opacity="0.52" />
             </g>
           </svg>
         </div>
@@ -109,51 +99,43 @@ export function Cover() {
         </div>
         {/* END */}
 
-        {/* 하단 긴 장식 라인 ✅ (선 없이 잎만, 상단과 리듬 통일) */}
+        {/* 하단 긴 장식 라인 ✅ (상단과 결 맞춘 잎 흐름 / 방향 자유) */}
         <div className="parent-line bottom">
-          <svg viewBox="0 0 320 28" aria-hidden="true">
-            <g fill="currentColor" opacity="0.75">
-              <path
-                d="M42 12 C36 17, 26 16, 25 12 C26 8, 36 7, 42 12 Z"
-                transform="rotate(18 33.5 12)"
-                opacity="0.7"
-              />
-              <path
-                d="M78 15 C72 21, 60 19, 60 14 C62 9, 74 10, 78 15 Z"
-                transform="rotate(-12 69 15)"
-              />
-              <path
-                d="M112 10 C106 16, 96 15, 95 10 C96 5, 106 5, 112 10 Z"
-                transform="rotate(8 103.5 10)"
-                opacity="0.65"
-              />
-              <path
-                d="M148 17 C144 21, 136 20, 136 17 C137 14, 145 14, 148 17 Z"
-                transform="rotate(-20 142 17)"
-                opacity="0.55"
-              />
+          <svg viewBox="0 0 320 30" aria-hidden="true">
+            <g fill="currentColor" opacity="0.72">
+              {/* 하단은 반대 리듬으로 “아래 사선 흐름” */}
+              <path d="M26 12 C24 15, 19 15, 18 12 C19 9, 24 9, 26 12 Z"
+                    transform="rotate(28 22 12)" opacity="0.55" />
+              <path d="M48 18 C46 21, 41 20, 40 18 C41 15, 46 15, 48 18 Z"
+                    transform="rotate(-20 44 18)" opacity="0.6" />
+              <path d="M70 11 C68 14, 63 14, 62 11 C63 8, 68 8, 70 11 Z"
+                    transform="rotate(12 66 11)" opacity="0.5" />
+              <path d="M92 19 C90 22, 85 21, 84 19 C85 16, 90 16, 92 19 Z"
+                    transform="rotate(-34 88 19)" opacity="0.62" />
+              <path d="M114 13 C112 16, 106 16, 105 13 C106 10, 112 10, 114 13 Z"
+                    transform="rotate(24 109.5 13)" opacity="0.56" />
+              <path d="M138 18 C136 21, 131 21, 130 18 C131 15, 136 15, 138 18 Z"
+                    transform="rotate(-6 134 18)" opacity="0.48" />
 
-              {/* 중앙 근처 작은 새싹 */}
-              <path
-                d="M165 20 C163 22, 159 22, 158 20 C159 18, 163 18, 165 20 Z"
-                transform="rotate(10 161.5 20)"
-                opacity="0.5"
-              />
+              {/* 중앙 근처: 촘촘한 작은 잎 */}
+              <path d="M158 20 C156 22, 153 22, 152 20 C153 18, 156 18, 158 20 Z"
+                    transform="rotate(16 155 20)" opacity="0.45" />
+              <path d="M170 14 C168 16, 165 16, 164 14 C165 12, 168 12, 170 14 Z"
+                    transform="rotate(-26 167 14)" opacity="0.5" />
+              <path d="M184 19 C182 21, 179 21, 178 19 C179 17, 182 17, 184 19 Z"
+                    transform="rotate(40 181 19)" opacity="0.42" />
 
-              <path
-                d="M192 10 C198 16, 208 15, 209 10 C208 5, 198 5, 192 10 Z"
-                transform="rotate(-10 200.5 10)"
-                opacity="0.65"
-              />
-              <path
-                d="M228 16 C234 21, 246 19, 246 14 C244 9, 232 11, 228 16 Z"
-                transform="rotate(16 237 16)"
-              />
-              <path
-                d="M264 11 C270 16, 280 15, 281 11 C280 7, 270 6, 264 11 Z"
-                transform="rotate(-8 272.5 11)"
-                opacity="0.7"
-              />
+              {/* 오른쪽 */}
+              <path d="M206 11 C204 14, 199 14, 198 11 C199 8, 204 8, 206 11 Z"
+                    transform="rotate(-14 202 11)" opacity="0.55" />
+              <path d="M230 18 C228 21, 223 20, 222 18 C223 15, 228 15, 230 18 Z"
+                    transform="rotate(30 226 18)" opacity="0.6" />
+              <path d="M254 11 C252 14, 247 14, 246 11 C247 8, 252 8, 254 11 Z"
+                    transform="rotate(-8 250 11)" opacity="0.5" />
+              <path d="M280 18 C278 21, 273 21, 272 18 C273 15, 278 15, 280 18 Z"
+                    transform="rotate(-38 276 18)" opacity="0.58" />
+              <path d="M300 12 C298 15, 293 15, 292 12 C293 9, 298 9, 300 12 Z"
+                    transform="rotate(10 296 12)" opacity="0.52" />
             </g>
           </svg>
         </div>
