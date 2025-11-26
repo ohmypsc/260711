@@ -40,27 +40,34 @@ export function Cover() {
       {/* 부모님 박스 */}
       <div className="family-section">
 
-        {/* 상단 긴 장식 라인 */}
+        {/* 상단 긴 장식 라인 ✅ (잎사귀 미니멀) */}
         <div className="parent-line top">
-          <svg viewBox="0 0 320 28">
+          <svg viewBox="0 0 320 24" aria-hidden="true">
+            {/* 단일 곡선 */}
             <path
-              d="M5 14 C80 2, 240 26, 315 14"
+              d="M10 12 C90 5, 230 5, 310 12"
               stroke="currentColor"
-              strokeWidth="0.8"
+              strokeWidth="0.9"
               strokeLinecap="round"
-              strokeDasharray="2 3"
               fill="none"
+              opacity="0.9"
             />
 
-            {/* 점 */}
-            <circle cx="70" cy="11" r="1.2" fill="currentColor" />
-            <circle cx="140" cy="17" r="1.2" fill="currentColor" />
-            <circle cx="240" cy="12" r="1.2" fill="currentColor" />
-
-            {/* 다이아 */}
-            <rect x="105" y="9" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 106 10)" />
-            <rect x="185" y="12" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 186 13)" />
-            <rect x="275" y="10" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 276 11)" />
+            {/* 중앙 아주 작은 잎 2개 */}
+            <path
+              d="M156 12
+                 C152 9, 148 9, 147 12
+                 C148 15, 152 15, 156 12 Z"
+              fill="currentColor"
+              opacity="0.55"
+            />
+            <path
+              d="M164 12
+                 C168 9, 172 9, 173 12
+                 C172 15, 168 15, 164 12 Z"
+              fill="currentColor"
+              opacity="0.55"
+            />
           </svg>
         </div>
 
@@ -82,27 +89,34 @@ export function Cover() {
         </div>
         {/* END */}
 
-        {/* 하단 긴 장식 라인 */}
+        {/* 하단 긴 장식 라인 ✅ (잎사귀 미니멀) */}
         <div className="parent-line bottom">
-          <svg viewBox="0 0 320 28">
+          <svg viewBox="0 0 320 24" aria-hidden="true">
+            {/* 단일 곡선 */}
             <path
-              d="M5 14 C80 26, 240 2, 315 14"
+              d="M10 12 C90 19, 230 19, 310 12"
               stroke="currentColor"
-              strokeWidth="0.8"
+              strokeWidth="0.9"
               strokeLinecap="round"
-              strokeDasharray="2 3"
               fill="none"
+              opacity="0.9"
             />
 
-            {/* 점 */}
-            <circle cx="60" cy="15" r="1.2" fill="currentColor" />
-            <circle cx="150" cy="9" r="1.2" fill="currentColor" />
-            <circle cx="245" cy="16" r="1.2" fill="currentColor" />
-
-            {/* 다이아 */}
-            <rect x="95" y="13" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 96 14)" />
-            <rect x="205" y="7" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 206 8)" />
-            <rect x="285" y="15" width="2.4" height="2.4" fill="currentColor" transform="rotate(45 286 16)" />
+            {/* 중앙 아주 작은 잎 2개 */}
+            <path
+              d="M156 12
+                 C152 9, 148 9, 147 12
+                 C148 15, 152 15, 156 12 Z"
+              fill="currentColor"
+              opacity="0.55"
+            />
+            <path
+              d="M164 12
+                 C168 9, 172 9, 173 12
+                 C172 15, 168 15, 164 12 Z"
+              fill="currentColor"
+              opacity="0.55"
+            />
           </svg>
         </div>
 
