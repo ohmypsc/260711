@@ -4,27 +4,29 @@
   width: 100%;
 }
 
-/* ✅ 날짜/요일/시간 한 줄 + 얇고 예쁜 구분선 */
 .calendar-topline {
+  width: 100%;
   text-align: center;
-  margin: -0.1rem 0 1.6rem;
-  font-weight: 600;
-  color: var(--text-main);
-  letter-spacing: 0.01rem;
-  font-size: clamp(1.05rem, 3.8vw, 1.45rem); /* ✅ 모바일에서 자동 축소 */
-  line-height: 1.2;
-  white-space: nowrap;   /* ✅ 한 줄 강제 */
-  overflow: hidden;      /* ✅ 혹시 넘치면 잘라줌 */
-  text-overflow: ellipsis;
 
+  /* ✅ 이 문구 길이에 맞춰 한 줄 꽉 채우는 스케일 */
+  font-size: clamp(1.45rem, 6.2vw, 2.15rem);
+
+  line-height: 1.22;
+  font-weight: 600;
+  letter-spacing: 0.01rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+
+  padding: 0 0.2rem 1.15rem; /* ✅ 좌우 여백 최소화 */
   position: relative;
-  padding-bottom: 1.05rem;
 
   &::after {
     content: "";
     position: absolute;
-    left: 18%;
-    right: 18%;
+    left: 4%;   /* ✅ 밑줄도 거의 끝까지 */
+    right: 4%;
     bottom: 0.25rem;
     height: 1px;
     background: linear-gradient(
@@ -37,6 +39,7 @@
     opacity: 0.9;
   }
 }
+
 
 /* ✅ 요일 헤더: 가로 정렬 + 일/토 색 */
 .calendar-weekdays {
