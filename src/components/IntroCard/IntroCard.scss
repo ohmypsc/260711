@@ -11,7 +11,12 @@
   --petal-filter: none;
 }
 
+/* ✅ 인트로 화면이 앱 최상단에서 화면 전체를 확실히 덮도록 고정 */
 .intro-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+
   background: radial-gradient(circle at center, #fcf9f7 0%, #f7f3f2 100%);
   font-family: "Noto Serif KR", serif;
   display: flex;
@@ -22,7 +27,18 @@
   color: var(--ink);
   overflow: hidden;
   transition: background 0.5s ease, color 0.5s ease;
-  position: relative;
+}
+
+/* ✅ 캔버스는 카드보다 아래 레이어로 내려 클릭 방해를 원천 차단 */
+canvas.petal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  filter: var(--petal-filter);
 }
 
 /* 카드 */
@@ -37,7 +53,10 @@
   max-width: 440px;
   text-align: center;
   transition: transform 0.3s ease, background-color 0.5s ease;
-  z-index: 10;
+
+  /* ✅ 캔버스보다 위 + 클릭 강제 */
+  z-index: 2;
+  pointer-events: auto;
 
   &::before {
     content: "";
@@ -77,15 +96,9 @@
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: 0% center;
-  }
-  50% {
-    background-position: 100% center;
-  }
-  100% {
-    background-position: 0% center;
-  }
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
 }
 
 .subtitle {
@@ -131,40 +144,16 @@
   }
 }
 
-canvas.petal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-  filter: var(--petal-filter);
-}
-
+/* 📱 모바일 대응 */
 @media (max-width: 480px) {
-  .invite-card {
-    padding: 54px 28px;
-  }
-  .names {
-    font-size: 1.8rem;
-    letter-spacing: 1.4px;
-  }
-  .subtitle {
-    font-size: 1rem;
-    margin-bottom: 28px;
-  }
-  .info {
-    font-size: 1.15rem;
-    line-height: 2.3rem;
-  }
-  .footer {
-    font-size: 1.1rem;
-    margin-top: 40px;
-    padding-top: 22px;
-  }
+  .invite-card { padding: 54px 28px; }
+  .names { font-size: 1.8rem; letter-spacing: 1.4px; }
+  .subtitle { font-size: 1rem; margin-bottom: 28px; }
+  .info { font-size: 1.15rem; line-height: 2.3rem; }
+  .footer { font-size: 1.1rem; margin-top: 40px; padding-top: 22px; }
 }
 
+/* 🌙 다크모드 */
 @media (prefers-color-scheme: dark) {
   :root {
     --paper-bg: #272222;
@@ -184,10 +173,8 @@ canvas.petal {
 
   .invite-card {
     background: var(--paper-bg);
-    background-image: linear-gradient(
-        rgba(39, 34, 34, 0.97),
-        rgba(39, 34, 34, 0.97)
-      ),
+    background-image:
+      linear-gradient(rgba(39,34,34,0.97), rgba(39,34,34,0.97)),
       var(--texture);
     background-blend-mode: soft-light;
     border: 1px solid var(--border);
@@ -208,13 +195,8 @@ canvas.petal {
     text-shadow: 0 0 10px rgba(250, 200, 200, 0.5);
   }
 
-  .subtitle {
-    color: var(--accent-light);
-  }
-
-  .info {
-    color: var(--muted);
-  }
+  .subtitle { color: var(--accent-light); }
+  .info { color: var(--muted); }
 
   .footer {
     color: var(--accent-light);
