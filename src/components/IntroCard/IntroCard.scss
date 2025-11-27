@@ -1,4 +1,9 @@
-:root {
+/* ============================================
+   IntroCard (Scoped Variables + Safe Layering)
+   ============================================ */
+
+.intro-wrap {
+  /* ✅ 인트로 전용 변수: 전역(:root) 오염 방지 */
   --paper-bg: #fdfbf9;
   --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
   --ink: #1f1414;
@@ -9,15 +14,13 @@
   --border: #ead4d1;
   --shadow: rgba(0, 0, 0, 0.08);
   --petal-filter: none;
-}
 
-/* ✅ 인트로 화면을 앱 최상단에 고정 */
-.intro-wrap {
+  /* ✅ 인트로 화면을 앱 최상단 고정 */
   position: fixed;
   inset: 0;
   z-index: 9990;
 
-  /* ✅ 내부 z-index 정리를 위한 stacking context */
+  /* ✅ 내부 z-index만으로 레이어 정리되게 */
   isolation: isolate;
 
   background: radial-gradient(circle at center, #fcf9f7 0%, #f7f3f2 100%);
@@ -32,7 +35,7 @@
   transition: background 0.5s ease, color 0.5s ease;
 }
 
-/* 카드 */
+/* 🎴 카드 */
 .invite-card {
   position: relative;
   background: var(--paper-bg) var(--texture);
@@ -52,43 +55,23 @@
   &::before {
     content: "";
     position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
     border: 1px solid #d8b1aa;
     border-radius: 14px;
     opacity: 0.6;
   }
 
-  &:hover {
-    transform: scale(1.02);
-  }
+  &:hover { transform: scale(1.02); }
 }
 
-/* ✅ 꽃잎 캔버스는 카드 "위" 레이어 */
-canvas.petal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  /* 제일 중요: 클릭 절대 안 막음 */
-  pointer-events: none;
-
-  /* 카드보다 위로 */
-  z-index: 3;
-
-  filter: var(--petal-filter);
-}
-
+/* ✨ 이름 */
 .names {
   font-family: "Nanum Myeongjo", serif;
   font-size: 2.2rem;
   font-weight: 700;
   letter-spacing: 1.6px;
   margin-bottom: 16px;
+
   background: linear-gradient(
     120deg,
     #c98f8a 0%,
@@ -109,6 +92,7 @@ canvas.petal {
   100% { background-position: 0% center; }
 }
 
+/* 💍 결혼합니다 */
 .subtitle {
   font-size: 1.2rem;
   color: var(--accent);
@@ -116,6 +100,7 @@ canvas.petal {
   letter-spacing: 1px;
 }
 
+/* 📅 정보 */
 .info {
   font-size: 1.4rem;
   line-height: 2.6rem;
@@ -131,6 +116,7 @@ canvas.petal {
 
 .section { margin-bottom: 30px; }
 
+/* 💌 하단 안내 */
 .footer {
   margin-top: 60px;
   padding-top: 28px;
@@ -146,8 +132,23 @@ canvas.petal {
 
   &:hover {
     color: #b87d7d;
-    text-shadow: 0 0 10px rgba(214, 160, 160, 0.4);
+    text-shadow: 0 0 10px rgba(214,160,160,0.4);
   }
+}
+
+/* 🌸 꽃잎 캔버스: 카드 위 + 클릭 절대 방해 X */
+canvas.petal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+
+  /* ✅ 클릭은 무조건 아래로 통과 */
+  pointer-events: none;
+
+  /* ✅ 카드보다 위에서 보여야 함 */
+  z-index: 3;
+
+  filter: var(--petal-filter);
 }
 
 /* 📱 모바일 */
@@ -159,20 +160,17 @@ canvas.petal {
   .footer { font-size: 1.1rem; margin-top: 40px; padding-top: 22px; }
 }
 
-/* 🌙 다크모드 */
+/* 🌙 다크모드: 변수도 intro-wrap 안에서만 변경 */
 @media (prefers-color-scheme: dark) {
-  :root {
+  .intro-wrap {
     --paper-bg: #272222;
-    --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
     --ink: #f6f5f4;
     --muted: #cabbb8;
     --accent: #dca8a0;
     --accent-light: #f1c2b8;
     --border: #3c2e2e;
     --shadow: rgba(0, 0, 0, 0.8);
-  }
 
-  .intro-wrap {
     background: radial-gradient(circle at center, #1d1717 0%, #0e0b0b 100%);
     color: var(--ink);
   }
@@ -198,7 +196,7 @@ canvas.petal {
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 10px rgba(250, 200, 200, 0.5);
+    text-shadow: 0 0 10px rgba(250,200,200,0.5);
   }
 
   .subtitle { color: var(--accent-light); }
@@ -207,6 +205,6 @@ canvas.petal {
   .footer {
     color: var(--accent-light);
     border-top: 1px solid var(--border);
-    text-shadow: 0 0 10px rgba(250, 200, 200, 0.4);
+    text-shadow: 0 0 10px rgba(250,200,200,0.4);
   }
 }
