@@ -238,7 +238,7 @@
   :root {
     --photo: clamp(115px, 42vw, 160px);
     --line-col-w: 32px;
-    --gutter: clamp(10px, 3vw, 16px);
+    --gutter: clamp(10px, 3vw, 12px);
 
     /* 모바일도 같은 겹침 비율 유지 */
     --overlap: calc(var(--photo) * -0.18);
