@@ -1,19 +1,21 @@
 .w-timeline {
   background: transparent;
   position: relative;
+}
 
+:root {
   /* 🖼️ 사진 크기 설정 */
   --photo: clamp(140px, 16vw, 205px);
   /* 라인 컬럼 너비 */
   --line-col-w: 44px; /* 데스크톱 기본값 */
   /* 사진과 캡션 사이 간격 */
   --gutter: clamp(14px, 2vw, 26px);
-  /* 다음 사진과 겹치는 정도 (-10%) */
+  /* 다음 사진과 겹치는 정도 (-30%) */
   --overlap: calc(var(--photo) * -0.1);
   /* 교차 리듬 세기 (0.06 = 사진 높이의 6%) */
   --lift-ratio: 0.06;
 
-  /* 중앙 세로선의 너비/색 */
+  /* 중앙 세로선의 너비를 변수로 정의 */
   --center-line-width: 2px;
   --line-color: rgba(231, 163, 169, 0.9);
 }
@@ -27,12 +29,10 @@
   margin: 0;
   position: relative;
   display: grid;
-
-  /* ✅ gap 제거: 겹침 간격은 overlap으로만 제어 */
-  gap: 0;
+  gap: 0.6rem;
 }
 
-/* ✅ 중앙 세로 라인 */
+/* 중앙 세로 라인 */
 .timeline-list::before {
   content: "";
   position: absolute;
@@ -47,41 +47,32 @@
 
 /* ---------------- 아이템 구조 ---------------- */
 
-/* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
-  z-index: 1; /* ✅ 중앙선이 항상 뒤로 가게 안전장치 */
+  z-index: 1; /* ✅ 추가: 중앙선이 아이템 뒤로 고정되게 */
 
-  /* 1fr (사진/캡션) | var(--line-col-w) | 1fr (캡션/사진) */
   grid-template-columns: 1fr var(--line-col-w) 1fr;
   display: grid;
   align-items: center;
 
-  /* ✅ 실제 사진 안전 사이즈 정의 + 최소값 안전장치 */
-  --photo-safe: max(
-    90px,
-    min(
-      var(--photo),
-      calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
-    )
+  --photo-safe: min(
+    var(--photo),
+    calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
   );
 
-  /* 아이템 높이를 사진 높이로 고정 */
   min-height: var(--photo-safe);
 
-  /* 기본 오프셋 */
   --offset: 0;
   transform: translateY(var(--offset));
 }
 
-/* ✅ 사진만 겹치게 */
+/* 사진만 겹치게 */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
 
 /* ---------------- 가운데 라인 컬럼 및 점 ---------------- */
 
-/* ✅ 라인 컬럼 */
 .line-col {
   grid-column: 2;
   height: 100%;
@@ -90,10 +81,9 @@
   align-items: center;
   z-index: 2;
 
-  position: relative; /* ✅ dot의 absolute 기준을 line-col로 고정 */
+  position: relative; /* ✅ 추가: dot 기준을 line-col로 */
 }
 
-/* ✅ dot을 중앙선 위에 정확히 고정 */
 .dot {
   width: 12px;
   height: 12px;
@@ -102,7 +92,7 @@
   box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
   z-index: 3;
 
-  position: absolute;
+  position: absolute; /* ✅ 유지 */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -110,8 +100,7 @@
 
 /* ---------------- 모바일 ---------------- */
 @media (max-width: 640px) {
-  /* ✅ :root 재정의 대신 컴포넌트 스코프에서 변수 변경 */
-  .w-timeline {
+  :root {
     --photo: clamp(115px, 42vw, 160px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
