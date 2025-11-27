@@ -1,135 +1,133 @@
 .w-timeline {
-  background: transparent;
-  position: relative;
-}
+  background: transparent;
+  position: relative;
 
-:root {
-  /* 🖼️ 사진 크기 설정 */
-  --photo: clamp(140px, 16vw, 205px);
-  /* 라인 컬럼 너비 */
-  --line-col-w: 44px; /* 데스크톱 기본값 */
-  /* 사진과 캡션 사이 간격 */
-  --gutter: clamp(14px, 2vw, 26px);
-  /* 다음 사진과 겹치는 정도 (-30%) */
-  --overlap: calc(var(--photo) * -0.1);
-  /* 교차 리듬 세기 (0.06 = 사진 높이의 6%) */
-  --lift-ratio: 0.06;
+  /* 🖼️ 사진 크기 설정 */
+  --photo: clamp(140px, 16vw, 205px);
+  /* 라인 컬럼 너비 */
+  --line-col-w: 44px; /* 데스크톱 기본값 */
+  /* 사진과 캡션 사이 간격 */
+  --gutter: clamp(14px, 2vw, 26px);
+  /* 다음 사진과 겹치는 정도 (-10%) */
+  --overlap: calc(var(--photo) * -0.1);
+  /* 교차 리듬 세기 (0.06 = 사진 높이의 6%) */
+  --lift-ratio: 0.06;
 
-  /* 중앙 세로선의 너비를 변수로 정의 */
-  --center-line-width: 2px;
+  /* 중앙 세로선의 너비/색 */
+  --center-line-width: 2px;
   --line-color: rgba(231, 163, 169, 0.9);
 }
 
-/* ---------------- 리스트 및 중앙 세로선 (수정됨: Opacity 해결) ---------------- */
+/* ---------------- 리스트 및 중앙 세로선 ---------------- */
 
 /* 리스트 */
 .timeline-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  position: relative;
-  display: grid;
-  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  display: grid;
+
+  /* ✅ gap 제거: 겹침 간격은 overlap으로만 제어 */
+  gap: 0;
 }
 
-/* ✅ 중앙 세로 라인 (Opacity 수정) */
+/* ✅ 중앙 세로 라인 */
 .timeline-list::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  /* 선 너비의 절반만큼 왼쪽으로 이동 */
-  transform: translateX(calc(var(--center-line-width) / -2));
-  width: var(--center-line-width);
-  
-  /* 🔥 수정: Opacity를 높여 선이 끊어지지 않게 함 */
-  background: var(--line-color);
-  z-index: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(calc(var(--center-line-width) / -2));
+  width: var(--center-line-width);
+  background: var(--line-color);
+  z-index: 0;
 }
 
 /* ---------------- 아이템 구조 ---------------- */
 
 /* ✅ 아이템: photo / line / caption */
 .timeline-item {
-  position: relative;
-  /* 1fr (사진/캡션) | var(--line-col-w) | 1fr (캡션/사진) */
-  grid-template-columns: 1fr var(--line-col-w) 1fr;
-  display: grid;
-  align-items: center;
+  position: relative;
+  z-index: 1; /* ✅ 중앙선이 항상 뒤로 가게 안전장치 */
 
-  /* 실제 사진 안전 사이즈 정의 */
-  --photo-safe: min(
-    var(--photo),
-    calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
-  );
+  /* 1fr (사진/캡션) | var(--line-col-w) | 1fr (캡션/사진) */
+  grid-template-columns: 1fr var(--line-col-w) 1fr;
+  display: grid;
+  align-items: center;
 
-  /* 아이템 높이를 사진 높이로 고정 */
-  min-height: var(--photo-safe);
-  
-  /* 기본 오프셋 */
-  --offset: 0;
-  transform: translateY(var(--offset));
+  /* ✅ 실제 사진 안전 사이즈 정의 + 최소값 안전장치 */
+  --photo-safe: max(
+    90px,
+    min(
+      var(--photo),
+      calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
+    )
+  );
+
+  /* 아이템 높이를 사진 높이로 고정 */
+  min-height: var(--photo-safe);
+
+  /* 기본 오프셋 */
+  --offset: 0;
+  transform: translateY(var(--offset));
 }
 
 /* ✅ 사진만 겹치게 */
 .timeline-item + .timeline-item {
-  margin-top: var(--overlap);
+  margin-top: var(--overlap);
 }
 
-/* ---------------- 가운데 라인 컬럼 및 점 (수정됨: 쏠림 해결) ---------------- */
+/* ---------------- 가운데 라인 컬럼 및 점 ---------------- */
 
-/* 라인 컬럼: 그리드 공간만 차지하도록 수정 (dot을 absolute로 변경하기 위해) */
+/* ✅ 라인 컬럼 */
 .line-col {
-  grid-column: 2;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  /* justify-content: center; 가 더 이상 dot에 필요하지 않지만 유지합니다. */
+  grid-column: 2;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  position: relative; /* ✅ dot의 absolute 기준을 line-col로 고정 */
 }
 
-/* 🔥 .dot에 absolute 위치를 적용하여 중앙선 위에 강제로 겹치도록 수정 */
+/* ✅ dot을 중앙선 위에 정확히 고정 */
 .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: var(--theme-primary);
-  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
-  z-index: 3;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--theme-primary);
+  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
+  z-index: 3;
 
-  /* 🔥 추가/수정: dot을 line-col 내부가 아닌 timeline-item의 중앙에 강제 배치 */
-  position: absolute; /* .timeline-item이 relative이므로 그 안에서 absolute */
+  position: absolute;
   top: 50%;
   left: 50%;
-  /* left: 50%는 line-col의 중앙을 잡기 위해 사용 */
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
 }
 
-/* ---------------- 모바일 (@media (max-width: 640px)) ---------------- */
+/* ---------------- 모바일 ---------------- */
 @media (max-width: 640px) {
-  :root {
-    --photo: clamp(115px, 42vw, 160px);
-    --line-col-w: 32px;
-    --gutter: clamp(10px, 3vw, 16px);
-    --overlap: calc(var(--photo) * -0.3);
-    --lift-ratio: 0.04;
+  /* ✅ :root 재정의 대신 컴포넌트 스코프에서 변수 변경 */
+  .w-timeline {
+    --photo: clamp(115px, 42vw, 160px);
+    --line-col-w: 32px;
+    --gutter: clamp(10px, 3vw, 16px);
+    --overlap: calc(var(--photo) * -0.3);
+    --lift-ratio: 0.04;
+    --center-line-width: 1px;
+  }
 
-    /* 모바일에서 중앙 세로선 너비를 1px로 미세 조정 */
-    --center-line-width: 1px; 
-  }
+  .timeline-item {
+    grid-template-columns: 1fr var(--line-col-w) 1fr;
+  }
 
-  /* dot이 absolute로 변경되어 쏠림 문제가 해결됩니다. */
-
-  .timeline-item {
-    grid-template-columns: 1fr var(--line-col-w) 1fr;
-  }
-
-  .caption-col .title {
-    font-size: 0.95rem;
-  }
-  .caption-col .desc {
-    font-size: 0.86rem;
-  }
+  .caption-col .title {
+    font-size: 0.95rem;
+  }
+  .caption-col .desc {
+    font-size: 0.86rem;
+  }
 }
