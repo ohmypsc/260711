@@ -17,6 +17,7 @@
 
   /* 중앙 세로선의 너비를 변수로 정의 */
   --center-line-width: 2px;
+  --line-color: rgba(231, 163, 169, 0.9);
 }
 
 /* ---------------- 리스트 및 중앙 세로선 (수정됨: Opacity 해결) ---------------- */
@@ -43,7 +44,7 @@
   width: var(--center-line-width);
   
   /* 🔥 수정: Opacity를 높여 선이 끊어지지 않게 함 */
-  background: var(--border-color);
+  background: var(--line-color);
   z-index: 0;
 }
 
