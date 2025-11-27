@@ -142,7 +142,7 @@
    🧭 Navigation Buttons (CLEAN FINAL + Gradient)
    - 심플/예쁨 유지
    - 네이버/티맵: 로고톤 정밀 그라데이션(텍스트+보더)
-   - 카카오: 단색 유지
+   - 카카오: 단색 아이덴티티 유지 + 고급화
    =========================== */
 
 .navi-buttons-wrapper {
@@ -158,12 +158,12 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 0.58rem; /* ✅ 로고/텍스트 간격 살짝 업 */
+  gap: 0.58rem;
 
   padding: 0.95rem 0.45rem;
   border-radius: 12px;
 
-  font-size: 0.97rem;  /* ✅ 라벨 살짝 키움 */
+  font-size: 0.97rem;
   font-weight: 700;
   letter-spacing: 0.01rem;
   line-height: 1;
@@ -171,10 +171,10 @@
 
   color: var(--text-main);
 
-  /* ✅ 그라데이션 보더를 ::before로 그릴 거라 투명 보더 */
+  /* 그라데이션 보더는 ::before가 담당 */
   border: 1.4px solid transparent;
 
-  /* ✅ 단정한 크림 바디 + 서비스 tint */
+  /* 단정한 크림 바디 + 서비스 tint */
   background:
     linear-gradient(
       180deg,
@@ -185,6 +185,7 @@
 
   position: relative;
   isolation: isolate;
+  overflow: hidden;
 
   cursor: pointer;
   user-select: none;
@@ -204,30 +205,28 @@
   opacity: 0.92;
 }
 
-/* ✅ 로고 아이콘 */
+/* 로고 아이콘 */
 .navi-button .navi-logo {
-  width: 1.42em;   /* ✅ 아이콘 조금 더 키움 */
+  width: 1.42em;
   height: 1.42em;
   object-fit: contain;
   display: inline-block;
   flex: 0 0 auto;
 }
 
-/* ✅ 라벨 공통 (span 없으면 영향 없음) */
+/* 라벨 공통 */
 .navi-button .navi-label {
   display: inline-block;
   line-height: 1;
 }
 
-/* ---------------------------
-   ✅ Gradient border base
-   --------------------------- */
+/* ✅ Gradient border base */
 .navi-button::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.4px;                  /* 보더 두께 */
+  padding: 1.4px;
   pointer-events: none;
   z-index: 1;
   background: var(--border-grad, transparent);
@@ -286,22 +285,66 @@
 
 
 /* ===========================
-   🟡 KAKAO (solid border)
+   🟡 KAKAO (polished but solid-brand)
    =========================== */
 
 .navi-button.kakao {
-  --navi-tint: rgba(254, 229, 0, 0.26);
-  border-color: rgba(254, 229, 0, 0.95);
+  --navi-tint: rgba(254, 229, 0, 0.30);
+
+  /* 단색 아이덴티티 유지하면서 "광택"만 있는 옐로우 보더 */
+  --border-grad: linear-gradient(
+    180deg,
+    #FFE76A 0%,
+    #FEE100 55%,
+    #FEC900 100%
+  );
+
   color: #191919;
 }
 
-/* 카카오는 ::before 보더 끔 */
+/* 카카오 보더는 단색-옐로우 그라데이션 */
 .navi-button.kakao::before {
-  background: transparent;
+  background: var(--border-grad);
+}
+
+/* 카카오 라벨: 검정 단색 유지 + 아주 얕은 딥 그라데이션 */
+.navi-button.kakao .navi-label {
+  background: linear-gradient(
+    180deg,
+    #222 0%,
+    #111 55%,
+    #000 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  font-weight: 800;
+  letter-spacing: 0.008em;
+}
+
+/* 노랑 상단 유리 하이라이트 */
+.navi-button.kakao::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 10%;
+  height: 42%;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.95) 0%,
+    rgba(255,255,255,0) 100%
+  );
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .navi-button.kakao:active {
-  --navi-tint: rgba(254, 229, 0, 0.34);
+  --navi-tint: rgba(254, 229, 0, 0.36);
+  filter: saturate(1.08);
 }
 
 
@@ -409,7 +452,7 @@
 
   .navi-button {
     padding: 0.8rem 0.3rem;
-    font-size: 0.88rem;  /* ✅ 모바일도 살짝 업 */
+    font-size: 0.88rem;
     border-radius: 10px;
     gap: 0.52rem;
   }
