@@ -236,7 +236,7 @@
 /* ---------------- 모바일 ---------------- */
 @media (max-width: 640px) {
   :root {
-    --photo: clamp(108px, 38vw, 148px);
+    --photo: clamp(108px, 40vw, 148px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
 
