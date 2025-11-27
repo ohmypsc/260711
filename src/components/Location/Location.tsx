@@ -236,21 +236,21 @@ export const Location = () => {
         <div ref={mapDomRef} className="map-area" />
       </div>
 
-      {/* ✅ 길찾기 버튼(로고 적용) */}
+      {/* ✅ 길찾기 버튼(로고 + 그라데이션 라벨) */}
       <div className="navi-buttons-wrapper">
         <button onClick={handleNaverMap} className="navi-button naver">
           <img className="navi-logo naver" src={naverMapLogo} alt="" aria-hidden />
-          네이버지도
+          <span className="navi-label">네이버지도</span>
         </button>
 
         <button onClick={handleKakaoMap} className="navi-button kakao">
           <img className="navi-logo kakao" src={kakaoMapLogo} alt="" aria-hidden />
-          카카오맵
+          <span className="navi-label">카카오맵</span>
         </button>
 
         <button onClick={handleTMap} className="navi-button tmap">
           <img className="navi-logo tmap" src={tmapLogo} alt="" aria-hidden />
-          티맵
+          <span className="navi-label">티맵</span>
         </button>
       </div>
 
