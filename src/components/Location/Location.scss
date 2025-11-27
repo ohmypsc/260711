@@ -234,9 +234,8 @@
 
 /* ===========================
    🧭 Navigation Buttons (FINAL)
-   - basic 버튼의 크림/세라믹/그레인/샤인 무드 이식
-   - 각 서비스 고유 색(tint/보더) 유지
-   - mobile-first / no hover / no shadow
+   - basic 버튼 무드 유지
+   - "속이 너무 하얘 보임"만 개선
    =========================== */
 
 .navi-buttons-wrapper {
@@ -256,28 +255,28 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 0.52rem;               /* ✅ 로고 커진 만큼 살짝만 여유 */
+  gap: 0.52rem;
 
   padding: 0.95rem 0.4rem;
   border-radius: 12px;
 
-  font-size: 0.96rem;         /* ✅ 글자 “조금” 키움(원본 대비 +0.06) */
+  font-size: 0.96rem;
   font-weight: 700;
   letter-spacing: 0.01rem;
   white-space: nowrap;
 
   color: var(--text-main);
 
-  /* ✅ basic 크림 바디 + 서비스 tint 레이어 */
+  /* ✅ (수정) 화이트 → 오프화이트/크림으로 살짝 다운 */
   background:
     radial-gradient(120% 140% at 8% 0%,
-      rgba(255,255,255,0.95) 0%,
-      rgba(255,255,255,0.55) 48%,
+      rgba(255,255,255,0.88) 0%,   /* ↓ 0.95 */
+      rgba(255,255,255,0.42) 48%,  /* ↓ 0.55 */
       transparent 75%
     ),
     linear-gradient(
       180deg,
-      #fff 0%,
+      color-mix(in srgb, #fff 92%, var(--theme-bg) 8%) 0%, /* ✅ 오프화이트 */
       var(--theme-bg) 60%,
       color-mix(in srgb, var(--theme-primary-light) 10%, transparent) 100%
     ),
@@ -365,7 +364,7 @@
 
 /* ✅ 로고 아이콘 공통 */
 .navi-button .navi-logo {
-  width: 1.32em;              /* ✅ 아이콘 “조금” 키움(원본 대비 +0.12em) */
+  width: 1.32em;
   height: 1.32em;
   object-fit: contain;
   display: inline-block;
@@ -375,7 +374,7 @@
 }
 
 .navi-button .navi-logo.naver {
-  width: 1.22em;              /* ✅ 원본 비율 유지한 채 업 */
+  width: 1.22em;
   height: 1.22em;
 }
 
@@ -395,45 +394,46 @@
 
 /* 네이버 */
 .navi-button.naver {
-  --navi-tint: rgba(3, 199, 90, 0.06);
+  /* ✅ (수정) tint 조금 더 보이게 */
+  --navi-tint: rgba(3, 199, 90, 0.085); /* ↑ 0.06 */
+
   border-color: rgba(3, 199, 90, 0.65);
   color: #03c75a;
 
-  /* ✅ 브랜드 느낌 폰트 */
   font-family: "NanumSquareNeo", system-ui, sans-serif;
 
   &:active {
-    --navi-tint: rgba(3, 199, 90, 0.12);
+    --navi-tint: rgba(3, 199, 90, 0.14); /* ↑ 0.12 */
     border-color: rgba(3, 199, 90, 0.9);
   }
 }
 
 /* 카카오 */
 .navi-button.kakao {
-  --navi-tint: rgba(254, 229, 0, 0.18);
+  --navi-tint: rgba(254, 229, 0, 0.22); /* ↑ 0.18 */
+
   border-color: rgba(254, 229, 0, 0.9);
   color: #191919;
 
-  /* ✅ 브랜드 느낌 폰트 */
   font-family: "KakaoBigSans", system-ui, sans-serif;
 
   &:active {
-    --navi-tint: rgba(254, 229, 0, 0.28);
+    --navi-tint: rgba(254, 229, 0, 0.32); /* ↑ 0.28 */
   }
 }
 
 /* T맵 */
 .navi-button.tmap {
-  --navi-tint: rgba(0, 128, 255, 0.06);
+  --navi-tint: rgba(0, 128, 255, 0.085); /* ↑ 0.06 */
+
   border-color: rgba(0, 128, 255, 0.65);
   color: #0080ff;
 
-  /* ✅ 브랜드 느낌 폰트(대체) */
   font-family: "Pretendard", system-ui, sans-serif;
   letter-spacing: 0.005em;
 
   &:active {
-    --navi-tint: rgba(0, 128, 255, 0.12);
+    --navi-tint: rgba(0, 128, 255, 0.14); /* ↑ 0.12 */
     border-color: rgba(0, 128, 255, 0.9);
   }
 }
@@ -503,13 +503,13 @@
 
   .navi-button {
     padding: 0.8rem 0.25rem;
-    font-size: 0.86rem;       /* ✅ 모바일 글자도 살짝 업 */
+    font-size: 0.86rem;
     border-radius: 10px;
     gap: 0.48rem;
   }
 
   .navi-button .navi-logo {
-    width: 1.28em;            /* ✅ 모바일도 비율 유지하며 살짝 업 */
+    width: 1.28em;
     height: 1.28em;
   }
 
