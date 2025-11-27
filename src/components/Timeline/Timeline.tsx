@@ -14,7 +14,6 @@ const images = Object.keys(imageModules)
   })
   .map((k) => imageModules[k]);
 
-/** 캡션(선택) */
 type Caption = {
   imgIndex: number; // 1-based
   title?: string;
@@ -47,41 +46,38 @@ const items: TimelineItem[] = images.map((img, i) => {
 export function Timeline() {
   return (
     <div className="w-timeline">
-      {/* ✅ 제목만 컴포넌트에서 */}
       <h2 className="section-title">우리의 시간</h2>
 
       <ol className="timeline-list">
-        {items.map((item, idx) => (
-          <li
-            key={item.imgIndex}
-            className={`timeline-item ${idx % 2 === 0 ? "left" : "right"} ${
-              item.hasCaption ? "with-caption" : "no-caption"
-            }`}
-          >
-            <div className="line-col">
-              <span className="dot" aria-hidden="true" />
-              <span className="vline" aria-hidden="true" />
-            </div>
+        {items.map((item, idx) => {
+          const side = idx % 2 === 0 ? "left" : "right";
 
-            <article className="card">
-              <div className="photo-wrap">
-                <img
-                  src={item.img}
-                  alt={item.caption?.title ?? `timeline-${item.imgIndex}`}
-                  loading="lazy"
-                />
+          return (
+            <li key={item.imgIndex} className={`timeline-item ${side}`}>
+              <div className="line-col">
+                <span className="dot" aria-hidden="true" />
               </div>
 
-              {item.hasCaption && (
-                <div className="text-wrap">
-                  {item.caption?.date && <p className="date">{item.caption.date}</p>}
-                  {item.caption?.title && <h3 className="title">{item.caption.title}</h3>}
-                  {item.caption?.desc && <p className="desc">{item.caption.desc}</p>}
+              <div className="media">
+                <div className="photo-wrap">
+                  <img
+                    src={item.img}
+                    alt={item.caption?.title ?? `timeline-${item.imgIndex}`}
+                    loading="lazy"
+                  />
                 </div>
-              )}
-            </article>
-          </li>
-        ))}
+
+                {item.hasCaption && (
+                  <div className="caption-wrap">
+                    {item.caption?.date && <p className="date">{item.caption.date}</p>}
+                    {item.caption?.title && <h3 className="title">{item.caption.title}</h3>}
+                    {item.caption?.desc && <p className="desc">{item.caption.desc}</p>}
+                  </div>
+                )}
+              </div>
+            </li>
+          );
+        })}
       </ol>
     </div>
   );
