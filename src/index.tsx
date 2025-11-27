@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
 import { Cover } from "@/components/Cover/Cover";
 import { Invitation } from "@/components/Invitation/Invitation";
+import { Timeline } from "@/components/Timeline/Timeline";
 import { Calendar } from "@/components/Calendar/Calendar";
 import { Location } from "@/components/Location/Location"; 
 import { Account } from "@/components/Account/Account";
@@ -51,6 +52,14 @@ export default function MainWeddingPage() {
           </div>
         </section>
 
+
+        <section id="timeline">
+          <div className="section-inner">
+            <Timeline />
+          </div>
+        </section>
+
+        
         <section id="calendar">
           <div className="section-inner">
             <Calendar />
