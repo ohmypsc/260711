@@ -1,124 +1,407 @@
+
+Gemini와의 대화
 .w-timeline {
+
   background: transparent;
+
   position: relative;
+
 }
+
+
 
 :root {
-  /* 🖼️ 사진 크기 설정 */
+
+  /* ✅ 사진 조금 더 줄임 */
+
   --photo: clamp(140px, 16vw, 205px);
-  /* 라인 컬럼 너비 */
-  --line-col-w: 44px; /* 데스크톱 기본값 */
-  /* 사진과 캡션 사이 간격 */
+
+
+
+  --line-col-w: 44px;
+
   --gutter: clamp(14px, 2vw, 26px);
-  /* 다음 사진과 겹치는 정도 (-30%) */
-  --overlap: calc(var(--photo) * -0.1);
-  /* 교차 리듬 세기 (0.06 = 사진 높이의 6%) */
+
+
+
+  /* 다음 사진 30% 겹침 */
+
+  --overlap: calc(var(--photo) * -0.3);
+
+
+
+  /* 교차 리듬 세기 */
+
   --lift-ratio: 0.06;
 
-  /* 중앙 세로선의 너비를 변수로 정의 */
-  --center-line-width: 2px;
 }
 
-/* ---------------- 리스트 및 중앙 세로선 ---------------- */
+
+
+/* 리스트 */
 
 .timeline-list {
+
   list-style: none;
+
   padding: 0;
+
   margin: 0;
+
   position: relative;
+
   display: grid;
+
   gap: 0.6rem;
+
 }
+
+
+
+/* 가운데 세로 라인 */
 
 .timeline-list::before {
+
   content: "";
+
   position: absolute;
+
   top: 0;
+
   bottom: 0;
+
   left: 50%;
-  transform: translateX(calc(var(--center-line-width) / -2));
-  width: var(--center-line-width);
+
+  transform: translateX(-50%);
+
+  width: 2px;
 
   background: linear-gradient(
+
     to bottom,
-    rgba(231, 163, 169, 0.7),
-    rgba(231, 163, 169, 0.7)
+
+    rgba(231, 163, 169, 0.45),
+
+    rgba(231, 163, 169, 0.06)
+
   );
+
   z-index: 0;
+
 }
 
-/* ---------------- 아이템 구조 ---------------- */
+
+
+/* ✅ 아이템: photo / line / caption */
 
 .timeline-item {
+
   position: relative;
-  z-index: 1; /* ✅ 중앙선보다 위로 */
+
+  display: grid;
 
   grid-template-columns: 1fr var(--line-col-w) 1fr;
-  display: grid;
-  align-items: center;
 
-  /* 실제 사진 안전 사이즈 정의 */
+  align-items: center; /* ✅ 세로 기준을 가운데로 */
+
+
+
+  /* ✅ 실제 사진 안전 사이즈를 "아이템 변수"로 정의 */
+
   --photo-safe: min(
+
     var(--photo),
+
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
+
   );
+
+
+
+  /* ✅ 아이템 높이를 사진 높이로 고정 → dot=정중앙 */
 
   min-height: var(--photo-safe);
 
+
+
+  /* 기본 오프셋 */
+
   --offset: 0;
+
   transform: translateY(var(--offset));
+
 }
 
-.timeline-item + .timeline-item {
-  margin-top: var(--overlap);
+
+
+/* ✅ 사진 영역 */
+
+.media {
+
+  grid-row: 1;
+
+  position: relative;
+
+  z-index: 1;
+
+  width: var(--photo-safe);
+
+  height: var(--photo-safe);
+
+  display: flex;
+
 }
 
-/* ---------------- 가운데 라인 컬럼 및 점 ---------------- */
+
+
+.photo-wrap {
+
+  width: 100%;
+
+  height: 100%;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  background: #fff;
+
+  box-shadow: 0 10px 20px var(--shadow-color);
+
+
+
+  img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+  }
+
+}
+
+
+
+/* ✅ 라인 컬럼은 아이템 높이(=사진)만큼 */
 
 .line-col {
+
   grid-column: 2;
+
   height: 100%;
+
   display: flex;
+
   justify-content: center;
-  align-items: center;
+
+  align-items: center; /* ✅ dot 중앙 */
+
   z-index: 2;
 
-  position: relative; /* ✅ dot absolute 기준 */
 }
+
+
 
 .dot {
+
   width: 12px;
+
   height: 12px;
+
   border-radius: 999px;
+
   background: var(--theme-primary);
+
   box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
+
   z-index: 3;
 
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
+
+
+
+/* ✅ 캡션: 반대편 + dot(사진 중앙) 기준으로 정렬 */
+
+.caption-col {
+
+  z-index: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.22rem;
+
+  align-self: center; /* ✅ 사진 중앙 라인에 맞춤 */
+
+  padding: 0;
+
+}
+
+
+
+.caption-col .date {
+
+  margin: 0;
+
+  font-size: 0.82rem;
+
+  color: var(--text-light);
+
+  letter-spacing: 0.02rem;
+
+}
+
+.caption-col .title {
+
+  margin: 0;
+
+  font-size: 1rem;
+
+  font-weight: 600;
+
+  color: var(--text-main);
+
+}
+
+.caption-col .desc {
+
+  margin: 0;
+
+  font-size: 0.9rem;
+
+  color: var(--text-sub);
+
+  line-height: 1.35;
+
+}
+
+
+
+/* ---------------- 좌/우 교차 ---------------- */
+
+
+
+/* ✅ 왼쪽 사진 / 오른쪽 캡션 */
+
+.timeline-item.left {
+
+  --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
+
+
+
+  .media {
+
+    grid-column: 1;
+
+    justify-self: end;
+
+    margin-right: var(--gutter);
+
+  }
+
+
+
+  .caption-col {
+
+    grid-column: 3;
+
+    justify-self: start;
+
+    margin-left: var(--gutter);
+
+    text-align: left;
+
+    align-items: flex-start;
+
+  }
+
+}
+
+
+
+/* ✅ 오른쪽 사진 / 왼쪽 캡션 */
+
+.timeline-item.right {
+
+  --offset: calc(var(--photo-safe) * var(--lift-ratio));
+
+
+
+  .media {
+
+    grid-column: 3;
+
+    justify-self: start;
+
+    margin-left: var(--gutter);
+
+  }
+
+
+
+  .caption-col {
+
+    grid-column: 1;
+
+    justify-self: end;
+
+    margin-right: var(--gutter);
+
+    text-align: right;
+
+    align-items: flex-end;
+
+  }
+
+}
+
+
+
+/* ✅ 사진만 겹치게 (캡션 높이 영향 X) */
+
+.timeline-item + .timeline-item {
+
+  margin-top: var(--overlap);
+
+}
+
+
 
 /* ---------------- 모바일 ---------------- */
+
 @media (max-width: 640px) {
+
   :root {
+
     --photo: clamp(115px, 42vw, 160px);
+
     --line-col-w: 32px;
+
     --gutter: clamp(10px, 3vw, 16px);
+
     --overlap: calc(var(--photo) * -0.3);
+
     --lift-ratio: 0.04;
-    --center-line-width: 1px;
+
   }
+
+
 
   .timeline-item {
+
     grid-template-columns: 1fr var(--line-col-w) 1fr;
+
   }
 
-  .caption-col .title {
-    font-size: 0.95rem;
-  }
-  .caption-col .desc {
-    font-size: 0.86rem;
-  }
-}
+
+
+  .caption-col .title { font-size: 0.95rem; }
+
+  .caption-col .desc  { font-size: 0.86rem; }
+
+} 
