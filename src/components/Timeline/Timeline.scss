@@ -43,7 +43,7 @@
   width: var(--center-line-width);
   
   /* 🔥 수정: Opacity를 높여 선이 끊어지지 않게 함 */
-  background: var(--line-color);
+  background: var(--border-color);
   z-index: 0;
 }
 
