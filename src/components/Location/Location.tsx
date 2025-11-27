@@ -161,21 +161,21 @@ export const Location = () => {
     else window.open(webUrl, "_blank");
   };
 
-  const handleKakaoNavi = () => {
+  // ✅ 카카오맵으로 변경 (네이버와 동일: 앱 → 없으면 웹)
+  const handleKakaoMap = () => {
     const device = getDevice();
 
-    const appUrl = `kakaonavi://navigate?name=${encodeURIComponent(
+    // 1) 카카오맵 앱 열기(좌표 보기)
+    const appUrl = `kakaomap://look?p=${DEST_LAT},${DEST_LNG}`;
+
+    // 2) 앱 없으면 웹 카카오맵 길찾기
+    const webUrl = `https://map.kakao.com/link/to/${encodeURIComponent(
       DEST_NAME
-    )}&x=${DEST_LNG}&y=${DEST_LAT}&coord_type=wgs84`;
+    )},${DEST_LAT},${DEST_LNG}`;
 
-    const androidStore =
-      "https://play.google.com/store/apps/details?id=com.locnall.KimGiSa";
-    const iosStore =
-      "https://apps.apple.com/kr/search?term=%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%82%B4%EB%B9%84";
-
-    if (device === "android") openWithFallback(appUrl, androidStore);
-    else if (device === "ios") openWithFallback(appUrl, iosStore);
-    else alert("모바일에서 이용 가능합니다.");
+    if (device === "ios" || device === "android")
+      openWithFallback(appUrl, webUrl);
+    else window.open(webUrl, "_blank");
   };
 
   const handleTMap = () => {
@@ -255,14 +255,15 @@ export const Location = () => {
           <i className="fa-solid fa-n" /> 네이버 지도
         </button>
 
-        <button onClick={handleKakaoNavi} className="navi-button kakao">
-          <i className="fa-solid fa-comment" /> 카카오내비
+        {/* ✅ 카카오내비 → 카카오맵 */}
+        <button onClick={handleKakaoMap} className="navi-button kakao">
+          <i className="fa-solid fa-location-dot" /> 카카오맵
         </button>
 
         <button onClick={handleTMap} className="navi-button tmap">
-  <i className="fa-solid fa-t" />
-  티맵
-</button>
+          <i className="fa-solid fa-t" />
+          티맵
+        </button>
       </div>
 
       {/* 교통 안내 */}
