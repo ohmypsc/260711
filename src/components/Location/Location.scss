@@ -1,125 +1,8 @@
 /* ===========================
-   📍 Venue Info (지도 위)
-   =========================== */
-
-.venue-info {
-  text-align: center;
-  margin: -1rem 0 1.2rem;
-  display: grid;
-  gap: 0.35rem;
-  color: var(--text-main);
-
-  .venue-name,
-  .venue-address {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 1rem;
-
-    i {
-      color: var(--theme-primary);
-    }
-  }
-
-  .venue-name {
-    font-weight: 600;
-    letter-spacing: 0.01rem;
-  }
-
-  .venue-address {
-    font-size: 0.95rem;
-    opacity: 0.9;
-  }
-}
-
-/* ===========================
-   🗺 Map + Lock UI
-   =========================== */
-
-.map-wrapper {
-  position: relative;
-  margin: 0 auto 1rem;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid var(--border-color);
-}
-
-.map-area {
-  width: 100%;
-  height: 350px;
-  border-radius: 14px;
-}
-
-.map-lock-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  background: transparent;
-}
-
-.lock-message {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(25, 25, 25, 0.9);
-  color: #fff;
-  padding: 0.9rem 1.05rem;
-  border-radius: 14px;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  text-align: center;
-  white-space: nowrap;
-
-  .lock-message-title {
-    font-weight: 700;
-    margin-bottom: 0.35rem;
-    letter-spacing: 0.01rem;
-
-    i {
-      margin-right: 0.35rem;
-    }
-  }
-
-  .lock-message-sub {
-    font-size: 0.9em;
-    opacity: 0.9;
-  }
-}
-
-.map-lock-button {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  z-index: 10;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: #fff;
-  font-size: 17px;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  transition: transform 0.12s ease,
-              background-color 0.2s ease,
-              color 0.2s ease;
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  &.unlocked {
-    background: #111;
-    color: #fff;
-    border-color: transparent;
-  }
-}
-
-/* ===========================
-   🧭 Navigation Buttons (outlined + light fill / no hover)
+   🧭 Navigation Buttons (FINAL)
+   - basic 버튼의 크림/세라믹/그레인/샤인 무드 이식
+   - 각 서비스 고유 색(tint/보더) 유지
+   - mobile-first / no hover / no shadow
    =========================== */
 
 .navi-buttons-wrapper {
@@ -130,12 +13,17 @@
 }
 
 .navi-button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
   min-width: 0;
+  width: 100%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-
   gap: 0.45rem;
+
   padding: 0.95rem 0.4rem;
   border-radius: 12px;
 
@@ -144,142 +32,269 @@
   letter-spacing: 0.01rem;
   white-space: nowrap;
 
-  background: #fff; /* 기본값, 각 버튼에서 덮어씀 */
-  border: 1.5px solid transparent; /* 각 버튼에서 덮어씀 */
   color: var(--text-main);
 
-  /* ✅ 데스크톱/모바일 baseline 통일 */
-  line-height: 1;              /* 텍스트 줄높이 고정 */
-  vertical-align: middle;      /* flex 안에서도 안정 */
+  /* ✅ basic 같은 “크림 바디”를 공통 베이스로 깔고,
+        마지막 레이어로 서비스 tint를 얹는 구조 */
+  background:
+    radial-gradient(120% 140% at 8% 0%,
+      rgba(255,255,255,0.95) 0%,
+      rgba(255,255,255,0.55) 48%,
+      transparent 75%
+    ),
+    linear-gradient(
+      180deg,
+      #fff 0%,
+      var(--theme-bg) 60%,
+      color-mix(in srgb, var(--theme-primary-light) 10%, transparent) 100%
+    ),
+    var(--navi-tint, #fff);
+
+  border: 1.5px solid transparent; /* 서비스별로 덮어씀 */
+  box-shadow: none;
+
+  line-height: 1;
+  vertical-align: middle;
 
   cursor: pointer;
-  transition: transform 0.12s ease, opacity 0.18s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 
-  i {
-    font-size: 1.05em;
-    line-height: 1;       /* ✅ 아이콘 줄높이도 동일 */
-    transform: none;      /* ✅ translate 제거 → 베이스라인 맞춤 */
-    display: inline-block;
-  }
-
-  &:active {
-    transform: translateY(1px) scale(0.98);
-    opacity: 0.9;
-  }
+  transition:
+    transform 0.12s ease,
+    opacity 0.18s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    filter 0.25s ease;
 }
 
-/* 네이버: 테두리 초록 + 연한 초록 fill */
+.navi-button i {
+  font-size: 1.05em;
+  line-height: 1;
+  transform: none;
+  display: inline-block;
+}
+
+/* ✅ 미세 그레인/종이결 (basic의 texture 레이어) */
+.navi-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+
+  background:
+    radial-gradient(circle at 18% 22%,
+      rgba(255,255,255,0.75) 0 1px,
+      transparent 1.2px
+    ) 0 0 / 10px 10px,
+    radial-gradient(circle at 72% 68%,
+      rgba(255,255,255,0.9) 0 1px,
+      transparent 1.3px
+    ) 0 0 / 12px 12px,
+    linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(255,255,255,0.25) 45%,
+      transparent 55%
+    );
+  opacity: 0.35;
+  mix-blend-mode: soft-light;
+}
+
+/* ✅ press shine (active only) */
+.navi-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+
+  opacity: 0;
+  transform: translateX(-18%);
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,0.85) 35%,
+    rgba(255,255,255,0.25) 50%,
+    transparent 70%
+  );
+}
+
+.navi-button:active {
+  transform: translateY(1px) scale(0.98);
+  opacity: 0.92;
+  filter: saturate(1.05);
+}
+
+.navi-button:active::after {
+  opacity: 0.9;
+  transform: translateX(22%);
+  transition: opacity 0.25s ease, transform 0.45s ease;
+}
+
+/* ------------------------------------------------------
+   ✅ 서비스별 컬러/테두리 유지 (tint는 변수로)
+   ------------------------------------------------------ */
+
+/* 네이버: 테두리 초록 + 연한 초록 tint */
 .navi-button.naver {
+  --navi-tint: rgba(3, 199, 90, 0.06);
   border-color: rgba(3, 199, 90, 0.65);
   color: #03c75a;
-  background: rgba(3, 199, 90, 0.06);
-
-  &:active {
-    background: rgba(3, 199, 90, 0.12);
-    border-color: rgba(3, 199, 90, 0.9);
-  }
+}
+.navi-button.naver:active {
+  --navi-tint: rgba(3, 199, 90, 0.12);
+  border-color: rgba(3, 199, 90, 0.9);
 }
 
-/* 카카오: 테두리 노랑 + 연한 노랑 fill */
+/* 카카오: 테두리 노랑 + 연한 노랑 tint */
 .navi-button.kakao {
+  --navi-tint: rgba(254, 229, 0, 0.18);
   border-color: rgba(254, 229, 0, 0.9);
   color: #191919;
-  background: rgba(254, 229, 0, 0.18);
-
-  i { color: #191919; }
-
-  &:active {
-    background: rgba(254, 229, 0, 0.28);
-  }
+}
+.navi-button.kakao i { color: #191919; }
+.navi-button.kakao:active {
+  --navi-tint: rgba(254, 229, 0, 0.28);
 }
 
-/* T맵: 테두리 파랑 + 연한 파랑 fill + T 아이콘 강조 */
+/* T맵: 테두리 파랑 + 연한 파랑 tint */
 .navi-button.tmap {
+  --navi-tint: rgba(0, 128, 255, 0.06);
   border-color: rgba(0, 128, 255, 0.65);
   color: #0080ff;
-  background: rgba(0, 128, 255, 0.06);
-
-  i {
-    font-weight: 900;   /* ✅ ‘T’ 로고처럼 진하게 */
-    font-size: 1.12em; /* ✅ 살짝만 키움 */
-  }
-
-  &:active {
-    background: rgba(0, 128, 255, 0.12);
-    border-color: rgba(0, 128, 255, 0.9);
-  }
 }
-
-/* ===========================
-   🚏 Transport Info
-   =========================== */
-
-.transport-info {
-  display: grid;
-  gap: 1.7rem;
-
-  h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 0.45rem;
-
-    i {
-      margin-right: 0.35rem;
-      color: var(--theme-primary);
-    }
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    line-height: 1.8;
-    font-size: 0.95rem;
-    color: var(--text-main);
-
-    li {
-      margin-bottom: 0.25rem;
-      position: relative;
-      padding-left: 0.9rem;
-
-      &::before {
-        content: "•";
-        color: var(--theme-primary);
-        font-weight: 800;
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
-
-      strong {
-        font-weight: 700;
-        color: var(--text-main);
-      }
-    }
-  }
+.navi-button.tmap i {
+  font-weight: 900;
+  font-size: 1.12em;
+}
+.navi-button.tmap:active {
+  --navi-tint: rgba(0, 128, 255, 0.12);
+  border-color: rgba(0, 128, 255, 0.9);
 }
 
 /* ===========================
    📱 Mobile
    =========================== */
-
 @media (max-width: 640px) {
-  .map-area {
-    height: 280px;
-  }
-
   .navi-buttons-wrapper {
     gap: 0.5rem;
   }
-
   .navi-button {
     padding: 0.8rem 0.25rem;
-    font-size: 0.82rem; /* ✅ 더 작은 화면에서도 1줄 유지 */
+    font-size: 0.82rem;
     border-radius: 10px;
   }
+}
 
-  .transport-info {
-    gap: 1.4rem;
-  }
+/* ===========================
+   🔒 Map Lock Button (FINAL)
+   - 네비 버튼과 같은 크림/세라믹/그레인 무드
+   - unlocked 색 유지
+   =========================== */
+
+.map-lock-button {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 10;
+
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 17px;
+
+  /* ✅ 크림 바디 + 뉴트럴 베이스 */
+  background:
+    radial-gradient(120% 140% at 8% 0%,
+      rgba(255,255,255,0.95) 0%,
+      rgba(255,255,255,0.55) 48%,
+      transparent 75%
+    ),
+    linear-gradient(180deg,
+      #fff 0%,
+      var(--theme-bg) 70%,
+      color-mix(in srgb, var(--theme-primary-light) 8%, transparent) 100%
+    );
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  isolation: isolate;
+  overflow: hidden;
+
+  transition:
+    transform 0.12s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.25s ease,
+    filter 0.25s ease;
+}
+
+/* 세라믹 하이라이트 */
+.map-lock-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+
+  background:
+    radial-gradient(130% 150% at 10% 0%,
+      rgba(255,255,255,0.95) 0%,
+      rgba(255,255,255,0.55) 45%,
+      transparent 75%);
+  opacity: 0.95;
+  mix-blend-mode: soft-light;
+}
+
+/* 미세 그레인 */
+.map-lock-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+
+  background:
+    radial-gradient(circle at 18% 22%,
+      rgba(255,255,255,0.75) 0 1px,
+      transparent 1.2px
+    ) 0 0 / 9px 9px,
+    radial-gradient(circle at 72% 68%,
+      rgba(255,255,255,0.9) 0 1px,
+      transparent 1.3px
+    ) 0 0 / 11px 11px;
+  opacity: 0.30;
+  mix-blend-mode: soft-light;
+}
+
+.map-lock-button:active {
+  transform: scale(0.95);
+  filter: saturate(1.05);
+}
+
+/* unlocked: 기존 검정 무드 유지 + 질감만 아주 살짝 */
+.map-lock-button.unlocked {
+  background: #111;
+  color: #fff;
+  border-color: transparent;
+}
+.map-lock-button.unlocked::before,
+.map-lock-button.unlocked::after {
+  opacity: 0.18;
 }
