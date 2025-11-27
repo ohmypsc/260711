@@ -4,18 +4,19 @@
 }
 
 :root {
-  /* ✅ 사진 조금 더 줄임 */
+  /* 🖼️ 사진 크기 설정 */
   --photo: clamp(140px, 16vw, 205px);
-
+  /* 라인 컬럼 너비 */
   --line-col-w: 44px;
+  /* 사진과 캡션 사이 간격 */
   --gutter: clamp(14px, 2vw, 26px);
-
-  /* 다음 사진 30% 겹침 */
-  --overlap: calc(var(--photo) * -0.18);
-
-  /* 교차 리듬 세기 */
+  /* 다음 사진과 겹치는 정도 (-30%) */
+  --overlap: calc(var(--photo) * -0.3);
+  /* 교차 리듬 세기 (0.06 = 사진 높이의 6%) */
   --lift-ratio: 0.06;
 }
+
+/* ---------------- 리스트 및 세로선 제거 ---------------- */
 
 /* 리스트 */
 .timeline-list {
@@ -24,48 +25,76 @@
   margin: 0;
   position: relative;
   display: grid;
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
-/* 가운데 세로 라인 */
+/* ❌ 기존 중앙 세로선 ::before는 제거 (line-col이 대체) */
 .timeline-list::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2px;
-  background: linear-gradient(
-    to bottom,
-    rgba(231, 163, 169, 0.45),
-    rgba(231, 163, 169, 0.06)
-  );
-  z-index: 0;
+  content: none;
 }
+
+/* ---------------- 아이템 구조 ---------------- */
 
 /* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
-  display: grid;
+  /* 1fr (사진/캡션) | var(--line-col-w) | 1fr (캡션/사진) */
   grid-template-columns: 1fr var(--line-col-w) 1fr;
-  align-items: center; /* ✅ 세로 기준을 가운데로 */
+  display: grid;
+  align-items: center;
 
-  /* ✅ 실제 사진 안전 사이즈를 "아이템 변수"로 정의 */
+  /* 실제 사진 안전 사이즈 정의 */
   --photo-safe: min(
     var(--photo),
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
   );
 
-  /* ✅ 아이템 높이를 사진 높이로 고정 → dot=정중앙 */
+  /* 아이템 높이를 사진 높이로 고정 */
   min-height: var(--photo-safe);
-
+  
   /* 기본 오프셋 */
   --offset: 0;
   transform: translateY(var(--offset));
 }
 
-/* ✅ 사진 영역 */
+/* ✅ 사진만 겹치게 */
+.timeline-item + .timeline-item {
+  margin-top: var(--overlap);
+}
+
+/* ---------------- 가운데 라인 컬럼 (수정됨) ---------------- */
+
+/* 라인 컬럼: 세로선과 점을 포함 */
+.line-col {
+  grid-column: 2;
+  height: 100%;
+  display: flex;
+  justify-content: center; /* 점(dot)을 중앙에 배치 */
+  align-items: center;
+  z-index: 2;
+  
+  /* 🔥 세로선을 이 컬럼의 배경으로 설정하여 dot과 정렬을 일치시킴 (수정된 부분) */
+  background-image: linear-gradient(
+    to bottom,
+    rgba(231, 163, 169, 0.45),
+    rgba(231, 163, 169, 0.06)
+  );
+  background-position: center top;
+  background-size: 2px 100%; /* 2px 너비의 세로선 */
+  background-repeat: no-repeat;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--theme-primary);
+  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
+  z-index: 3;
+}
+
+/* ---------------- 사진 및 캡션 ---------------- */
+
 .media {
   grid-row: 1;
   position: relative;
@@ -82,41 +111,21 @@
   overflow: hidden;
   background: #fff;
   box-shadow: 0 10px 20px var(--shadow-color);
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
 }
 
-/* ✅ 라인 컬럼은 아이템 높이(=사진)만큼 */
-.line-col {
-  grid-column: 2;
+.photo-wrap img {
+  width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center; /* ✅ dot 중앙 */
-  z-index: 2;
+  object-fit: cover;
+  display: block;
 }
 
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: var(--theme-primary);
-  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
-  z-index: 3;
-}
-
-/* ✅ 캡션: 반대편 + dot(사진 중앙) 기준으로 정렬 */
 .caption-col {
   z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.22rem;
-  align-self: center; /* ✅ 사진 중앙 라인에 맞춤 */
+  align-self: center;
   padding: 0;
 }
 
@@ -179,44 +188,25 @@
   }
 }
 
-/* ✅ 사진만 겹치게 (캡션 높이 영향 X) */
-.timeline-item + .timeline-item {
-  margin-top: var(--overlap);
-}
-
-/* ---------------- 모바일 ---------------- */
+/* ---------------- 모바일 (@media (max-width: 640px)) ---------------- */
 @media (max-width: 640px) {
   :root {
     --photo: clamp(115px, 42vw, 160px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
-
-    /* ✅ 모바일도 간격 더 넉넉하게 */
-    --overlap: calc(var(--photo) * -0.18);
+    --overlap: calc(var(--photo) * -0.3);
     --lift-ratio: 0.04;
   }
 
-  /* ✅ 중앙을 진짜로 만들기 위해 2칼럼만 사용 */
+  /* line-col이 중앙선을 담당하므로 추가 수정 없이 완벽하게 중앙 정렬됨 */
   .timeline-item {
-    grid-template-columns: 1fr 1fr;
-    position: relative;
+    grid-template-columns: 1fr var(--line-col-w) 1fr;
   }
 
-  /* ✅ 라인 컬럼을 그리드에서 빼고 중앙(50%)에 절대 고정 */
-  .line-col {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    height: 100%;
-    width: 0;                 /* 공간 차지 X */
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2;
+  .caption-col .title {
+    font-size: 0.95rem;
   }
-
-  /* 좌/우 배치는 기존 규칙 유지됨 */
-  .caption-col .title { font-size: 0.95rem; }
-  .caption-col .desc  { font-size: 0.86rem; }
+  .caption-col .desc {
+    font-size: 0.86rem;
+  }
 }
