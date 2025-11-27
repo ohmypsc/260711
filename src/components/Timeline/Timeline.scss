@@ -5,14 +5,14 @@
 
 /* ✅ 사진 크기 + 안전 여백 변수 */
 :root {
-  /* 기본 사진 한 변(원래보다 살짝 줄임) */
-  --photo: clamp(160px, 18vw, 230px);
+  /* ✅ 사진 한 변 더 살짝 축소 */
+  --photo: clamp(145px, 16.5vw, 210px);
 
   /* 가운데 라인 컬럼 폭 */
   --line-col-w: 44px;
 
   /* 라인과 사진 사이 안전 여백 */
-  --gutter: clamp(14px, 2vw, 28px);
+  --gutter: clamp(14px, 2vw, 26px);
 
   /* 70% 아래부터 다음 시작 → 30% 겹침 */
   --overlap: calc(var(--photo) * -0.3);
@@ -56,37 +56,19 @@
   align-items: start;
 }
 
-/* 라인 컬럼 */
-.line-col {
-  grid-column: 2;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  z-index: 2;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  margin-top: 0.9rem;
-  border-radius: 999px;
-  background: var(--theme-primary);
-  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
-  z-index: 3;
-}
-
 /* ✅ 사진만 감싸는 영역 */
 .media {
   position: relative;
   z-index: 1;
 
-  /* ✅ 절대 가운데 침범 안 하는 최대폭
-     (화면 반쪽 - 라인/2 - gutter) */
-  width: min(
+  /* ✅ 실제 적용되는 사진 크기(가운데 침범 방지) */
+  --photo-safe: min(
     var(--photo),
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
   );
+
+  width: var(--photo-safe);
+  height: var(--photo-safe); /* ✅ 높이도 사진 정사각에 고정 */
   display: flex;
   flex-direction: column;
 }
@@ -95,7 +77,6 @@
 .photo-wrap {
   width: 100%;
   height: 100%;
-  aspect-ratio: 1 / 1;
   border-radius: 14px;
   overflow: hidden;
   background: #fff;
@@ -109,13 +90,38 @@
   }
 }
 
-/* ✅ 캡션은 “반대편 칼럼”에 독립 배치 */
+/* ───────── 라인/점 ───────── */
+
+/* ✅ 라인 컬럼이 “사진 높이만큼만” 가지게 해서 dot이 사진 중앙에 옴 */
+.line-col {
+  grid-column: 2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* ✅ 세로 중앙 */
+  height: var(--photo-safe); /* ✅ 사진 높이 */
+  z-index: 2;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--theme-primary);
+  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
+  z-index: 3;
+}
+
+/* ───────── 캡션 ───────── */
+
+/* ✅ 캡션은 반대편 칼럼 + dot(사진 중앙) 기준으로 맞춰짐 */
 .caption-col {
   z-index: 1;
-  padding-top: 0.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.22rem;
+  align-self: center; /* ✅ dot 높이 라인에 맞춰 가운데 정렬 */
+  padding-top: 0;     /* ✅ 위로 내려가던 보정 제거 */
 }
 
 .caption-col .date {
@@ -185,9 +191,10 @@
 /* ---------------- 모바일 ---------------- */
 @media (max-width: 640px) {
   :root {
-    --photo: clamp(130px, 48vw, 180px);
+    /* ✅ 모바일도 살짝 축소 */
+    --photo: clamp(118px, 44vw, 165px);
     --line-col-w: 32px;
-    --gutter: clamp(10px, 3vw, 18px);
+    --gutter: clamp(10px, 3vw, 16px);
     --overlap: calc(var(--photo) * -0.3);
     --lift: calc(var(--photo) * 0.04);
   }
