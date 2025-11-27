@@ -8,7 +8,7 @@ import { ContactInfoProvider } from "@/ContactInfoProvider";
 // 페이지 컴포넌트
 import MainWeddingPage from "@/index";
 import { AdminPage } from "@/AdminPage";
-import IntroCard from "@/components/IntroCard/IntroCard"; // ✅ 추가
+import IntroCard from "@/components/IntroCard";
 
 // 전역 스타일
 import "./App.scss";
