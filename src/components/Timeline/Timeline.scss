@@ -4,25 +4,28 @@
 }
 
 :root {
-  /* 🖼️ 사진 크기 설정 */
+  /* 🖼️ 사진 크기 */
   --photo: clamp(140px, 16vw, 205px);
+
   /* 라인 컬럼 너비 */
   --line-col-w: 44px; /* 데스크톱 기본값 */
-  /* 사진과 캡션 사이 간격 */
+
+  /* 사진-캡션 간격 */
   --gutter: clamp(14px, 2vw, 26px);
-  /* 다음 사진과 겹치는 정도 (-30%) */
+
+  /* 다음 사진과 겹치는 정도 */
   --overlap: calc(var(--photo) * -0.1);
-  /* 교차 리듬 세기 (0.06 = 사진 높이의 6%) */
+
+  /* 교차 리듬 세기 */
   --lift-ratio: 0.06;
 
-  /* 중앙 세로선의 너비를 변수로 정의 */
+  /* 중앙 세로선 */
   --center-line-width: 2px;
   --line-color: rgba(231, 163, 169, 0.9);
 }
 
-/* ---------------- 리스트 및 중앙 세로선 ---------------- */
+/* ---------------- 리스트 & 중앙 세로선 ---------------- */
 
-/* 리스트 */
 .timeline-list {
   list-style: none;
   padding: 0;
@@ -49,12 +52,13 @@
 
 .timeline-item {
   position: relative;
-  z-index: 1; /* ✅ 추가: 중앙선이 아이템 뒤로 고정되게 */
+  z-index: 1; /* ✅ 중앙선보다 위로 고정 */
 
-  grid-template-columns: 1fr var(--line-col-w) 1fr;
   display: grid;
+  grid-template-columns: 1fr var(--line-col-w) 1fr;
   align-items: center;
 
+  /* 실제 사진 안전 사이즈 */
   --photo-safe: min(
     var(--photo),
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
@@ -62,6 +66,7 @@
 
   min-height: var(--photo-safe);
 
+  /* 기본 오프셋 */
   --offset: 0;
   transform: translateY(var(--offset));
 }
@@ -71,7 +76,7 @@
   margin-top: var(--overlap);
 }
 
-/* ---------------- 가운데 라인 컬럼 및 점 ---------------- */
+/* ---------------- 가운데 라인 컬럼 & 점 ---------------- */
 
 .line-col {
   grid-column: 2;
@@ -81,7 +86,7 @@
   align-items: center;
   z-index: 2;
 
-  position: relative; /* ✅ 추가: dot 기준을 line-col로 */
+  position: relative; /* ✅ dot absolute 기준 */
 }
 
 .dot {
@@ -92,13 +97,14 @@
   box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
   z-index: 3;
 
-  position: absolute; /* ✅ 유지 */
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 /* ---------------- 모바일 ---------------- */
+
 @media (max-width: 640px) {
   :root {
     --photo: clamp(115px, 42vw, 160px);
@@ -116,6 +122,7 @@
   .caption-col .title {
     font-size: 0.95rem;
   }
+
   .caption-col .desc {
     font-size: 0.86rem;
   }
