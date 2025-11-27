@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Location.scss";
 
+// ✅ 로고 import (src/image에 올려둔 파일)
+import kakaoMapLogo from "@/image/kakaomap.png";
+import naverMapLogo from "@/image/navermap.png";
+import tmapLogo from "@/image/tmap.png";
+
 // ✅ 유성컨벤션 실제 정보
 const DEST_NAME = "유성컨벤션 3층 그랜드홀";
-const DEST_LAT = 36.3562313;  // 위도
-const DEST_LNG = 127.3514617; // 경도
+const DEST_LAT = 36.3562313;
+const DEST_LNG = 127.3514617;
 const ADDRESS_LINE = "대전 유성구 온천북로 77";
 
-// ✅ 네이버 지도 키 (신규 Maps: ncpKeyId 로드)
 const NAVER_MAP_KEY = import.meta.env.VITE_NAVER_MAP_CLIENT_ID || "";
 
 function loadNaverMapSdk(keyId: string) {
@@ -65,7 +69,6 @@ export const Location = () => {
   const [showLockMessage, setShowLockMessage] = useState(false);
   const lockMessageTimeout = useRef<number | null>(null);
 
-  // 지도 초기화 (1회)
   useEffect(() => {
     if (!NAVER_MAP_KEY) {
       console.error("🚫 VITE_NAVER_MAP_CLIENT_ID가 없습니다.");
@@ -84,10 +87,8 @@ export const Location = () => {
           minZoom: 10,
           zoomControl: true,
           zoomControlOptions: {
-            position: window.naver.maps.Position.TOP_RIGHT, // 줌: 오른쪽 위
+            position: window.naver.maps.Position.TOP_RIGHT,
           },
-
-          // ✅ 잠금 기본 옵션(스크롤 우선)
           draggable: false,
           scrollWheel: false,
           pinchZoom: false,
@@ -111,7 +112,6 @@ export const Location = () => {
     };
   }, []);
 
-  // 잠금/해제 시 옵션만 갱신
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
@@ -124,7 +124,6 @@ export const Location = () => {
     });
   }, [locked]);
 
-  // 🔒 잠금 상태에서 터치하면 안내만
   const handleLockMessage = () => {
     setShowLockMessage(true);
     if (lockMessageTimeout.current) clearTimeout(lockMessageTimeout.current);
@@ -134,16 +133,11 @@ export const Location = () => {
     );
   };
 
-  // ✅ 수동 잠금 토글 (자동 재잠금 없음)
   const toggleLock = () => {
     if (lockMessageTimeout.current) clearTimeout(lockMessageTimeout.current);
     setShowLockMessage(false);
     setLocked((v) => !v);
   };
-
-  // =========================
-  // ✅ 길찾기 버튼
-  // =========================
 
   const handleNaverMap = () => {
     const device = getDevice();
@@ -161,14 +155,10 @@ export const Location = () => {
     else window.open(webUrl, "_blank");
   };
 
-  // ✅ 카카오맵으로 변경 (네이버와 동일: 앱 → 없으면 웹)
   const handleKakaoMap = () => {
     const device = getDevice();
 
-    // 1) 카카오맵 앱 열기(좌표 보기)
     const appUrl = `kakaomap://look?p=${DEST_LAT},${DEST_LNG}`;
-
-    // 2) 앱 없으면 웹 카카오맵 길찾기
     const webUrl = `https://map.kakao.com/link/to/${encodeURIComponent(
       DEST_NAME
     )},${DEST_LAT},${DEST_LNG}`;
@@ -199,7 +189,6 @@ export const Location = () => {
     <div className="location-container">
       <h2 className="section-title">오시는 길</h2>
 
-      {/* 장소/주소 (지도 위) */}
       <div className="venue-info">
         <div className="venue-name">
           <i className="fa-solid fa-building-columns" />
@@ -211,7 +200,6 @@ export const Location = () => {
         </div>
       </div>
 
-      {/* 지도 + 잠금 */}
       <div className="map-wrapper">
         {locked && (
           <div
@@ -233,7 +221,6 @@ export const Location = () => {
           </div>
         )}
 
-        {/* ✅ TOP_LEFT 자물쇠 */}
         <button
           className={"map-lock-button" + (locked ? "" : " unlocked")}
           onClick={toggleLock}
@@ -249,24 +236,24 @@ export const Location = () => {
         <div ref={mapDomRef} className="map-area" />
       </div>
 
-      {/* 길찾기 버튼 */}
+      {/* ✅ 길찾기 버튼(로고 적용) */}
       <div className="navi-buttons-wrapper">
         <button onClick={handleNaverMap} className="navi-button naver">
-          <i className="fa-solid fa-n" /> 네이버 지도
+          <img className="navi-logo naver" src={naverMapLogo} alt="" aria-hidden />
+          네이버 지도
         </button>
 
-        {/* ✅ 카카오내비 → 카카오맵 */}
         <button onClick={handleKakaoMap} className="navi-button kakao">
-          <i className="fa-solid fa-location-dot" /> 카카오맵
+          <img className="navi-logo kakao" src={kakaoMapLogo} alt="" aria-hidden />
+          카카오맵
         </button>
 
         <button onClick={handleTMap} className="navi-button tmap">
-          <i className="fa-solid fa-t" />
+          <img className="navi-logo tmap" src={tmapLogo} alt="" aria-hidden />
           티맵
         </button>
       </div>
 
-      {/* 교통 안내 */}
       <div className="transport-info">
         <div>
           <h4>
