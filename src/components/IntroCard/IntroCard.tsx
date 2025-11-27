@@ -20,7 +20,10 @@ export default function IntroCard({ onFinish }: Props) {
     ctxRef.current = ctx;
 
     const petalImg = new Image();
-    petalImg.src = "/petal.png";
+
+    // ✅ GH Pages/로컬 모두 안전한 경로
+    petalImg.src = import.meta.env.BASE_URL + "petal.png";
+
     petalImgRef.current = petalImg;
 
     function resize() {
@@ -67,6 +70,12 @@ export default function IntroCard({ onFinish }: Props) {
     const petalImg = petalImgRef.current!;
     let petals = petalsRef.current;
 
+    // ✅ 이미지 로드 실패/전 로딩이면 drawImage 하지 않음
+    if (!petalImg.complete || petalImg.naturalWidth === 0) {
+      animationRef.current = requestAnimationFrame(draw);
+      return;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     petals.forEach((p) => {
@@ -93,18 +102,19 @@ export default function IntroCard({ onFinish }: Props) {
   };
 
   const handleClick = () => {
-    // 혹시 기존 애니메이션 돌고 있으면 정리
     if (animationRef.current) cancelAnimationFrame(animationRef.current);
 
     createBurst();
+
+    // ✅ 로드된 뒤에만 애니메이션이 진행되도록 draw가 알아서 대기
     draw();
+
     setTimeout(() => onFinish(), 2600);
   };
 
   return (
     <div className="intro-wrap">
-      {/* ✅ React onClick으로 확실하게 */}
-      <div id="inviteCard" className="invite-card" onClick={handleClick}>
+      <div id="inviteCard" className="invite-card" onPointerDown={handleClick}>
         <div className="names">백승철 · 오미영</div>
         <div className="subtitle">결혼합니다</div>
 
