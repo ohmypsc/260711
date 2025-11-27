@@ -73,6 +73,8 @@
   --offset: 0;
   transform: none;
 }
+
+/* 그리드가 내용에 밀리지 않게 */
 .media,
 .caption-col {
   min-width: 0;
@@ -117,6 +119,9 @@
   z-index: 2;
 
   position: relative; /* dot 기준 */
+
+  /* ✅ 추가: 점도 사진 offset과 같이 이동 */
+  transform: translateY(var(--offset));
 }
 
 .dot {
@@ -141,6 +146,9 @@
   gap: 0.22rem;
   align-self: center;
   padding: 0;
+
+  /* ✅ 추가: 캡션도 점 높이와 같이 이동 */
+  transform: translateY(var(--offset));
 }
 
 .caption-col .date {
@@ -206,19 +214,19 @@
 
 /* ---------------- 겹침 + 간격 균일 보정 ---------------- */
 
-/* ✅ 기본 겹침 */
+/* 기본 겹침 */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
 
-/* ✅ left → right : 리프트 때문에 늘어난 간격(2d)만큼 더 겹치게 */
+/* left → right : 리프트 때문에 늘어난 간격(2d)만큼 더 겹치게 */
 .timeline-item.left + .timeline-item.right {
   margin-top: calc(
     var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2)
   );
 }
 
-/* ✅ right → left : 리프트 때문에 줄어든 간격(2d)만큼 덜 겹치게 */
+/* right → left : 리프트 때문에 줄어든 간격(2d)만큼 덜 겹치게 */
 .timeline-item.right + .timeline-item.left {
   margin-top: calc(
     var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2)
@@ -232,13 +240,12 @@
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
 
-    /* ✅ 모바일도 같은 겹침 비율 유지 */
+    /* 모바일도 같은 겹침 비율 유지 */
     --overlap: calc(var(--photo) * -0.18);
 
     --lift-ratio: 0.04;
     --center-line-width: 1px;
   }
-
 
   .caption-col .title {
     font-size: 0.95rem;
