@@ -57,7 +57,7 @@
   z-index: 1; /* 중앙선보다 위로 */
 
   display: grid;
-  grid-template-columns: 1fr var(--line-col-w) 1fr;
+  grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
   align-items: center;
 
   /* 실제 사진 안전 사이즈 */
@@ -72,6 +72,10 @@
   /* ✅ offset 변수는 유지하되, 아이템은 움직이지 않음 */
   --offset: 0;
   transform: none;
+}
+.media,
+.caption-col {
+  min-width: 0;
 }
 
 /* ✅ 사진 영역 */
@@ -235,9 +239,6 @@
     --center-line-width: 1px;
   }
 
-  .timeline-item {
-    grid-template-columns: 1fr var(--line-col-w) 1fr;
-  }
 
   .caption-col .title {
     font-size: 0.95rem;
