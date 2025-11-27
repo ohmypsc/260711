@@ -1,42 +1,4 @@
 /* ===========================
-   Webfonts (Location only)
-   - 로케이션 컴포넌트에서만 사용
-   =========================== */
-
-/* NAVER 느낌: NanumSquare Neo */
-@font-face {
-  font-family: "NanumSquareNeo";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/NanumSquareNeoTTF-bRg.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "NanumSquareNeo";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/NanumSquareNeoTTF-cBd.woff2") format("woff2");
-  font-weight: 700;
-  font-display: swap;
-}
-
-/* KAKAO 느낌: Kakao Big Sans */
-@font-face {
-  font-family: "KakaoBigSans";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2503@1.0/KakaoBigSans-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: "KakaoBigSans";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2503@1.0/KakaoBigSans-ExtraBold.woff2") format("woff2");
-  font-weight: 800;
-  font-display: swap;
-}
-
-/* TMAP 대체: Pretendard (공식 CDN) */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
-
-
-
-/* ===========================
    📍 Venue Info (지도 위)
    =========================== */
 
@@ -128,7 +90,8 @@
 }
 
 /* ===========================
-   🔒 Map Lock Button (basic 무드 이식)
+   🔒 Map Lock Button (CLEAN)
+   - 전역 무드 안 따르고 심플하게
    =========================== */
 
 .map-lock-button {
@@ -143,99 +106,42 @@
   display: grid;
   place-items: center;
 
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
   font-size: 17px;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 
-  /* ✅ 크림 바디 + 세라믹 하이라이트 */
-  background:
-    radial-gradient(120% 140% at 8% 0%,
-      rgba(255,255,255,0.95) 0%,
-      rgba(255,255,255,0.55) 48%,
-      transparent 75%
-    ),
-    linear-gradient(180deg,
-      #fff 0%,
-      var(--theme-bg) 70%,
-      color-mix(in srgb, var(--theme-primary-light) 8%, transparent) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #fff 94%, var(--theme-bg) 6%) 0%,
+    var(--theme-bg) 100%
+  );
 
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 
-  isolation: isolate;
-  overflow: hidden;
-
-  transition:
-    transform 0.12s ease,
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.25s ease,
-    filter 0.25s ease;
-
-  /* 세라믹 하이라이트 */
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 1;
-
-    background:
-      radial-gradient(130% 150% at 10% 0%,
-        rgba(255,255,255,0.95) 0%,
-        rgba(255,255,255,0.55) 45%,
-        transparent 75%);
-    opacity: 0.95;
-    mix-blend-mode: soft-light;
-  }
-
-  /* 미세 그레인 */
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 2;
-
-    background:
-      radial-gradient(circle at 18% 22%,
-        rgba(255,255,255,0.75) 0 1px,
-        transparent 1.2px
-      ) 0 0 / 9px 9px,
-      radial-gradient(circle at 72% 68%,
-        rgba(255,255,255,0.9) 0 1px,
-        transparent 1.3px
-      ) 0 0 / 11px 11px;
-    opacity: 0.30;
-    mix-blend-mode: soft-light;
-  }
-
-  &:active {
-    transform: scale(0.95);
-    filter: saturate(1.05);
-  }
-
-  &.unlocked {
-    background: #111;
-    color: #fff;
-    border-color: transparent;
-
-    &::before,
-    &::after {
-      opacity: 0.18; /* 검정 위에서는 질감만 살짝 */
-    }
-  }
+  transition: transform 0.12s ease,
+              background 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
 }
 
+.map-lock-button:active {
+  transform: scale(0.94);
+}
+
+.map-lock-button.unlocked {
+  background: #111;
+  color: #fff;
+  border-color: transparent;
+}
+
+
 /* ===========================
-   🧭 Navigation Buttons (FINAL)
-   - basic 버튼 무드 유지
-   - "속이 너무 하얘 보임"만 개선
+   🧭 Navigation Buttons (CLEAN FINAL)
+   - 심플/예쁨/브랜드 컬러 유지
+   - mobile-first / no hover / no shadow
    =========================== */
 
 .navi-buttons-wrapper {
@@ -246,47 +152,33 @@
 }
 
 .navi-button {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-
   min-width: 0;
   width: 100%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 0.52rem;
+  gap: 0.55rem;
 
-  padding: 0.95rem 0.4rem;
+  padding: 0.95rem 0.45rem;
   border-radius: 12px;
 
-  font-size: 0.96rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.01rem;
+  line-height: 1;
   white-space: nowrap;
 
   color: var(--text-main);
+  border: 1.4px solid transparent;
 
-  /* ✅ (수정) 화이트 → 오프화이트/크림으로 살짝 다운 */
+  /* ✅ 단정한 크림 바디 + 서비스 tint */
   background:
-    radial-gradient(120% 140% at 8% 0%,
-      rgba(255,255,255,0.88) 0%,   /* ↓ 0.95 */
-      rgba(255,255,255,0.42) 48%,  /* ↓ 0.55 */
-      transparent 75%
-    ),
     linear-gradient(
       180deg,
-      color-mix(in srgb, #fff 92%, var(--theme-bg) 8%) 0%, /* ✅ 오프화이트 */
-      var(--theme-bg) 60%,
-      color-mix(in srgb, var(--theme-primary-light) 10%, transparent) 100%
+      color-mix(in srgb, #fff 92%, var(--theme-bg) 8%) 0%,
+      var(--theme-bg) 100%
     ),
-    var(--navi-tint, #fff);
-
-  border: 1.5px solid transparent;
-  box-shadow: none;
-
-  line-height: 1;
-  vertical-align: middle;
+    var(--navi-tint, transparent);
 
   cursor: pointer;
   user-select: none;
@@ -296,147 +188,57 @@
   transition:
     transform 0.12s ease,
     opacity 0.18s ease,
-    background 0.25s ease,
-    border-color 0.25s ease,
-    filter 0.25s ease;
-
-  /* ✅ 미세 그레인/종이결 */
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 2;
-
-    background:
-      radial-gradient(circle at 18% 22%,
-        rgba(255,255,255,0.75) 0 1px,
-        transparent 1.2px
-      ) 0 0 / 10px 10px,
-      radial-gradient(circle at 72% 68%,
-        rgba(255,255,255,0.9) 0 1px,
-        transparent 1.3px
-      ) 0 0 / 12px 12px,
-      linear-gradient(
-        135deg,
-        transparent 0%,
-        rgba(255,255,255,0.25) 45%,
-        transparent 55%
-      );
-
-    opacity: 0.35;
-    mix-blend-mode: soft-light;
-  }
-
-  /* ✅ press shine (active only) */
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 3;
-
-    opacity: 0;
-    transform: translateX(-18%);
-    background: linear-gradient(
-      120deg,
-      transparent 0%,
-      rgba(255,255,255,0.85) 35%,
-      rgba(255,255,255,0.25) 50%,
-      transparent 70%
-    );
-  }
-
-  &:active {
-    transform: translateY(1px) scale(0.98);
-    opacity: 0.92;
-    filter: saturate(1.05);
-  }
-
-  &:active::after {
-    opacity: 0.9;
-    transform: translateX(22%);
-    transition: opacity 0.25s ease, transform 0.45s ease;
-  }
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
-/* ✅ 로고 아이콘 공통 */
+.navi-button:active {
+  transform: translateY(1px) scale(0.985);
+  opacity: 0.92;
+}
+
+/* ✅ 로고 아이콘 */
 .navi-button .navi-logo {
-  width: 1.32em;
-  height: 1.32em;
+  width: 1.35em;
+  height: 1.35em;
   object-fit: contain;
   display: inline-block;
   flex: 0 0 auto;
-  transform: translateY(-0.6px);
-  filter: saturate(1.04) contrast(1.02);
 }
 
-.navi-button .navi-logo.naver {
-  width: 1.22em;
-  height: 1.22em;
-}
-
-.navi-button .navi-logo.kakao {
-  width: 1.38em;
-  height: 1.38em;
-}
-
-.navi-button .navi-logo.tmap {
-  width: 1.28em;
-  height: 1.28em;
-}
-
-.navi-button:active .navi-logo {
-  filter: saturate(1.1) contrast(1.04);
-}
 
 /* 네이버 */
 .navi-button.naver {
-  /* ✅ (수정) tint 조금 더 보이게 */
-  --navi-tint: rgba(3, 199, 90, 0.085); /* ↑ 0.06 */
-
-  border-color: rgba(3, 199, 90, 0.65);
+  --navi-tint: rgba(3, 199, 90, 0.10);
+  border-color: rgba(3, 199, 90, 0.7);
   color: #03c75a;
-
-  font-family: "NanumSquareNeo", system-ui, sans-serif;
-
-  &:active {
-    --navi-tint: rgba(3, 199, 90, 0.14); /* ↑ 0.12 */
-    border-color: rgba(3, 199, 90, 0.9);
-  }
+}
+.navi-button.naver:active {
+  --navi-tint: rgba(3, 199, 90, 0.16);
+  border-color: rgba(3, 199, 90, 0.95);
 }
 
 /* 카카오 */
 .navi-button.kakao {
-  --navi-tint: rgba(254, 229, 0, 0.22); /* ↑ 0.18 */
-
-  border-color: rgba(254, 229, 0, 0.9);
+  --navi-tint: rgba(254, 229, 0, 0.26);
+  border-color: rgba(254, 229, 0, 0.95);
   color: #191919;
-
-  font-family: "KakaoBigSans", system-ui, sans-serif;
-
-  &:active {
-    --navi-tint: rgba(254, 229, 0, 0.32); /* ↑ 0.28 */
-  }
+}
+.navi-button.kakao:active {
+  --navi-tint: rgba(254, 229, 0, 0.34);
 }
 
 /* T맵 */
 .navi-button.tmap {
-  --navi-tint: rgba(0, 128, 255, 0.085); /* ↑ 0.06 */
-
-  border-color: rgba(0, 128, 255, 0.65);
+  --navi-tint: rgba(0, 128, 255, 0.10);
+  border-color: rgba(0, 128, 255, 0.7);
   color: #0080ff;
-
-  font-family: "Pretendard", system-ui, sans-serif;
-  letter-spacing: 0.005em;
-
-  &:active {
-    --navi-tint: rgba(0, 128, 255, 0.14); /* ↑ 0.12 */
-    border-color: rgba(0, 128, 255, 0.9);
-  }
 }
+.navi-button.tmap:active {
+  --navi-tint: rgba(0, 128, 255, 0.16);
+  border-color: rgba(0, 128, 255, 0.95);
+}
+
 
 /* ===========================
    🚏 Transport Info
@@ -502,10 +304,10 @@
   }
 
   .navi-button {
-    padding: 0.8rem 0.25rem;
+    padding: 0.8rem 0.3rem;
     font-size: 0.86rem;
     border-radius: 10px;
-    gap: 0.48rem;
+    gap: 0.5rem;
   }
 
   .navi-button .navi-logo {
