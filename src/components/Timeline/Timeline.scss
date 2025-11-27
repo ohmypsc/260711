@@ -7,16 +7,19 @@
   /* 🖼️ 사진 크기 설정 */
   --photo: clamp(140px, 16vw, 205px);
   /* 라인 컬럼 너비 */
-  --line-col-w: 44px;
+  --line-col-w: 44px; /* 데스크톱 기본값 */
   /* 사진과 캡션 사이 간격 */
   --gutter: clamp(14px, 2vw, 26px);
   /* 다음 사진과 겹치는 정도 (-30%) */
-  --overlap: calc(var(--photo) * -0.3);
+  --overlap: calc(var(--photo) * -0.1);
   /* 교차 리듬 세기 (0.06 = 사진 높이의 6%) */
   --lift-ratio: 0.06;
+
+  /* 🔥 추가: 중앙 세로선의 너비를 변수로 정의 (유지보수 용이) */
+  --center-line-width: 2px;
 }
 
-/* ---------------- 리스트 및 세로선 제거 ---------------- */
+/* ---------------- 리스트 및 중앙 세로선 (다시 활성화) ---------------- */
 
 /* 리스트 */
 .timeline-list {
@@ -28,9 +31,22 @@
   gap: 0.6rem;
 }
 
-/* ❌ 기존 중앙 세로선 ::before는 제거 (line-col이 대체) */
+/* ✅ 중앙 세로 라인 (다시 활성화 및 보정) */
 .timeline-list::before {
-  content: none;
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  /* 🔥 세로선 너비의 절반만큼 왼쪽으로 이동하여 정확히 중앙에 오도록 보정 */
+  transform: translateX(calc(var(--center-line-width) / -2));
+  width: var(--center-line-width); /* 변수 사용 */
+  background: linear-gradient(
+    to bottom,
+    rgba(231, 163, 169, 0.45),
+    rgba(231, 163, 169, 0.06)
+  );
+  z-index: 0;
 }
 
 /* ---------------- 아이템 구조 ---------------- */
@@ -62,26 +78,17 @@
   margin-top: var(--overlap);
 }
 
-/* ---------------- 가운데 라인 컬럼 (수정됨) ---------------- */
+/* ---------------- 가운데 라인 컬럼 및 점 ---------------- */
 
-/* 라인 컬럼: 세로선과 점을 포함 */
+/* 라인 컬럼: 점을 포함 */
 .line-col {
-  grid-column: 2;
+  grid-column: 2; /* 그리드의 두 번째 컬럼 */
   height: 100%;
   display: flex;
-  justify-content: center; /* 점(dot)을 중앙에 배치 */
+  justify-content: center; /* 🔥 점(dot)을 line-col 너비 내에서 중앙에 배치 */
   align-items: center;
   z-index: 2;
-  
-  /* 🔥 세로선을 이 컬럼의 배경으로 설정하여 dot과 정렬을 일치시킴 (수정된 부분) */
-  background-image: linear-gradient(
-    to bottom,
-    rgba(231, 163, 169, 0.45),
-    rgba(231, 163, 169, 0.06)
-  );
-  background-position: center top;
-  background-size: 2px 100%; /* 2px 너비의 세로선 */
-  background-repeat: no-repeat;
+  /* background-image 속성은 여기에서 제거됩니다. */
 }
 
 .dot {
@@ -192,13 +199,15 @@
 @media (max-width: 640px) {
   :root {
     --photo: clamp(115px, 42vw, 160px);
-    --line-col-w: 32px;
+    --line-col-w: 32px; /* 모바일 라인 컬럼 너비 */
     --gutter: clamp(10px, 3vw, 16px);
     --overlap: calc(var(--photo) * -0.3);
     --lift-ratio: 0.04;
+
+    /* 🔥 모바일에서 중앙 세로선 너비를 1px로 미세 조정 (정확도 향상) */
+    --center-line-width: 1px; 
   }
 
-  /* line-col이 중앙선을 담당하므로 추가 수정 없이 완벽하게 중앙 정렬됨 */
   .timeline-item {
     grid-template-columns: 1fr var(--line-col-w) 1fr;
   }
