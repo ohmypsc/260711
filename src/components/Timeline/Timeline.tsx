@@ -54,10 +54,12 @@ export function Timeline() {
 
           return (
             <li key={item.imgIndex} className={`timeline-item ${side}`}>
+              {/* 가운데 라인 */}
               <div className="line-col">
                 <span className="dot" aria-hidden="true" />
               </div>
 
+              {/* 사진 */}
               <div className="media">
                 <div className="photo-wrap">
                   <img
@@ -66,15 +68,16 @@ export function Timeline() {
                     loading="lazy"
                   />
                 </div>
-
-                {item.hasCaption && (
-                  <div className="caption-wrap">
-                    {item.caption?.date && <p className="date">{item.caption.date}</p>}
-                    {item.caption?.title && <h3 className="title">{item.caption.title}</h3>}
-                    {item.caption?.desc && <p className="desc">{item.caption.desc}</p>}
-                  </div>
-                )}
               </div>
+
+              {/* 캡션(반대편 칼럼) */}
+              {item.hasCaption && (
+                <div className="caption-col">
+                  {item.caption?.date && <p className="date">{item.caption.date}</p>}
+                  {item.caption?.title && <h3 className="title">{item.caption.title}</h3>}
+                  {item.caption?.desc && <p className="desc">{item.caption.desc}</p>}
+                </div>
+              )}
             </li>
           );
         })}
