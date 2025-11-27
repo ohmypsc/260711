@@ -1,0 +1,131 @@
+.w-timeline {
+  background: transparent;
+}
+
+/* 리스트 전체 */
+.timeline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.8rem;
+}
+
+/* 아이템 한 줄 */
+.timeline-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: stretch;
+  column-gap: 0.9rem;
+  position: relative;
+
+  &.left .card {
+    border-top-left-radius: 18px;
+  }
+  &.right .card {
+    border-top-right-radius: 18px;
+  }
+}
+
+/* 왼쪽 세로 라인 영역 */
+.line-col {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* 동그라미 */
+.dot {
+  width: 12px;
+  height: 12px;
+  margin-top: 0.9rem;
+  border-radius: 50%;
+  background: var(--theme-primary);
+  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
+  z-index: 2;
+}
+
+/* 세로 라인 */
+.vline {
+  position: absolute;
+  top: 0;
+  bottom: -1.8rem;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(231, 163, 169, 0.35),
+    rgba(231, 163, 169, 0.05)
+  );
+  z-index: 1;
+}
+
+/* 카드 */
+.card {
+  background: var(--section-bg-soft);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 22px var(--shadow-color);
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 0.9rem;
+  padding: 0.7rem;
+}
+
+/* 사진 */
+.photo-wrap {
+  width: 108px;
+  height: 108px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #fff;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+/* 텍스트 */
+.text-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.28rem;
+
+  .date {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    letter-spacing: 0.02rem;
+  }
+
+  .title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--text-main);
+  }
+
+  .desc {
+    margin: 0;
+    font-size: 0.98rem;
+    color: var(--text-main);
+    opacity: 0.92;
+    line-height: 1.6;
+  }
+}
+
+/* 모바일 최적화 */
+@media (max-width: 420px) {
+  .card {
+    grid-template-columns: 92px 1fr;
+  }
+  .photo-wrap {
+    width: 92px;
+    height: 92px;
+  }
+}
