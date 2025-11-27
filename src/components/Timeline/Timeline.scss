@@ -3,22 +3,18 @@
   position: relative;
 }
 
-/* ✅ 사진 크기 + 안전 여백 변수 */
 :root {
-  /* ✅ 사진 한 변 더 살짝 축소 */
-  --photo: clamp(145px, 16.5vw, 210px);
+  /* ✅ 사진 조금 더 줄임 */
+  --photo: clamp(140px, 16vw, 205px);
 
-  /* 가운데 라인 컬럼 폭 */
   --line-col-w: 44px;
-
-  /* 라인과 사진 사이 안전 여백 */
   --gutter: clamp(14px, 2vw, 26px);
 
-  /* 70% 아래부터 다음 시작 → 30% 겹침 */
+  /* 다음 사진 30% 겹침 */
   --overlap: calc(var(--photo) * -0.3);
 
-  /* 좌/우 교차 리듬 */
-  --lift: calc(var(--photo) * 0.06);
+  /* 교차 리듬 세기 */
+  --lift-ratio: 0.06;
 }
 
 /* 리스트 */
@@ -48,32 +44,37 @@
   z-index: 0;
 }
 
-/* 아이템 한 줄 (photo / line / caption) */
+/* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
   display: grid;
   grid-template-columns: 1fr var(--line-col-w) 1fr;
-  align-items: start;
-}
+  align-items: center; /* ✅ 세로 기준을 가운데로 */
 
-/* ✅ 사진만 감싸는 영역 */
-.media {
-  position: relative;
-  z-index: 1;
-
-  /* ✅ 실제 적용되는 사진 크기(가운데 침범 방지) */
+  /* ✅ 실제 사진 안전 사이즈를 "아이템 변수"로 정의 */
   --photo-safe: min(
     var(--photo),
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
   );
 
-  width: var(--photo-safe);
-  height: var(--photo-safe); /* ✅ 높이도 사진 정사각에 고정 */
-  display: flex;
-  flex-direction: column;
+  /* ✅ 아이템 높이를 사진 높이로 고정 → dot=정중앙 */
+  min-height: var(--photo-safe);
+
+  /* 기본 오프셋 */
+  --offset: 0;
+  transform: translateY(var(--offset));
 }
 
-/* 사진 높이 = width와 동일 */
+/* ✅ 사진 영역 */
+.media {
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  width: var(--photo-safe);
+  height: var(--photo-safe);
+  display: flex;
+}
+
 .photo-wrap {
   width: 100%;
   height: 100%;
@@ -90,16 +91,13 @@
   }
 }
 
-/* ───────── 라인/점 ───────── */
-
-/* ✅ 라인 컬럼이 “사진 높이만큼만” 가지게 해서 dot이 사진 중앙에 옴 */
+/* ✅ 라인 컬럼은 아이템 높이(=사진)만큼 */
 .line-col {
   grid-column: 2;
-  position: relative;
+  height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center; /* ✅ 세로 중앙 */
-  height: var(--photo-safe); /* ✅ 사진 높이 */
+  align-items: center; /* ✅ dot 중앙 */
   z-index: 2;
 }
 
@@ -112,16 +110,14 @@
   z-index: 3;
 }
 
-/* ───────── 캡션 ───────── */
-
-/* ✅ 캡션은 반대편 칼럼 + dot(사진 중앙) 기준으로 맞춰짐 */
+/* ✅ 캡션: 반대편 + dot(사진 중앙) 기준으로 정렬 */
 .caption-col {
   z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.22rem;
-  align-self: center; /* ✅ dot 높이 라인에 맞춰 가운데 정렬 */
-  padding-top: 0;     /* ✅ 위로 내려가던 보정 제거 */
+  align-self: center; /* ✅ 사진 중앙 라인에 맞춤 */
+  padding: 0;
 }
 
 .caption-col .date {
@@ -130,14 +126,12 @@
   color: var(--text-light);
   letter-spacing: 0.02rem;
 }
-
 .caption-col .title {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
 }
-
 .caption-col .desc {
   margin: 0;
   font-size: 0.9rem;
@@ -145,15 +139,16 @@
   line-height: 1.35;
 }
 
-/* ---------------- 좌/우 교차 배치 ---------------- */
+/* ---------------- 좌/우 교차 ---------------- */
 
-/* 왼쪽 사진 → 오른쪽 캡션 */
+/* ✅ 왼쪽 사진 / 오른쪽 캡션 */
 .timeline-item.left {
+  --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
+
   .media {
     grid-column: 1;
     justify-self: end;
     margin-right: var(--gutter);
-    transform: translateY(calc(var(--lift) * -1));
   }
 
   .caption-col {
@@ -165,13 +160,14 @@
   }
 }
 
-/* 오른쪽 사진 → 왼쪽 캡션 */
+/* ✅ 오른쪽 사진 / 왼쪽 캡션 */
 .timeline-item.right {
+  --offset: calc(var(--photo-safe) * var(--lift-ratio));
+
   .media {
     grid-column: 3;
     justify-self: start;
     margin-left: var(--gutter);
-    transform: translateY(var(--lift));
   }
 
   .caption-col {
@@ -183,7 +179,7 @@
   }
 }
 
-/* ✅ 사진 70% 아래부터 다음 시작(캡션 높이 제외) */
+/* ✅ 사진만 겹치게 (캡션 높이 영향 X) */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
@@ -191,22 +187,17 @@
 /* ---------------- 모바일 ---------------- */
 @media (max-width: 640px) {
   :root {
-    /* ✅ 모바일도 살짝 축소 */
-    --photo: clamp(118px, 44vw, 165px);
+    --photo: clamp(115px, 42vw, 160px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
     --overlap: calc(var(--photo) * -0.3);
-    --lift: calc(var(--photo) * 0.04);
+    --lift-ratio: 0.04;
   }
 
   .timeline-item {
     grid-template-columns: 1fr var(--line-col-w) 1fr;
   }
 
-  .caption-col .title {
-    font-size: 0.95rem;
-  }
-  .caption-col .desc {
-    font-size: 0.86rem;
-  }
+  .caption-col .title { font-size: 0.95rem; }
+  .caption-col .desc  { font-size: 0.86rem; }
 }
