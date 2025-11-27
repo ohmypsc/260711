@@ -204,7 +204,25 @@
 /* ✅ 사진만 겹치게 (간격 “항상 동일” 유지) */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
+  /* 기본 겹침 */
+.timeline-item + .timeline-item {
+  margin-top: var(--overlap);
 }
+
+/* ✅ left → right : 간격이 커지므로 2d만큼 더 겹치게 */
+.timeline-item.left + .timeline-item.right {
+  margin-top: calc(
+    var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2)
+  );
+}
+
+/* ✅ right → left : 간격이 작아지므로 2d만큼 덜 겹치게 */
+.timeline-item.right + .timeline-item.left {
+  margin-top: calc(
+    var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2)
+  );
+}
+
 
 /* ---------------- 모바일 ---------------- */
 @media (max-width: 640px) {
