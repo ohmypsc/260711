@@ -4,14 +4,17 @@
 }
 
 :root {
-  /* ✅ 사진 조금 더 줄임 */
+  /* ✅ 사진 크기 */
   --photo: clamp(140px, 16vw, 205px);
 
+  /* 라인 컬럼 너비 */
   --line-col-w: 44px;
+
+  /* 사진-캡션 간격 */
   --gutter: clamp(14px, 2vw, 26px);
 
-  /* 다음 사진 30% 겹침 */
-  --overlap: calc(var(--photo) * -0.1);
+  /* ✅ 겹침 정도 줄임 (기존 -30% → -18%) */
+  --overlap: calc(var(--photo) * -0.18);
 
   /* 교차 리듬 세기 */
   --lift-ratio: 0.06;
@@ -37,8 +40,6 @@
   top: 0;
   bottom: 0;
   left: 50%;
-
-  /* ✅ 선 두께의 절반만큼 보정(1px/2px 모두 정확히 중앙) */
   transform: translateX(calc(var(--center-line-width) / -2));
   width: var(--center-line-width);
 
@@ -53,24 +54,24 @@
 /* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
-  z-index: 1; /* ✅ 중앙선보다 위로 고정(레이어 꼬임 방지) */
+  z-index: 1; /* 중앙선보다 위로 */
 
   display: grid;
   grid-template-columns: 1fr var(--line-col-w) 1fr;
   align-items: center;
 
-  /* ✅ 실제 사진 안전 사이즈를 "아이템 변수"로 정의 */
+  /* 실제 사진 안전 사이즈 */
   --photo-safe: min(
     var(--photo),
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
   );
 
-  /* ✅ 아이템 높이를 사진 높이로 고정 → dot=정중앙 */
+  /* 아이템 높이를 사진 높이로 고정 */
   min-height: var(--photo-safe);
 
-  /* 기본 오프셋 */
+  /* ✅ offset 변수는 유지하되, 아이템은 움직이지 않음 */
   --offset: 0;
-  transform: translateY(var(--offset));
+  transform: none;
 }
 
 /* ✅ 사진 영역 */
@@ -81,6 +82,9 @@
   width: var(--photo-safe);
   height: var(--photo-safe);
   display: flex;
+
+  /* ✅ 사진만 위/아래로 리듬 */
+  transform: translateY(var(--offset));
 }
 
 .photo-wrap {
@@ -99,7 +103,7 @@
   }
 }
 
-/* ✅ 라인 컬럼은 아이템 높이(=사진)만큼 */
+/* 라인 컬럼 */
 .line-col {
   grid-column: 2;
   height: 100%;
@@ -108,7 +112,7 @@
   align-items: center;
   z-index: 2;
 
-  position: relative; /* ✅ dot 기준을 line-col로 “공통” 통일 */
+  position: relative; /* dot 기준 */
 }
 
 .dot {
@@ -119,13 +123,13 @@
   box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
   z-index: 3;
 
-  position: absolute; /* ✅ 데스크톱/모바일 동일 방식 */
+  position: absolute; /* 데스크톱/모바일 동일 중앙 고정 */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-/* ✅ 캡션: 반대편 + dot(사진 중앙) 기준으로 정렬 */
+/* 캡션 */
 .caption-col {
   z-index: 1;
   display: flex;
@@ -158,8 +162,9 @@
 
 /* ---------------- 좌/우 교차 ---------------- */
 
-/* ✅ 왼쪽 사진 / 오른쪽 캡션 */
+/* 왼쪽 사진 / 오른쪽 캡션 */
 .timeline-item.left {
+  /* ✅ offset은 사진에만 적용됨 */
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
 
   .media {
@@ -177,7 +182,7 @@
   }
 }
 
-/* ✅ 오른쪽 사진 / 왼쪽 캡션 */
+/* 오른쪽 사진 / 왼쪽 캡션 */
 .timeline-item.right {
   --offset: calc(var(--photo-safe) * var(--lift-ratio));
 
@@ -196,7 +201,7 @@
   }
 }
 
-/* ✅ 사진만 겹치게 (캡션 높이 영향 X) */
+/* ✅ 사진만 겹치게 (간격 “항상 동일” 유지) */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
@@ -207,11 +212,11 @@
     --photo: clamp(115px, 42vw, 160px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
-    --overlap: calc(var(--photo) * -0.3);
-    --lift-ratio: 0.04;
 
-    /* ✅ 모바일에서 선 두께만 변수로 바꿔도
-       dot은 같은 방식으로 항상 중앙에 있음 */
+    /* ✅ 모바일도 같은 겹침 비율 유지 */
+    --overlap: calc(var(--photo) * -0.18);
+
+    --lift-ratio: 0.04;
     --center-line-width: 1px;
   }
 
