@@ -3,17 +3,26 @@
   position: relative;
 }
 
-/* 리스트 전체 */
+/* ✅ 사진 크기(=높이) 기준 변수 */
+:root {
+  /* 데스크톱에서 사진 한 변 */
+  --photo: clamp(230px, 26vw, 320px);
+  /* “70% 아래부터 다음 시작” → 30% 겹침 */
+  --overlap: calc(var(--photo) * -0.3);
+  /* 좌/우 교차 리듬(살짝 어긋나게) */
+  --lift: calc(var(--photo) * 0.06); /* 약 6% */
+}
+
+/* 리스트 */
 .timeline-list {
   list-style: none;
   padding: 0;
   margin: 0;
   position: relative;
-
   display: grid;
 
-  /* ✅ (2) 기본 세로 간격 자체를 줄임 */
-  gap: 1.2rem;
+  /* ✅ 기본 gap은 사진 기준이 아니므로 작게만 둠 */
+  gap: 0.6rem;
 }
 
 /* 가운데 세로 라인 */
@@ -33,16 +42,12 @@
   z-index: 0;
 }
 
-/* 아이템 한 줄: 좌 / 라인 / 우 */
+/* 아이템 한 줄 (좌/라인/우) */
 .timeline-item {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 44px 1fr;
   align-items: start;
-
-  /* ✅ (2) 겹침 강도 */
-  --lift: 18px;       /* 좌/우 교차 시 Y축 어긋남 */
-  --overlap: -14px;   /* 다음 아이템이 위로 더 붙는 정도 */
 }
 
 /* 라인 컬럼 */
@@ -65,9 +70,9 @@
   z-index: 3;
 }
 
-/* 사진+캡션 묶음 */
+/* ✅ 사진+캡션 묶음 */
 .media {
-  width: min(320px, 92%);
+  width: var(--photo);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -75,10 +80,10 @@
   z-index: 1;
 }
 
-/* 사진 */
+/* ✅ 사진 높이를 var(--photo)로 “고정” */
 .photo-wrap {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: var(--photo);
   border-radius: 14px;
   overflow: hidden;
   background: #fff;
@@ -92,7 +97,7 @@
   }
 }
 
-/* ✅ (3) 캡션 가운데 정렬 */
+/* 캡션: 사진 아래 가운데 정렬 */
 .caption-wrap {
   display: flex;
   flex-direction: column;
@@ -106,14 +111,12 @@
     color: var(--text-light);
     letter-spacing: 0.02rem;
   }
-
   .title {
     margin: 0;
     font-size: 0.98rem;
     font-weight: 500;
     color: var(--text-main);
   }
-
   .desc {
     margin: 0;
     font-size: 0.88rem;
@@ -139,25 +142,31 @@
   }
 }
 
-/* ✅ (2) “다음 아이템이 겹쳐 보이게” 전체적으로 위로 끌어당김 */
+/* ✅ “사진 70% 아래부터 다음 사진 시작” 구현
+   - 다음 아이템 전체를 사진 높이의 30%만큼 위로 당김
+   - 캡션 높이는 계산에 넣지 않음(요구사항) */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
 
 /* ---------------- 모바일 ---------------- */
-/* ✅ (1) 모바일에서도 교차 유지(센터 라인 유지) */
+/* 모바일에서도 교차 유지 + 사진 크기만 다운 */
 @media (max-width: 640px) {
-  .timeline-list {
-    gap: 0.9rem; /* 모바일은 더 촘촘 */
+  :root {
+    --photo: clamp(190px, 60vw, 250px);
+    --overlap: calc(var(--photo) * -0.3);
+    --lift: calc(var(--photo) * 0.04);
   }
 
   .timeline-item {
-    grid-template-columns: 1fr 32px 1fr; /* 폭만 슬림하게 */
-    --lift: 10px;       /* 모바일 겹침은 살짝만 */
-    --overlap: -10px;
+    grid-template-columns: 1fr 32px 1fr;
   }
 
   .media {
-    width: min(260px, 92%);
+    width: var(--photo);
+  }
+
+  .photo-wrap {
+    height: var(--photo);
   }
 }
