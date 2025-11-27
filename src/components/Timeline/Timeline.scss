@@ -11,7 +11,9 @@
   position: relative;
 
   display: grid;
-  gap: 2.2rem;
+
+  /* ✅ (2) 기본 세로 간격 자체를 줄임 */
+  gap: 1.2rem;
 }
 
 /* 가운데 세로 라인 */
@@ -38,8 +40,9 @@
   grid-template-columns: 1fr 44px 1fr;
   align-items: start;
 
-  /* 교차 겹침용 */
-  --lift: 14px;
+  /* ✅ (2) 겹침 강도 */
+  --lift: 18px;       /* 좌/우 교차 시 Y축 어긋남 */
+  --overlap: -14px;   /* 다음 아이템이 위로 더 붙는 정도 */
 }
 
 /* 라인 컬럼 */
@@ -62,7 +65,7 @@
   z-index: 3;
 }
 
-/* ✅ 카드 대신 "사진+캡션 묶음" */
+/* 사진+캡션 묶음 */
 .media {
   width: min(320px, 92%);
   display: flex;
@@ -72,14 +75,14 @@
   z-index: 1;
 }
 
-/* 사진 자체만 */
+/* 사진 */
 .photo-wrap {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 14px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 10px 20px var(--shadow-color); /* 사진만 떠 있는 느낌 */
+  box-shadow: 0 10px 20px var(--shadow-color);
 
   img {
     width: 100%;
@@ -89,12 +92,13 @@
   }
 }
 
-/* 캡션: 사진 아래 작게 */
+/* ✅ (3) 캡션 가운데 정렬 */
 .caption-wrap {
   display: flex;
   flex-direction: column;
   gap: 0.22rem;
-  padding-left: 0.1rem;
+  text-align: center;
+  align-items: center;
 
   .date {
     margin: 0;
@@ -133,37 +137,27 @@
     justify-self: start;
     transform: translateY(var(--lift));
   }
-
-  /* 오른쪽이 한 템포 위로 들어와 살짝 겹치는 효과 */
-  margin-top: -10px;
 }
 
-/* 모바일: 한 줄 세로 흐름 */
+/* ✅ (2) “다음 아이템이 겹쳐 보이게” 전체적으로 위로 끌어당김 */
+.timeline-item + .timeline-item {
+  margin-top: var(--overlap);
+}
+
+/* ---------------- 모바일 ---------------- */
+/* ✅ (1) 모바일에서도 교차 유지(센터 라인 유지) */
 @media (max-width: 640px) {
-  .timeline-list::before {
-    left: 18px;
-    transform: none;
+  .timeline-list {
+    gap: 0.9rem; /* 모바일은 더 촘촘 */
   }
 
   .timeline-item {
-    grid-template-columns: 36px 1fr;
-    column-gap: 0.8rem;
-    --lift: 0px;
+    grid-template-columns: 1fr 32px 1fr; /* 폭만 슬림하게 */
+    --lift: 10px;       /* 모바일 겹침은 살짝만 */
+    --overlap: -10px;
   }
 
-  .line-col {
-    grid-column: 1;
-  }
-
-  .timeline-item.left .media,
-  .timeline-item.right .media {
-    grid-column: 2;
-    justify-self: start;
-    transform: none;
-    width: 100%;
-  }
-
-  .timeline-item.right {
-    margin-top: 0;
+  .media {
+    width: min(260px, 92%);
   }
 }
