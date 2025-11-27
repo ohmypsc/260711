@@ -55,36 +55,32 @@ const items: TimelineItem[] = [
 
 export function Timeline() {
   return (
-    <section className="w-timeline">
-      <div className="section-inner">
-        <h2 className="section-title">Our Timeline</h2>
+    <div className="w-timeline">
+      <ol className="timeline-list">
+        {items.map((item, idx) => (
+          <li
+            key={item.id}
+            className={`timeline-item ${idx % 2 === 0 ? "left" : "right"}`}
+          >
+            <div className="line-col">
+              <span className="dot" aria-hidden="true" />
+              <span className="vline" aria-hidden="true" />
+            </div>
 
-        <ol className="timeline-list">
-          {items.map((item, idx) => (
-            <li
-              key={item.id}
-              className={`timeline-item ${idx % 2 === 0 ? "left" : "right"}`}
-            >
-              <div className="line-col">
-                <span className="dot" aria-hidden="true" />
-                <span className="vline" aria-hidden="true" />
+            <article className="card">
+              <div className="photo-wrap">
+                <img src={item.img} alt={item.title} loading="lazy" />
               </div>
 
-              <article className="card">
-                <div className="photo-wrap">
-                  <img src={item.img} alt={item.title} loading="lazy" />
-                </div>
-
-                <div className="text-wrap">
-                  <p className="date">{item.date}</p>
-                  <h3 className="title">{item.title}</h3>
-                  <p className="desc">{item.desc}</p>
-                </div>
-              </article>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
+              <div className="text-wrap">
+                <p className="date">{item.date}</p>
+                <h3 className="title">{item.title}</h3>
+                <p className="desc">{item.desc}</p>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
