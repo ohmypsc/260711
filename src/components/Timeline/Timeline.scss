@@ -13,7 +13,7 @@
   /* 사진-캡션 간격 */
   --gutter: clamp(14px, 2vw, 26px);
 
-  /* ✅ 겹침 정도 줄임 (기존 -30% → -18%) */
+  /* ✅ 겹침 정도 줄임 */
   --overlap: calc(var(--photo) * -0.18);
 
   /* 교차 리듬 세기 */
@@ -164,7 +164,6 @@
 
 /* 왼쪽 사진 / 오른쪽 캡션 */
 .timeline-item.left {
-  /* ✅ offset은 사진에만 적용됨 */
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
 
   .media {
@@ -201,28 +200,26 @@
   }
 }
 
-/* ✅ 사진만 겹치게 (간격 “항상 동일” 유지) */
-.timeline-item + .timeline-item {
-  margin-top: var(--overlap);
-  /* 기본 겹침 */
+/* ---------------- 겹침 + 간격 균일 보정 ---------------- */
+
+/* ✅ 기본 겹침 */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
 
-/* ✅ left → right : 간격이 커지므로 2d만큼 더 겹치게 */
+/* ✅ left → right : 리프트 때문에 늘어난 간격(2d)만큼 더 겹치게 */
 .timeline-item.left + .timeline-item.right {
   margin-top: calc(
     var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2)
   );
 }
 
-/* ✅ right → left : 간격이 작아지므로 2d만큼 덜 겹치게 */
+/* ✅ right → left : 리프트 때문에 줄어든 간격(2d)만큼 덜 겹치게 */
 .timeline-item.right + .timeline-item.left {
   margin-top: calc(
     var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2)
   );
 }
-
 
 /* ---------------- 모바일 ---------------- */
 @media (max-width: 640px) {
@@ -242,6 +239,11 @@
     grid-template-columns: 1fr var(--line-col-w) 1fr;
   }
 
-  .caption-col .title { font-size: 0.95rem; }
-  .caption-col .desc  { font-size: 0.86rem; }
+  .caption-col .title {
+    font-size: 0.95rem;
+  }
+
+  .caption-col .desc {
+    font-size: 0.86rem;
+  }
 }
