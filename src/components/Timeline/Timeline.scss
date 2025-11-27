@@ -11,7 +11,7 @@
   --gutter: clamp(14px, 2vw, 26px);
 
   /* 다음 사진 30% 겹침 */
-  --overlap: calc(var(--photo) * -0.3);
+  --overlap: calc(var(--photo) * -0.18);
 
   /* 교차 리듬 세기 */
   --lift-ratio: 0.06;
@@ -24,7 +24,7 @@
   margin: 0;
   position: relative;
   display: grid;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 
 /* 가운데 세로 라인 */
@@ -190,14 +190,33 @@
     --photo: clamp(115px, 42vw, 160px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
-    --overlap: calc(var(--photo) * -0.3);
+
+    /* ✅ 모바일도 간격 더 넉넉하게 */
+    --overlap: calc(var(--photo) * -0.18);
     --lift-ratio: 0.04;
   }
 
+  /* ✅ 중앙을 진짜로 만들기 위해 2칼럼만 사용 */
   .timeline-item {
-    grid-template-columns: 1fr var(--line-col-w) 1fr;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
   }
 
+  /* ✅ 라인 컬럼을 그리드에서 빼고 중앙(50%)에 절대 고정 */
+  .line-col {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 100%;
+    width: 0;                 /* 공간 차지 X */
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+  }
+
+  /* 좌/우 배치는 기존 규칙 유지됨 */
   .caption-col .title { font-size: 0.95rem; }
   .caption-col .desc  { font-size: 0.86rem; }
 }
