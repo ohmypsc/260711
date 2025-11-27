@@ -240,7 +240,7 @@ export const Location = () => {
       <div className="navi-buttons-wrapper">
         <button onClick={handleNaverMap} className="navi-button naver">
           <img className="navi-logo naver" src={naverMapLogo} alt="" aria-hidden />
-          네이버 지도
+          네이버지도
         </button>
 
         <button onClick={handleKakaoMap} className="navi-button kakao">
