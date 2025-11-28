@@ -24,31 +24,6 @@
   gap: 1rem;
 }
 
-/* 이름 텍스트 반짝 + 그라데이션 */
-.names span:not(.diamond) {
-  background: linear-gradient(
-    90deg,
-    #f2c6cc 0%,
-    #ff8c94 45%,
-    #f2c6cc 100%
-  );
-  -webkit-background-clip: text;
-  color: transparent;
-
-  text-shadow:
-    0 1px 3px rgba(255, 140, 148, 0.18),
-    0 0 10px rgba(255, 140, 148, 0.14);
-
-  animation: shimmer 4s ease-in-out infinite;
-}
-
-/* 중앙 다이아 */
-.diamond {
-  color: var(--theme-primary);
-  font-size: 1.45rem;
-  opacity: 0.9;
-  animation: diamondGlow 3.2s ease-in-out infinite;
-}
 
 /* -------------------------
    날짜 / 장소
