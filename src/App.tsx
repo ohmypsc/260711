@@ -14,7 +14,15 @@ import IntroCard from "@/components/IntroCard";
 import "./App.scss";
 
 export default function App() {
-  const [showIntro, setShowIntro] = useState(true);
+  // ✅ 같은 탭(세션)에서 인트로를 한 번 넘겼으면 다시 안 뜨게
+  const [showIntro, setShowIntro] = useState(() => {
+    return sessionStorage.getItem("introDismissed") !== "true";
+  });
+
+  const finishIntro = () => {
+    sessionStorage.setItem("introDismissed", "true");
+    setShowIntro(false);
+  };
 
   return (
     <ContactInfoProvider>
@@ -24,7 +32,7 @@ export default function App() {
             path="/"
             element={
               showIntro ? (
-                <IntroCard onFinish={() => setShowIntro(false)} />
+                <IntroCard onFinish={finishIntro} />
               ) : (
                 <MainWeddingPage />
               )
