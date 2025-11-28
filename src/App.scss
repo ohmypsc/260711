@@ -87,3 +87,19 @@ section {
   letter-spacing: 0.02rem;
   color: var(--text-main);
 }
+
+/* ============================================
+   ✨ Section Reveal Animation (Global)
+   ============================================ */
+
+main.wedding-page section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms ease;
+  will-change: opacity, transform;
+}
+
+main.wedding-page section.lazy-active {
+  opacity: 1;
+  transform: translateY(0);
+}
