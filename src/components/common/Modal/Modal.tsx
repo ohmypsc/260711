@@ -14,22 +14,18 @@ export function Modal({ onClose, children, anchorRect }: ModalProps) {
   const [closing, setClosing] = useState(false);
   const [shiftX, setShiftX] = useState(0);
 
-  // ✅ Portal mount node (SSR 안전 처리)
+  // ✅ Portal mount node (중복 방지 + SSR 안전)
   const portalEl = useMemo(() => {
     if (typeof window === "undefined") return null;
+
+    const existing = document.getElementById("modal-root");
+    if (existing) return existing;
+
     const el = document.createElement("div");
     el.id = "modal-root";
+    document.body.appendChild(el);
     return el;
   }, []);
-
-  // ✅ body에 portal node 붙이기/떼기
-  useEffect(() => {
-    if (!portalEl) return;
-    document.body.appendChild(portalEl);
-    return () => {
-      document.body.removeChild(portalEl);
-    };
-  }, [portalEl]);
 
   // ✅ 버튼 축 vs 뷰포트 축 차이 계산 → 모달 X 보정
   useLayoutEffect(() => {
@@ -38,7 +34,10 @@ export function Modal({ onClose, children, anchorRect }: ModalProps) {
     const anchorCenterX = anchorRect.left + anchorRect.width / 2;
     const viewportCenterX = window.innerWidth / 2;
 
+    // 버튼 중심이 뷰포트 중심보다 오른쪽이면 +, 왼쪽이면 -
     let dx = anchorCenterX - viewportCenterX;
+
+    // ✅ 과한 이동 방지 (최대 24px 정도만 보정)
     dx = Math.max(-24, Math.min(24, dx));
 
     setShiftX(dx);
@@ -89,10 +88,8 @@ export function Modal({ onClose, children, anchorRect }: ModalProps) {
     setTimeout(() => onClose(), 180);
   };
 
-  // ✅ portalEl 준비 안 됐으면 렌더 X
   if (!portalEl) return null;
 
-  // ✅ 실제 모달 UI
   const modalUI = (
     <div className="modal-overlay" onClick={handleClose}>
       {/* ✅ 포지셔너 wrapper: 얘만 X 보정 */}
@@ -118,6 +115,5 @@ export function Modal({ onClose, children, anchorRect }: ModalProps) {
     </div>
   );
 
-  // ✅ body 기준으로 띄우기
   return createPortal(modalUI, portalEl);
 }
