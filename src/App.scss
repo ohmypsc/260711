@@ -87,31 +87,3 @@ section {
   letter-spacing: 0.02rem;
   color: var(--text-main);
 }
-
-/* ✅ Main Page Fade In (delay 제거) */
-.page-fade {
-  opacity: 0;
-  animation: pageFadeIn 1s ease-out forwards;
-  will-change: opacity;
-}
-
-@keyframes pageFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ✅ Section Scroll Fade In */
-.wedding-page section {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.9s ease-out,
-    transform 0.9s ease-out;
-  transition-delay: var(--fade-delay, 0s);
-  will-change: opacity, transform;
-}
-
-.wedding-page section.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
