@@ -93,3 +93,16 @@ section {
   letter-spacing: 0.02rem;
   color: var(--text-main);
 }
+
+/* ✅ 메인 페이지 전체 페이드인 */
+.page-fade {
+  opacity: 0;
+  animation: pageFadeIn 1s ease-out forwards;
+  animation-delay: 0.15s;
+  will-change: opacity;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
