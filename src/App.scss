@@ -103,11 +103,14 @@ main.wedding-page section {
 
 /* inner만 reveal */
 main.wedding-page section .section-inner {
-  opacity: 0.001;               /* 완전 0보다 체감 부드러움 */
+  opacity: 0.001;
   transform: translateY(24px);
-  transition: opacity 700ms ease, transform 1000ms ease;
+  transition:
+    opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
+
 
 /* section에 lazy-active 붙으면 inner가 나타남 */
 main.wedding-page section.lazy-active .section-inner {
