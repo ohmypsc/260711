@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { ContactModal } from "@/components/Cover/ContactModal";
 import { useContactInfo } from "@/ContactInfoProvider";
@@ -8,7 +8,6 @@ function LeafLine({ variant }: { variant: "top" | "bottom" }) {
   const EndCaps =
     variant === "top" ? (
       <>
-        {/* ✅ TOP 양끝 고정 잎(길이 기준점) */}
         <path
           d="M10 19 C8 16, 3 16, 2 19 C3 22, 8 22, 10 19 Z"
           transform="translate(6 19) rotate(-8) scale(0.9) translate(-6 -19)"
@@ -22,7 +21,6 @@ function LeafLine({ variant }: { variant: "top" | "bottom" }) {
       </>
     ) : (
       <>
-        {/* ✅ BOTTOM 양끝 고정 잎(TOP과 동일 크기/농도) */}
         <path
           d="M10 19 C8 16, 3 16, 2 19 C3 22, 8 22, 10 19 Z"
           transform="translate(6 19) rotate(6) scale(0.9) translate(-6 -19)"
@@ -100,22 +98,24 @@ export function Cover() {
   const [open, setOpen] = useState(false);
   const info = useContactInfo();
 
-  const getName = (id: string) => info.find((c) => c.id === id)?.name;
-
-  const GROOM_FULLNAME = getName("groom");
-  const BRIDE_FULLNAME = getName("bride");
-
-  const GROOM_FATHER = getName("groom-father");
-  const GROOM_MOTHER = getName("groom-mother");
-  const BRIDE_FATHER = getName("bride-father");
-  const BRIDE_MOTHER = getName("bride-mother");
+  const names = useMemo(() => {
+    const getName = (id: string) => info.find((c) => c.id === id)?.name ?? "";
+    return {
+      groom: getName("groom"),
+      bride: getName("bride"),
+      groomFather: getName("groom-father"),
+      groomMother: getName("groom-mother"),
+      brideFather: getName("bride-father"),
+      brideMother: getName("bride-mother"),
+    };
+  }, [info]);
 
   return (
     <div className="w-cover">
       <h1 className="names">
-        <span>{GROOM_FULLNAME}</span>
+        <span>{names.groom}</span>
         <span className="diamond">♥</span>
-        <span>{BRIDE_FULLNAME}</span>
+        <span>{names.bride}</span>
       </h1>
 
       <p className="date">2026.07.11. (토) 오전 11시</p>
@@ -126,18 +126,18 @@ export function Cover() {
 
         <div className="name">
           <span className="parent-names">
-            {GROOM_FATHER} · {GROOM_MOTHER}의
+            {names.groomFather} · {names.groomMother}의
           </span>{" "}
           <span className="relation-name relation-name--adjust">아들</span>{" "}
-          {GROOM_FULLNAME}
+          {names.groom}
         </div>
 
         <div className="name">
           <span className="parent-names">
-            {BRIDE_FATHER} · {BRIDE_MOTHER}의
+            {names.brideFather} · {names.brideMother}의
           </span>{" "}
           <span className="relation-name relation-name--adjust">딸</span>{" "}
-          {BRIDE_FULLNAME}
+          {names.bride}
         </div>
 
         <LeafLine variant="bottom" />
