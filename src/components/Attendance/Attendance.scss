@@ -5,7 +5,6 @@
     margin: 10px 0 16px;
     line-height: 1.6;
     color: var(--text-main);
-    font-family: inherit; /* ✅ 전역 폰트 */
   }
 
   .attendance-buttons {
@@ -13,7 +12,6 @@
     flex-direction: column;
     gap: 0.8rem;
     margin-top: 1rem;
-    font-family: inherit; /* ✅ 전역 폰트 */
   }
 }
 
@@ -27,14 +25,12 @@
   flex-direction: column;
   gap: 12px;
   padding: 0 4px;
-  font-family: inherit; /* ✅ 전역 폰트 */
 }
 
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 10px;
-  font-family: inherit; /* ✅ 전역 폰트 */
 
   .field {
     display: flex;
@@ -47,7 +43,6 @@
     font-size: 0.9rem;
     color: var(--text-main);
     font-weight: 600;
-    font-family: inherit; /* ✅ 전역 폰트 */
   }
 
   input {
@@ -57,7 +52,6 @@
     font-size: 0.95rem;
     background: #fff;
     color: var(--text-main);
-    font-family: inherit; /* ✅ 전역 폰트 상속 */
   }
 
   .span-2 {
@@ -70,7 +64,6 @@
 
     button {
       width: 100%;
-      font-family: inherit; /* ✅ 전역 폰트 */
     }
   }
 }
@@ -96,7 +89,6 @@
   font-size: 0.92rem;
   cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease;
-  font-family: inherit; /* ✅ 전역 폰트 */
 
   &.active {
     background: var(--section-bg-soft);
@@ -119,7 +111,6 @@
     color: var(--text-main);
     font-size: 1.1rem;
     cursor: pointer;
-    font-family: inherit; /* ✅ 전역 폰트 */
 
     &:disabled {
       opacity: 0.45;
@@ -136,7 +127,6 @@
     background: #fff;
     color: var(--text-main);
     font-weight: 700;
-    font-family: inherit; /* ✅ 전역 폰트 */
   }
 }
 
@@ -147,7 +137,6 @@
 .my-attendance {
   margin-top: 16px;
   text-align: left;
-  font-family: inherit; /* ✅ 전역 폰트 */
 
   .my-attendance__title {
     font-size: 1rem;
@@ -195,7 +184,6 @@
         background: var(--theme-accent);
         color: var(--text-main);
         cursor: pointer;
-        font-family: inherit; /* ✅ 전역 폰트 */
 
         &.danger {
           background: #ffe8e8;
