@@ -14,28 +14,27 @@ import { AdminPage } from "./AdminPage";
 export default function MainWeddingPage() {
   useEffect(() => {
     // ===============================
-    // ✅ 1) 모바일 확대(더블탭/핀치) 방지 - 스크롤 지연 없는 방식
+    // ✅ 1) 모바일 확대(더블탭/핀치) 방지 - 유지
     // ===============================
     let lastTouchEnd = 0;
 
     const blockDoubleTapZoom = (e: TouchEvent) => {
       const now = Date.now();
       if (now - lastTouchEnd <= 300) {
-        e.preventDefault(); // 더블탭일 때만 줌 방지
+        e.preventDefault();
       }
       lastTouchEnd = now;
     };
 
     const stopGesture = (e: Event) => e.preventDefault();
 
-    // ✅ touchstart 제거 -> 스크롤 시작 지연 사라짐
     document.addEventListener("touchend", blockDoubleTapZoom, { passive: false });
     document.addEventListener("gesturestart", stopGesture);
     document.addEventListener("gesturechange", stopGesture);
     document.addEventListener("gestureend", stopGesture);
 
     // ===============================
-    // ✅ 2) 섹션 공통 lazy 등장 효과
+    // ✅ 2) 섹션 공통 lazy 등장 효과 (트리거 '미리' 켜지게 수정)
     // ===============================
     const targets = document.querySelectorAll("main.wedding-page section");
 
@@ -49,8 +48,8 @@ export default function MainWeddingPage() {
         });
       },
       {
-        threshold: 0.12,
-        rootMargin: "0px 0px -10% 0px",
+        threshold: 0.01,               // 👈 거의 닿기만 해도 켜짐
+        rootMargin: "0px 0px 25% 0px", // 👈 아래에서 25% '미리' 켜짐
       }
     );
 
@@ -67,7 +66,6 @@ export default function MainWeddingPage() {
       });
     });
 
-    // cleanup
     return () => {
       document.removeEventListener("touchend", blockDoubleTapZoom);
       document.removeEventListener("gesturestart", stopGesture);
