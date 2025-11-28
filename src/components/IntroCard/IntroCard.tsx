@@ -17,7 +17,6 @@ function gaussianRandom(mean = 0, stdev = 1) {
 export default function IntroCard({ onFinish }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // 애니메이션 관련 ref들
   const petalsRef = useRef<any[]>([]);
   const animationRef = useRef<number | null>(null);
   const petalImgRef = useRef<HTMLImageElement | null>(null);
@@ -29,8 +28,6 @@ export default function IntroCard({ onFinish }: Props) {
     ctxRef.current = ctx;
 
     const petalImg = new Image();
-
-    // ✅ GH Pages/로컬 모두 안전한 경로
     petalImg.src = import.meta.env.BASE_URL + "petal.png";
     petalImgRef.current = petalImg;
 
@@ -47,24 +44,40 @@ export default function IntroCard({ onFinish }: Props) {
     };
   }, []);
 
-  // ✅ BgEffect 느낌으로 크기/비율 다양화된 Burst
+  /**
+   * ✅ Depth Burst
+   * - 큰 꽃잎: 더 멀리(반지름 큼), 더 묵직(속도/중력 살짝 큼), 더 진함
+   * - 작은 꽃잎: 가까이(반지름 작음), 더 가벼움, 더 빨리 사라짐
+   */
   const createBurst = () => {
     const petals: any[] = [];
-    const count = 400;
-    const radius = 180;
+    const count = 420;
+    const baseRadius = 160; // 기본 퍼짐 반경
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const r = Math.random() * radius;
 
-      // 평균 26px, 분산 9px 정도로 자연스럽게 섞임
-      const size = Math.max(14, gaussianRandom(26, 9));
+      // ✅ 크기 정규분포
+      const size = Math.max(12, gaussianRandom(26, 9));
+      const aspect = 0.8 + Math.random() * 0.55; // 0.8~1.35
 
-      // 꽃잎 비율도 랜덤하게
-      const aspect = 0.8 + Math.random() * 0.5; // 0.8~1.3
+      // ✅ 크기 기반 깊이 계수 (큰 꽃잎일수록 depth↑)
+      const depth = Math.min(size / 22, 1.9); // 약 0.5~1.9 범위
 
-      // 크기에 따라 속도도 살짝 연동(큰 건 조금 더 묵직하게)
-      const sizeFactor = Math.min(size / 26, 1.6);
+      // ✅ 큰 꽃잎일수록 더 멀리 퍼지도록 반경에 depth 적용
+      const r = Math.random() * baseRadius * depth;
+
+      // ✅ 속도: 큰 꽃잎은 묵직하게(조금 느리고), 작은 꽃잎은 가볍게(조금 빠르게)
+      const speedScale = 1 / (0.75 + depth * 0.45);
+
+      // ✅ 중력: 큰 꽃잎이 약간 더 빨리 떨어지게
+      const gravity = (0.045 + Math.random() * 0.07) * depth;
+
+      // ✅ 큰 꽃잎이 조금 더 오래/진하게 남는 느낌
+      const opacity = 0.55 + Math.random() * 0.35 * depth;
+
+      // ✅ 사라지는 속도: 작은 꽃잎 더 빨리 fade
+      const fade = 0.0028 + (1 / depth) * 0.0012;
 
       petals.push({
         x: window.innerWidth / 2 + Math.cos(angle) * r,
@@ -73,14 +86,15 @@ export default function IntroCard({ onFinish }: Props) {
         w: size,
         h: size * aspect,
 
-        xSpeed: (Math.random() - 0.5) * 8 / sizeFactor,
-        ySpeed: (Math.random() - 1.1) * 5 / sizeFactor,
+        xSpeed: (Math.random() - 0.5) * 9 * speedScale,
+        ySpeed: (Math.random() - 1.15) * 5.5 * speedScale,
 
         rot: Math.random() * 2 * Math.PI,
-        rotSpeed: (Math.random() - 0.5) * 0.25,
-        gravity: (0.05 + Math.random() * 0.08) * sizeFactor,
+        rotSpeed: (Math.random() - 0.5) * 0.22,
 
-        opacity: 0.7 + Math.random() * 0.3,
+        gravity,
+        opacity,
+        fade,
       });
     }
 
@@ -93,7 +107,6 @@ export default function IntroCard({ onFinish }: Props) {
     const petalImg = petalImgRef.current!;
     let petals = petalsRef.current;
 
-    // ✅ 이미지 로드 실패/전 로딩이면 drawImage 하지 않음
     if (!petalImg.complete || petalImg.naturalWidth === 0) {
       animationRef.current = requestAnimationFrame(draw);
       return;
@@ -106,7 +119,7 @@ export default function IntroCard({ onFinish }: Props) {
       p.y += p.ySpeed;
       p.ySpeed += p.gravity;
       p.rot += p.rotSpeed;
-      p.opacity -= 0.0035;
+      p.opacity -= p.fade;
 
       ctx.globalAlpha = Math.max(p.opacity, 0);
       ctx.save();
@@ -126,7 +139,6 @@ export default function IntroCard({ onFinish }: Props) {
 
   const handleClick = () => {
     if (animationRef.current) cancelAnimationFrame(animationRef.current);
-
     createBurst();
     draw();
     setTimeout(() => onFinish(), 2600);
