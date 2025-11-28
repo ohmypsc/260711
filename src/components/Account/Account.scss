@@ -5,8 +5,8 @@
   .account__desc {
     margin: 0.9rem 0 1.4rem;
     line-height: 1.7;
-    color: var(--text-light);
-    font-size: 0.98rem;
+    color: var(--text-main);
+    font-size: 1.2rem;
   }
 
   .account-buttons {
@@ -25,6 +25,7 @@
     padding: 0.95rem 0.8rem;
     font-size: 1.02rem;
     letter-spacing: 0.01rem;
+
     background: #fff;
     border: 1px solid var(--border-color);
     box-shadow: 0 6px 18px var(--shadow-color);
@@ -35,9 +36,7 @@
       box-shadow: 0 4px 10px var(--shadow-color);
     }
 
-    &.groom {
-      border-color: rgba(231, 163, 169, 0.55);
-    }
+    &.groom,
     &.bride {
       border-color: rgba(231, 163, 169, 0.55);
     }
@@ -62,13 +61,13 @@
   gap: 10px;
 }
 
-/* 카드형으로 정리해서 밋밋함 제거 */
+/* 카드형 */
 .account-card {
   background: #fff;
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 12px 12px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.03);
+  padding: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -98,15 +97,23 @@
   }
 }
 
-/* 하단: 은행/계좌 + 복사 버튼 */
+/* 하단: PC는 가로, 모바일은 세로 */
 .account-card__bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* 계좌 라인 */
+@media (max-width: 480px) {
+  .account-card__bottom {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+
+/* 계좌 라인 (긴 숫자 자동 줄바꿈) */
 .bank-line {
   font-size: 0.95rem;
   color: var(--text-main);
@@ -114,6 +121,7 @@
 
   flex-grow: 1;
   min-width: 0;
+  white-space: normal; /* ✅ 줄바꿈 허용 */
 
   strong {
     font-weight: 700;
@@ -124,7 +132,9 @@
   .account-number {
     font-weight: 500;
     letter-spacing: 0.02rem;
-    word-break: keep-all;
+
+    overflow-wrap: anywhere; /* ✅ 긴 숫자도 자동 줄바꿈 */
+    word-break: break-all;
   }
 }
 
@@ -138,11 +148,13 @@
   text-align: center;
 }
 
-/* Copy Button */
+/* Copy Button (크게 + 모바일 풀버튼) */
 .copy-btn {
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.88rem;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  min-width: 64px;
 
   background: var(--theme-primary);
   color: #fff;
@@ -157,29 +169,18 @@
   }
 }
 
-.account-modal-footnote {
-  font-size: 0.88rem;
-  color: var(--text-light);
-  text-align: center;
-  margin-top: 2px;
+@media (max-width: 480px) {
+  .copy-btn {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1.02rem;
+    border-radius: 12px;
+  }
 }
 
-/* 작은 화면 최적화 */
 @media (max-width: 360px) {
-  .account-card {
-    padding: 10px;
-  }
-
-  .bank-line {
-    font-size: 0.9rem;
-
-    .account-number {
-      font-size: 0.93rem;
-    }
-  }
-
   .copy-btn {
-    font-size: 0.82rem;
-    padding: 5px 10px;
+    font-size: 0.95rem;
+    padding: 11px 0;
   }
 }
