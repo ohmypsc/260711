@@ -63,6 +63,7 @@ body {
     );
   width: 100%;
   overflow-x: hidden;
+  z-index: 1; /* BgEffect가 뒤로 가도록 */
 }
 
 /* ============================================
@@ -90,16 +91,26 @@ section {
 
 /* ============================================
    ✨ Section Reveal Animation (Global)
+   ✅ 모달 fixed 깨지지 않는 버전
+   - section 자체에는 transform 절대 금지
+   - inner만 애니메이션
    ============================================ */
 
+/* section은 레이아웃 그대로 유지 */
 main.wedding-page section {
-  opacity: 0;
+  /* padding 등 기존 레이아웃만 적용됨 */
+}
+
+/* inner만 reveal */
+main.wedding-page section .section-inner {
+  opacity: 0.001;               /* 완전 0보다 체감 부드러움 */
   transform: translateY(24px);
   transition: opacity 700ms ease, transform 700ms ease;
   will-change: opacity, transform;
 }
 
-main.wedding-page section.lazy-active {
+/* section에 lazy-active 붙으면 inner가 나타남 */
+main.wedding-page section.lazy-active .section-inner {
   opacity: 1;
   transform: translateY(0);
 }
