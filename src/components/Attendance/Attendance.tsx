@@ -35,7 +35,6 @@ export function Attendance() {
   const [myRows, setMyRows] = useState<AttendanceRow[]>([]);
   const hasMyRows = myRows.length > 0;
 
-  // ✅ 같은 브라우저에서 제출했던 id 자동 로드
   const loadMyRows = async () => {
     const ids = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as number[];
     if (ids.length === 0) return;
@@ -91,14 +90,13 @@ export function Attendance() {
         )}
       </div>
 
-      {/* ✅ 내 응답 표시 */}
       {hasMyRows && (
         <div className="my-attendance">
           <h3 className="my-attendance__title">내 참석 응답</h3>
 
           {myRows.map((row) => (
             <div key={row.id} className="my-attendance__item">
-              <div className="line">
+              <div className="info">
                 <span className="name">{row.name}</span>
                 <span className="meta">
                   {row.side === "groom" ? "신랑 측" : "신부 측"} · {row.count}명 ·{" "}
@@ -139,7 +137,6 @@ export function Attendance() {
         </div>
       )}
 
-      {/* 작성 모달 */}
       {openModal === "write" && (
         <WriteAttendanceModal
           onClose={() => setOpenModal(null)}
@@ -150,7 +147,6 @@ export function Attendance() {
         />
       )}
 
-      {/* 내 응답 찾기 모달 */}
       {openModal === "find" && (
         <FindAttendanceModal
           onClose={() => setOpenModal(null)}
@@ -161,7 +157,6 @@ export function Attendance() {
         />
       )}
 
-      {/* 수정 모달 */}
       {openModal && typeof openModal === "object" && openModal.type === "edit" && (
         <EditAttendanceModal
           row={openModal.row}
@@ -176,7 +171,6 @@ export function Attendance() {
         />
       )}
 
-      {/* 삭제 모달 */}
       {openModal && typeof openModal === "object" && openModal.type === "delete" && (
         <DeleteAttendanceModal
           row={openModal.row}
@@ -194,7 +188,72 @@ export function Attendance() {
 }
 
 /* ------------------------------------------------------------------
-   Write Modal (message 제거)
+   공용 UI: Toggle Buttons / Stepper
+------------------------------------------------------------------ */
+
+function ToggleRow<T extends string>({
+  value,
+  onChange,
+  options,
+}: {
+  value: T | "";
+  onChange: (v: T) => void;
+  options: { label: string; value: T }[];
+}) {
+  return (
+    <div className="toggle-row">
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          className={`toggle-btn ${value === opt.value ? "active" : ""}`}
+          onClick={() => onChange(opt.value)}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function CountStepper({
+  value,
+  onChange,
+  min = 1,
+  max = 10,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  min?: number;
+  max?: number;
+}) {
+  return (
+    <div className="count-stepper">
+      <button
+        type="button"
+        className="step-btn"
+        onClick={() => onChange(value - 1)}
+        disabled={value <= min}
+      >
+        −
+      </button>
+
+      <div className="count-pill">{value}명</div>
+
+      <button
+        type="button"
+        className="step-btn"
+        onClick={() => onChange(value + 1)}
+        disabled={value >= max}
+      >
+        +
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------
+   Write Modal (select 제거 / 2열 구성)
 ------------------------------------------------------------------ */
 
 function WriteAttendanceModal({
@@ -206,18 +265,20 @@ function WriteAttendanceModal({
 }) {
   const [loading, setLoading] = useState(false);
 
+  const [side, setSide] = useState<Side | "">("");
+  const [meal, setMeal] = useState<Meal | "">("");
+  const [count, setCount] = useState(1);
+
   const ref = useRef({
     name: null as unknown as HTMLInputElement,
     phone: null as unknown as HTMLInputElement,
-    count: null as unknown as HTMLSelectElement,
-    side: null as unknown as HTMLSelectElement,
-    meal: null as unknown as HTMLSelectElement,
   });
 
   return (
     <Modal onClose={onClose}>
       <div className="attendance-modal-content">
-        <h2 className="modal-heading modal-divider">참석 여부 확인하기</h2>
+        <h2 className="modal-title">참석 여부 확인하기</h2>
+        <p className="modal-subtitle">간단히 입력해 주시면 큰 도움이 됩니다.</p>
 
         <form
           className="attendance-form"
@@ -228,15 +289,11 @@ function WriteAttendanceModal({
             try {
               const name = ref.current.name.value.trim();
               const phone = ref.current.phone.value.trim();
-              const count = parseInt(ref.current.count.value, 10);
-              const side = ref.current.side.value as Side;
-              const meal = ref.current.meal.value as Meal;
 
               if (!name || !phone || !side) {
                 alert("이름, 연락처, 하객 구분은 필수입니다.");
                 return;
               }
-
               if (!meal) {
                 alert("식사 여부를 선택해주세요.");
                 return;
@@ -261,61 +318,55 @@ function WriteAttendanceModal({
             }
           }}
         >
-          <label className="label">이름 *</label>
-          <input
-            disabled={loading}
-            type="text"
-            placeholder="이름을 입력해주세요."
-            ref={(r) => (ref.current.name = r as HTMLInputElement)}
-          />
+          <div className="field span-2">
+            <label className="label">이름 *</label>
+            <input
+              disabled={loading}
+              type="text"
+              placeholder="이름을 입력해주세요."
+              ref={(r) => (ref.current.name = r as HTMLInputElement)}
+            />
+          </div>
 
-          <label className="label">연락처 *</label>
-          <input
-            disabled={loading}
-            type="tel"
-            placeholder="010-0000-0000"
-            ref={(r) => (ref.current.phone = r as HTMLInputElement)}
-          />
+          <div className="field span-2">
+            <label className="label">연락처 *</label>
+            <input
+              disabled={loading}
+              type="tel"
+              placeholder="010-0000-0000"
+              ref={(r) => (ref.current.phone = r as HTMLInputElement)}
+            />
+          </div>
 
-          <label className="label">어느 분의 하객이신가요? *</label>
-          <select
-            disabled={loading}
-            ref={(r) => (ref.current.side = r as HTMLSelectElement)}
-            defaultValue=""
-          >
-            <option value="" disabled>
-              선택해주세요
-            </option>
-            <option value="groom">신랑 측</option>
-            <option value="bride">신부 측</option>
-          </select>
+          <div className="field">
+            <label className="label">하객 구분 *</label>
+            <ToggleRow
+              value={side}
+              onChange={setSide}
+              options={[
+                { label: "신랑 측", value: "groom" },
+                { label: "신부 측", value: "bride" },
+              ]}
+            />
+          </div>
 
-          <label className="label">참석 인원 *</label>
-          <select
-            disabled={loading}
-            ref={(r) => (ref.current.count = r as HTMLSelectElement)}
-            defaultValue="1"
-          >
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {n}명
-              </option>
-            ))}
-          </select>
+          <div className="field">
+            <label className="label">참석 인원 *</label>
+            <CountStepper value={count} onChange={setCount} />
+          </div>
 
-          <label className="label">식사 여부 *</label>
-          <select
-            disabled={loading}
-            ref={(r) => (ref.current.meal = r as HTMLSelectElement)}
-            defaultValue=""
-          >
-            <option value="" disabled>
-              선택해주세요
-            </option>
-            <option value="yes">예정입니다</option>
-            <option value="no">예정이 아닙니다</option>
-            <option value="unknown">미정입니다</option>
-          </select>
+          <div className="field span-2">
+            <label className="label">식사 여부 *</label>
+            <ToggleRow
+              value={meal}
+              onChange={setMeal}
+              options={[
+                { label: "예정입니다", value: "yes" },
+                { label: "예정이 아닙니다", value: "no" },
+                { label: "미정입니다", value: "unknown" },
+              ]}
+            />
+          </div>
 
           <div className="attendance-form__actions">
             <Button variant="submit" type="submit" disabled={loading}>
@@ -329,7 +380,7 @@ function WriteAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Find Modal
+   Find Modal (컴팩트/전역 헤더)
 ------------------------------------------------------------------ */
 
 function FindAttendanceModal({
@@ -348,7 +399,8 @@ function FindAttendanceModal({
   return (
     <Modal onClose={onClose}>
       <div className="attendance-modal-content">
-        <h2 className="modal-heading modal-divider">내 참석 응답 찾기</h2>
+        <h2 className="modal-title">내 참석 응답 찾기</h2>
+        <p className="modal-subtitle">제출했던 정보로 확인할 수 있어요.</p>
 
         <form
           className="attendance-form"
@@ -391,21 +443,25 @@ function FindAttendanceModal({
             }
           }}
         >
-          <label className="label">이름 *</label>
-          <input
-            disabled={loading}
-            type="text"
-            placeholder="이름을 입력해주세요."
-            ref={(r) => (ref.current.name = r as HTMLInputElement)}
-          />
+          <div className="field span-2">
+            <label className="label">이름 *</label>
+            <input
+              disabled={loading}
+              type="text"
+              placeholder="이름을 입력해주세요."
+              ref={(r) => (ref.current.name = r as HTMLInputElement)}
+            />
+          </div>
 
-          <label className="label">연락처 *</label>
-          <input
-            disabled={loading}
-            type="tel"
-            placeholder="제출할 때 입력한 연락처"
-            ref={(r) => (ref.current.phone = r as HTMLInputElement)}
-          />
+          <div className="field span-2">
+            <label className="label">연락처 *</label>
+            <input
+              disabled={loading}
+              type="tel"
+              placeholder="제출할 때 입력한 연락처"
+              ref={(r) => (ref.current.phone = r as HTMLInputElement)}
+            />
+          </div>
 
           <div className="attendance-form__actions">
             <Button variant="submit" type="submit" disabled={loading}>
@@ -419,7 +475,7 @@ function FindAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Edit / Delete Modals (message 제거)
+   Edit / Delete Modals (select 제거 / 최소 UI)
 ------------------------------------------------------------------ */
 
 function EditAttendanceModal({
@@ -436,15 +492,13 @@ function EditAttendanceModal({
   onSuccess: (row: AttendanceRow) => void;
 }) {
   const [loading, setLoading] = useState(false);
-  const ref = useRef({
-    count: null as unknown as HTMLSelectElement,
-    meal: null as unknown as HTMLSelectElement,
-  });
+  const [count, setCount] = useState(row.count);
+  const [meal, setMeal] = useState<Meal>(row.meal);
 
   return (
     <Modal onClose={onClose}>
       <div className="attendance-modal-content">
-        <h2 className="modal-heading modal-divider">내 응답 수정</h2>
+        <h2 className="modal-title">내 응답 수정</h2>
 
         <form
           className="attendance-form"
@@ -453,7 +507,6 @@ function EditAttendanceModal({
             setLoading(true);
 
             try {
-              // ✅ 최종 1회 본인 확인
               const { data: check, error: checkError } = await supabase
                 .from("attendance")
                 .select("id")
@@ -464,14 +517,6 @@ function EditAttendanceModal({
 
               if (checkError || !check) {
                 alert("본인 확인에 실패했습니다.");
-                return;
-              }
-
-              const count = parseInt(ref.current.count.value, 10);
-              const meal = ref.current.meal.value as Meal;
-
-              if (!meal) {
-                alert("식사 여부를 선택해주세요.");
                 return;
               }
 
@@ -495,29 +540,23 @@ function EditAttendanceModal({
             }
           }}
         >
-          <label className="label">참석 인원 *</label>
-          <select
-            disabled={loading}
-            ref={(r) => (ref.current.count = r as HTMLSelectElement)}
-            defaultValue={String(row.count)}
-          >
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {n}명
-              </option>
-            ))}
-          </select>
+          <div className="field">
+            <label className="label">참석 인원 *</label>
+            <CountStepper value={count} onChange={setCount} />
+          </div>
 
-          <label className="label">식사 여부 *</label>
-          <select
-            disabled={loading}
-            ref={(r) => (ref.current.meal = r as HTMLSelectElement)}
-            defaultValue={row.meal}
-          >
-            <option value="yes">예정입니다</option>
-            <option value="no">예정이 아닙니다</option>
-            <option value="unknown">미정입니다</option>
-          </select>
+          <div className="field span-2">
+            <label className="label">식사 여부 *</label>
+            <ToggleRow
+              value={meal}
+              onChange={setMeal}
+              options={[
+                { label: "예정입니다", value: "yes" },
+                { label: "예정이 아닙니다", value: "no" },
+                { label: "미정입니다", value: "unknown" },
+              ]}
+            />
+          </div>
 
           <div className="attendance-form__actions">
             <Button variant="outline" type="submit" disabled={loading}>
@@ -548,7 +587,8 @@ function DeleteAttendanceModal({
   return (
     <Modal onClose={onClose}>
       <div className="attendance-modal-content">
-        <h2 className="modal-heading modal-divider">내 응답 삭제</h2>
+        <h2 className="modal-title">내 응답 삭제</h2>
+        <p className="modal-subtitle">삭제하면 복구할 수 없습니다.</p>
 
         <form
           className="attendance-form"
@@ -557,7 +597,6 @@ function DeleteAttendanceModal({
             setLoading(true);
 
             try {
-              // ✅ 최종 1회 본인 확인
               const { data: check, error: checkError } = await supabase
                 .from("attendance")
                 .select("id")
