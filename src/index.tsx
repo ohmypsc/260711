@@ -13,6 +13,9 @@ import { AdminPage } from "./AdminPage";
 
 export default function MainWeddingPage() {
   useEffect(() => {
+    // ===============================
+    // ✅ 1) 모바일 줌 방지 로직(기존)
+    // ===============================
     let lastTouchTime = 0;
 
     const blockZoom = (e: TouchEvent) => {
@@ -28,18 +31,42 @@ export default function MainWeddingPage() {
     document.addEventListener("gesturechange", stopGesture);
     document.addEventListener("gestureend", stopGesture);
 
+    // ===============================
+    // ✅ 2) 섹션 공통 lazy 등장 효과(추가)
+    // ===============================
+    const targets = document.querySelectorAll("main.wedding-page section");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("lazy-active");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+
+    // cleanup
     return () => {
       document.removeEventListener("touchstart", blockZoom);
       document.removeEventListener("gesturestart", stopGesture);
       document.removeEventListener("gesturechange", stopGesture);
       document.removeEventListener("gestureend", stopGesture);
+
+      targets.forEach((el) => observer.unobserve(el));
     };
   }, []);
 
   return (
     <>
       <main className="wedding-page">
-
         <section id="cover">
           <div className="section-inner">
             <Cover />
@@ -52,33 +79,31 @@ export default function MainWeddingPage() {
           </div>
         </section>
 
-
         <section id="timeline">
           <div className="section-inner">
             <Timeline />
           </div>
         </section>
 
-        
         <section id="calendar">
           <div className="section-inner">
             <Calendar />
           </div>
         </section>
-        
+
         <section id="location">
           <div className="section-inner">
             <Location />
           </div>
         </section>
-        
+
         <section id="account">
           <div className="section-inner">
             <Account />
           </div>
         </section>
 
-         <section id="attendance">
+        <section id="attendance">
           <div className="section-inner">
             <Attendance />
           </div>
@@ -95,9 +120,6 @@ export default function MainWeddingPage() {
             <PhotoUpload />
           </div>
         </section>
-
-        
-
       </main>
       <BgEffect />
     </>
