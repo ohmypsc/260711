@@ -1,11 +1,14 @@
 /* ============================================
-   🌸 Romantic + Premium Final Edition
+   Cover (Clean / Global tone)
+   - 전역 컬러/폰트/레이아웃만 따름
+   - shimmer/그라데이션/발광/애니메이션 제거
    ============================================ */
 
 .w-cover {
   text-align: center;
   max-width: var(--section-max-width);
   margin: 0 auto;
+
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
@@ -18,12 +21,18 @@
   font-weight: 600;
   line-height: 1.28;
   font-size: clamp(2.45rem, 7.5vw, 3.05rem);
+
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
 }
 
+.diamond {
+  color: var(--theme-primary);
+  font-size: 1.45rem;
+  opacity: 0.9;
+}
 
 /* -------------------------
    날짜 / 장소
@@ -34,23 +43,24 @@
   opacity: 0.96;
   margin: 0;
 }
+
 .place {
   margin-top: -0.35rem;
 }
 
 /* -------------------------
-   부모님 박스  ✅ (여백 축소 반영)
+   부모님 박스
 -------------------------- */
 .family-section {
-  margin: 0.75rem 0 1.05rem;   /* ✅ 위/아래 여백 줄임 */
-  padding: 0.55rem 0 0.55rem;  /* ✅ 내부 패딩 줄임 */
+  margin: 0.75rem 0 1.05rem;
+  padding: 0.55rem 0;
 
   font-size: 1.05rem;
   line-height: 1.72rem;
 
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;                /* ✅ 줄 간격 살짝 타이트 */
+  gap: 0.35rem;
 }
 
 .name {
@@ -69,12 +79,11 @@
 }
 
 /* -------------------------
-   긴 장식 라인 ✅ (잎사귀 미니멀 라인)
+   장식 라인
 -------------------------- */
 .parent-line {
   width: 100%;
-  max-width: 100%;
-  margin: 0.2rem auto;         /* ✅ 라인 위/아래 여백 축소 */
+  margin: 0.2rem auto;
 
   color: var(--theme-primary);
   opacity: 0.9;
@@ -83,46 +92,34 @@
     width: 100%;
     height: auto;
     display: block;
-    filter: drop-shadow(0 1px 2px rgba(255,140,148,0.14));
+    /* ✅ drop-shadow도 제거해서 합성 영향 최소화 */
+    filter: none;
   }
 }
 
 .parent-line.top {
-  margin-bottom: 0.35rem;      /* ✅ 위쪽 라인 아래 여백 축소 */
+  margin-bottom: 0.35rem;
 }
+
 .parent-line.bottom {
-  margin-top: 0.35rem;         /* ✅ 아래쪽 라인 위 여백 축소 */
-}
-
-/* -------------------------
-   Animations
--------------------------- */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes shimmer {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.17); }
-}
-
-@keyframes diamondGlow {
-  0%, 100% { transform: scale(1); opacity: 0.85; }
-  50% { transform: scale(1.15); opacity: 1; }
+  margin-top: 0.35rem;
 }
 
 /* -------------------------
    Mobile
 -------------------------- */
 @media (max-width: 420px) {
-  .w-cover { gap: 1.5rem; }
-  .diamond { font-size: 1.3rem; }
-  .parent-line { max-width: 100%; }
+  .w-cover {
+    gap: 1.5rem;
+  }
+
+  .diamond {
+    font-size: 1.3rem;
+  }
 
   .family-section {
-    margin: 0.65rem 0 0.95rem; /* ✅ 모바일도 같이 타이트 */
-    padding: 0.5rem 0 0.5rem;
+    margin: 0.65rem 0 0.95rem;
+    padding: 0.5rem 0;
     gap: 0.3rem;
   }
 }
