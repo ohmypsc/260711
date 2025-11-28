@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import petalUrl from "@/image/petal.png";
 import "./BgEffect.scss";
 
@@ -73,9 +73,6 @@ class Petal {
       this.reset(false);
     }
 
-    // ✅ 이미지 아직 로드 안 됐으면 그리기만 스킵 (지연/에러 방지)
-    if (!this.img.complete || this.img.naturalWidth === 0) return;
-
     this.windTime += WIND_SPEED;
     const windOffset = Math.sin(this.windTime) * WIND_STRENGTH;
 
@@ -83,7 +80,17 @@ class Petal {
     ctx.globalAlpha = this.opacity;
     ctx.translate(this.x + windOffset, this.y);
     ctx.rotate(this.rotation);
-    ctx.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
+
+    // ✅ 이미지 로딩 전에도 fallback으로 바로 그려서 "늦게 시작" 느낌 제거
+    if (!this.img.complete || this.img.naturalWidth === 0) {
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.w * 0.35, this.h * 0.45, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(231, 163, 169, 0.35)";
+      ctx.fill();
+    } else {
+      ctx.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
+    }
+
     ctx.restore();
   }
 
@@ -99,9 +106,13 @@ export const BgEffect = () => {
   const petalsRef = useRef<Petal[]>([]);
   const frameRef = useRef(0);
 
-  useEffect(() => {
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
+  // ✅ 첫 페인트 전에 세팅 → 로딩 순간부터 이미 흩날리는 느낌
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -113,9 +124,12 @@ export const BgEffect = () => {
     const img = new Image();
     img.src = petalUrl;
 
-    const count = Math.floor((window.innerWidth * window.innerHeight) / 25000);
+    const count = Math.max(
+      8,
+      Math.floor((window.innerWidth * window.innerHeight) / 25000)
+    );
 
-    // ✅ ✨ 핵심: 이미지 onload 기다리지 말고 꽃잎을 바로 생성
+    // ✅ 이미지 로딩 기다리지 않고 즉시 생성
     petalsRef.current = Array.from({ length: count }, () => {
       return new Petal(canvas, ctx, img);
     });
@@ -135,7 +149,7 @@ export const BgEffect = () => {
   }, []);
 
   return (
-    <div className="bg-effect">
+    <div className="bg-effect" aria-hidden>
       <canvas ref={canvasRef} />
     </div>
   );
