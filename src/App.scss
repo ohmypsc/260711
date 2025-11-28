@@ -105,7 +105,7 @@ main.wedding-page section {
 main.wedding-page section .section-inner {
   opacity: 0.001;               /* 완전 0보다 체감 부드러움 */
   transform: translateY(24px);
-  transition: opacity 700ms ease, transform 700ms ease;
+  transition: opacity 700ms ease, transform 1000ms ease;
   will-change: opacity, transform;
 }
 
