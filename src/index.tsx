@@ -38,7 +38,7 @@ export default function MainWeddingPage() {
 
   return (
     <>
-      <main className="wedding-page">
+      <main className="wedding-page page-fade">
 
         <section id="cover">
           <div className="section-inner">
