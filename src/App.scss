@@ -37,7 +37,8 @@ body {
   /* Primary: 페탈과 맞지만 과하지 않은 ‘로즈 베이지’ */
   --theme-primary: #E7A3A9;       /* 핑크+베이지 섞인 은은한 로즈 */
   --theme-primary-light: #F2C7CB; /* 라이트 블러시 */
-  --section-bg-soft: #F8F1F2; /* 아주 연한 섹션 배경(로즈 아이보리) */
+  --section-bg-soft: #F8F1F2;     /* 아주 연한 섹션 배경(로즈 아이보리) */
+
   /* Text: 너무 무겁지 않은 선명한 차콜 */
   --text-main: #242428;
   --text-light: #8F9097;
@@ -94,7 +95,9 @@ section {
   color: var(--text-main);
 }
 
-/* ✅ 메인 페이지 전체 페이드인 */
+/* ============================================
+   ✅ Main Page Fade In (인트로 → 메인 전환 부드럽게)
+   ============================================ */
 .page-fade {
   opacity: 0;
   animation: pageFadeIn 1s ease-out forwards;
@@ -105,4 +108,26 @@ section {
 @keyframes pageFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* ============================================
+   ✅ Section Scroll Fade In (스크롤 진입 시 섹션별 페이드업)
+   - MainWeddingPage.tsx의 IntersectionObserver와 함께 동작
+   ============================================ */
+
+/* 기본 상태: 숨겨진 채로 살짝 아래에 */
+.wedding-page section {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.9s ease-out,
+    transform 0.9s ease-out;
+  transition-delay: var(--fade-delay, 0s);
+  will-change: opacity, transform;
+}
+
+/* 화면에 들어오면 등장 */
+.wedding-page section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
