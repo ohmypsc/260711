@@ -261,10 +261,10 @@ export const Location = () => {
           </h4>
           <ul>
             <li>
-              <strong>지하철:</strong> 대전 1호선 ‘유성온천역’ 인근, 역에서 택시 또는 버스 이용 권장
+              <strong>지하철:</strong> 대전 1호선 ‘유성온천역’ 하차 → 택시 약 5분 / 도보 약 15분
             </li>
             <li>
-              <strong>버스:</strong> ‘유성컨벤션센터/유성컨벤션웨딩홀’ 주변 정류장 하차 후 도보 이동
+              <strong>버스:</strong> ‘유성컨벤션센터’ 정류장 하차 후 도보 이동
             </li>
           </ul>
         </div>
@@ -275,14 +275,15 @@ export const Location = () => {
           </h4>
           <ul>
             <li>
-              <strong>내비 검색:</strong> ‘유성컨벤션’ 검색 후 안내 경로 이용
+              <strong>내비 검색:</strong> ‘유성컨벤션’ 검색
             </li>
             <li>
-              <strong>주차:</strong> 건물 전용 주차장 이용 가능, 예식장 안내에 따라 무료 주차 제공
+              <strong>주차:</strong> 건물 지하 주차장 이용(무료 주차 가능)
             </li>
           </ul>
         </div>
       </div>
+
     </div>
   );
 };
