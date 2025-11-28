@@ -86,9 +86,7 @@ function AccountModal({ type, onClose }: AccountModalProps) {
           {filtered.map((item) => (
             <div key={item.id} className="account-card">
               <div className="account-card__top">
-                <span className="chip">
-                  {item.relation}
-                </span>
+                <span className="chip">{item.relation}</span>
                 <span className="name">{item.name}</span>
               </div>
 
@@ -106,7 +104,7 @@ function AccountModal({ type, onClose }: AccountModalProps) {
                     onClick={() => copy(item.account)}
                     aria-label="계좌번호 복사"
                   >
-                    복사
+                    복사하기
                   </button>
                 </div>
               ) : (
@@ -115,10 +113,6 @@ function AccountModal({ type, onClose }: AccountModalProps) {
             </div>
           ))}
         </div>
-
-        <p className="account-modal-footnote">
-          복사 버튼을 누르면 계좌번호가 자동으로 복사됩니다.
-        </p>
       </div>
     </Modal>
   );
