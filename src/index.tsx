@@ -66,6 +66,7 @@ export default function MainWeddingPage() {
 
   return (
     <>
+      <BgEffect />
       <main className="wedding-page">
         <section id="cover">
           <div className="section-inner">
@@ -121,7 +122,6 @@ export default function MainWeddingPage() {
           </div>
         </section>
       </main>
-      <BgEffect />
     </>
   );
 }
