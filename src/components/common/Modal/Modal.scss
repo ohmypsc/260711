@@ -1,19 +1,22 @@
 /* ============================================
    Modal Global Styles (Mobile-first / Elegant)
+   ✅ Mobile backdrop-filter 톤 차이 해결 버전
+   - 오버레이 "색"과 "블러" 분리
+   - 100vh + 100dvh 이중 안전장치
    ============================================ */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
 
-  /* ✅ body 폭/스크롤바 유무와 무관하게 '진짜 뷰포트' 기준으로 고정 */
+  /* ✅ dvh 흔들림 대비: vh + dvh 같이 */
+  width: 100vw;
+  height: 100vh;
   width: 100dvw;
   height: 100dvh;
 
-  /* ✅ 어둠 과하지 않게, 화사한 웨딩 톤 */
+  /* ✅ 어둠 톤은 항상 고정 (샘플링 영향 X) */
   background: rgba(20, 20, 24, 0.34);
-  backdrop-filter: blur(9px) saturate(115%);
-  -webkit-backdrop-filter: blur(9px) saturate(115%);
 
   display: flex;
   justify-content: center;
@@ -24,8 +27,23 @@
 
   animation: overlayFadeIn 0.2s ease forwards;
 
-  /* ✅ 혹시 모를 모바일 가로 흔들림 방지 */
   overflow-x: hidden;
+
+  /* pseudo 레이어를 위한 stacking */
+  isolation: isolate;
+}
+
+/* ✅ blur/saturate는 별도 레이어에서만 */
+.modal-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  backdrop-filter: blur(9px) saturate(115%);
+  -webkit-backdrop-filter: blur(9px) saturate(115%);
+
+  pointer-events: none;
+  z-index: -1; /* overlay 배경 뒤에 깔리도록 */
 }
 
 /* ============================================
@@ -39,10 +57,8 @@
   border: 1px solid var(--border-color);
   border-radius: 16px;
 
-  /* ✅ 여백 축소 */
   padding: 16px 14px;
 
-  /* ✅ 가벼운 카드 그림자 */
   box-shadow:
     0 12px 34px var(--shadow-color),
     0 1px 4px rgba(0, 0, 0, 0.05);
@@ -57,7 +73,6 @@
   margin: 0 auto;
 }
 
-/* 닫힐 때 애니메이션 */
 .modal-container.closing {
   animation: modalHide 0.18s ease forwards;
 }
@@ -66,7 +81,6 @@
    ✅ Title System (표준: 제목/부제목만)
    ============================================ */
 
-/* ✅ 표준 제목: 구분선 포함 */
 .modal-title {
   text-align: center;
   font-size: 1.35rem;
@@ -79,7 +93,6 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-/* ✅ 표준 부제목 */
 .modal-subtitle {
   text-align: center;
   font-size: 0.9rem;
