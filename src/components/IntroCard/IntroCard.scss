@@ -1,5 +1,5 @@
 /* ============================================
-   IntroCard (Scoped Variables + Safe Layering)
+   IntroCard (Fully Scoped + Safe Layering)
    ============================================ */
 
 .intro-wrap {
@@ -33,134 +33,133 @@
   color: var(--ink);
   overflow: hidden;
   transition: background 0.5s ease, color 0.5s ease;
-}
 
-/* 🎴 카드 */
-.invite-card {
-  position: relative;
-  background: var(--paper-bg) var(--texture);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: 0 12px 35px var(--shadow);
-  padding: 70px 52px;
-  width: 90%;
-  max-width: 440px;
-  text-align: center;
-  transition: transform 0.3s ease, background-color 0.5s ease;
+  /* 🎴 카드 (인트로 내부 스코프) */
+  .invite-card {
+    position: relative;
+    background: var(--paper-bg) var(--texture);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 12px 35px var(--shadow);
+    padding: 70px 52px;
+    width: 90%;
+    max-width: 440px;
+    text-align: center;
+    transition: transform 0.3s ease, background-color 0.5s ease;
 
-  /* ✅ 카드 클릭 레이어 */
-  z-index: 2;
-  pointer-events: auto;
+    z-index: 2;
+    pointer-events: auto;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 8px; left: 8px; right: 8px; bottom: 8px;
-    border: 1px solid #d8b1aa;
-    border-radius: 14px;
-    opacity: 0.6;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 8px; left: 8px; right: 8px; bottom: 8px;
+      border: 1px solid #d8b1aa;
+      border-radius: 14px;
+      opacity: 0.6;
+    }
+
+    &:hover { transform: scale(1.02); }
   }
 
-  &:hover { transform: scale(1.02); }
+  /* ✨ 이름 (인트로 내부 스코프) */
+  .names {
+    font-family: "Nanum Myeongjo", serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    margin-bottom: 16px;
+
+    background: linear-gradient(
+      120deg,
+      #c98f8a 0%,
+      #e9c2b8 25%,
+      #f6d9d0 50%,
+      #e1b5aa 75%,
+      #c98f8a 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 300% auto;
+
+    /* ✅ 전역 shimmer와 충돌 방지 */
+    animation: intro-shimmer 6s ease-in-out infinite;
+  }
+
+  /* 💍 결혼합니다 (인트로 내부 스코프) */
+  .subtitle {
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 38px;
+    letter-spacing: 1px;
+  }
+
+  /* 📅 정보 (인트로 내부 스코프) */
+  .info {
+    font-size: 1.4rem;
+    line-height: 2.6rem;
+    color: var(--muted);
+    margin-top: 12px;
+    word-break: keep-all;
+
+    strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+  }
+
+  .section { margin-bottom: 30px; }
+
+  /* 💌 하단 안내 (인트로 내부 스코프) */
+  .footer {
+    margin-top: 60px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    font-size: 1.3rem;
+    color: var(--accent);
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1.8;
+    transition: all 0.3s ease;
+    white-space: normal;
+    text-align: center;
+
+    &:hover {
+      color: #b87d7d;
+      text-shadow: 0 0 10px rgba(214,160,160,0.4);
+    }
+  }
+
+  /* 🌸 꽃잎 캔버스: 카드 위 + 클릭 절대 방해 X */
+  canvas.petal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    filter: var(--petal-filter);
+  }
 }
 
-/* ✨ 이름 */
-.names {
-  font-family: "Nanum Myeongjo", serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  letter-spacing: 1.6px;
-  margin-bottom: 16px;
-
-  background: linear-gradient(
-    120deg,
-    #c98f8a 0%,
-    #e9c2b8 25%,
-    #f6d9d0 50%,
-    #e1b5aa 75%,
-    #c98f8a 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 300% auto;
-  animation: shimmer 6s ease-in-out infinite;
-}
-
-@keyframes shimmer {
+/* ✅ 키프레임도 Intro 전용 이름으로 분리 */
+@keyframes intro-shimmer {
   0% { background-position: 0% center; }
   50% { background-position: 100% center; }
   100% { background-position: 0% center; }
 }
 
-/* 💍 결혼합니다 */
-.subtitle {
-  font-size: 1.2rem;
-  color: var(--accent);
-  margin-bottom: 38px;
-  letter-spacing: 1px;
-}
-
-/* 📅 정보 */
-.info {
-  font-size: 1.4rem;
-  line-height: 2.6rem;
-  color: var(--muted);
-  margin-top: 12px;
-  word-break: keep-all;
-
-  strong {
-    color: var(--ink);
-    font-weight: 700;
-  }
-}
-
-.section { margin-bottom: 30px; }
-
-/* 💌 하단 안내 */
-.footer {
-  margin-top: 60px;
-  padding-top: 28px;
-  border-top: 1px solid var(--border);
-  font-size: 1.3rem;
-  color: var(--accent);
-  font-weight: 700;
-  cursor: pointer;
-  line-height: 1.8;
-  transition: all 0.3s ease;
-  white-space: normal;
-  text-align: center;
-
-  &:hover {
-    color: #b87d7d;
-    text-shadow: 0 0 10px rgba(214,160,160,0.4);
-  }
-}
-
-/* 🌸 꽃잎 캔버스: 카드 위 + 클릭 절대 방해 X */
-canvas.petal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-
-  /* ✅ 클릭은 무조건 아래로 통과 */
-  pointer-events: none;
-
-  /* ✅ 카드보다 위에서 보여야 함 */
-  z-index: 3;
-
-  filter: var(--petal-filter);
-}
-
-/* 📱 모바일 */
+/* 📱 모바일 (인트로 내부만) */
 @media (max-width: 480px) {
-  .invite-card { padding: 54px 28px; }
-  .names { font-size: 1.8rem; letter-spacing: 1.4px; }
-  .subtitle { font-size: 1rem; margin-bottom: 28px; }
-  .info { font-size: 1.15rem; line-height: 2.3rem; }
-  .footer { font-size: 1.1rem; margin-top: 40px; padding-top: 22px; }
+  .intro-wrap {
+    .invite-card { padding: 54px 28px; }
+    .names { font-size: 1.8rem; letter-spacing: 1.4px; }
+    .subtitle { font-size: 1rem; margin-bottom: 28px; }
+    .info { font-size: 1.15rem; line-height: 2.3rem; }
+    .footer { font-size: 1.1rem; margin-top: 40px; padding-top: 22px; }
+  }
 }
 
-/* 🌙 다크모드: 변수도 intro-wrap 안에서만 변경 */
+/* 🌙 다크모드 */
 @media (prefers-color-scheme: dark) {
   .intro-wrap {
     --paper-bg: #272222;
@@ -173,38 +172,38 @@ canvas.petal {
 
     background: radial-gradient(circle at center, #1d1717 0%, #0e0b0b 100%);
     color: var(--ink);
-  }
 
-  .invite-card {
-    background: var(--paper-bg);
-    background-image:
-      linear-gradient(rgba(39,34,34,0.97), rgba(39,34,34,0.97)),
-      var(--texture);
-    background-blend-mode: soft-light;
-    border: 1px solid var(--border);
-    box-shadow: 0 10px 35px var(--shadow);
-  }
+    .invite-card {
+      background: var(--paper-bg);
+      background-image:
+        linear-gradient(rgba(39,34,34,0.97), rgba(39,34,34,0.97)),
+        var(--texture);
+      background-blend-mode: soft-light;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 35px var(--shadow);
+    }
 
-  .names {
-    background: linear-gradient(
-      120deg,
-      #f2c5bc 0%,
-      #d99d91 30%,
-      #f7d0c8 50%,
-      #d18a80 75%,
-      #f2c5bc 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 10px rgba(250,200,200,0.5);
-  }
+    .names {
+      background: linear-gradient(
+        120deg,
+        #f2c5bc 0%,
+        #d99d91 30%,
+        #f7d0c8 50%,
+        #d18a80 75%,
+        #f2c5bc 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(250,200,200,0.5);
+    }
 
-  .subtitle { color: var(--accent-light); }
-  .info { color: var(--muted); }
+    .subtitle { color: var(--accent-light); }
+    .info { color: var(--muted); }
 
-  .footer {
-    color: var(--accent-light);
-    border-top: 1px solid var(--border);
-    text-shadow: 0 0 10px rgba(250,200,200,0.4);
+    .footer {
+      color: var(--accent-light);
+      border-top: 1px solid var(--border);
+      text-shadow: 0 0 10px rgba(250,200,200,0.4);
+    }
   }
 }
