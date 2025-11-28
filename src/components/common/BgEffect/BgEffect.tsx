@@ -49,7 +49,6 @@ class Petal {
     this.h = size * (0.85 + Math.random() * 0.35);
 
     this.opacity = 0.3 + Math.random() * 0.35;
-
     this.x = Math.random() * this.canvas.width;
 
     this.y = initial
@@ -60,7 +59,6 @@ class Petal {
 
     this.rotation = Math.random() * Math.PI * 2;
 
-    /* 🎯 회전 속도 대폭 감소 */
     this.rotationSpeed =
       (Math.random() * ROTATION_VARIANCE + ROTATION_BASE) *
       (Math.random() > 0.5 ? 1 : -1);
@@ -75,6 +73,9 @@ class Petal {
       this.reset(false);
     }
 
+    // ✅ 이미지 아직 로드 안 됐으면 그리기만 스킵 (지연/에러 방지)
+    if (!this.img.complete || this.img.naturalWidth === 0) return;
+
     this.windTime += WIND_SPEED;
     const windOffset = Math.sin(this.windTime) * WIND_STRENGTH;
 
@@ -88,7 +89,7 @@ class Petal {
 
   animate() {
     this.y += this.ySpeed;
-    this.rotation += this.rotationSpeed;  /* 회전 자연스러움 */
+    this.rotation += this.rotationSpeed;
     this.draw();
   }
 }
@@ -102,19 +103,22 @@ export const BgEffect = () => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
 
     const img = new Image();
     img.src = petalUrl;
 
     const count = Math.floor((window.innerWidth * window.innerHeight) / 25000);
 
-    img.onload = () => {
-      petalsRef.current = Array.from({ length: count }, () => {
-        return new Petal(canvas, ctx, img);
-      });
-    };
+    // ✅ ✨ 핵심: 이미지 onload 기다리지 말고 꽃잎을 바로 생성
+    petalsRef.current = Array.from({ length: count }, () => {
+      return new Petal(canvas, ctx, img);
+    });
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -124,7 +128,10 @@ export const BgEffect = () => {
 
     render();
 
-    return () => cancelAnimationFrame(frameRef.current);
+    return () => {
+      cancelAnimationFrame(frameRef.current);
+      window.removeEventListener("resize", resize);
+    };
   }, []);
 
   return (
