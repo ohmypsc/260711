@@ -14,7 +14,7 @@ import { AdminPage } from "./AdminPage";
 export default function MainWeddingPage() {
   useEffect(() => {
     // ===============================
-    // ✅ 1) 확대 방지(더블탭/핀치) 유지 + 스크롤 방해 최소화
+    // ✅ 1) 확대 방지(더블탭/핀치) 유지
     // ===============================
     let lastTouchEnd = 0;
 
@@ -34,11 +34,8 @@ export default function MainWeddingPage() {
     document.addEventListener("gestureend", stopGesture);
 
     // ===============================
-    // ✅ 2) 섹션 공통 lazy 등장 효과
-    //    - 다음 섹션이 미리 페이드인해서 "대기감" 제거
+    // ✅ 2) 섹션 공통 lazy 등장 효과 (안 보이는 섹션/대기감 해결 버전)
     // ===============================
-    const targets = document.querySelectorAll("main.wedding-page section");
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -49,37 +46,55 @@ export default function MainWeddingPage() {
         });
       },
       {
-        threshold: 0.01,
-        rootMargin: "0px 0px 25% 0px",
+        // 너무 일찍 켜져서 "안 보이는 것 같은" 문제 방지 + 대기감도 없음
+        threshold: 0.05,
+        rootMargin: "0px 0px 10% 0px",
       }
     );
 
-    targets.forEach((el) => observer.observe(el));
+    const observeAllSections = () => {
+      document
+        .querySelectorAll("main.wedding-page section")
+        .forEach((el) => observer.observe(el));
+    };
 
-    // ✅ 첫 화면 섹션(cover 포함)도 자연스러운 페이드인 되게
+    // 초기 섹션 관찰
+    observeAllSections();
+
+    // ✅ 첫 화면 섹션(cover 포함)도 자연스러운 페이드인
     requestAnimationFrame(() => {
-      targets.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9) {
-          el.classList.add("lazy-active");
-          observer.unobserve(el);
-        }
-      });
+      document
+        .querySelectorAll("main.wedding-page section")
+        .forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.9) {
+            el.classList.add("lazy-active");
+            observer.unobserve(el);
+          }
+        });
     });
 
+    // ✅ 나중에 마운트/렌더되는 섹션도 자동 관찰 (특정 섹션만 안 되는 문제 해결)
+    const mainEl = document.querySelector("main.wedding-page");
+    const mo = new MutationObserver(() => observeAllSections());
+    if (mainEl) {
+      mo.observe(mainEl, { childList: true, subtree: true });
+    }
+
+    // cleanup
     return () => {
       document.removeEventListener("touchend", blockDoubleTapZoom);
       document.removeEventListener("gesturestart", stopGesture);
       document.removeEventListener("gesturechange", stopGesture);
       document.removeEventListener("gestureend", stopGesture);
 
-      targets.forEach((el) => observer.unobserve(el));
+      observer.disconnect();
+      mo.disconnect();
     };
   }, []);
 
   return (
     <>
-      {/* ✅ BgEffect를 위에 두면 첫 로딩부터 흩날리는 감성 더 좋음 */}
       <BgEffect />
 
       <main className="wedding-page">
