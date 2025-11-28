@@ -2,7 +2,6 @@
    📌 Global Reset & Layout
    ============================================ */
 
-/* 전체 요소에 box-sizing 적용 → 모바일 우측 잘림 방지 */
 *,
 *::before,
 *::after {
@@ -14,7 +13,7 @@ body {
   margin: 0;
   padding: 0;
 
-  overflow-x: hidden; /* 가로 스크롤 완전 차단 */
+  overflow-x: hidden;
   overflow-y: auto;
 
   width: 100%;
@@ -23,31 +22,25 @@ body {
       #ffffff 0%,
       var(--theme-bg) 58%,
       var(--theme-accent) 100%
-    ); /* 모바일/PC 일관 배경 */
+    );
 
-  /* ✅ 기본 폰트 커진 만큼 줄간격도 살짝 여유 */
   line-height: 1.65;
 }
 
 :root {
-  /* Background: 밝고 따뜻한 여름 화이트 */
-  --theme-bg: #FBFAF7;            /* 맑은 크림 화이트 */
-  --theme-accent: #F2F3F6;        /* 거의 그레이에 가까운 쿨 뉴트럴 */
+  --theme-bg: #FBFAF7;
+  --theme-accent: #F2F3F6;
 
-  /* Primary: 페탈과 맞지만 과하지 않은 ‘로즈 베이지’ */
-  --theme-primary: #E7A3A9;       /* 핑크+베이지 섞인 은은한 로즈 */
-  --theme-primary-light: #F2C7CB; /* 라이트 블러시 */
-  --section-bg-soft: #F8F1F2;     /* 아주 연한 섹션 배경(로즈 아이보리) */
+  --theme-primary: #E7A3A9;
+  --theme-primary-light: #F2C7CB;
+  --section-bg-soft: #F8F1F2;
 
-  /* Text: 너무 무겁지 않은 선명한 차콜 */
   --text-main: #242428;
   --text-light: #8F9097;
 
-  /* Status */
   --theme-success: #469C7A;
   --theme-error: #E06B6B;
 
-  /* UI: 라인 깔끔, 그림자는 ‘햇살처럼’ 아주 약한 로즈 톤 */
   --border-color: #E6E4E8;
   --shadow-color: rgba(231, 163, 169, 0.16);
 
@@ -61,7 +54,7 @@ body {
    📄 Wedding Page Wrapper
    ============================================ */
 .wedding-page {
-  position: relative; /* 꽃잎 레이어와의 stacking 안정화 */
+  position: relative;
   background:
     radial-gradient(120% 140% at 10% -10%,
       #ffffff 0%,
@@ -73,7 +66,7 @@ body {
 }
 
 /* ============================================
-   📦 Section Layout (모든 섹션 공통 규격)
+   📦 Section Layout
    ============================================ */
 section {
   padding: 1.3rem 0;
@@ -82,7 +75,7 @@ section {
 .section-inner {
   max-width: var(--section-max-width);
   margin: 0 auto;
-  padding: 0 0.5rem; /* 내부 여백만 */
+  padding: 0 0.5rem;
   width: 100%;
 }
 
@@ -95,13 +88,10 @@ section {
   color: var(--text-main);
 }
 
-/* ============================================
-   ✅ Main Page Fade In (인트로 → 메인 전환 부드럽게)
-   ============================================ */
+/* ✅ Main Page Fade In (delay 제거) */
 .page-fade {
   opacity: 0;
   animation: pageFadeIn 1s ease-out forwards;
-  animation-delay: 0.15s;
   will-change: opacity;
 }
 
@@ -110,12 +100,7 @@ section {
   to   { opacity: 1; }
 }
 
-/* ============================================
-   ✅ Section Scroll Fade In (스크롤 진입 시 섹션별 페이드업)
-   - MainWeddingPage.tsx의 IntersectionObserver와 함께 동작
-   ============================================ */
-
-/* 기본 상태: 숨겨진 채로 살짝 아래에 */
+/* ✅ Section Scroll Fade In */
 .wedding-page section {
   opacity: 0;
   transform: translateY(18px);
@@ -126,7 +111,6 @@ section {
   will-change: opacity, transform;
 }
 
-/* 화면에 들어오면 등장 */
 .wedding-page section.is-visible {
   opacity: 1;
   transform: translateY(0);
