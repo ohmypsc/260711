@@ -12,39 +12,6 @@ import { PhotoUpload } from "@/components/PhotoUpload/PhotoUpload";
 import { AdminPage } from "./AdminPage";
 
 export default function MainWeddingPage() {
-   // ✅ (1) 섹션 스크롤 페이드인: 파일 추가 없이 여기서 끝
-  useEffect(() => {
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>("main.wedding-page section")
-    );
-
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const el = entry.target as HTMLElement;
-          if (entry.isIntersecting) {
-            el.classList.add("is-visible");
-            observer.unobserve(el); // 한 번만 페이드인
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -8% 0px",
-      }
-    );
-
-    sections.forEach((section, i) => {
-      section.style.setProperty("--fade-delay", `${i * 0.12}s`);
-      observer.observe(section);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  // ✅ (2) 너 기존 줌/제스처 방지 로직 그대로
   useEffect(() => {
     let lastTouchTime = 0;
 
@@ -71,7 +38,7 @@ export default function MainWeddingPage() {
 
   return (
     <>
-      <main className="wedding-page page-fade">
+      <main className="wedding-page">
 
         <section id="cover">
           <div className="section-inner">
