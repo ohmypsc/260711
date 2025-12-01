@@ -9,26 +9,6 @@
     color: var(--text-main);
   }
 
-  /* ✅ 이름 입력 영역 */
-  .photo-upload__name {
-    margin: 0 0 10px 0;
-
-    input {
-      width: 100%;
-      padding: 0.7rem;
-      border: 1px solid var(--light-grey-color);
-      border-radius: 0.4rem;
-      font-family: "MapoGoldenPier";
-      font-size: 0.95rem;
-      box-sizing: border-box;
-      background: var(--white-color);
-    }
-  }
-
-  .w-btn.solid {
-    width: 100%;
-  }
-
   /* ✅ 썸네일 갤러리 */
   .thumbs {
     margin-top: 14px;
@@ -52,35 +32,64 @@
 
     .thumbs__grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr); /* 3x3 */
       gap: 6px;
     }
 
     .thumb {
+      position: relative;
       display: block;
       width: 100%;
       aspect-ratio: 1 / 1;
       overflow: hidden;
+
       border-radius: 8px;
-      border: 1px solid var(--light-grey-color);
-      background: var(--white-color);
+      border: 1px solid var(--border-color);
+      background: #fff;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
-        transition: transform 0.2s ease;
       }
 
-      &:hover img {
-        transform: scale(1.03);
+      /* ✅ 업로더 이름 라벨 */
+      .thumb__label {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        padding: 4px 6px;
+        font-size: 0.78rem;
+        line-height: 1.2;
+        text-align: center;
+
+        color: #fff;
+        background: rgba(0, 0, 0, 0.38);
+        backdrop-filter: blur(1px);
       }
     }
   }
+
+  /* ✅ 썸네일 아래 버튼 영역 */
+  .photo-upload__actions {
+    margin-top: 14px;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .photo-upload__progress {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
 }
 
-/* ✅ 썸네일 페이지네이션 */
+/* ✅ 썸네일 페이지네이션: Guestbook 톤 */
 .thumbs__pagination {
   display: flex;
   justify-content: center;
@@ -90,9 +99,9 @@
 
   .page-btn {
     padding: 6px 12px;
-    border: 1px solid var(--light-grey-color);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    background: var(--white-color);
+    background: transparent;
     font-size: 0.9rem;
     cursor: pointer;
 
@@ -105,5 +114,90 @@
   .page-info {
     font-size: 0.9rem;
     color: var(--text-main);
+  }
+}
+
+/* -------------------------------------
+   Modal mood (방명록/어텐던스 리듬)
+------------------------------------- */
+
+.photo-modal-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.photo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+
+  .label {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    padding: 9px 12px;
+    font-size: 0.92rem;
+    line-height: 1.2;
+    font-family: inherit;
+
+    background: #fff;
+    color: var(--text-main);
+
+    height: auto;
+    min-height: 42px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  .photo-pick-btn {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px dashed var(--border-color);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text-main);
+    font-size: 0.92rem;
+    line-height: 1.2;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  .photo-picked-info {
+    font-size: 0.88rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: 2px;
+  }
+}
+
+/* ✅ 모달 footer: 업로드 + 닫기 같은 행 */
+.photo-footer-row {
+  display: flex;
+  gap: 8px;
+
+  button {
+    flex: 1;
+    width: auto;
   }
 }
