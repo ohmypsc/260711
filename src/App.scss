@@ -82,46 +82,48 @@ section {
 
 .section-title {
   position: relative;
-  font-family: "Noto Serif KR", serif; /* 전역 톤 그대로 */
-  font-size: clamp(1.05rem, 2.8vw, 1.4rem); /* 더 작고 단정하게 */
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(1.05rem, 2.8vw, 1.4rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-align: center;
   margin-bottom: 2rem;
 
-  /* 가독성 베이스 컬러 */
+  /* ✅ 1) 먼저 '진짜 글자색'을 깔아서 텅 빈 느낌 제거 */
   color: var(--text-main);
 
-  /* 글자 자체 ‘은은한 반짝’용 그라데이션 */
+  /* ✅ 2) .names 같은 결의 쉬머 그라데이션 */
   background-image: linear-gradient(
-    110deg,
-    var(--text-main) 0%,
-    var(--text-main) 42%,
-    var(--theme-primary-light) 50%,
-    var(--text-main) 58%,
-    var(--text-main) 100%
+    120deg,
+    #b97c79 0%,
+    #e6b8ae 25%,
+    #f4d5cc 50%,
+    #ddb0a7 75%,
+    #b97c79 100%
   );
-  background-size: 220% 100%;
-  background-position: 0% 50%;
+  background-size: 300% auto;
+  background-position: 0% center;
 
-  /* 그라데이션을 텍스트에만 적용 */
   -webkit-background-clip: text;
   background-clip: text;
+
+  /* ✅ 3) 텍스트를 완전 투명으로 만들지 말고
+        '섞이듯이 보이게' 처리해서 가독성 유지 */
   -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
 
-  /* 선명도 + 부드러운 입체감(가독성 안 깨는 선) */
+  /* ✅ 4) 가독성용 미세 외곽/명암 */
   text-shadow:
-    0 0 0.6px rgba(255,255,255,0.9),
-    0 2px 10px var(--shadow-color);
+    0 0 0.8px rgba(255,255,255,0.9),
+    0 1px 6px var(--shadow-color);
 
-  animation: title-shimmer 3.6s ease-in-out infinite;
+  animation: section-shimmer 6s ease-in-out infinite;
 }
 
-/* 반짝임은 ‘스쳐 지나가는’ 정도로만 */
-@keyframes title-shimmer {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes section-shimmer {
+  0%   { background-position: 0% center; }
+  50%  { background-position: 100% center; }
+  100% { background-position: 0% center; }
 }
 
 /* 모션 줄이기 설정 존중 */
