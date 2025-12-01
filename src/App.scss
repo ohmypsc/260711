@@ -90,8 +90,9 @@ section {
   margin-bottom: 2rem;
   color: var(--text-main);
 
-  -webkit-text-stroke: 0.3px rgba(231, 163, 169, 0.45); /* ✅ 얇은 스트로크 */
-  text-shadow: 0 4px 10px rgba(231, 163, 169, 0.32);
+  -webkit-text-stroke: 0.35px rgba(255, 248, 230, 0.9);
+text-shadow: 0 3px 10px rgba(255, 236, 200, 0.7);
+
 }
 
 
