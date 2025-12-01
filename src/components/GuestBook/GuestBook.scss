@@ -80,19 +80,33 @@
   line-height: 1.55;
 }
 
-/* 삭제 버튼(무드 맞춘 미니멀) */
+/* ✅ 삭제 버튼: hover 없음 + X 아이콘 */
 .delete-btn {
-  font-size: 0.85rem;
+  display: inline-grid;
+  place-items: center;
+
+  width: 26px;
+  height: 26px;
+
   background: transparent;
   border: none;
   color: var(--text-light);
   cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: background 0.15s ease;
 
-  &:hover {
-    background: var(--theme-accent);
+  border-radius: 50%;
+  line-height: 1;
+
+  /* hover 제거, 눌림만 최소 */
+  transition: transform 0.12s ease, color 0.12s ease;
+
+  &:active {
+    transform: scale(0.94);
+    color: var(--text-main);
+  }
+
+  i {
+    font-size: 1.05rem;
+    display: block;
   }
 }
 
@@ -119,12 +133,15 @@
       color: #fff;
       border-color: var(--theme-primary);
     }
+
+    &:active {
+      transform: scale(0.97);
+    }
   }
 }
 
 /* -------------------------------------
    Modal mood (Attendance와 동일 리듬)
-   ⚠️ 전역에 좌우 padding 있음 → 여기서 추가 padding X
 ------------------------------------- */
 
 .guestbook-modal-content {
@@ -173,7 +190,7 @@
   textarea {
     height: 7.5rem;
     resize: none;
-    line-height: 1.55; /* 내용은 읽기 좋게 */
+    line-height: 1.55;
   }
 }
 
@@ -199,6 +216,6 @@
 
   button {
     flex: 1;
-    width: auto; /* 전역 width:100% 무력화 */
+    width: auto;
   }
 }
