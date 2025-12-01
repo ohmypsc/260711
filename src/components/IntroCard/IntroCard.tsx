@@ -32,9 +32,19 @@ export default function IntroCard({ onFinish }: Props) {
     petalImgRef.current = petalImg;
 
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // ✅ DPR 반영: 모바일에서도 선명/크기 체감 일관성
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+
+      // 좌표계 보정
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
+
     resize();
     window.addEventListener("resize", resize);
 
@@ -45,52 +55,52 @@ export default function IntroCard({ onFinish }: Props) {
   }, []);
 
   /**
-   * ✅ Depth Burst (풍성 버전)
-   * - 화면을 덮을 만큼 빽빽하게 생성
-   * - 큰 꽃잎: 더 멀리, 더 묵직, 더 오래
-   * - 작은 꽃잎: 가까이, 더 가벼움, 조금 빨리 fade
+   * ✅ Depth Burst (풍성 버전 + 모바일 풍성 보정)
+   * - 모바일: density 낮춤 + 최소 개수 보장
+   * - DPR 반영으로 선명도/체감 개선
    */
   const createBurst = () => {
     const petals: any[] = [];
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-    const area = window.innerWidth * window.innerHeight;
+    const area = w * h;
+    const isMobile = w <= 480;
 
-    // ✅ 밀도(작을수록 풍성). 기존 2500 → 1200
-    const density = 1200;
+    // ✅ 모바일은 더 촘촘하게(풍성)
+    const density = isMobile ? 700 : 1200;
 
-    // ✅ 대형 화면도 덮게 상한 대폭 증가. 필요하면 2600~3600 사이로 조절
-    const count = Math.min(3200, Math.floor(area / density));
+    // ✅ 모바일 최소 개수 보장
+    const minCount = isMobile ? 900 : 0;
 
-    const baseRadius = 180; // 퍼짐 반경 살짝 확대
+    // ✅ 모바일 상한은 너무 무겁지 않게 조절
+    const maxCount = isMobile ? 2200 : 3200;
+
+    const count = Math.min(
+      maxCount,
+      Math.max(minCount, Math.floor(area / density))
+    );
+
+    // ✅ 모바일은 폭발 반경 살짝 줄여 빈 공간 줄임(선택 보정)
+    const baseRadius = isMobile ? 140 : 180;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
 
-      // ✅ 크기 정규분포 (조금 더 풍성한 분포)
       const size = Math.max(10, gaussianRandom(24, 8));
       const aspect = 0.8 + Math.random() * 0.6; // 0.8~1.4
 
-      // ✅ 크기 기반 깊이 계수 (큰 꽃잎일수록 depth↑)
       const depth = Math.min(size / 20, 2.1);
-
-      // ✅ 큰 꽃잎일수록 더 멀리 퍼지도록 반경에 depth 적용
       const r = Math.random() * baseRadius * depth;
 
-      // ✅ 속도 스케일
       const speedScale = 1 / (0.75 + depth * 0.45);
-
-      // ✅ 중력(큰 꽃잎 조금 더 빨리 떨어짐)
       const gravity = (0.045 + Math.random() * 0.07) * depth;
-
-      // ✅ 투명도(큰 꽃잎 더 진하게)
       const opacity = 0.6 + Math.random() * 0.35 * depth;
-
-      // ✅ 오래 남게(페이드 느림)
       const fade = 0.0018 + (1 / depth) * 0.0009;
 
       petals.push({
-        x: window.innerWidth / 2 + Math.cos(angle) * r,
-        y: window.innerHeight / 2 + Math.sin(angle) * r,
+        x: w / 2 + Math.cos(angle) * r,
+        y: h / 2 + Math.sin(angle) * r,
 
         w: size,
         h: size * aspect,
