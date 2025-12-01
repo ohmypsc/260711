@@ -80,64 +80,33 @@ section {
   width: 100%;
 }
 
-/* ============================================
-   🏷 Section Title – Small Typography Style
-   ============================================ */
-
 .section-title {
   position: relative;
-  margin: 0 auto 2.6rem;
+  font-size: clamp(1.8rem, 4.8vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-align: center;
-
-  font-size: clamp(1.25rem, 4.2vw, 1.7rem); /* 기존 2rem → 더 작은 타이포 */
-  font-weight: 500;
-  letter-spacing: 0.18em;                  /* 작은 타이포 감성 = 넓은 자간 */
-  line-height: 1.25;
   color: var(--text-main);
-
-  text-transform: uppercase;               /* 영문 제목일 때 더 타이포 느낌 */
-  font-variation-settings: "wght" 520;
+  margin-bottom: 3rem;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
 }
 
-/* 위에 작은 캡션 느낌 (원하면 data-subtitle로 넣기) */
-.section-title::before {
-  content: attr(data-subtitle);
-  display: block;
-  margin-bottom: 0.55rem;
-
-  font-size: 0.72rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--text-light);
-  opacity: 0.9;
-}
-
-/* 아래 얇은 장식 라인 + 도트 */
+/* 아래 장식 라인 */
 .section-title::after {
   content: "";
-  display: block;
-  width: 64px;
+  position: absolute;
+  left: 50%;
+  bottom: -1.3rem;
+  transform: translateX(-50%);
+  width: 140px;
   height: 10px;
-  margin: 0.9rem auto 0;
-
   background:
-    radial-gradient(circle, var(--theme-primary) 2px, transparent 3px) center/10px 10px no-repeat,
-    linear-gradient(to right,
-      transparent 0%,
-      var(--theme-primary-light) 25%,
-      var(--theme-primary) 50%,
-      var(--theme-primary-light) 75%,
-      transparent 100%);
+    radial-gradient(circle at 50% 0, var(--theme-primary) 2px, transparent 3px) 0 0/14px 10px,
+    linear-gradient(to right, transparent 0%, var(--theme-primary-light) 50%, transparent 100%);
   opacity: 0.9;
-  border-radius: 999px;
+  filter: blur(0.2px);
 }
 
-/* 모바일에서 너무 커 보이지 않게 살짝 더 조정 */
-@media (max-width: 420px) {
-  .section-title {
-    letter-spacing: 0.14em;
-  }
-}
 
 /* ============================================
    ✨ Section Reveal Animation (Global)
