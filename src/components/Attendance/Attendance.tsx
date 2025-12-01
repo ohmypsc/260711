@@ -59,7 +59,8 @@ export function Attendance() {
 
   const saveMyId = (id: number) => {
     const prev = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as number[];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...prev, id]));
+    const next = Array.from(new Set([...prev, id])); // ✅ 중복 방지
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   };
 
   const removeMyId = (id: number) => {
@@ -79,15 +80,15 @@ export function Attendance() {
       </p>
 
       <div className="attendance-buttons">
+        {/* ✅ Cover/Section CTA → basic */}
         <Button variant="basic" onClick={() => setOpenModal("write")}>
           참석여부 확인하기
         </Button>
 
-        {!hasMyRows && (
-          <Button variant="basic" onClick={() => setOpenModal("find")}>
-            내 응답 찾기
-          </Button>
-        )}
+        {/* ✅ 저장된 응답이 있어도 찾기 항상 노출 */}
+        <Button variant="basic" onClick={() => setOpenModal("find")}>
+          내 응답 찾기
+        </Button>
       </div>
 
       {hasMyRows && (
@@ -105,6 +106,7 @@ export function Attendance() {
               </div>
 
               <div className="actions">
+                {/* ✅ mini 버튼은 별도 컴팩트 톤 */}
                 <button
                   onClick={() =>
                     setOpenModal({
@@ -115,9 +117,11 @@ export function Attendance() {
                     })
                   }
                   className="mini-btn"
+                  type="button"
                 >
                   수정
                 </button>
+
                 <button
                   onClick={() =>
                     setOpenModal({
@@ -128,6 +132,7 @@ export function Attendance() {
                     })
                   }
                   className="mini-btn danger"
+                  type="button"
                 >
                   삭제
                 </button>
@@ -152,7 +157,10 @@ export function Attendance() {
           onClose={() => setOpenModal(null)}
           onFound={(foundRow) => {
             saveMyId(foundRow.id);
-            setMyRows([foundRow]);
+            setMyRows((prev) => {
+              const filtered = prev.filter((r) => r.id !== foundRow.id);
+              return [foundRow, ...filtered];
+            });
           }}
         />
       )}
@@ -184,6 +192,29 @@ export function Attendance() {
         />
       )}
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------
+   공통 레이아웃
+   - 타이틀/서브타이틀은 전역 modal-title / modal-subtitle 사용
+------------------------------------------------------------------ */
+
+function AttendanceModalLayout({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="attendance-modal-content">
+      <h2 className="modal-title">{title}</h2>
+      {subtitle && <p className="modal-subtitle">{subtitle}</p>}
+      {children}
+    </div>
   );
 }
 
@@ -253,7 +284,9 @@ function CountStepper({
 }
 
 /* ------------------------------------------------------------------
-   Write Modal (select 제거 / 2열 구성)
+   Write Modal
+   - 닫기 버튼 없음(전역 footer 담당)
+   - submit 버튼만 variant="submit"
 ------------------------------------------------------------------ */
 
 function WriteAttendanceModal({
@@ -276,10 +309,10 @@ function WriteAttendanceModal({
 
   return (
     <Modal onClose={onClose}>
-      <div className="attendance-modal-content">
-        <h2 className="modal-title">참석 여부 확인하기</h2>
-        <p className="modal-subtitle">간단히 입력해 주시면 큰 도움이 됩니다.</p>
-
+      <AttendanceModalLayout
+        title="참석 여부 확인하기"
+        subtitle="간단히 입력해 주시면 큰 도움이 됩니다."
+      >
         <form
           className="attendance-form"
           onSubmit={async (e) => {
@@ -292,10 +325,12 @@ function WriteAttendanceModal({
 
               if (!name || !phone || !side) {
                 alert("이름, 연락처, 하객 구분은 필수입니다.");
+                setLoading(false);
                 return;
               }
               if (!meal) {
                 alert("식사 여부를 선택해주세요.");
+                setLoading(false);
                 return;
               }
 
@@ -374,13 +409,13 @@ function WriteAttendanceModal({
             </Button>
           </div>
         </form>
-      </div>
+      </AttendanceModalLayout>
     </Modal>
   );
 }
 
 /* ------------------------------------------------------------------
-   Find Modal (컴팩트/전역 헤더)
+   Find Modal
 ------------------------------------------------------------------ */
 
 function FindAttendanceModal({
@@ -398,10 +433,10 @@ function FindAttendanceModal({
 
   return (
     <Modal onClose={onClose}>
-      <div className="attendance-modal-content">
-        <h2 className="modal-title">내 참석 응답 찾기</h2>
-        <p className="modal-subtitle">제출했던 정보로 확인할 수 있어요.</p>
-
+      <AttendanceModalLayout
+        title="내 참석 응답 찾기"
+        subtitle="제출했던 정보로 확인할 수 있어요."
+      >
         <form
           className="attendance-form"
           onSubmit={async (e) => {
@@ -414,6 +449,7 @@ function FindAttendanceModal({
 
               if (!name || !phone) {
                 alert("이름과 연락처를 입력해주세요.");
+                setLoading(false);
                 return;
               }
 
@@ -429,6 +465,7 @@ function FindAttendanceModal({
               if (error) throw error;
               if (!data) {
                 alert("일치하는 응답을 찾지 못했습니다.");
+                setLoading(false);
                 return;
               }
 
@@ -469,13 +506,13 @@ function FindAttendanceModal({
             </Button>
           </div>
         </form>
-      </div>
+      </AttendanceModalLayout>
     </Modal>
   );
 }
 
 /* ------------------------------------------------------------------
-   Edit / Delete Modals (select 제거 / 최소 UI)
+   Edit Modal
 ------------------------------------------------------------------ */
 
 function EditAttendanceModal({
@@ -497,9 +534,7 @@ function EditAttendanceModal({
 
   return (
     <Modal onClose={onClose}>
-      <div className="attendance-modal-content">
-        <h2 className="modal-title">내 응답 수정</h2>
-
+      <AttendanceModalLayout title="내 응답 수정">
         <form
           className="attendance-form"
           onSubmit={async (e) => {
@@ -517,6 +552,7 @@ function EditAttendanceModal({
 
               if (checkError || !check) {
                 alert("본인 확인에 실패했습니다.");
+                setLoading(false);
                 return;
               }
 
@@ -559,15 +595,19 @@ function EditAttendanceModal({
           </div>
 
           <div className="attendance-form__actions">
-            <Button variant="outline" type="submit" disabled={loading}>
+            <Button variant="submit" type="submit" disabled={loading}>
               저장하기
             </Button>
           </div>
         </form>
-      </div>
+      </AttendanceModalLayout>
     </Modal>
   );
 }
+
+/* ------------------------------------------------------------------
+   Delete Modal
+------------------------------------------------------------------ */
 
 function DeleteAttendanceModal({
   row,
@@ -586,10 +626,10 @@ function DeleteAttendanceModal({
 
   return (
     <Modal onClose={onClose}>
-      <div className="attendance-modal-content">
-        <h2 className="modal-title">내 응답 삭제</h2>
-        <p className="modal-subtitle">삭제하면 복구할 수 없습니다.</p>
-
+      <AttendanceModalLayout
+        title="내 응답 삭제"
+        subtitle="삭제하면 복구할 수 없습니다."
+      >
         <form
           className="attendance-form"
           onSubmit={async (e) => {
@@ -607,6 +647,7 @@ function DeleteAttendanceModal({
 
               if (checkError || !check) {
                 alert("본인 확인에 실패했습니다.");
+                setLoading(false);
                 return;
               }
 
@@ -634,7 +675,7 @@ function DeleteAttendanceModal({
             </Button>
           </div>
         </form>
-      </div>
+      </AttendanceModalLayout>
     </Modal>
   );
 }
