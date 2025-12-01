@@ -173,12 +173,6 @@ button.w-btn.basic:active:not(:disabled) {
    🌹 MODAL TWIN — submit & close (무드/타이포 완전 동일)
    기능 구분은 색/배경만
    ------------------------------------------------------ */
-/* ✅ submit/close만 살짝 컴팩트 */
-button.w-btn.submit,
-button.w-btn.close {
-  padding-top: clamp(0.72rem, 1.8vw, 0.82rem);
-  padding-bottom: clamp(0.72rem, 1.8vw, 0.82rem);
-}
 
 /* SUBMIT — 모달 메인 */
 button.w-btn.submit {
@@ -253,3 +247,11 @@ button.w-btn:disabled {
   border-color: var(--border-color);
   color: var(--text-light);
 }
+
+/* ✅ submit/close만 살짝 컴팩트 */
+button.w-btn.submit,
+button.w-btn.close {
+  padding-top: clamp(0.72rem, 1.8vw, 0.82rem);
+  padding-bottom: clamp(0.72rem, 1.8vw, 0.82rem);
+}
+
