@@ -270,7 +270,7 @@ function ToggleRow<T extends string>({
 }
 
 /* ------------------------------------------------------------------
-   Write Modal (인원 상한 제거 + count 빈칸 유지)
+   Write Modal (footer 2버튼 같은 행)
 ------------------------------------------------------------------ */
 function WriteAttendanceModal({
   onClose,
@@ -286,19 +286,37 @@ function WriteAttendanceModal({
 
   const [side, setSide] = useState<Side | "">("");
   const [meal, setMeal] = useState<Meal | "">("");
-  const [countInput, setCountInput] = useState(""); // ✅ 초기 빈칸
+  const [countInput, setCountInput] = useState("");
 
   const normalizeCountOnBlur = () => {
     if (countInput.trim() === "") return;
     const n = parseInt(countInput, 10);
-    if (!n || n < 1) return setCountInput("1"); // ✅ 최소값만 보정
+    if (!n || n < 1) return setCountInput("1");
     setCountInput(String(n));
   };
 
   return (
-    <Modal onClose={onClose}>
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="attendance-footer-row">
+          <Button
+            variant="submit"
+            type="submit"
+            form="attendance-write-form"
+            disabled={loading}
+          >
+            저장하기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
       <AttendanceModalLayout title="참석 여부 확인하기">
         <form
+          id="attendance-write-form"
           className="attendance-form"
           onSubmit={async (e) => {
             e.preventDefault();
@@ -325,9 +343,7 @@ function WriteAttendanceModal({
 
               const { data, error } = await supabase
                 .from("attendance")
-                .insert([
-                  { name: trimmedName, phone, count: countNum, side, meal },
-                ])
+                .insert([{ name: trimmedName, phone, count: countNum, side, meal }])
                 .select("*")
                 .single();
 
@@ -386,7 +402,7 @@ function WriteAttendanceModal({
             <input
               disabled={loading}
               type="number"
-              min={1}          // ✅ 최소만
+              min={1}
               step={1}
               value={countInput}
               onChange={(e) => setCountInput(e.target.value)}
@@ -407,12 +423,6 @@ function WriteAttendanceModal({
               ]}
             />
           </div>
-
-          <div className="attendance-form__actions">
-            <Button variant="submit" type="submit" disabled={loading}>
-              저장하기
-            </Button>
-          </div>
         </form>
       </AttendanceModalLayout>
     </Modal>
@@ -420,7 +430,7 @@ function WriteAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Find Modal (자동 하이픈 + 레거시 OR)
+   Find Modal (footer 2버튼 같은 행)
 ------------------------------------------------------------------ */
 function FindAttendanceModal({
   onClose,
@@ -430,17 +440,34 @@ function FindAttendanceModal({
   onFound: (row: AttendanceRow) => void;
 }) {
   const [loading, setLoading] = useState(false);
-
   const [name, setName] = useState("");
   const [phoneDisplay, setPhoneDisplay] = useState("");
 
   return (
-    <Modal onClose={onClose}>
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="attendance-footer-row">
+          <Button
+            variant="submit"
+            type="submit"
+            form="attendance-find-form"
+            disabled={loading}
+          >
+            찾기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
       <AttendanceModalLayout
         title="내 참석 응답 찾기"
         subtitle="제출했던 정보로 확인할 수 있어요."
       >
         <form
+          id="attendance-find-form"
           className="attendance-form"
           onSubmit={async (e) => {
             e.preventDefault();
@@ -508,12 +535,6 @@ function FindAttendanceModal({
               }}
             />
           </div>
-
-          <div className="attendance-form__actions">
-            <Button variant="submit" type="submit" disabled={loading}>
-              찾기
-            </Button>
-          </div>
         </form>
       </AttendanceModalLayout>
     </Modal>
@@ -521,7 +542,7 @@ function FindAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Edit Modal (이름/연락처/구분/인원/식사 전부 수정 가능)
+   Edit Modal (footer 2버튼 같은 행)
 ------------------------------------------------------------------ */
 function EditAttendanceModal({
   row,
@@ -555,16 +576,33 @@ function EditAttendanceModal({
   };
 
   return (
-    <Modal onClose={onClose}>
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="attendance-footer-row">
+          <Button
+            variant="submit"
+            type="submit"
+            form="attendance-edit-form"
+            disabled={loading}
+          >
+            저장하기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
       <AttendanceModalLayout title="내 응답 수정">
         <form
+          id="attendance-edit-form"
           className="attendance-form"
           onSubmit={async (e) => {
             e.preventDefault();
             setLoading(true);
 
             try {
-              // ✅ 본인 인증은 수정 전 값으로
               const rawAuthPhone = authPhone;
               const normAuthPhone = normalizePhone(authPhone);
 
@@ -604,9 +642,9 @@ function EditAttendanceModal({
                 .from("attendance")
                 .update({
                   name: trimmedName,
-                  phone,          // ✅ 연락처도 업데이트
+                  phone,
                   side,
-                  count: countNum, // ✅ 상한 제한 없음
+                  count: countNum,
                   meal,
                 })
                 .eq("id", row.id)
@@ -689,12 +727,6 @@ function EditAttendanceModal({
               ]}
             />
           </div>
-
-          <div className="attendance-form__actions">
-            <Button variant="submit" type="submit" disabled={loading}>
-              저장하기
-            </Button>
-          </div>
         </form>
       </AttendanceModalLayout>
     </Modal>
@@ -702,7 +734,7 @@ function EditAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Delete Modal (레거시 OR)
+   Delete Modal (footer 2버튼 같은 행)
 ------------------------------------------------------------------ */
 function DeleteAttendanceModal({
   row,
@@ -720,12 +752,30 @@ function DeleteAttendanceModal({
   const [loading, setLoading] = useState(false);
 
   return (
-    <Modal onClose={onClose}>
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="attendance-footer-row">
+          <Button
+            variant="submit"
+            type="submit"
+            form="attendance-delete-form"
+            disabled={loading}
+          >
+            삭제하기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
       <AttendanceModalLayout
         title="내 응답 삭제"
         subtitle="삭제하면 복구할 수 없습니다."
       >
         <form
+          id="attendance-delete-form"
           className="attendance-form"
           onSubmit={async (e) => {
             e.preventDefault();
@@ -766,13 +816,7 @@ function DeleteAttendanceModal({
               setLoading(false);
             }
           }}
-        >
-          <div className="attendance-form__actions">
-            <Button variant="submit" type="submit" disabled={loading}>
-              삭제하기
-            </Button>
-          </div>
-        </form>
+        />
       </AttendanceModalLayout>
     </Modal>
   );
