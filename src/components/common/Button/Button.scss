@@ -2,7 +2,6 @@
    🌸 Wedding Button (Entry texture + Modal twin)
    variants: basic | submit | close
    mobile-first / no hover / no shadow
-   uses global :root vars only + white alpha
    ============================================ */
 
 button.w-btn {
@@ -18,12 +17,14 @@ button.w-btn {
 
   border-radius: 12px;
 
-  font-size: clamp(1.02rem, 2.6vw, 1.16rem);
-  font-weight: 620;                /* ✅ 기본 타이포 무게 통일 */
-  letter-spacing: 0.012em;         /* ✅ submit/close 동일 */
+  /* ✅ 베이스 타이포/리듬 */
+  font-size: clamp(1.0rem, 2.4vw, 1.12rem);
+  font-weight: 620;
+  letter-spacing: 0.012em;
   line-height: 1.2;
 
-  padding: clamp(0.88rem, 2.2vw, 0.98rem)
+  /* ✅ 베이스 세로를 “한 단계 컴팩트”로 */
+  padding: clamp(0.74rem, 2.0vw, 0.84rem)
            clamp(1.0rem, 3vw, 1.15rem);
 
   box-shadow: none;
@@ -39,10 +40,11 @@ button.w-btn {
     filter 0.25s ease;
 }
 
+/* ✅ 데스크톱 베이스도 과하게 두껍지 않게 */
 @media (min-width: 768px) {
   button.w-btn {
-    font-size: 1rem;
-    padding: 0.72rem 0.95rem;
+    font-size: 0.98rem;
+    padding: 0.62rem 0.95rem; /* ← 여기 자체가 컴팩트 기준 */
     border-radius: 10px;
   }
 }
@@ -85,21 +87,19 @@ button.w-btn:active:not(:disabled)::after {
 }
 
 /* ------------------------------------------------------
-   🌸 BASIC(=입장/Entry) — Cover Main CTA (주인공)
-   - 크림 바디 + 로즈는 라인/기미만
-   - 질감(그레인) + 세라믹 하이라이트 추가
-   ------------------------------------------------------ */
+   🌸 BASIC — Cover Main CTA (주인공)
+   베이스보다 “확실히 풍성하게”
+------------------------------------------------------ */
 button.w-btn.basic {
   color: var(--text-main);
 
-  /* cover용 비율/타이포만 살짝 업 */
-  padding: clamp(1.04rem, 3vw, 1.16rem)
+  /* ✅ basic만 다시 크게 */
+  padding: clamp(1.02rem, 3vw, 1.14rem)
            clamp(1.12rem, 3.4vw, 1.32rem);
   border-radius: 14px;
   font-weight: 680;
   letter-spacing: 0.02em;
 
-  /* ✅ 크림/샴페인 바디 */
   background:
     radial-gradient(120% 140% at 8% 0%,
       rgba(255,255,255,0.95) 0%,
@@ -113,13 +113,12 @@ button.w-btn.basic {
       color-mix(in srgb, var(--theme-primary-light) 10%, transparent) 100%
     );
 
-  /* ✅ 로즈는 링만 아주 은은 */
   border: 1px solid color-mix(in srgb, var(--border-color) 70%, var(--theme-primary) 30%);
   outline: 1px solid color-mix(in srgb, var(--theme-primary) 35%, #fff 65%);
   outline-offset: -3px;
 }
 
-/* ✅ 엔트리 전용 “질감 레이어” (미세 그레인/종이결) */
+/* 엔트리 질감 */
 button.w-btn.basic::before {
   content: "";
   position: absolute;
@@ -128,9 +127,7 @@ button.w-btn.basic::before {
   pointer-events: none;
   z-index: 2;
 
-  /* 전역 컬러만으로 만든 아주 미세한 텍스처 */
   background:
-    /* 미세 점결 */
     radial-gradient(circle at 15% 20%,
       color-mix(in srgb, var(--theme-primary-light) 12%, transparent) 0 1px,
       transparent 1.2px
@@ -139,7 +136,6 @@ button.w-btn.basic::before {
       rgba(255,255,255,0.9) 0 1px,
       transparent 1.3px
     ) 0 0 / 12px 12px,
-    /* 아주 얇은 실키 스트라이프 느낌 */
     linear-gradient(
       135deg,
       transparent 0%,
@@ -147,7 +143,7 @@ button.w-btn.basic::before {
       transparent 55%
     );
 
-  opacity: 0.35; /* ✅ 과하지 않게 */
+  opacity: 0.35;
   mix-blend-mode: soft-light;
 }
 
@@ -170,13 +166,11 @@ button.w-btn.basic:active:not(:disabled) {
 }
 
 /* ------------------------------------------------------
-   🌹 MODAL TWIN — submit & close (무드/타이포 완전 동일)
-   기능 구분은 색/배경만
-   ------------------------------------------------------ */
-
-/* SUBMIT — 모달 메인 */
+   🌹 MODAL TWIN — submit & close
+   “베이스 리듬 그대로” 쓰고, 색만 구분
+------------------------------------------------------ */
 button.w-btn.submit {
-  color: var(--text-main);   /* ✅ close와 동일한 글자톤 */
+  color: var(--text-main);
 
   background:
     linear-gradient(180deg,
@@ -190,9 +184,8 @@ button.w-btn.submit {
   outline-offset: -2px;
 }
 
-/* CLOSE — 모달 보조 */
 button.w-btn.close {
-  color: var(--text-main);   /* ✅ submit과 완전 동일 */
+  color: var(--text-main);
 
   background:
     linear-gradient(180deg,
@@ -205,14 +198,12 @@ button.w-btn.close {
   outline-offset: -2px;
 }
 
-/* 눌림 인터랙션도 동일 */
 button.w-btn.submit:active:not(:disabled),
 button.w-btn.close:active:not(:disabled) {
   transform: translateY(0.6px) scale(0.987);
   filter: saturate(1.05);
 }
 
-/* submit만 살짝 로즈 틴트가 더 보이게 */
 button.w-btn.submit:active:not(:disabled) {
   background:
     linear-gradient(180deg,
@@ -223,7 +214,6 @@ button.w-btn.submit:active:not(:disabled) {
   border-color: color-mix(in srgb, var(--border-color) 55%, var(--theme-primary) 45%);
 }
 
-/* close는 뉴트럴 톤 유지 */
 button.w-btn.close:active:not(:disabled) {
   background:
     linear-gradient(180deg,
@@ -234,9 +224,7 @@ button.w-btn.close:active:not(:disabled) {
   border-color: color-mix(in srgb, var(--border-color) 70%, var(--theme-primary) 30%);
 }
 
-/* ------------------------------------------------------
-   🌙 Disabled
-   ------------------------------------------------------ */
+/* Disabled */
 button.w-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -247,11 +235,3 @@ button.w-btn:disabled {
   border-color: var(--border-color);
   color: var(--text-light);
 }
-
-/* ✅ submit/close만 살짝 컴팩트 */
-button.w-btn.submit,
-button.w-btn.close {
-  padding-top: clamp(0.72rem, 1.8vw, 0.82rem);
-  padding-bottom: clamp(0.72rem, 1.8vw, 0.82rem);
-}
-
