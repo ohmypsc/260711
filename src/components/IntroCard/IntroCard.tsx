@@ -51,7 +51,16 @@ export default function IntroCard({ onFinish }: Props) {
    */
   const createBurst = () => {
     const petals: any[] = [];
-    const count = 420;
+
+    // ✅ 화면 면적 기반으로 개수 결정 (화면이 클수록 더 많이)
+    const area = window.innerWidth * window.innerHeight;
+
+    // 밀도 조절 값: 작을수록 더 빽빽해짐
+    const density = 3500;
+
+    // 최대치(성능 안전선). 더 늘리고 싶으면 1400~1600까지도 가능
+    const count = Math.min(1200, Math.floor(area / density));
+
     const baseRadius = 160; // 기본 퍼짐 반경
 
     for (let i = 0; i < count; i++) {
