@@ -254,40 +254,7 @@ export const Location = () => {
         </button>
       </div>
 
-      <div className="transport-info">
-        <div>
-          <h4>
-            <i className="fa-solid fa-bus-simple" /> 대중교통 이용 시
-          </h4>
-          <ul>
-            <li>
-              <strong>지하철:</strong> 대전 1호선 ‘유성온천역’ 하차 → 택시 약 5분 / 도보 약 15분
-            </li>
-            <li>
-              <strong>버스:</strong> ‘유성컨벤션센터’ 정류장 하차 후 도보 이동
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4>
-            <i className="fa-solid fa-square-parking" /> 자가용 이용 시
-          </h4>
-          <ul>
-            <li>
-              <strong>내비 검색:</strong> ‘유성컨벤션’ 검색
-            </li>
-            <li>
-              <strong>주차:</strong> 건물 지하 주차장 이용(무료 주차 가능)
-            </li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  );
-};
-
+    
 declare global {
   interface Window {
     naver: any;
