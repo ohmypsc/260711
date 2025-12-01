@@ -82,29 +82,18 @@ section {
 
 .section-title {
   position: relative;
-  font-size: clamp(1.8rem, 4.8vw, 2.25rem);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-family: "Noto Serif KR", serif; /* 전역 serif 톤과 통일 */
+  font-size: clamp(1.15rem, 3.2vw, 1.55rem); /* 더 작고 단정하게 */
+  font-weight: 700;
+  letter-spacing: 0.12em; /* 작아진 만큼 자간 살짝 넓혀 고급스럽게 */
   text-align: center;
   color: var(--text-main);
-  margin-bottom: 3rem;
-  font-family: "Pretendard", "Noto Sans KR", sans-serif;
-}
+  margin-bottom: 2.2rem;
 
-/* 아래 장식 라인 */
-.section-title::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -1.3rem;
-  transform: translateX(-50%);
-  width: 140px;
-  height: 10px;
-  background:
-    radial-gradient(circle at 50% 0, var(--theme-primary) 2px, transparent 3px) 0 0/14px 10px,
-    linear-gradient(to right, transparent 0%, var(--theme-primary-light) 50%, transparent 100%);
-  opacity: 0.9;
-  filter: blur(0.2px);
+  /* 글자 자체에 은은한 포인트 */
+  text-shadow:
+    0 1px 0 #fff,
+    0 6px 14px var(--shadow-color);
 }
 
 
