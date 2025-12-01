@@ -88,64 +88,18 @@ section {
   letter-spacing: 0.14em;
   text-align: center;
   margin-bottom: 2rem;
-
-  /* 기본은 또렷한 검은 글자 */
   color: var(--text-main);
 
-  /* 기본 입체감 */
+  /* 잉크 번짐 + 종이 위 레이어감 */
   text-shadow:
-    0 0 0.7px rgba(255,255,255,0.9),
-    0 2px 10px rgba(231,163,169,0.12);
+    0 0 0.6px rgba(255,255,255,0.9),
+    0 1px 0 rgba(0,0,0,0.03),
+    0 6px 18px var(--shadow-color);
 
-  animation: title-shine 4.8s ease-in-out infinite;
-  will-change: text-shadow, filter;
-}
+  /* 아주 미세한 따뜻한 엣지 톤 */
+  -webkit-text-stroke: 0.35px rgba(231,163,169,0.35);
 
-@keyframes title-shine {
-  0% {
-    text-shadow:
-      0 0 0.7px rgba(255,255,255,0.9),
-      -26px 0 14px rgba(231,163,169,0),
-      0 2px 10px rgba(231,163,169,0.10);
-    filter: brightness(1);
-  }
-
-  30% {
-    text-shadow:
-      0 0 0.8px rgba(255,255,255,0.95),
-      -6px 0 18px rgba(242,199,203,0.35),
-      0 3px 14px rgba(231,163,169,0.16);
-    filter: brightness(1.02);
-  }
-
-  50% {
-    /* 하이라이트가 정점으로 스치고 지나감 */
-    text-shadow:
-      0 0 0.9px rgba(255,255,255,1),
-      0 0 24px rgba(242,199,203,0.55),
-      0 5px 18px rgba(231,163,169,0.22);
-    filter: brightness(1.05);
-  }
-
-  70% {
-    text-shadow:
-      0 0 0.8px rgba(255,255,255,0.95),
-      6px 0 18px rgba(242,199,203,0.35),
-      0 3px 14px rgba(231,163,169,0.16);
-    filter: brightness(1.02);
-  }
-
-  100% {
-    text-shadow:
-      0 0 0.7px rgba(255,255,255,0.9),
-      26px 0 14px rgba(231,163,169,0),
-      0 2px 10px rgba(231,163,169,0.10);
-    filter: brightness(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .section-title { animation: none; filter: none; }
+  filter: saturate(1.05);
 }
 
 
