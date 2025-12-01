@@ -48,18 +48,19 @@
     font-weight: 600;
   }
 
-  /* ✅ input을 토글과 같은 높이/무드로 */
+  /* ✅ input = 토글 리듬 동일, height 고정 제거 */
   input {
-    padding: 8px 10px;
-    line-height: 1.2;
+    padding: 8px 10px;     /* 토글과 동일 */
+    font-size: 0.92rem;    /* 토글과 동일 */
+    line-height: 1.2;      /* 토글과 동일 */
 
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    font-size: 0.92rem;
+    border-radius: 10px;   /* 토글과 동일 */
     background: #fff;
     color: var(--text-main);
 
-    height: 38px;
+    height: auto;          /* ✅ 자동 높이 */
+    min-height: 40px;      /* ✅ 기기별 작아지는 것만 방지 */
     box-sizing: border-box;
 
     &:focus {
@@ -77,9 +78,7 @@
     grid-column: span 2;
     margin-top: 2px;
 
-    button {
-      width: 100%;
-    }
+    button { width: 100%; }
   }
 }
 
@@ -93,7 +92,7 @@
   flex-wrap: wrap;
 }
 
-/* ✅ 식사여부 3개도 모바일에서 한 줄 고정 */
+/* ✅ 식사 3개 모바일에서도 한 줄 */
 .toggle-row.no-wrap {
   flex-wrap: nowrap;
 }
@@ -101,15 +100,20 @@
 .toggle-btn {
   flex: 1;
   min-width: 88px;
+
   padding: 8px 10px;
+  font-size: 0.92rem;
+  line-height: 1.2;  /* ✅ normal 제거 → 높이 기준 고정 */
+
   border: 1px solid var(--border-color);
   border-radius: 10px;
   background: #fff;
   color: var(--text-main);
-  font-size: 0.92rem;
+
   cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease;
-  -webkit-tap-highlight-color: transparent; /* ✅ 모바일 파란 하이라이트 제거 */
+
+  -webkit-tap-highlight-color: transparent; /* ✅ 모바일 파란효과 제거 */
   user-select: none;
 
   &.active {
