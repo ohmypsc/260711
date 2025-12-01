@@ -81,12 +81,6 @@
       width: 100%;
     }
   }
-
-  .photo-upload__progress {
-    margin-top: 8px;
-    font-size: 0.9rem;
-    color: var(--text-light);
-  }
 }
 
 /* ✅ 썸네일 페이지네이션: Guestbook 톤 */
@@ -191,13 +185,22 @@
   }
 }
 
-/* ✅ 모달 footer: 업로드 + 닫기 같은 행 */
+/* ✅ 모달 footer: 업로드 + 닫기 같은 행 (Attendance 리듬 통일) */
 .photo-footer-row {
   display: flex;
   gap: 8px;
+  margin-top: 14px;
 
   button {
     flex: 1;
     width: auto;
   }
+}
+
+/* ✅ 포탈 모달에서도 progress 먹도록 전역으로 */
+.photo-upload__progress {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  text-align: center;
 }
