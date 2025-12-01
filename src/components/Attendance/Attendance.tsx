@@ -270,7 +270,7 @@ function ToggleRow<T extends string>({
 }
 
 /* ------------------------------------------------------------------
-   Write Modal (최종 UX + count 지우기 가능)
+   Write Modal (count 자동 1 제거 최종)
 ------------------------------------------------------------------ */
 function WriteAttendanceModal({
   onClose,
@@ -286,11 +286,14 @@ function WriteAttendanceModal({
 
   const [side, setSide] = useState<Side | "">("");
   const [meal, setMeal] = useState<Meal | "">("");
-  const [countInput, setCountInput] = useState("1"); // ✅ 입력 중 빈 값 허용
+  const [countInput, setCountInput] = useState(""); // ✅ 초기 빈칸
 
   const normalizeCountOnBlur = () => {
+    // ✅ 빈칸이면 자동 입력하지 않음
+    if (countInput.trim() === "") return;
+
     const n = parseInt(countInput, 10);
-    if (!n || n < 1) return setCountInput("1");
+    if (!n || n < 1) return setCountInput("1"); // 이상 입력만 보정
     if (n > 10) return setCountInput("10");
     setCountInput(String(n));
   };
@@ -310,6 +313,7 @@ function WriteAttendanceModal({
               const phone = normalizePhone(rawPhone);
               const countNum = parseInt(countInput, 10);
 
+              // ✅ 빠진 항목 모아서 안내
               const missing: string[] = [];
               if (!trimmedName) missing.push("이름");
               if (!rawPhone) missing.push("연락처");
@@ -544,6 +548,8 @@ function EditAttendanceModal({
   const [countInput, setCountInput] = useState(String(row.count));
 
   const normalizeCountOnBlur = () => {
+    if (countInput.trim() === "") return;
+
     const n = parseInt(countInput, 10);
     if (!n || n < 1) return setCountInput("1");
     if (n > 10) return setCountInput("10");
