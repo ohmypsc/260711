@@ -48,6 +48,8 @@ body {
 
   font-family: "Noto Serif KR", serif;
   font-size: clamp(17px, 3.4vw, 21px);
+  --font-title: "OG Renaissance Secret", "Noto Serif KR", serif;
+   
 }
 
 /* ============================================
@@ -82,25 +84,18 @@ section {
 
 .section-title {
   position: relative;
-  font-family: "Noto Serif KR", serif;
-  font-size: clamp(1.05rem, 2.8vw, 1.4rem);
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-family: var(--font-title);
+  font-size: clamp(1.08rem, 3vw, 1.55rem); /* OG 폰트는 살짝 키워야 예쁨 */
+  font-weight: 400;                       /* 폰트 자체가 묵직해서 400이 깔끔 */
+  letter-spacing: 0.1em;                  /* 0.14em은 장식 획을 깨뜨릴 수 있음 */
   text-align: center;
   margin-bottom: 2rem;
   color: var(--text-main);
 
-  /* 잉크 번짐 + 종이 위 레이어감 */
-  text-shadow:
-    0 0 0.6px rgba(255,255,255,0.9),
-    0 1px 0 rgba(0,0,0,0.03),
-    0 6px 18px var(--shadow-color);
-
-  /* 아주 미세한 따뜻한 엣지 톤 */
-  -webkit-text-stroke: 0.35px rgba(231,163,169,0.35);
-
-  filter: saturate(1.05);
+  /* ✅ 효과는 가독성 보정 수준만 */
+  text-shadow: 0 0 0.5px rgba(255,255,255,0.75);
 }
+
 
 
 
