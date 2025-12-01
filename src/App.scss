@@ -25,6 +25,10 @@ body {
     );
 
   line-height: 1.65;
+
+  /* ✅ 여기로 옮김 (원래 :root 아래에서 떠돌던 것) */
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(17px, 3.4vw, 21px);
 }
 
 :root {
@@ -33,11 +37,11 @@ body {
   --theme-accent: #F4F6EF;      
 
   /* 🌿 Deep & Bright Greenery */
-  --theme-primary: #2F9E5B;        /* 진하고 밝은 보태니컬 그린(메인) */
-  --theme-primary-light: #78CFA0;  /* 선명한 라이트 그린(서브/hover) */
-  --section-bg-soft: #F8FBF4;      /* 아이보리+그린 기운 살짝 */
+  --theme-primary: #2F9E5B;
+  --theme-primary-light: #78CFA0;
+  --section-bg-soft: #F8FBF4;
 
-  /* 🖋 Text (가볍지 않게 중심 잡기) */
+  /* 🖋 Text */
   --text-main: #1E221F;         
   --text-light: #767C73;       
 
@@ -52,10 +56,6 @@ body {
   --section-max-width: 640px;
 }
 
-  font-family: "Noto Serif KR", serif;
-  font-size: clamp(17px, 3.4vw, 21px);
-   
-}
 
 /* ============================================
    📄 Wedding Page Wrapper
