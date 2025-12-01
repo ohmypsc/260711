@@ -9,77 +9,102 @@ import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook";
 import { PhotoUpload } from "@/components/PhotoUpload/PhotoUpload";
-import { AdminPage } from "./AdminPage";
 
 export default function MainWeddingPage() {
   useEffect(() => {
     // ===============================
-    // ✅ 1) 확대 방지(더블탭/핀치) 유지
+    // ✅ 1) 확대 방지(더블탭/핀치)
+    // - iOS: gesture* 이벤트
+    // - Android 포함 전기기: 멀티터치(touches>1) 차단
     // ===============================
     let lastTouchEnd = 0;
 
     const blockDoubleTapZoom = (e: TouchEvent) => {
       const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        e.preventDefault(); // 더블탭일 때만 줌 방지
-      }
+      if (now - lastTouchEnd <= 300) e.preventDefault();
       lastTouchEnd = now;
     };
 
-    const stopGesture = (e: Event) => e.preventDefault(); // 핀치줌 방지
+    const stopGesture = (e: Event) => e.preventDefault(); // iOS pinch zoom 방지
+
+    const blockPinchZoom = (e: TouchEvent) => {
+      if (e.touches.length > 1) e.preventDefault(); // Android 포함 pinch zoom 방지
+    };
 
     document.addEventListener("touchend", blockDoubleTapZoom, { passive: false });
     document.addEventListener("gesturestart", stopGesture);
     document.addEventListener("gesturechange", stopGesture);
     document.addEventListener("gestureend", stopGesture);
 
+    document.addEventListener("touchstart", blockPinchZoom, { passive: false });
+    document.addEventListener("touchmove", blockPinchZoom, { passive: false });
+
     // ===============================
-    // ✅ 2) 섹션 공통 lazy 등장 효과 (안 보이는 섹션/대기감 해결 버전)
+    // ✅ 2) 섹션 공통 lazy 등장 효과 (모바일 최적화)
+    // - MutationObserver 제거(모바일 버벅임 원인)
+    // - iOS/모바일 IO 누락 대비 scroll fallback
     // ===============================
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("main.wedding-page section")
+    );
+
+    const activate = (el: HTMLElement) => {
+      if (!el.classList.contains("lazy-active")) {
+        el.classList.add("lazy-active");
+      }
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("lazy-active");
+            activate(entry.target as HTMLElement);
             observer.unobserve(entry.target);
           }
         });
       },
       {
-        // 너무 일찍 켜져서 "안 보이는 것 같은" 문제 방지 + 대기감도 없음
-        threshold: 0.05,
-        rootMargin: "0px 0px 10% 0px",
+        threshold: 0.12, // 모바일에서 안정적인 트리거
+        rootMargin: "0px 0px 120px 0px", // % 대신 px (iOS 안정)
       }
     );
 
-    const observeAllSections = () => {
-      document
-        .querySelectorAll("main.wedding-page section")
-        .forEach((el) => observer.observe(el));
+    sections.forEach((el) => observer.observe(el));
+
+    // ✅ 첫 화면 섹션 즉시 활성화
+    const primeFirstView = () => {
+      sections.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.95) {
+          activate(el);
+          observer.unobserve(el);
+        }
+      });
     };
+    primeFirstView();
 
-    // 초기 섹션 관찰
-    observeAllSections();
+    // ✅ IO가 놓치는 섹션 대비 fallback (RAF throttle)
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
 
-    // ✅ 첫 화면 섹션(cover 포함)도 자연스러운 페이드인
-    requestAnimationFrame(() => {
-      document
-        .querySelectorAll("main.wedding-page section")
-        .forEach((el) => {
+      requestAnimationFrame(() => {
+        sections.forEach((el) => {
+          if (el.classList.contains("lazy-active")) return;
+
           const rect = el.getBoundingClientRect();
           if (rect.top < window.innerHeight * 0.9) {
-            el.classList.add("lazy-active");
+            activate(el);
             observer.unobserve(el);
           }
         });
-    });
 
-    // ✅ 나중에 마운트/렌더되는 섹션도 자동 관찰 (특정 섹션만 안 되는 문제 해결)
-    const mainEl = document.querySelector("main.wedding-page");
-    const mo = new MutationObserver(() => observeAllSections());
-    if (mainEl) {
-      mo.observe(mainEl, { childList: true, subtree: true });
-    }
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     // cleanup
     return () => {
@@ -88,8 +113,12 @@ export default function MainWeddingPage() {
       document.removeEventListener("gesturechange", stopGesture);
       document.removeEventListener("gestureend", stopGesture);
 
+      document.removeEventListener("touchstart", blockPinchZoom);
+      document.removeEventListener("touchmove", blockPinchZoom);
+
+      window.removeEventListener("scroll", onScroll);
+
       observer.disconnect();
-      mo.disconnect();
     };
   }, []);
 
