@@ -119,15 +119,14 @@ export function GuestBook() {
                 <span className="date">{formatDate(post.timestamp)}</span>
               </div>
 
+              {/* ✅ 삭제만, X 아이콘 */}
               <button
                 className="delete-btn"
-                onClick={() =>
-                  setOpenModal({ type: "delete", postId: post.id })
-                }
-                aria-label="delete"
+                onClick={() => setOpenModal({ type: "delete", postId: post.id })}
+                aria-label="방명록 삭제"
                 type="button"
               >
-                삭제
+                <i className="fa-solid fa-xmark" aria-hidden="true" />
               </button>
             </div>
 
