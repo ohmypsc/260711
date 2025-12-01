@@ -83,13 +83,58 @@ section {
 
 .section-title {
   position: relative;
-  font-size: clamp(1.08rem, 3vw, 1.55rem);
-  font-weight: 400;                       
-  letter-spacing: 0.1em;                
+  font-size: clamp(1.12rem, 3.2vw, 1.62rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-align: center;
-  margin-bottom: 2rem;
+  margin: 0 auto 2.4rem;
   color: var(--text-main);
+  width: fit-content;
+
+  /* ✅ 화사하지만 과하지 않은 '소프트 필' */
+  padding: 0.45rem 1.25rem 0.5rem;
+  background: rgba(231, 163, 169, 0.10); /* 연핑크 안개 */
+  border: 1px solid rgba(231, 163, 169, 0.18);
+  border-radius: 999px;
+  box-shadow:
+    0 6px 18px rgba(231, 163, 169, 0.10),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+
+  /* ✅ 위쪽 작은 진주 점 */
+  &::before {
+    content: "";
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--theme-primary);
+    box-shadow:
+      0 0 0 3px rgba(231, 163, 169, 0.20),
+      0 2px 6px rgba(231, 163, 169, 0.35);
+    opacity: 0.95;
+  }
+
+  /* ✅ 아래쪽 얇은 그라데이션 라인 */
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -0.95rem;
+    transform: translateX(-50%);
+    width: clamp(80px, 20vw, 140px);
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(36, 36, 40, 0.35),
+      transparent
+    );
+  }
 }
+
 
 
 
