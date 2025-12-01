@@ -90,8 +90,12 @@ section {
   margin-bottom: 2rem;
   color: var(--text-main);
 
-  -webkit-text-stroke: 0.35px rgba(255, 255, 255, 0.8);
-text-shadow: 0 3px 10px rgba(255, 255, 255, 0.55);
+  /* ✅ 엠보싱(입체) 효과 */
+  text-shadow:
+    0 -1px 0 rgba(255, 255, 255, 0.9), /* 위쪽 하이라이트 */
+    0  2px 4px rgba(0, 0, 0, 0.18);    /* 아래쪽 약한 그림자 */
+}
+
 
 }
 
