@@ -243,13 +243,15 @@ function ToggleRow<T extends string>({
   value,
   onChange,
   options,
+  className = "",
 }: {
   value: T | "";
   onChange: (v: T) => void;
   options: { label: string; value: T }[];
+  className?: string;
 }) {
   return (
-    <div className="toggle-row">
+    <div className={`toggle-row ${className}`}>
       {options.map((opt) => (
         <button
           key={opt.value}
@@ -265,7 +267,7 @@ function ToggleRow<T extends string>({
 }
 
 /* ------------------------------------------------------------------
-   Write Modal (요청사항 + 빠진 항목 안내)
+   Write Modal (최종 UX + 지우기 가능 count)
 ------------------------------------------------------------------ */
 function WriteAttendanceModal({
   onClose,
@@ -281,11 +283,13 @@ function WriteAttendanceModal({
 
   const [side, setSide] = useState<Side | "">("");
   const [meal, setMeal] = useState<Meal | "">("");
-  const [count, setCount] = useState(1);
+  const [countInput, setCountInput] = useState("1"); // ✅ 입력 중 빈 값 허용
 
-  const clampCount = (v: number) => {
-    if (Number.isNaN(v)) return 1;
-    return Math.max(1, Math.min(10, v));
+  const normalizeCountOnBlur = () => {
+    const n = parseInt(countInput, 10);
+    if (!n || n < 1) return setCountInput("1");
+    if (n > 10) return setCountInput("10");
+    setCountInput(String(n));
   };
 
   return (
@@ -302,13 +306,14 @@ function WriteAttendanceModal({
               const trimmedName = name.trim();
               const rawPhone = phoneDisplay.trim();
               const phone = normalizePhone(rawPhone);
+              const countNum = parseInt(countInput, 10);
 
               // ✅ 빠진 항목 모아서 안내
               const missing: string[] = [];
               if (!trimmedName) missing.push("이름");
               if (!rawPhone) missing.push("연락처");
               if (!side) missing.push("하객 구분");
-              if (!count || count < 1) missing.push("참석 인원");
+              if (!countNum || countNum < 1) missing.push("참석 인원");
               if (!meal) missing.push("식사 여부");
 
               if (missing.length > 0) {
@@ -317,9 +322,13 @@ function WriteAttendanceModal({
                 return;
               }
 
+              const safeCount = Math.max(1, Math.min(10, countNum));
+
               const { data, error } = await supabase
                 .from("attendance")
-                .insert([{ name: trimmedName, phone, count, side, meal }])
+                .insert([
+                  { name: trimmedName, phone, count: safeCount, side, meal },
+                ])
                 .select("*")
                 .single();
 
@@ -376,7 +385,7 @@ function WriteAttendanceModal({
             />
           </div>
 
-          {/* ✅ 참석 인원: 별도 행 + 숫자 입력 */}
+          {/* ✅ 참석 인원: 지우기 가능 + blur 때만 보정 */}
           <div className="field span-2">
             <label className="label">참석 인원 *</label>
             <input
@@ -385,17 +394,17 @@ function WriteAttendanceModal({
               min={1}
               max={10}
               step={1}
-              value={count}
-              onChange={(e) =>
-                setCount(clampCount(parseInt(e.target.value, 10)))
-              }
+              value={countInput}
+              onChange={(e) => setCountInput(e.target.value)}
+              onBlur={normalizeCountOnBlur}
             />
           </div>
 
-          {/* ✅ 식사 여부: O/X/미정 */}
+          {/* ✅ 식사 여부: O/X/미정 + 모바일 한 줄 고정 */}
           <div className="field span-2">
             <label className="label">식사 여부 *</label>
             <ToggleRow
+              className="no-wrap"
               value={meal}
               onChange={setMeal}
               options={[
@@ -459,7 +468,7 @@ function FindAttendanceModal({
                 .from("attendance")
                 .select("*")
                 .eq("name", trimmedName)
-                // ✅ 기존(하이픈 포함) 데이터도 찾도록 OR 매칭
+                // ✅ raw/normalized OR
                 .or(`phone.eq.${rawPhone},phone.eq.${phone}`)
                 .order("created_at", { ascending: false })
                 .limit(1)
@@ -520,7 +529,7 @@ function FindAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Edit Modal (O/X/미정 통일 + 레거시 OR 매칭)
+   Edit Modal (count 지우기 가능 + O/X/미정 통일 + 레거시 OR)
 ------------------------------------------------------------------ */
 function EditAttendanceModal({
   row,
@@ -536,8 +545,16 @@ function EditAttendanceModal({
   onSuccess: (row: AttendanceRow) => void;
 }) {
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(row.count);
   const [meal, setMeal] = useState<Meal>(row.meal);
+
+  const [countInput, setCountInput] = useState(String(row.count));
+
+  const normalizeCountOnBlur = () => {
+    const n = parseInt(countInput, 10);
+    if (!n || n < 1) return setCountInput("1");
+    if (n > 10) return setCountInput("10");
+    setCountInput(String(n));
+  };
 
   return (
     <Modal onClose={onClose}>
@@ -566,9 +583,18 @@ function EditAttendanceModal({
                 return;
               }
 
+              const countNum = parseInt(countInput, 10);
+              if (!countNum || countNum < 1) {
+                alert("참석 인원을 확인해주세요.");
+                setLoading(false);
+                return;
+              }
+
+              const safeCount = Math.max(1, Math.min(10, countNum));
+
               const { data, error } = await supabase
                 .from("attendance")
-                .update({ count, meal })
+                .update({ count: safeCount, meal })
                 .eq("id", row.id)
                 .select("*")
                 .single();
@@ -594,20 +620,16 @@ function EditAttendanceModal({
               min={1}
               max={10}
               step={1}
-              value={count}
-              onChange={(e) => {
-                const v = Math.max(
-                  1,
-                  Math.min(10, parseInt(e.target.value, 10) || 1)
-                );
-                setCount(v);
-              }}
+              value={countInput}
+              onChange={(e) => setCountInput(e.target.value)}
+              onBlur={normalizeCountOnBlur}
             />
           </div>
 
           <div className="field span-2">
             <label className="label">식사 여부 *</label>
             <ToggleRow
+              className="no-wrap"
               value={meal}
               onChange={setMeal}
               options={[
@@ -630,7 +652,7 @@ function EditAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Delete Modal (레거시 OR 매칭)
+   Delete Modal (레거시 OR)
 ------------------------------------------------------------------ */
 function DeleteAttendanceModal({
   row,
