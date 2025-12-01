@@ -186,3 +186,15 @@
     }
   }
 }
+
+
+/* ✅ 모달 footer: 저장/찾기/삭제 + 닫기 같은 행 */
+.attendance-footer-row {
+  display: flex;
+  gap: 8px;
+
+  button {
+    flex: 1;
+    width: auto; /* 전역 width:100% 무력화 */
+  }
+}
