@@ -48,10 +48,9 @@
 
 .map-area {
   width: 100%;
-  height: 350px;
+  height: clamp(280px, 40vw, 520px); /* ✅ 유연 높이 */
   border-radius: 14px;
 }
-
 .map-lock-overlay {
   position: absolute;
   inset: 0;
