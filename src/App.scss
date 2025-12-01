@@ -28,12 +28,13 @@ body {
 }
 
 :root {
-  --theme-bg: #FBFAF7;
-  --theme-accent: #F2F3F6;
+  --theme-bg: #F8F6F2;        /* 따뜻한 실크 아이보리 */
+  --theme-accent: #EEF1F5;    /* 아주 연한 쿨 오프화이트 */
 
-  --theme-primary: #faa0ad;
-  --theme-primary-light: #ffccd3;
-  --section-bg-soft: #F8F1F2;
+  --theme-primary: #E9A7AF;   /* 더스티 로즈(핑크 티 눌림) */
+  --theme-primary-light: #F4CCD1; /* 아주 연한 블러쉬 */
+
+  --section-bg-soft: #F6F2F0; /* 섹션 배경(종이톤) */
 
   --text-main: #242428;
   --text-light: #8F9097;
@@ -41,9 +42,8 @@ body {
   --theme-success: #469C7A;
   --theme-error: #E06B6B;
 
-  --border-color: #E6E4E8;
-  --shadow-color: rgba(252, 245, 246, 0.9);
-
+  --border-color: #E7E3E6;    /* 웜 그레이 보더 */
+  --shadow-color: rgba(0, 0, 0, 0.08); /* 핑크 0, 은은한 깊이 */
   --section-max-width: clamp(640px, 60vw, 800px);
 
   font-family: "Noto Serif KR", serif;
