@@ -96,7 +96,7 @@ export function GuestBook() {
         신랑, 신부에게 축하의 마음을 전해주세요.
       </p>
 
-      {/* ✅ 목록 */}
+      {/* 목록 */}
       <div className="guestbook-list">
         {posts.length === 0 && (
           <div className="guestbook-empty">
@@ -112,16 +112,14 @@ export function GuestBook() {
                 <span className="date">{formatDate(post.timestamp)}</span>
               </div>
 
-              {/* ✅ 삭제만 X 아이콘으로 */}
+              {/* ✅ 삭제 버튼: X 아이콘만 */}
               <button
                 className="delete-btn"
-                onClick={() =>
-                  setOpenModal({ type: "delete", postId: post.id })
-                }
-                aria-label="방명록 삭제"
+                onClick={() => setOpenModal({ type: "delete", postId: post.id })}
+                aria-label="delete"
                 type="button"
               >
-                <i className="fa-solid fa-xmark" aria-hidden="true" />
+                <i className="fa-solid fa-xmark" />
               </button>
             </div>
 
@@ -130,7 +128,7 @@ export function GuestBook() {
         ))}
       </div>
 
-      {/* ✅ 페이지네이션 */}
+      {/* 페이지네이션 */}
       {totalPages > 1 && (
         <div className="pagination">
           {currentPage > 0 && (
@@ -166,7 +164,7 @@ export function GuestBook() {
         </div>
       )}
 
-      {/* ✅ 작성 버튼을 페이지네이션 아래로 */}
+      {/* ✅ 작성 버튼: 페이지네이션 아래 */}
       <div className="guestbook__actions">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
           방명록 작성하기
