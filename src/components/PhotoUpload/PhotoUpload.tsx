@@ -106,7 +106,7 @@ export function PhotoUpload() {
       <p className="photo-upload__desc">
         하객분들이 직접 찍은 사진을 남겨주시면 감사하겠습니다.
         <br />
-        여러 장을 한 번에 선택해도 자동으로 최적화되어 업로드됩니다.
+        찍어주신 사진은 소중히 간직하겠습니다.
       </p>
 
       {/* ✅ 썸네일 갤러리 */}
@@ -116,7 +116,7 @@ export function PhotoUpload() {
         {thumbLoading ? (
           <div className="thumbs__loading">불러오는 중…</div>
         ) : thumbs.length === 0 ? (
-          <div className="thumbs__empty">아직 업로드된 사진이 없습니다.</div>
+          <div className="thumbs__empty">첫 사진을 남겨주세요💖</div>
         ) : (
           <>
             <div className="thumbs__grid">
@@ -352,7 +352,7 @@ function UploadPhotoModal({
     } else {
       alert(
         `일부 사진 업로드가 실패했어요.\n\n${failed.join("\n")}\n\n` +
-          `다시 시도하거나 JPG로 변환 후 올려주세요.`
+          `다시 시도해주세요.`
       );
     }
   };
