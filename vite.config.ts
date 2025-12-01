@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
-  base: "/mysc/",
+  base: "/260711/",
   plugins: [react()],
 
   resolve: {
