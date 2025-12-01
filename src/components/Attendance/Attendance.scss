@@ -16,7 +16,7 @@
 }
 
 /* -------------------------------------
-   Modal Content (Global Modal 무드 따름)
+   Modal Content (전역 모달 무드 따름)
 ------------------------------------- */
 
 .attendance-modal-content {
@@ -26,10 +26,14 @@
   gap: 12px;
 }
 
+/* -------------------------------------
+   Form Layout
+------------------------------------- */
+
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 10px 10px;
 
   .field {
     display: flex;
@@ -44,13 +48,19 @@
     font-weight: 600;
   }
 
+  /* ✅ input을 토글과 같은 높이/무드로 */
   input {
-    padding: 0.68rem;
+    padding: 8px 10px;
+    line-height: 1.2;
+
     border: 1px solid var(--border-color);
-    border-radius: 0.55rem;
-    font-size: 0.95rem;
+    border-radius: 10px;
+    font-size: 0.92rem;
     background: #fff;
     color: var(--text-main);
+
+    height: 38px;
+    box-sizing: border-box;
 
     &:focus {
       outline: none;
@@ -74,21 +84,22 @@
 }
 
 /* -------------------------------------
-   Toggle Buttons
+   Toggle / Chips
 ------------------------------------- */
 
 .toggle-row {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+}
 
-  &.no-wrap {
-    flex-wrap: nowrap;
-  }
+/* ✅ 식사여부 3개도 모바일에서 한 줄 고정 */
+.toggle-row.no-wrap {
+  flex-wrap: nowrap;
 }
 
 .toggle-btn {
-  flex: 1 1 100px;
+  flex: 1;
   min-width: 88px;
   padding: 8px 10px;
   border: 1px solid var(--border-color);
@@ -98,16 +109,8 @@
   font-size: 0.92rem;
   cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease;
-
-  /* ✅ 모바일 파란 탭 하이라이트 제거 */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent; /* ✅ 모바일 파란 하이라이트 제거 */
   user-select: none;
-
-  &:focus,
-  &:focus-visible {
-    outline: none;
-  }
 
   &.active {
     background: var(--section-bg-soft);
@@ -116,14 +119,8 @@
   }
 }
 
-.toggle-row.no-wrap .toggle-btn {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-}
-
 /* -------------------------------------
-   My Attendance Box (컴팩트)
+   My Attendance Box
 ------------------------------------- */
 
 .my-attendance {
@@ -171,26 +168,15 @@
       .mini-btn {
         font-size: 0.85rem;
         padding: 6px 8px;
-        border: 1px solid var(--border-color);
+        border: none;
         border-radius: 8px;
         background: var(--theme-accent);
         color: var(--text-main);
         cursor: pointer;
-        transition: filter 0.18s ease, transform 0.12s ease;
-
-        &:active {
-          transform: translateY(0.5px) scale(0.98);
-          filter: saturate(1.05);
-        }
 
         &.danger {
-          background: color-mix(in srgb, #fff 70%, var(--theme-error) 30%);
+          background: #ffe8e8;
           color: var(--theme-error);
-          border-color: color-mix(
-            in srgb,
-            var(--border-color) 70%,
-            var(--theme-error) 30%
-          );
         }
       }
     }
