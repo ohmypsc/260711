@@ -179,6 +179,7 @@ export function PhotoUpload() {
         <UploadPhotoModal
           fileRef={fileRef}
           loading={loading}
+          progress={progress}
           onClose={() => setOpenModal(null)}
           onUploaded={() => loadThumbs(0)}
           setLoading={setLoading}
@@ -194,13 +195,6 @@ export function PhotoUpload() {
         multiple
         style={{ display: "none" }}
       />
-
-      {/* 전역 로딩 텍스트 */}
-      {loading && progress && (
-        <p className="photo-upload__progress">
-          업로드 중... ({progress.done}/{progress.total})
-        </p>
-      )}
     </section>
   );
 }
@@ -212,6 +206,7 @@ export function PhotoUpload() {
 function UploadPhotoModal({
   fileRef,
   loading,
+  progress,
   onClose,
   onUploaded,
   setLoading,
@@ -219,6 +214,7 @@ function UploadPhotoModal({
 }: {
   fileRef: React.RefObject<HTMLInputElement>;
   loading: boolean;
+  progress: { done: number; total: number } | null;
   onClose: () => void;
   onUploaded: () => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -306,7 +302,6 @@ function UploadPhotoModal({
           ext = "png";
         }
 
-        // ✅ 파일명용 안전한 이름 + fallback
         const safeName =
           uploaderName.replace(/\s+/g, "").replace(/[^\w가-힣]/g, "") || "guest";
 
@@ -408,12 +403,21 @@ function UploadPhotoModal({
             onClick={onPickFiles}
             disabled={loading}
           >
-            사진 선택하기
+            사진 여러 장 선택하기
           </button>
 
           {selectedFiles.length > 0 && (
             <div className="photo-picked-info">
               {selectedFiles.length}장 선택됨
+            </div>
+          )}
+
+          {/* ✅ 업로드 진행 문구: 모달 안에 표시 */}
+          {loading && (
+            <div className="photo-upload__progress">
+              {progress
+                ? `업로드 중... (${progress.done}/${progress.total})`
+                : "업로드 중..."}
             </div>
           )}
         </div>
