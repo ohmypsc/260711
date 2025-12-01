@@ -50,7 +50,7 @@
 
   /* ✅ input = 토글 리듬 동일, height 고정 제거 */
   input {
-    padding: 8px 10px;     /* 토글과 동일 */
+    padding: 9px 12px;     /* 토글과 동일 */
     font-size: 0.92rem;    /* 토글과 동일 */
     line-height: 1.2;      /* 토글과 동일 */
 
@@ -60,7 +60,7 @@
     color: var(--text-main);
 
     height: auto;          /* ✅ 자동 높이 */
-    min-height: 40px;      /* ✅ 기기별 작아지는 것만 방지 */
+    min-height: 42px;      /* ✅ 기기별 작아지는 것만 방지 */
     box-sizing: border-box;
 
     &:focus {
@@ -101,7 +101,7 @@
   flex: 1;
   min-width: 88px;
 
-  padding: 8px 10px;
+  padding: 9px 10px;
   font-size: 0.92rem;
   line-height: 1.2;  /* ✅ normal 제거 → 높이 기준 고정 */
 
