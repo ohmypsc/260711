@@ -17,8 +17,6 @@
 
 /* -------------------------------------
    Modal Content (Global Modal 무드 따름)
-   - 전역: modal-container padding 사용
-   - 개별: 내용 레이아웃만 담당
 ------------------------------------- */
 
 .attendance-modal-content {
@@ -26,7 +24,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* ✅ padding 제거: 전역 modal-container padding을 그대로 사용 */
 }
 
 .attendance-form {
@@ -70,7 +67,6 @@
     grid-column: span 2;
     margin-top: 2px;
 
-    /* submit 버튼은 전역 w-btn(풀폭)과 잘 맞음 */
     button {
       width: 100%;
     }
@@ -78,13 +74,17 @@
 }
 
 /* -------------------------------------
-   Toggle Buttons / Stepper
+   Toggle Buttons
 ------------------------------------- */
 
 .toggle-row {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+
+  &.no-wrap {
+    flex-wrap: nowrap;
+  }
 }
 
 .toggle-btn {
@@ -99,6 +99,16 @@
   cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease;
 
+  /* ✅ 모바일 파란 탭 하이라이트 제거 */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+
   &.active {
     background: var(--section-bg-soft);
     border-color: var(--theme-primary);
@@ -106,41 +116,14 @@
   }
 }
 
-.count-stepper {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  .step-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: #fff;
-    color: var(--text-main);
-    font-size: 1.1rem;
-    cursor: pointer;
-
-    &:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-  }
-
-  .count-pill {
-    flex: 1;
-    text-align: center;
-    padding: 8px 0;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: #fff;
-    color: var(--text-main);
-    font-weight: 700;
-  }
+.toggle-row.no-wrap .toggle-btn {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 /* -------------------------------------
-   My Attendance Box (컴팩트 + 전역 톤)
+   My Attendance Box (컴팩트)
 ------------------------------------- */
 
 .my-attendance {
@@ -185,7 +168,6 @@
       display: flex;
       gap: 6px;
 
-      /* mini 버튼은 w-btn을 쓰면 풀폭이라 안 맞음 → 별도 미니 톤 */
       .mini-btn {
         font-size: 0.85rem;
         padding: 6px 8px;
@@ -204,7 +186,11 @@
         &.danger {
           background: color-mix(in srgb, #fff 70%, var(--theme-error) 30%);
           color: var(--theme-error);
-          border-color: color-mix(in srgb, var(--border-color) 70%, var(--theme-error) 30%);
+          border-color: color-mix(
+            in srgb,
+            var(--border-color) 70%,
+            var(--theme-error) 30%
+          );
         }
       }
     }
