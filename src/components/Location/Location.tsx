@@ -16,8 +16,9 @@ const NAVER_MAP_KEY = import.meta.env.VITE_NAVER_MAP_CLIENT_ID || "";
 
 function loadNaverMapSdk(keyId: string) {
   if (window.naver?.maps) return Promise.resolve();
-  if ((window as any).__naverMapLoadingPromise)
+  if ((window as any).__naverMapLoadingPromise) {
     return (window as any).__naverMapLoadingPromise as Promise<void>;
+  }
 
   const promise = new Promise<void>((resolve, reject) => {
     const CALLBACK_NAME = "__naverMapInitCallback";
@@ -108,7 +109,9 @@ export const Location = () => {
 
     return () => {
       mapInstanceRef.current = null;
-      if (lockMessageTimeout.current) clearTimeout(lockMessageTimeout.current);
+      if (lockMessageTimeout.current) {
+        clearTimeout(lockMessageTimeout.current);
+      }
     };
   }, []);
 
@@ -150,9 +153,11 @@ export const Location = () => {
       DEST_NAME
     )}`;
 
-    if (device === "ios" || device === "android")
+    if (device === "ios" || device === "android") {
       openWithFallback(appUrl, webUrl);
-    else window.open(webUrl, "_blank");
+    } else {
+      window.open(webUrl, "_blank");
+    }
   };
 
   const handleKakaoMap = () => {
@@ -163,9 +168,11 @@ export const Location = () => {
       DEST_NAME
     )},${DEST_LAT},${DEST_LNG}`;
 
-    if (device === "ios" || device === "android")
+    if (device === "ios" || device === "android") {
       openWithFallback(appUrl, webUrl);
-    else window.open(webUrl, "_blank");
+    } else {
+      window.open(webUrl, "_blank");
+    }
   };
 
   const handleTMap = () => {
@@ -177,8 +184,7 @@ export const Location = () => {
 
     const androidStore =
       "https://play.google.com/store/apps/details?id=com.skt.tmap.ku";
-    const iosStore =
-      "https://apps.apple.com/kr/app/id431589174";
+    const iosStore = "https://apps.apple.com/kr/app/id431589174";
 
     if (device === "android") openWithFallback(appUrl, androidStore);
     else if (device === "ios") openWithFallback(appUrl, iosStore);
@@ -213,7 +219,8 @@ export const Location = () => {
                   <i className="fa-solid fa-lock" /> 지도 잠금 중
                 </div>
                 <div className="lock-message-sub">
-                  지도를 확대/축소하시려면<br />
+                  지도를 확대/축소하시려면
+                  <br />
                   왼쪽 위 자물쇠를 눌러 주세요.
                 </div>
               </div>
@@ -253,8 +260,12 @@ export const Location = () => {
           <span className="navi-label">티맵</span>
         </button>
       </div>
+    </div>
+  );
+};
 
-    
+export {}; // ✅ 이 파일을 모듈로 명시(전역 보강 안정화)
+
 declare global {
   interface Window {
     naver: any;
