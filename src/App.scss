@@ -99,9 +99,10 @@ section {
 
 /* ============================================
    ✨ Section Reveal Animation (Global)
-   ✅ 모달 fixed 깨지지 않는 버전
+   ✅ 모달 fixed 깨지지 않는 버전 + 모바일 최적화
    - section 자체에는 transform 절대 금지
    - inner만 애니메이션
+   - will-change는 활성화된 섹션만
    ============================================ */
 
 /* section은 레이아웃 그대로 유지 */
@@ -109,17 +110,16 @@ main.wedding-page section {
   /* padding 등 기존 레이아웃만 적용됨 */
 }
 
-/* inner만 reveal */
+/* inner 기본 상태 (숨김 + 아래에서 올라오기) */
 main.wedding-page section .section-inner {
-  opacity: 0.001;
-  transform: translateY(24px);
-  transition: opacity 1000ms ease, transform 1200ms ease; /* 👈 700 → 1000 */
-  will-change: opacity, transform;
+  opacity: 0; /* ✅ 0.001 → 0 */
+  transform: translate3d(0, 24px, 0); /* ✅ translateY → translate3d */
+  transition: opacity 800ms ease, transform 900ms ease; /* ✅ 모바일 부담 완화 */
 }
 
-
-/* section에 lazy-active 붙으면 inner가 나타남 */
+/* lazy-active 붙으면 등장 */
 main.wedding-page section.lazy-active .section-inner {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
+  will-change: opacity, transform; /* ✅ 활성화된 요소만 GPU 힌트 */
 }
