@@ -17,6 +17,8 @@
 
 /* -------------------------------------
    Modal Content (Global Modal 무드 따름)
+   - 전역: modal-container / modal-title / modal-subtitle / footer
+   - 개별: 내용 레이아웃만 담당
 ------------------------------------- */
 
 .attendance-modal-content {
@@ -30,7 +32,7 @@
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 10px;
+  gap: 10px;
 
   .field {
     display: flex;
@@ -52,6 +54,12 @@
     font-size: 0.95rem;
     background: #fff;
     color: var(--text-main);
+
+    &:focus {
+      outline: none;
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+    }
   }
 
   .span-2 {
@@ -62,6 +70,7 @@
     grid-column: span 2;
     margin-top: 2px;
 
+    /* submit 버튼은 전역 w-btn(풀폭)과 잘 맞음 */
     button {
       width: 100%;
     }
@@ -69,7 +78,7 @@
 }
 
 /* -------------------------------------
-   Button Toggle / Chips / Stepper
+   Toggle Buttons / Stepper
 ------------------------------------- */
 
 .toggle-row {
@@ -79,7 +88,7 @@
 }
 
 .toggle-btn {
-  flex: 1;
+  flex: 1 1 100px;
   min-width: 88px;
   padding: 8px 10px;
   border: 1px solid var(--border-color);
@@ -131,7 +140,7 @@
 }
 
 /* -------------------------------------
-   My Attendance Box (컴팩트)
+   My Attendance Box (컴팩트 + 전역 톤)
 ------------------------------------- */
 
 .my-attendance {
@@ -176,18 +185,26 @@
       display: flex;
       gap: 6px;
 
+      /* ✅ mini 버튼은 w-btn을 쓰면 풀폭이라 안 맞음 → 별도 미니 톤 */
       .mini-btn {
         font-size: 0.85rem;
         padding: 6px 8px;
-        border: none;
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         background: var(--theme-accent);
         color: var(--text-main);
         cursor: pointer;
+        transition: filter 0.18s ease, transform 0.12s ease;
+
+        &:active {
+          transform: translateY(0.5px) scale(0.98);
+          filter: saturate(1.05);
+        }
 
         &.danger {
-          background: #ffe8e8;
+          background: color-mix(in srgb, #fff 70%, var(--theme-error) 30%);
           color: var(--theme-error);
+          border-color: color-mix(in srgb, var(--border-color) 70%, var(--theme-error) 30%);
         }
       }
     }
