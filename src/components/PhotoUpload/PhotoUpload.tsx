@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./PhotoUpload.scss";
 
 import { Button } from "@/components/common/Button/Button";
+import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
 
 const BUCKET = "wedding-photos";
@@ -9,18 +10,23 @@ const MAX_UPLOAD_MB = 5;
 const MAX_LONG_SIDE = 1920;
 const JPEG_QUALITY = 0.75;
 
-const THUMBS_PER_PAGE = 24;
+// ✅ 9장(3x3)만 보이게
+const THUMBS_PER_PAGE = 9;
 
 type PhotoThumb = {
   name: string;
   url: string;
   created_at: string;
+  uploader_name?: string | null;
 };
+
+type ModalType = null | "upload";
 
 export function PhotoUpload() {
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const [uploaderName, setUploaderName] = useState("");
+  const [openModal, setOpenModal] = useState<ModalType>(null);
+
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] =
     useState<{ done: number; total: number } | null>(null);
@@ -31,19 +37,12 @@ export function PhotoUpload() {
   const [page, setPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
 
-  const onPick = () => {
-    if (!uploaderName.trim()) {
-      alert("이름을 먼저 입력해주세요.");
-      return;
-    }
-    fileRef.current?.click();
-  };
-
   const loadThumbs = async (targetPage = page) => {
     setThumbLoading(true);
     try {
       const offset = targetPage * THUMBS_PER_PAGE;
 
+      // 1) 스토리지에서 파일 목록
       const { data, error } = await supabase.storage
         .from(BUCKET)
         .list("", {
@@ -54,19 +53,37 @@ export function PhotoUpload() {
 
       if (error) throw error;
 
-      const list = (data ?? [])
-        .filter((f) => f.name && !f.name.startsWith("."))
-        .map((f) => {
-          const { data: urlData } = supabase.storage
-            .from(BUCKET)
-            .getPublicUrl(f.name);
+      const files = (data ?? []).filter((f) => f.name && !f.name.startsWith("."));
+      const fileNames = files.map((f) => f.name);
 
-          return {
-            name: f.name,
-            url: urlData.publicUrl,
-            created_at: f.created_at ?? "",
-          };
-        });
+      // 2) photo_meta에서 uploader_name 가져오기
+      let metaMap = new Map<string, string>();
+      if (fileNames.length > 0) {
+        const { data: metaData, error: metaError } = await supabase
+          .from("photo_meta")
+          .select("file_name, uploader_name")
+          .in("file_name", fileNames);
+
+        if (!metaError && metaData) {
+          metaData.forEach((m) => {
+            if (m.file_name) metaMap.set(m.file_name, m.uploader_name);
+          });
+        }
+      }
+
+      // 3) public url + 메타 병합
+      const list: PhotoThumb[] = files.map((f) => {
+        const { data: urlData } = supabase.storage
+          .from(BUCKET)
+          .getPublicUrl(f.name);
+
+        return {
+          name: f.name,
+          url: urlData.publicUrl,
+          created_at: f.created_at ?? "",
+          uploader_name: metaMap.get(f.name) ?? null,
+        };
+      });
 
       setThumbs(list);
       setPage(targetPage);
@@ -83,108 +100,6 @@ export function PhotoUpload() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (files.length === 0) return;
-
-    const name = uploaderName.trim();
-    if (!name) {
-      alert("이름이 비어있습니다. 다시 입력해주세요.");
-      e.target.value = "";
-      return;
-    }
-
-    setLoading(true);
-    setProgress({ done: 0, total: files.length });
-
-    const failed: string[] = [];
-    let done = 0;
-
-    for (const file of files) {
-      let filename = "";
-      try {
-        if (!file.type.startsWith("image/")) {
-          failed.push(`${file.name} (이미지 아님)`);
-          continue;
-        }
-
-        const optimized = await compressIfNeeded(file);
-
-        // ✅ HEIC/HEIF면 확장자 유지, 아니면 png/jpg로
-        const isHeic =
-          optimized.type === "image/heic" ||
-          optimized.type === "image/heif" ||
-          /\.heic$/i.test(optimized.name) ||
-          /\.heif$/i.test(optimized.name);
-
-        let ext = "jpg";
-        if (isHeic) {
-          ext = (optimized.name.split(".").pop() || "heic").toLowerCase();
-        } else if (optimized.type.includes("png")) {
-          ext = "png";
-        }
-
-        filename = `${Date.now()}_${Math.random()
-          .toString(36)
-          .slice(2)}.${ext}`;
-
-        // 1) 스토리지 업로드
-        const { error: upErr } = await supabase.storage
-          .from(BUCKET)
-          .upload(filename, optimized, { upsert: false });
-
-        if (upErr) throw upErr;
-
-        // 2) 메타 저장 (photo_meta)
-        const { error: metaErr } = await supabase
-          .from("photo_meta")
-          .insert([
-            {
-              file_name: filename,
-              uploader_name: name,
-              created_at: new Date().toISOString(),
-            },
-          ]);
-
-        // 메타 저장 실패는 업로드 자체를 실패로 보진 않되, 사용자에게 알려줌
-        if (metaErr) {
-          console.warn("photo_meta insert failed:", metaErr);
-          failed.push(`${file.name} (업로드는 됐지만 이름 저장 실패)`);
-        }
-      } catch (err: any) {
-        console.error("Upload failed:", file.name, err);
-        failed.push(`${file.name} (${err?.message ?? "알 수 없는 오류"})`);
-
-        // 업로드가 실패했으면 filename이 생성됐을 수도 있으니 혹시 남아있으면 제거 시도
-        if (filename) {
-          try {
-            await supabase.storage.from(BUCKET).remove([filename]);
-          } catch {}
-        }
-      } finally {
-        done++;
-        setProgress({ done, total: files.length });
-        await new Promise((r) => setTimeout(r, 150));
-      }
-    }
-
-    setLoading(false);
-    setProgress(null);
-    e.target.value = "";
-
-    // 업로드 후 첫 페이지 다시 로드
-    loadThumbs(0);
-
-    if (failed.length === 0) {
-      alert("사진이 모두 업로드되었습니다! 감사합니다 😊");
-    } else {
-      alert(
-        `일부 사진 업로드가 실패했어요.\n\n${failed.join("\n")}\n\n` +
-          `다시 시도하거나 JPG로 변환 후 올려주세요.`
-      );
-    }
-  };
-
   return (
     <section className="photo-upload">
       <h2 className="section-title">사진 업로드</h2>
@@ -193,34 +108,6 @@ export function PhotoUpload() {
         <br />
         여러 장을 한 번에 선택해도 자동으로 최적화되어 업로드됩니다.
       </p>
-
-      {/* ✅ 이름 입력 */}
-      <div className="photo-upload__name">
-        <input
-          type="text"
-          placeholder="이름을 입력해주세요"
-          value={uploaderName}
-          onChange={(e) => setUploaderName(e.target.value)}
-          disabled={loading}
-        />
-      </div>
-
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*,.heic,.heif"
-        multiple
-        onChange={onChangeFile}
-        style={{ display: "none" }}
-      />
-
-      <Button variant="basic" onClick={onPick} disabled={loading}>
-        {loading
-          ? progress
-            ? `업로드 중... (${progress.done}/${progress.total})`
-            : "업로드 중..."
-          : "사진 여러 장 업로드하기"}
-      </Button>
 
       {/* ✅ 썸네일 갤러리 */}
       <div className="thumbs">
@@ -240,9 +127,14 @@ export function PhotoUpload() {
                   target="_blank"
                   rel="noreferrer"
                   className="thumb"
-                  title={t.name}
+                  title={t.uploader_name ?? t.name}
                 >
                   <img src={t.url} alt="uploaded" loading="lazy" />
+
+                  {/* ✅ 업로더 이름 오버레이 */}
+                  {t.uploader_name && (
+                    <div className="thumb__label">{t.uploader_name}</div>
+                  )}
                 </a>
               ))}
             </div>
@@ -253,6 +145,7 @@ export function PhotoUpload() {
                 className="page-btn"
                 disabled={page === 0 || thumbLoading}
                 onClick={() => loadThumbs(page - 1)}
+                type="button"
               >
                 이전
               </button>
@@ -263,6 +156,7 @@ export function PhotoUpload() {
                 className="page-btn"
                 disabled={!hasNext || thumbLoading}
                 onClick={() => loadThumbs(page + 1)}
+                type="button"
               >
                 다음
               </button>
@@ -270,7 +164,250 @@ export function PhotoUpload() {
           </>
         )}
       </div>
+
+      {/* ✅ 썸네일 아래 업로드 버튼 */}
+      <div className="photo-upload__actions">
+        <Button
+          variant="basic"
+          onClick={() => setOpenModal("upload")}
+          disabled={loading}
+        >
+          사진 여러 장 업로드하기
+        </Button>
+      </div>
+
+      {/* ✅ 업로드 모달 */}
+      {openModal === "upload" && (
+        <UploadPhotoModal
+          fileRef={fileRef}
+          loading={loading}
+          onClose={() => setOpenModal(null)}
+          onUploaded={() => loadThumbs(0)}
+          setLoading={setLoading}
+          setProgress={setProgress}
+        />
+      )}
+
+      {/* ✅ hidden file input (모달에서 클릭) */}
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*,.heic,.heif"
+        multiple
+        style={{ display: "none" }}
+      />
+
+      {/* 전역 로딩 텍스트(원하면 UI로 바꿔도 됨) */}
+      {loading && progress && (
+        <p className="photo-upload__progress">
+          업로드 중... ({progress.done}/{progress.total})
+        </p>
+      )}
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------
+   Upload Modal (방명록 무드 / footer 2버튼 같은 행)
+------------------------------------------------------------------ */
+
+function UploadPhotoModal({
+  fileRef,
+  loading,
+  onClose,
+  onUploaded,
+  setLoading,
+  setProgress,
+}: {
+  fileRef: React.RefObject<HTMLInputElement>;
+  loading: boolean;
+  onClose: () => void;
+  onUploaded: () => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setProgress: React.Dispatch<
+    React.SetStateAction<{ done: number; total: number } | null>
+  >;
+}) {
+  const [name, setName] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const onPickFiles = () => {
+    if (!name.trim()) {
+      alert("이름을 먼저 입력해주세요.");
+      return;
+    }
+    fileRef.current?.click();
+  };
+
+  // 모달 열릴 때 file input change 핸들러 붙이기
+  useEffect(() => {
+    const el = fileRef.current;
+    if (!el) return;
+
+    const handler = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const files = Array.from(target.files ?? []);
+      setSelectedFiles(files);
+    };
+
+    el.addEventListener("change", handler);
+    return () => el.removeEventListener("change", handler);
+  }, [fileRef]);
+
+  const onSubmitUpload = async () => {
+    const uploaderName = name.trim();
+    if (!uploaderName) {
+      alert("이름을 입력해주세요.");
+      return;
+    }
+    if (selectedFiles.length === 0) {
+      alert("사진을 선택해주세요.");
+      return;
+    }
+
+    setLoading(true);
+    setProgress({ done: 0, total: selectedFiles.length });
+
+    const failed: string[] = [];
+    let done = 0;
+
+    for (const file of selectedFiles) {
+      let filename = "";
+      try {
+        if (!file.type.startsWith("image/")) {
+          failed.push(`${file.name} (이미지 아님)`);
+          continue;
+        }
+
+        const optimized = await compressIfNeeded(file);
+
+        const isHeic =
+          optimized.type === "image/heic" ||
+          optimized.type === "image/heif" ||
+          /\.heic$/i.test(optimized.name) ||
+          /\.heif$/i.test(optimized.name);
+
+        let ext = "jpg";
+        if (isHeic) {
+          ext = (optimized.name.split(".").pop() || "heic").toLowerCase();
+        } else if (optimized.type.includes("png")) {
+          ext = "png";
+        }
+
+        const safeName = uploaderName
+          .replace(/\s+/g, "")
+          .replace(/[^\w가-힣]/g, "");
+
+        filename = `${safeName}_${Date.now()}_${Math.random()
+          .toString(36)
+          .slice(2)}.${ext}`;
+
+        const { error: upErr } = await supabase.storage
+          .from(BUCKET)
+          .upload(filename, optimized, { upsert: false });
+
+        if (upErr) throw upErr;
+
+        const { error: metaErr } = await supabase
+          .from("photo_meta")
+          .insert([
+            {
+              file_name: filename,
+              uploader_name: uploaderName,
+              created_at: new Date().toISOString(),
+            },
+          ]);
+
+        if (metaErr) {
+          console.warn("photo_meta insert failed:", metaErr);
+          failed.push(`${file.name} (업로드는 됐지만 이름 저장 실패)`);
+        }
+      } catch (err: any) {
+        console.error("Upload failed:", file.name, err);
+        failed.push(`${file.name} (${err?.message ?? "알 수 없는 오류"})`);
+
+        if (filename) {
+          try {
+            await supabase.storage.from(BUCKET).remove([filename]);
+          } catch {}
+        }
+      } finally {
+        done++;
+        setProgress({ done, total: selectedFiles.length });
+        await new Promise((r) => setTimeout(r, 120));
+      }
+    }
+
+    setLoading(false);
+    setProgress(null);
+    setSelectedFiles([]);
+
+    if (fileRef.current) fileRef.current.value = "";
+
+    onUploaded();
+
+    if (failed.length === 0) {
+      alert("사진이 모두 업로드되었습니다! 감사합니다 😊");
+      onClose();
+    } else {
+      alert(
+        `일부 사진 업로드가 실패했어요.\n\n${failed.join("\n")}\n\n` +
+          `다시 시도하거나 JPG로 변환 후 올려주세요.`
+      );
+    }
+  };
+
+  return (
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="photo-footer-row">
+          <Button
+            variant="submit"
+            type="button"
+            onClick={onSubmitUpload}
+            disabled={loading}
+          >
+            업로드하기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
+      <div className="photo-modal-content">
+        <h2 className="modal-title">사진 업로드하기</h2>
+
+        <div className="photo-form">
+          <label className="label">이름 *</label>
+          <input
+            disabled={loading}
+            type="text"
+            autoComplete="off"
+            placeholder="이름을 입력해주세요."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <label className="label">사진 선택 *</label>
+          <button
+            type="button"
+            className="photo-pick-btn"
+            onClick={onPickFiles}
+            disabled={loading}
+          >
+            사진 여러 장 선택하기
+          </button>
+
+          {selectedFiles.length > 0 && (
+            <div className="photo-picked-info">
+              {selectedFiles.length}장 선택됨
+            </div>
+          )}
+        </div>
+      </div>
+    </Modal>
   );
 }
 
