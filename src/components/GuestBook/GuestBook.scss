@@ -9,10 +9,11 @@
     font-size: 0.95rem;
   }
 
+  /* ✅ 이제 페이지네이션 아래로 내려가니까 위쪽 여백만 */
   .guestbook__actions {
     display: flex;
     justify-content: center;
-    margin-bottom: 18px;
+    margin-top: 16px;
   }
 }
 
@@ -80,33 +81,19 @@
   line-height: 1.55;
 }
 
-/* ✅ 삭제 버튼: hover 없음 + X 아이콘 */
+/* ✅ 삭제 버튼: X 아이콘, hover 없음 */
 .delete-btn {
-  display: inline-grid;
-  place-items: center;
-
-  width: 26px;
-  height: 26px;
-
+  font-size: 0.95rem;
   background: transparent;
   border: none;
   color: var(--text-light);
   cursor: pointer;
-
-  border-radius: 50%;
+  padding: 4px 6px;
+  border-radius: 6px;
   line-height: 1;
 
-  /* hover 제거, 눌림만 최소 */
-  transition: transform 0.12s ease, color 0.12s ease;
-
-  &:active {
-    transform: scale(0.94);
-    color: var(--text-main);
-  }
-
   i {
-    font-size: 1.05rem;
-    display: block;
+    font-size: 1rem;
   }
 }
 
@@ -132,10 +119,6 @@
       background: var(--theme-primary);
       color: #fff;
       border-color: var(--theme-primary);
-    }
-
-    &:active {
-      transform: scale(0.97);
     }
   }
 }
