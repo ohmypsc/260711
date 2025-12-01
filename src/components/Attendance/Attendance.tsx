@@ -27,6 +27,9 @@ type ModalType =
 
 const STORAGE_KEY = "attendance_ids";
 
+/** ✅ 연락처 정규화: 숫자만 남김 */
+const normalizePhone = (v: string) => v.replace(/\D/g, "");
+
 const mealLabel = (meal: Meal) =>
   meal === "yes" ? "식사 예정" : meal === "no" ? "식사 안 함" : "식사 미정";
 
@@ -80,12 +83,10 @@ export function Attendance() {
       </p>
 
       <div className="attendance-buttons">
-        {/* ✅ Cover/Section CTA → basic */}
         <Button variant="basic" onClick={() => setOpenModal("write")}>
           참석여부 확인하기
         </Button>
 
-        {/* ✅ 저장된 응답이 있어도 찾기 항상 노출 */}
         <Button variant="basic" onClick={() => setOpenModal("find")}>
           내 응답 찾기
         </Button>
@@ -106,7 +107,6 @@ export function Attendance() {
               </div>
 
               <div className="actions">
-                {/* ✅ mini 버튼은 별도 컴팩트 톤 */}
                 <button
                   onClick={() =>
                     setOpenModal({
@@ -179,25 +179,26 @@ export function Attendance() {
         />
       )}
 
-      {openModal && typeof openModal === "object" && openModal.type === "delete" && (
-        <DeleteAttendanceModal
-          row={openModal.row}
-          authName={openModal.authName}
-          authPhone={openModal.authPhone}
-          onClose={() => setOpenModal(null)}
-          onSuccess={(deletedId) => {
-            setMyRows((prev) => prev.filter((r) => r.id !== deletedId));
-            removeMyId(deletedId);
-          }}
-        />
-      )}
+      {openModal &&
+        typeof openModal === "object" &&
+        openModal.type === "delete" && (
+          <DeleteAttendanceModal
+            row={openModal.row}
+            authName={openModal.authName}
+            authPhone={openModal.authPhone}
+            onClose={() => setOpenModal(null)}
+            onSuccess={(deletedId) => {
+              setMyRows((prev) => prev.filter((r) => r.id !== deletedId));
+              removeMyId(deletedId);
+            }}
+          />
+        )}
     </section>
   );
 }
 
 /* ------------------------------------------------------------------
    공통 레이아웃
-   - 타이틀/서브타이틀은 전역 modal-title / modal-subtitle 사용
 ------------------------------------------------------------------ */
 
 function AttendanceModalLayout({
@@ -285,8 +286,7 @@ function CountStepper({
 
 /* ------------------------------------------------------------------
    Write Modal
-   - 닫기 버튼 없음(전역 footer 담당)
-   - submit 버튼만 variant="submit"
+   ✅ 저장 시 phone 정규화해서 insert
 ------------------------------------------------------------------ */
 
 function WriteAttendanceModal({
@@ -321,9 +321,10 @@ function WriteAttendanceModal({
 
             try {
               const name = ref.current.name.value.trim();
-              const phone = ref.current.phone.value.trim();
+              const rawPhone = ref.current.phone.value.trim();
+              const phone = normalizePhone(rawPhone); // ✅ 정규화
 
-              if (!name || !phone || !side) {
+              if (!name || !rawPhone || !side) {
                 alert("이름, 연락처, 하객 구분은 필수입니다.");
                 setLoading(false);
                 return;
@@ -416,6 +417,7 @@ function WriteAttendanceModal({
 
 /* ------------------------------------------------------------------
    Find Modal
+   ✅ 기존(하이픈 포함) 데이터도 찾게 OR 매칭
 ------------------------------------------------------------------ */
 
 function FindAttendanceModal({
@@ -445,9 +447,10 @@ function FindAttendanceModal({
 
             try {
               const name = ref.current.name.value.trim();
-              const phone = ref.current.phone.value.trim();
+              const rawPhone = ref.current.phone.value.trim();
+              const phone = normalizePhone(rawPhone); // ✅ 정규화
 
-              if (!name || !phone) {
+              if (!name || !rawPhone) {
                 alert("이름과 연락처를 입력해주세요.");
                 setLoading(false);
                 return;
@@ -457,7 +460,8 @@ function FindAttendanceModal({
                 .from("attendance")
                 .select("*")
                 .eq("name", name)
-                .eq("phone", phone)
+                // ✅ raw / normalized 둘 중 하나만 맞아도 찾기 성공(레거시 대응)
+                .or(`phone.eq.${rawPhone},phone.eq.${phone}`)
                 .order("created_at", { ascending: false })
                 .limit(1)
                 .maybeSingle();
@@ -513,6 +517,7 @@ function FindAttendanceModal({
 
 /* ------------------------------------------------------------------
    Edit Modal
+   ✅ 본인 확인 시 raw/normalized OR 매칭
 ------------------------------------------------------------------ */
 
 function EditAttendanceModal({
@@ -542,12 +547,16 @@ function EditAttendanceModal({
             setLoading(true);
 
             try {
+              const rawAuthPhone = authPhone;
+              const normAuthPhone = normalizePhone(authPhone);
+
               const { data: check, error: checkError } = await supabase
                 .from("attendance")
                 .select("id")
                 .eq("id", row.id)
                 .eq("name", authName)
-                .eq("phone", authPhone)
+                // ✅ 레거시 데이터 대응
+                .or(`phone.eq.${rawAuthPhone},phone.eq.${normAuthPhone}`)
                 .maybeSingle();
 
               if (checkError || !check) {
@@ -607,6 +616,7 @@ function EditAttendanceModal({
 
 /* ------------------------------------------------------------------
    Delete Modal
+   ✅ 본인 확인 시 raw/normalized OR 매칭
 ------------------------------------------------------------------ */
 
 function DeleteAttendanceModal({
@@ -637,12 +647,16 @@ function DeleteAttendanceModal({
             setLoading(true);
 
             try {
+              const rawAuthPhone = authPhone;
+              const normAuthPhone = normalizePhone(authPhone);
+
               const { data: check, error: checkError } = await supabase
                 .from("attendance")
                 .select("id")
                 .eq("id", row.id)
                 .eq("name", authName)
-                .eq("phone", authPhone)
+                // ✅ 레거시 데이터 대응
+                .or(`phone.eq.${rawAuthPhone},phone.eq.${normAuthPhone}`)
                 .maybeSingle();
 
               if (checkError || !check) {
