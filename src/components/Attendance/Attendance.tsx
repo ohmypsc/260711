@@ -27,7 +27,7 @@ type ModalType =
 
 const STORAGE_KEY = "attendance_ids";
 
-/** ✅ 연락처 정규화: 숫자만 남김 */
+/** ✅ 연락처 정규화: 숫자만 */
 const normalizePhone = (v: string) => v.replace(/\D/g, "");
 
 /** ✅ 자동 하이픈 포맷(입력 UI용) */
@@ -270,7 +270,7 @@ function ToggleRow<T extends string>({
 }
 
 /* ------------------------------------------------------------------
-   Write Modal (count 자동 1 제거 최종)
+   Write Modal (인원 상한 제거 + count 빈칸 유지)
 ------------------------------------------------------------------ */
 function WriteAttendanceModal({
   onClose,
@@ -289,12 +289,9 @@ function WriteAttendanceModal({
   const [countInput, setCountInput] = useState(""); // ✅ 초기 빈칸
 
   const normalizeCountOnBlur = () => {
-    // ✅ 빈칸이면 자동 입력하지 않음
     if (countInput.trim() === "") return;
-
     const n = parseInt(countInput, 10);
-    if (!n || n < 1) return setCountInput("1"); // 이상 입력만 보정
-    if (n > 10) return setCountInput("10");
+    if (!n || n < 1) return setCountInput("1"); // ✅ 최소값만 보정
     setCountInput(String(n));
   };
 
@@ -313,7 +310,6 @@ function WriteAttendanceModal({
               const phone = normalizePhone(rawPhone);
               const countNum = parseInt(countInput, 10);
 
-              // ✅ 빠진 항목 모아서 안내
               const missing: string[] = [];
               if (!trimmedName) missing.push("이름");
               if (!rawPhone) missing.push("연락처");
@@ -327,12 +323,10 @@ function WriteAttendanceModal({
                 return;
               }
 
-              const safeCount = Math.max(1, Math.min(10, countNum));
-
               const { data, error } = await supabase
                 .from("attendance")
                 .insert([
-                  { name: trimmedName, phone, count: safeCount, side, meal },
+                  { name: trimmedName, phone, count: countNum, side, meal },
                 ])
                 .select("*")
                 .single();
@@ -392,8 +386,7 @@ function WriteAttendanceModal({
             <input
               disabled={loading}
               type="number"
-              min={1}
-              max={10}
+              min={1}          // ✅ 최소만
               step={1}
               value={countInput}
               onChange={(e) => setCountInput(e.target.value)}
@@ -528,7 +521,7 @@ function FindAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Edit Modal (count 지우기 가능 + 레거시 OR)
+   Edit Modal (이름/연락처/구분/인원/식사 전부 수정 가능)
 ------------------------------------------------------------------ */
 function EditAttendanceModal({
   row,
@@ -544,15 +537,20 @@ function EditAttendanceModal({
   onSuccess: (row: AttendanceRow) => void;
 }) {
   const [loading, setLoading] = useState(false);
+
+  const [name, setName] = useState(row.name);
+  const [phoneDisplay, setPhoneDisplay] = useState(
+    formatPhone(normalizePhone(row.phone))
+  );
+
+  const [side, setSide] = useState<Side>(row.side);
   const [meal, setMeal] = useState<Meal>(row.meal);
   const [countInput, setCountInput] = useState(String(row.count));
 
   const normalizeCountOnBlur = () => {
     if (countInput.trim() === "") return;
-
     const n = parseInt(countInput, 10);
     if (!n || n < 1) return setCountInput("1");
-    if (n > 10) return setCountInput("10");
     setCountInput(String(n));
   };
 
@@ -566,6 +564,7 @@ function EditAttendanceModal({
             setLoading(true);
 
             try {
+              // ✅ 본인 인증은 수정 전 값으로
               const rawAuthPhone = authPhone;
               const normAuthPhone = normalizePhone(authPhone);
 
@@ -583,18 +582,33 @@ function EditAttendanceModal({
                 return;
               }
 
+              const trimmedName = name.trim();
+              const rawPhone = phoneDisplay.trim();
+              const phone = normalizePhone(rawPhone);
               const countNum = parseInt(countInput, 10);
-              if (!countNum || countNum < 1) {
-                alert("참석 인원을 확인해주세요.");
+
+              const missing: string[] = [];
+              if (!trimmedName) missing.push("이름");
+              if (!rawPhone) missing.push("연락처");
+              if (!side) missing.push("하객 구분");
+              if (!countNum || countNum < 1) missing.push("참석 인원");
+              if (!meal) missing.push("식사 여부");
+
+              if (missing.length > 0) {
+                alert(`필수 항목을 입력/선택해주세요: ${missing.join(", ")}`);
                 setLoading(false);
                 return;
               }
 
-              const safeCount = Math.max(1, Math.min(10, countNum));
-
               const { data, error } = await supabase
                 .from("attendance")
-                .update({ count: safeCount, meal })
+                .update({
+                  name: trimmedName,
+                  phone,          // ✅ 연락처도 업데이트
+                  side,
+                  count: countNum, // ✅ 상한 제한 없음
+                  meal,
+                })
                 .eq("id", row.id)
                 .select("*")
                 .single();
@@ -613,12 +627,48 @@ function EditAttendanceModal({
           }}
         >
           <div className="field span-2">
+            <label className="label">이름 *</label>
+            <input
+              disabled={loading}
+              type="text"
+              autoComplete="off"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div className="field span-2">
+            <label className="label">연락처 *</label>
+            <input
+              disabled={loading}
+              type="tel"
+              autoComplete="off"
+              value={phoneDisplay}
+              onChange={(e) => {
+                const digits = normalizePhone(e.target.value);
+                setPhoneDisplay(formatPhone(digits));
+              }}
+            />
+          </div>
+
+          <div className="field span-2">
+            <label className="label">하객 구분 *</label>
+            <ToggleRow
+              value={side}
+              onChange={setSide}
+              options={[
+                { label: "신랑 측", value: "groom" },
+                { label: "신부 측", value: "bride" },
+              ]}
+            />
+          </div>
+
+          <div className="field span-2">
             <label className="label">참석 인원 *</label>
             <input
               disabled={loading}
               type="number"
               min={1}
-              max={10}
               step={1}
               value={countInput}
               onChange={(e) => setCountInput(e.target.value)}
