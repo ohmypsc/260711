@@ -100,14 +100,17 @@ export function Attendance() {
         참석 여부를 미리 알려주시면 예식 준비에 큰 도움이 됩니다.
       </p>
 
+      {/* ✅ myRows 있으면 '내 응답 찾기' 숨김 */}
       <div className="attendance-buttons">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
           참석여부 확인하기
         </Button>
 
-        <Button variant="basic" onClick={() => setOpenModal("find")}>
-          내 응답 찾기
-        </Button>
+        {!hasMyRows && (
+          <Button variant="basic" onClick={() => setOpenModal("find")}>
+            내 응답 찾기
+          </Button>
+        )}
       </div>
 
       {hasMyRows && (
@@ -267,7 +270,7 @@ function ToggleRow<T extends string>({
 }
 
 /* ------------------------------------------------------------------
-   Write Modal (최종 UX + 지우기 가능 count)
+   Write Modal (최종 UX + count 지우기 가능)
 ------------------------------------------------------------------ */
 function WriteAttendanceModal({
   onClose,
@@ -294,7 +297,6 @@ function WriteAttendanceModal({
 
   return (
     <Modal onClose={onClose}>
-      {/* ✅ 서브타이틀 없음 */}
       <AttendanceModalLayout title="참석 여부 확인하기">
         <form
           className="attendance-form"
@@ -308,7 +310,6 @@ function WriteAttendanceModal({
               const phone = normalizePhone(rawPhone);
               const countNum = parseInt(countInput, 10);
 
-              // ✅ 빠진 항목 모아서 안내
               const missing: string[] = [];
               if (!trimmedName) missing.push("이름");
               if (!rawPhone) missing.push("연락처");
@@ -345,7 +346,6 @@ function WriteAttendanceModal({
             }
           }}
         >
-          {/* ✅ placeholder 없음 */}
           <div className="field span-2">
             <label className="label">이름 *</label>
             <input
@@ -357,7 +357,6 @@ function WriteAttendanceModal({
             />
           </div>
 
-          {/* ✅ 자동 하이픈 포맷 + placeholder 없음 */}
           <div className="field span-2">
             <label className="label">연락처 *</label>
             <input
@@ -372,7 +371,6 @@ function WriteAttendanceModal({
             />
           </div>
 
-          {/* ✅ 하객 구분: 별도 행 */}
           <div className="field span-2">
             <label className="label">하객 구분 *</label>
             <ToggleRow
@@ -385,7 +383,6 @@ function WriteAttendanceModal({
             />
           </div>
 
-          {/* ✅ 참석 인원: 지우기 가능 + blur 때만 보정 */}
           <div className="field span-2">
             <label className="label">참석 인원 *</label>
             <input
@@ -400,7 +397,6 @@ function WriteAttendanceModal({
             />
           </div>
 
-          {/* ✅ 식사 여부: O/X/미정 + 모바일 한 줄 고정 */}
           <div className="field span-2">
             <label className="label">식사 여부 *</label>
             <ToggleRow
@@ -427,7 +423,7 @@ function WriteAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Find Modal (자동 하이픈 + 레거시 OR 매칭)
+   Find Modal (자동 하이픈 + 레거시 OR)
 ------------------------------------------------------------------ */
 function FindAttendanceModal({
   onClose,
@@ -468,7 +464,6 @@ function FindAttendanceModal({
                 .from("attendance")
                 .select("*")
                 .eq("name", trimmedName)
-                // ✅ raw/normalized OR
                 .or(`phone.eq.${rawPhone},phone.eq.${phone}`)
                 .order("created_at", { ascending: false })
                 .limit(1)
@@ -529,7 +524,7 @@ function FindAttendanceModal({
 }
 
 /* ------------------------------------------------------------------
-   Edit Modal (count 지우기 가능 + O/X/미정 통일 + 레거시 OR)
+   Edit Modal (count 지우기 가능 + 레거시 OR)
 ------------------------------------------------------------------ */
 function EditAttendanceModal({
   row,
@@ -546,7 +541,6 @@ function EditAttendanceModal({
 }) {
   const [loading, setLoading] = useState(false);
   const [meal, setMeal] = useState<Meal>(row.meal);
-
   const [countInput, setCountInput] = useState(String(row.count));
 
   const normalizeCountOnBlur = () => {
