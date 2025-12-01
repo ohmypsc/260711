@@ -225,14 +225,6 @@ function UploadPhotoModal({
   const [name, setName] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-  // ✅ 모달 열릴 때 input/value & 선택 목록 리셋 (같은 파일 재선택 이슈 방지)
-  useEffect(() => {
-    if (fileRef.current) fileRef.current.value = "";
-    setSelectedFiles([]);
-    setName("");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const onPickFiles = () => {
     if (!name.trim()) {
       alert("이름을 먼저 입력해주세요.");
@@ -241,7 +233,7 @@ function UploadPhotoModal({
     fileRef.current?.click();
   };
 
-  // ✅ 모달 열릴 때 file input change 핸들러 붙이기
+  // 모달 열릴 때 file input change 핸들러 붙이기
   useEffect(() => {
     const el = fileRef.current;
     if (!el) return;
@@ -255,12 +247,6 @@ function UploadPhotoModal({
     el.addEventListener("change", handler);
     return () => el.removeEventListener("change", handler);
   }, [fileRef]);
-
-  const handleClose = () => {
-    if (fileRef.current) fileRef.current.value = "";
-    setSelectedFiles([]);
-    onClose();
-  };
 
   const onSubmitUpload = async () => {
     const uploaderName = name.trim();
@@ -302,8 +288,9 @@ function UploadPhotoModal({
           ext = "png";
         }
 
-        const safeName =
-          uploaderName.replace(/\s+/g, "").replace(/[^\w가-힣]/g, "") || "guest";
+        const safeName = uploaderName
+          .replace(/\s+/g, "")
+          .replace(/[^\w가-힣]/g, "");
 
         filename = `${safeName}_${Date.now()}_${Math.random()
           .toString(36)
@@ -355,17 +342,18 @@ function UploadPhotoModal({
 
     if (failed.length === 0) {
       alert("사진이 모두 업로드되었습니다! 감사합니다 😊");
-      handleClose();
+      onClose();
     } else {
       alert(
-        `일부 사진 업로드가 실패했어요.\n\n${failed.join("\n")}\n\n다시 시도해주세요.`
+        `일부 사진 업로드가 실패했어요.\n\n${failed.join("\n")}\n\n` +
+          `다시 시도해주세요.`
       );
     }
   };
 
   return (
     <Modal
-      onClose={handleClose}
+      onClose={onClose}
       footer={
         <div className="photo-footer-row">
           <Button
@@ -376,7 +364,7 @@ function UploadPhotoModal({
           >
             업로드하기
           </Button>
-          <Button variant="close" type="button" onClick={handleClose}>
+          <Button variant="close" type="button" onClick={onClose}>
             닫기
           </Button>
         </div>
@@ -413,11 +401,9 @@ function UploadPhotoModal({
           )}
 
           {/* ✅ 업로드 진행 문구: 모달 안에 표시 */}
-          {loading && (
+          {loading && progress && (
             <div className="photo-upload__progress">
-              {progress
-                ? `업로드 중... (${progress.done}/${progress.total})`
-                : "업로드 중..."}
+              업로드 중... ({progress.done}/{progress.total})
             </div>
           )}
         </div>
@@ -440,6 +426,7 @@ async function compressIfNeeded(file: File): Promise<File> {
     /\.heif$/i.test(file.name);
 
   if (isHeic) return file;
+
   if (sizeMB <= MAX_UPLOAD_MB) return file;
 
   const img = await loadImage(file);
