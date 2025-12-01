@@ -387,55 +387,7 @@
 }
 
 
-/* ===========================
-   🚏 Transport Info
-   =========================== */
 
-.transport-info {
-  display: grid;
-  gap: 1.7rem;
-
-  h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 0.45rem;
-
-    i {
-      margin-right: 0.35rem;
-      color: var(--theme-primary);
-    }
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    line-height: 1.8;
-    font-size: 0.95rem;
-    color: var(--text-main);
-
-    li {
-      margin-bottom: 0.25rem;
-      position: relative;
-      padding-left: 0.9rem;
-
-      &::before {
-        content: "•";
-        color: var(--theme-primary);
-        font-weight: 800;
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
-
-      strong {
-        font-weight: 700;
-        color: var(--text-main);
-      }
-    }
-  }
-}
 
 /* ===========================
    📱 Mobile
