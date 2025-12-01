@@ -14,7 +14,11 @@ type Post = {
   content: string;
 };
 
-type ModalType = null | "write" | { type: "delete"; postId: number };
+type ModalType =
+  | null
+  | "write"
+  | { type: "delete"; post: Post }
+  | { type: "edit"; post: Post };
 
 // ✅ dayjs 없이 날짜 포맷
 const formatDate = (unixSeconds: number) => {
@@ -77,6 +81,11 @@ export function GuestBook() {
         { event: "DELETE", schema: "public", table: "guestbook" },
         () => loadPage(currentPage)
       )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "guestbook" },
+        () => loadPage(currentPage)
+      )
       .subscribe();
 
     return () => {
@@ -96,19 +105,15 @@ export function GuestBook() {
         신랑, 신부에게 축하의 마음을 전해주세요.
       </p>
 
-      {/* 작성 버튼 */}
       <div className="guestbook__actions">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
           방명록 작성하기
         </Button>
       </div>
 
-      {/* 목록 */}
       <div className="guestbook-list">
         {posts.length === 0 && (
-          <div className="guestbook-empty">
-            첫 방명록을 작성해 주세요 💖
-          </div>
+          <div className="guestbook-empty">첫 방명록을 작성해 주세요 💖</div>
         )}
 
         {posts.map((post) => (
@@ -119,15 +124,24 @@ export function GuestBook() {
                 <span className="date">{formatDate(post.timestamp)}</span>
               </div>
 
-              <button
-                className="delete-btn"
-                onClick={() =>
-                  setOpenModal({ type: "delete", postId: post.id })
-                }
-                aria-label="delete"
-              >
-                삭제
-              </button>
+              {/* ✅ B안: 항상 노출 */}
+              <div className="guestbook-item__actions">
+                <button
+                  className="mini-btn"
+                  onClick={() => setOpenModal({ type: "edit", post })}
+                  type="button"
+                >
+                  수정
+                </button>
+                <button
+                  className="mini-btn danger"
+                  onClick={() => setOpenModal({ type: "delete", post })}
+                  type="button"
+                  aria-label="delete"
+                >
+                  삭제
+                </button>
+              </div>
             </div>
 
             <div className="guestbook-item__content">{post.content}</div>
@@ -135,14 +149,10 @@ export function GuestBook() {
         ))}
       </div>
 
-      {/* 페이지네이션 */}
       {totalPages > 1 && (
         <div className="pagination">
           {currentPage > 0 && (
-            <button
-              className="page"
-              onClick={() => loadPage(currentPage - 1)}
-            >
+            <button className="page" onClick={() => loadPage(currentPage - 1)}>
               이전
             </button>
           )}
@@ -158,17 +168,13 @@ export function GuestBook() {
           ))}
 
           {currentPage < totalPages - 1 && (
-            <button
-              className="page"
-              onClick={() => loadPage(currentPage + 1)}
-            >
+            <button className="page" onClick={() => loadPage(currentPage + 1)}>
               다음
             </button>
           )}
         </div>
       )}
 
-      {/* 작성 모달 */}
       {openModal === "write" && (
         <WriteGuestBookModal
           onClose={() => setOpenModal(null)}
@@ -176,16 +182,21 @@ export function GuestBook() {
         />
       )}
 
-      {/* 삭제 모달 */}
-      {openModal &&
-        typeof openModal === "object" &&
-        openModal.type === "delete" && (
-          <DeleteGuestBookModal
-            postId={openModal.postId}
-            onClose={() => setOpenModal(null)}
-            onSuccess={() => loadPage(currentPage)}
-          />
-        )}
+      {openModal && typeof openModal === "object" && openModal.type === "delete" && (
+        <DeleteGuestBookModal
+          post={openModal.post}
+          onClose={() => setOpenModal(null)}
+          onSuccess={() => loadPage(currentPage)}
+        />
+      )}
+
+      {openModal && typeof openModal === "object" && openModal.type === "edit" && (
+        <EditGuestBookModal
+          post={openModal.post}
+          onClose={() => setOpenModal(null)}
+          onSuccess={() => loadPage(currentPage)}
+        />
+      )}
     </section>
   );
 }
@@ -193,7 +204,6 @@ export function GuestBook() {
 /* ------------------------------------------------------------------
    Write Modal
 ------------------------------------------------------------------ */
-
 function WriteGuestBookModal({
   onClose,
   onSuccess,
@@ -210,11 +220,29 @@ function WriteGuestBookModal({
   const [loading, setLoading] = useState(false);
 
   return (
-    <Modal onClose={onClose}>
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="guestbook-footer-row">
+          <Button
+            variant="submit"
+            type="submit"
+            form="guestbook-write-form"
+            disabled={loading}
+          >
+            저장하기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
       <div className="guestbook-modal-content">
-        <h2 className="modal-heading modal-divider">방명록 작성하기</h2>
+        <h2 className="modal-title">방명록 작성하기</h2>
 
         <form
+          id="guestbook-write-form"
           className="guestbook-form"
           onSubmit={async (e) => {
             e.preventDefault();
@@ -225,8 +253,14 @@ function WriteGuestBookModal({
               const content = inputRef.current.content.value.trim();
               const password = inputRef.current.password.value;
 
-              if (!name || !content || !password) {
-                alert("모든 항목을 입력해주세요.");
+              const missing: string[] = [];
+              if (!name) missing.push("이름");
+              if (!content) missing.push("내용");
+              if (!password) missing.push("비밀번호");
+
+              if (missing.length) {
+                alert(`필수 항목을 입력해주세요: ${missing.join(", ")}`);
+                setLoading(false);
                 return;
               }
 
@@ -247,15 +281,16 @@ function WriteGuestBookModal({
             }
           }}
         >
-          <label className="label">이름</label>
+          <label className="label">이름 *</label>
           <input
             disabled={loading}
             type="text"
+            autoComplete="off"
             placeholder="이름을 입력해주세요."
             ref={(ref) => (inputRef.current.name = ref as HTMLInputElement)}
           />
 
-          <label className="label">내용</label>
+          <label className="label">내용 *</label>
           <textarea
             disabled={loading}
             placeholder="축하 메시지를 입력해주세요."
@@ -264,21 +299,16 @@ function WriteGuestBookModal({
             }
           />
 
-          <label className="label">비밀번호</label>
+          <label className="label">비밀번호 *</label>
           <input
             disabled={loading}
             type="password"
-            placeholder="비밀번호를 입력해주세요."
+            autoComplete="off"
+            placeholder="삭제/수정 시 필요해요."
             ref={(ref) =>
               (inputRef.current.password = ref as HTMLInputElement)
             }
           />
-
-          <div className="guestbook-form__actions">
-            <Button variant="submit" type="submit" disabled={loading}>
-              저장하기
-            </Button>
-          </div>
         </form>
       </div>
     </Modal>
@@ -286,55 +316,207 @@ function WriteGuestBookModal({
 }
 
 /* ------------------------------------------------------------------
-   Delete Modal
+   Edit Modal (B안: 항상 노출 + 비번 인증)
 ------------------------------------------------------------------ */
-
-function DeleteGuestBookModal({
-  postId,
+function EditGuestBookModal({
+  post,
   onClose,
   onSuccess,
 }: {
-  postId: number;
+  post: Post;
   onClose: () => void;
   onSuccess: () => void;
 }) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState(post.name);
+  const [content, setContent] = useState(post.content);
+  const [password, setPassword] = useState("");
 
   return (
-    <Modal onClose={onClose}>
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="guestbook-footer-row">
+          <Button
+            variant="submit"
+            type="submit"
+            form="guestbook-edit-form"
+            disabled={loading}
+          >
+            저장하기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
       <div className="guestbook-modal-content">
-        <h2 className="modal-heading modal-divider">삭제하시겠습니까?</h2>
+        <h2 className="modal-title">방명록 수정</h2>
 
         <form
+          id="guestbook-edit-form"
           className="guestbook-form"
           onSubmit={async (e) => {
             e.preventDefault();
             setLoading(true);
 
             try {
-              const password = inputRef.current?.value ?? "";
+              const trimmedName = name.trim();
+              const trimmedContent = content.trim();
 
+              const missing: string[] = [];
+              if (!trimmedName) missing.push("이름");
+              if (!trimmedContent) missing.push("내용");
+              if (!password) missing.push("비밀번호");
+
+              if (missing.length) {
+                alert(`필수 항목을 입력해주세요: ${missing.join(", ")}`);
+                setLoading(false);
+                return;
+              }
+
+              // ✅ 비번 확인
               const { data, error } = await supabase
                 .from("guestbook")
                 .select("password")
-                .eq("id", postId)
+                .eq("id", post.id)
                 .single();
 
               if (error || !data) {
-                alert("삭제 오류가 발생했습니다.");
+                alert("수정 오류가 발생했습니다.");
+                setLoading(false);
                 return;
               }
 
               if (data.password !== password) {
                 alert("비밀번호가 일치하지 않습니다.");
+                setLoading(false);
+                return;
+              }
+
+              const { error: updateError } = await supabase
+                .from("guestbook")
+                .update({ name: trimmedName, content: trimmedContent })
+                .eq("id", post.id);
+
+              if (updateError) throw updateError;
+
+              alert("수정되었습니다.");
+              onClose();
+              onSuccess();
+            } catch (err) {
+              console.error(err);
+              alert("수정에 실패했습니다.");
+            } finally {
+              setLoading(false);
+            }
+          }}
+        >
+          <label className="label">이름 *</label>
+          <input
+            disabled={loading}
+            type="text"
+            autoComplete="off"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <label className="label">내용 *</label>
+          <textarea
+            disabled={loading}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+
+          <label className="label">비밀번호 *</label>
+          <input
+            disabled={loading}
+            type="password"
+            autoComplete="off"
+            placeholder="작성 시 입력한 비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </form>
+      </div>
+    </Modal>
+  );
+}
+
+/* ------------------------------------------------------------------
+   Delete Modal (B안: 항상 노출 + 비번 인증)
+------------------------------------------------------------------ */
+function DeleteGuestBookModal({
+  post,
+  onClose,
+  onSuccess,
+}: {
+  post: Post;
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+
+  return (
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="guestbook-footer-row">
+          <Button
+            variant="submit"
+            type="submit"
+            form="guestbook-delete-form"
+            disabled={loading}
+          >
+            삭제하기
+          </Button>
+          <Button variant="close" type="button" onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
+      <div className="guestbook-modal-content">
+        <h2 className="modal-title">삭제하시겠습니까?</h2>
+
+        <form
+          id="guestbook-delete-form"
+          className="guestbook-form"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setLoading(true);
+
+            try {
+              if (!password) {
+                alert("비밀번호를 입력해주세요.");
+                setLoading(false);
+                return;
+              }
+
+              const { data, error } = await supabase
+                .from("guestbook")
+                .select("password")
+                .eq("id", post.id)
+                .single();
+
+              if (error || !data) {
+                alert("삭제 오류가 발생했습니다.");
+                setLoading(false);
+                return;
+              }
+
+              if (data.password !== password) {
+                alert("비밀번호가 일치하지 않습니다.");
+                setLoading(false);
                 return;
               }
 
               const { error: deleteError } = await supabase
                 .from("guestbook")
                 .delete()
-                .eq("id", postId);
+                .eq("id", post.id);
 
               if (deleteError) throw deleteError;
 
@@ -349,19 +531,15 @@ function DeleteGuestBookModal({
             }
           }}
         >
-          <label className="label">비밀번호</label>
+          <label className="label">비밀번호 *</label>
           <input
-            ref={inputRef}
             disabled={loading}
             type="password"
-            placeholder="비밀번호를 입력해주세요."
+            autoComplete="off"
+            placeholder="작성 시 입력한 비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-
-          <div className="guestbook-form__actions">
-            <Button variant="submit" type="submit" disabled={loading}>
-              삭제하기
-            </Button>
-          </div>
         </form>
       </div>
     </Modal>
