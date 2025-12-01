@@ -45,48 +45,48 @@ export default function IntroCard({ onFinish }: Props) {
   }, []);
 
   /**
-   * ✅ Depth Burst
-   * - 큰 꽃잎: 더 멀리(반지름 큼), 더 묵직(속도/중력 살짝 큼), 더 진함
-   * - 작은 꽃잎: 가까이(반지름 작음), 더 가벼움, 더 빨리 사라짐
+   * ✅ Depth Burst (풍성 버전)
+   * - 화면을 덮을 만큼 빽빽하게 생성
+   * - 큰 꽃잎: 더 멀리, 더 묵직, 더 오래
+   * - 작은 꽃잎: 가까이, 더 가벼움, 조금 빨리 fade
    */
   const createBurst = () => {
     const petals: any[] = [];
 
-    // ✅ 화면 면적 기반으로 개수 결정 (화면이 클수록 더 많이)
     const area = window.innerWidth * window.innerHeight;
 
-    // 밀도 조절 값: 작을수록 더 빽빽해짐
-    const density = 2500;
+    // ✅ 밀도(작을수록 풍성). 기존 2500 → 1200
+    const density = 1200;
 
-    // 최대치(성능 안전선). 더 늘리고 싶으면 1400~1600까지도 가능
-    const count = Math.min(1400, Math.floor(area / density));
+    // ✅ 대형 화면도 덮게 상한 대폭 증가. 필요하면 2600~3600 사이로 조절
+    const count = Math.min(3200, Math.floor(area / density));
 
-    const baseRadius = 160; // 기본 퍼짐 반경
+    const baseRadius = 180; // 퍼짐 반경 살짝 확대
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
 
-      // ✅ 크기 정규분포
-      const size = Math.max(12, gaussianRandom(26, 9));
-      const aspect = 0.8 + Math.random() * 0.55; // 0.8~1.35
+      // ✅ 크기 정규분포 (조금 더 풍성한 분포)
+      const size = Math.max(10, gaussianRandom(24, 8));
+      const aspect = 0.8 + Math.random() * 0.6; // 0.8~1.4
 
       // ✅ 크기 기반 깊이 계수 (큰 꽃잎일수록 depth↑)
-      const depth = Math.min(size / 22, 1.9); // 약 0.5~1.9 범위
+      const depth = Math.min(size / 20, 2.1);
 
       // ✅ 큰 꽃잎일수록 더 멀리 퍼지도록 반경에 depth 적용
       const r = Math.random() * baseRadius * depth;
 
-      // ✅ 속도: 큰 꽃잎은 묵직하게(조금 느리고), 작은 꽃잎은 가볍게(조금 빠르게)
+      // ✅ 속도 스케일
       const speedScale = 1 / (0.75 + depth * 0.45);
 
-      // ✅ 중력: 큰 꽃잎이 약간 더 빨리 떨어지게
+      // ✅ 중력(큰 꽃잎 조금 더 빨리 떨어짐)
       const gravity = (0.045 + Math.random() * 0.07) * depth;
 
-      // ✅ 큰 꽃잎이 조금 더 오래/진하게 남는 느낌
-      const opacity = 0.55 + Math.random() * 0.35 * depth;
+      // ✅ 투명도(큰 꽃잎 더 진하게)
+      const opacity = 0.6 + Math.random() * 0.35 * depth;
 
-      // ✅ 사라지는 속도: 작은 꽃잎 더 빨리 fade
-      const fade = 0.0028 + (1 / depth) * 0.0012;
+      // ✅ 오래 남게(페이드 느림)
+      const fade = 0.0018 + (1 / depth) * 0.0009;
 
       petals.push({
         x: window.innerWidth / 2 + Math.cos(angle) * r,
