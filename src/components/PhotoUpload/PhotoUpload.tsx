@@ -111,7 +111,6 @@ export function PhotoUpload() {
 
       {/* ✅ 썸네일 갤러리 */}
       <div className="thumbs">
-        <div className="thumbs__title">최근 업로드된 사진</div>
 
         {thumbLoading ? (
           <div className="thumbs__loading">불러오는 중…</div>
@@ -172,7 +171,7 @@ export function PhotoUpload() {
           onClick={() => setOpenModal("upload")}
           disabled={loading}
         >
-          사진 여러 장 업로드하기
+          사진 보내기
         </Button>
       </div>
 
