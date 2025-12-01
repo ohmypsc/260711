@@ -17,7 +17,7 @@
 
 /* -------------------------------------
    Modal Content (Global Modal 무드 따름)
-   - 전역: modal-container / modal-title / modal-subtitle / footer
+   - 전역: modal-container padding 사용
    - 개별: 내용 레이아웃만 담당
 ------------------------------------- */
 
@@ -26,6 +26,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* ✅ padding 제거: 전역 modal-container padding을 그대로 사용 */
 }
 
 .attendance-form {
@@ -47,6 +48,7 @@
   }
 
   input {
+    padding: 0.68rem;
     border: 1px solid var(--border-color);
     border-radius: 0.55rem;
     font-size: 0.95rem;
@@ -183,7 +185,7 @@
       display: flex;
       gap: 6px;
 
-      /* ✅ mini 버튼은 w-btn을 쓰면 풀폭이라 안 맞음 → 별도 미니 톤 */
+      /* mini 버튼은 w-btn을 쓰면 풀폭이라 안 맞음 → 별도 미니 톤 */
       .mini-btn {
         font-size: 0.85rem;
         padding: 6px 8px;
