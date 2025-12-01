@@ -32,19 +32,22 @@
   font-size: 0.95rem;
   color: var(--text-light);
   background: var(--theme-accent);
+  border: 1px solid var(--border-color);
 }
 
 /* -------------------------------------
-   Item
+   Item (전역 무드 통일)
 ------------------------------------- */
 
 .guestbook-item {
   text-align: left;
-  background: var(--white-color);
-  border: 1px solid var(--light-grey-color);
+  background: #fff;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 12px 14px;
-  box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 8px 20px var(--shadow-color),
+    0 1px 3px rgba(0,0,0,0.04);
 }
 
 .guestbook-item__head {
@@ -52,6 +55,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 6px;
+  gap: 8px;
 }
 
 .guestbook-item__meta {
@@ -67,7 +71,7 @@
 
   .date {
     font-size: 0.85rem;
-    opacity: 0.5;
+    opacity: 0.55;
     color: var(--text-main);
   }
 }
@@ -80,19 +84,33 @@
   line-height: 1.55;
 }
 
-/* 삭제 버튼(무드 맞춘 미니멀) */
-.delete-btn {
-  font-size: 0.85rem;
-  background: transparent;
-  border: none;
-  color: var(--text-light);
-  cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: background 0.15s ease;
+/* ✅ B안: 항상 노출되는 mini action */
+.guestbook-item__actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
 
-  &:hover {
+  .mini-btn {
+    font-size: 0.85rem;
+    padding: 6px 8px;
+    border: none;
+    border-radius: 8px;
     background: var(--theme-accent);
+    color: var(--text-main);
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+
+    &.danger {
+      background: #ffe8e8;
+      color: var(--theme-error);
+    }
+
+    &:active {
+      transform: translateY(0.5px);
+      filter: saturate(1.03);
+    }
   }
 }
 
@@ -108,30 +126,32 @@
 
   .page {
     padding: 6px 10px;
-    border: 1px solid var(--dark-grey-color);
-    border-radius: 6px;
-    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #fff;
     cursor: pointer;
     font-size: 0.9rem;
+    color: var(--text-main);
 
     &.current {
       background: var(--theme-primary);
       color: #fff;
       border-color: var(--theme-primary);
+      font-weight: 700;
     }
   }
 }
 
 /* -------------------------------------
-   Modal mood (Account 쪽 톤 참고)
+   Modal mood (Attendance와 동일 결)
 ------------------------------------- */
 
 .guestbook-modal-content {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 0 10px;
+  gap: 12px;
+  padding: 0; /* ✅ 전역 모달 패딩을 그대로 사용 */
 }
 
 .guestbook-form {
@@ -143,6 +163,7 @@
   .label {
     font-size: 0.9rem;
     color: var(--text-main);
+    font-weight: 600;
     margin-top: 2px;
   }
 
@@ -150,27 +171,42 @@
   textarea {
     width: 100%;
     box-sizing: border-box;
-    border: 1px solid var(--light-grey-color);
-    border-radius: 6px;
-    padding: 10px 12px;
-    font-size: 0.95rem;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 9px 12px;
+
+    font-size: 0.92rem;
+    line-height: 1.2;
     font-family: inherit;
+
+    background: #fff;
+    color: var(--text-main);
+
+    &:focus {
+      outline: none;
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+    }
   }
 
   textarea {
     height: 8rem;
     resize: none;
     line-height: 1.5;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
+}
 
-  .guestbook-form__actions {
-    margin-top: 6px;
-    display: flex;
-    justify-content: center;
+/* ✅ footer 2버튼 같은 행 */
+.guestbook-footer-row {
+  display: flex;
+  gap: 8px;
 
-    .w-btn {
-      width: 100%;
-    }
+  button {
+    flex: 1;
+    width: auto;
   }
 }
 
