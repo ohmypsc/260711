@@ -408,7 +408,7 @@ function UploadPhotoModal({
             onClick={onPickFiles}
             disabled={loading}
           >
-            사진 여러 장 선택하기
+            사진 선택하기
           </button>
 
           {selectedFiles.length > 0 && (
