@@ -158,7 +158,9 @@
   background-color: var(--theme-primary);
   box-shadow: none;
 
-  --leaf-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%0A%20%20%3Cpath%20d%3D%27M12%202%20C7%205%2C4%209%2C4%2013%20C4%2018%2C8%2022%2C12%2022%20C16%2022%2C20%2018%2C20%2013%20C20%209%2C17%205%2C12%202%20Z%27%20fill%3D%27black%27/%3E%0A%20%20%3Cpath%20d%3D%27M12%206%20L12%2020%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27/%3E%0A%3C/svg%3E");
+  /* ✅ 커버 LeafLine 같은 잎방울 형태 */
+--leaf-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%0A%20%20%3Cpath%20d%3D%27M4%2012%20C6%207%2C12%204%2C18%207%20C21%2010%2C19%2017%2C12%2020%20C6%2017%2C3%2014%2C4%2012%20Z%27%20fill%3D%27black%27/%3E%0A%3C/svg%3E");
+
 
   -webkit-mask: var(--leaf-mask) center / contain no-repeat;
   mask: var(--leaf-mask) center / contain no-repeat;
