@@ -105,43 +105,48 @@
   top: 50%;
   left: 50%;
 
+  /* ✅ pseudo 위치 기준 잡아주기 */
+  position: absolute;
+  display: block;
+  transform: translate(-50%, -50%);
+  opacity: 0.95;
+
   background-color: var(--theme-primary);
   box-shadow: none;
 
-  /* ✅ 메인 잎방울 마스크 */
   --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E");
 
   -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
   mask: var(--leaf-dot-mask) center / contain no-repeat;
-
-  transform: translate(-50%, -50%);
-  opacity: 0.95;
-
-  /* ✅ 서브 잎 공통 세팅 */
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;  /* 메인과 같은 박스 */
-    background-color: var(--theme-primary);
-    -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
-    mask: var(--leaf-dot-mask) center / contain no-repeat;
-    opacity: 0.55;
-  }
-
-  /* ✅ 서브 잎 1: 왼쪽 아래에 작게 */
-  &::before {
-    transform: translate(-65%, 55%) rotate(-18deg) scale(0.6);
-  }
-
-  /* ✅ 서브 잎 2: 오른쪽 위에 더 작게 */
-  &::after {
-    transform: translate(55%, -70%) rotate(22deg) scale(0.5);
-    opacity: 0.45;
-  }
 }
 
-/* 커버처럼 약간씩 방향 다르게 + 서브잎도 같이 흔들리게 */
+/* ✅ 서브 잎 공통 */
+.dot::before,
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-color: var(--theme-primary);
+
+  -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
+  mask: var(--leaf-dot-mask) center / contain no-repeat;
+
+  opacity: 0.55;
+}
+
+/* ✅ 서브 잎 1: 왼쪽 아래 */
+.dot::before {
+  transform: translate(-65%, 55%) rotate(-18deg) scale(0.6);
+}
+
+/* ✅ 서브 잎 2: 오른쪽 위 */
+.dot::after {
+  transform: translate(55%, -70%) rotate(22deg) scale(0.5);
+  opacity: 0.45;
+}
+
+/* 커버처럼 약간씩 방향 다르게 */
 .timeline-item:nth-child(3n) .dot {
   transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
   opacity: 0.9;
@@ -155,21 +160,22 @@
   opacity: 0.85;
 }
 
-/* 모바일도 비율 맞춰 살짝 줄이기 */
+/* 모바일 */
 @media (max-width: 640px) {
   .dot {
     width: 12px;
     height: 12px;
+  }
 
-    &::before {
-      transform: translate(-62%, 52%) rotate(-18deg) scale(0.55);
-    }
+  .dot::before {
+    transform: translate(-62%, 52%) rotate(-18deg) scale(0.55);
+  }
 
-    &::after {
-      transform: translate(52%, -66%) rotate(22deg) scale(0.45);
-    }
+  .dot::after {
+    transform: translate(52%, -66%) rotate(22deg) scale(0.45);
   }
 }
+
 
 
 
