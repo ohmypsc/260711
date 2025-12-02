@@ -3,6 +3,7 @@ import "./IntroCard.scss";
 
 type Props = {
   onFinish: () => void;
+  exiting?: boolean; // ✅ App에서 전달받는 상태
 };
 
 // ✅ BgEffect와 같은 정규분포 랜덤(크기 자연스럽게)
@@ -14,7 +15,7 @@ function gaussianRandom(mean = 0, stdev = 1) {
   );
 }
 
-export default function IntroCard({ onFinish }: Props) {
+export default function IntroCard({ onFinish, exiting = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const petalsRef = useRef<any[]>([]);
@@ -56,8 +57,7 @@ export default function IntroCard({ onFinish }: Props) {
 
   /**
    * ✅ Depth Burst (풍성 버전 + 모바일 풍성 보정)
-   * - 모바일: density 낮춤 + 최소 개수 보장
-   * - DPR 반영으로 선명도/체감 개선
+   * - 꽃잎이 초반에 더 "덮는" 느낌 나도록 opacity 약간 높임
    */
   const createBurst = () => {
     const petals: any[] = [];
@@ -67,13 +67,8 @@ export default function IntroCard({ onFinish }: Props) {
     const area = w * h;
     const isMobile = w <= 480;
 
-    // ✅ 모바일은 더 촘촘하게(풍성)
     const density = isMobile ? 700 : 1200;
-
-    // ✅ 모바일 최소 개수 보장
     const minCount = isMobile ? 900 : 0;
-
-    // ✅ 모바일 상한은 너무 무겁지 않게 조절
     const maxCount = isMobile ? 2200 : 3200;
 
     const count = Math.min(
@@ -81,22 +76,23 @@ export default function IntroCard({ onFinish }: Props) {
       Math.max(minCount, Math.floor(area / density))
     );
 
-    // ✅ 모바일은 폭발 반경 살짝 줄여 빈 공간 줄임(선택 보정)
     const baseRadius = isMobile ? 140 : 180;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
 
       const size = Math.max(10, gaussianRandom(24, 8));
-      const aspect = 0.8 + Math.random() * 0.6; // 0.8~1.4
+      const aspect = 0.8 + Math.random() * 0.6;
 
       const depth = Math.min(size / 20, 2.1);
       const r = Math.random() * baseRadius * depth;
 
       const speedScale = 1 / (0.75 + depth * 0.45);
       const gravity = (0.045 + Math.random() * 0.07) * depth;
-      const opacity = 0.6 + Math.random() * 0.35 * depth;
-      const fade = 0.0018 + (1 / depth) * 0.0009;
+
+      // ✅ 초반 덮임을 강화
+      const opacity = 0.75 + Math.random() * 0.35 * depth;
+      const fade = 0.0016 + (1 / depth) * 0.0008;
 
       petals.push({
         x: w / 2 + Math.cos(angle) * r,
@@ -106,7 +102,7 @@ export default function IntroCard({ onFinish }: Props) {
         h: size * aspect,
 
         xSpeed: (Math.random() - 0.5) * 9 * speedScale,
-        ySpeed: (Math.random() - 1.15) * 5.5 * speedScale,
+        ySpeed: (Math.random() - 1.2) * 6.0 * speedScale,
 
         rot: Math.random() * 2 * Math.PI,
         rotSpeed: (Math.random() - 0.5) * 0.22,
@@ -160,11 +156,13 @@ export default function IntroCard({ onFinish }: Props) {
     if (animationRef.current) cancelAnimationFrame(animationRef.current);
     createBurst();
     draw();
-    setTimeout(() => onFinish(), 2600);
+
+    // ✅ 꽃잎이 화면을 덮는 "바로 그 순간" 메인으로 전환
+    setTimeout(() => onFinish(), 320);
   };
 
   return (
-    <div className="intro-wrap">
+    <div className={`intro-wrap ${exiting ? "exiting" : ""}`}>
       <div id="inviteCard" className="invite-card" onPointerDown={handleClick}>
         <div className="names">백승철 · 오미영</div>
         <div className="subtitle">결혼합니다</div>
