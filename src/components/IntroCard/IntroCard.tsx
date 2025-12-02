@@ -147,7 +147,7 @@ export default function IntroCard({ onFinish }: Props) {
     }
   };
 
- const handleClick = () => {
+const handleClick = () => {
   if (clickedRef.current) return;
   clickedRef.current = true;
 
@@ -155,13 +155,11 @@ export default function IntroCard({ onFinish }: Props) {
   createBurst();
   draw();
 
-  // ✅ 0.6초 후 페이드 시작 (SCSS delay와 감각 맞춤)
-  setTimeout(() => {
-    setFadeOut(true);
-  }, 600);
+  // ✅ fade-out 애니메이션 시작 트리거
+  setFadeOut(true);
 
-  // ✅ 페이드(2s) + 딜레이(0.6s) 끝난 뒤 메인 전환
-  setTimeout(() => onFinish(), 2600);
+  // ✅ (0.6s 딜레이 + 2.2s 페이드) = 2.8s 뒤 전환
+  setTimeout(() => onFinish(), 2800);
 };
 
 
