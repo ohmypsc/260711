@@ -33,20 +33,29 @@
   color: var(--ink);
   overflow: hidden;
 
-  .intro-wrap {
+ .intro-wrap {
+  /* 기존 transition 유지해도 되지만, fade-out은 animation이 담당 */
   transition:
     background 0.5s ease,
-    color 0.5s ease,
-    opacity 2s ease,
-    transform 2s ease;
+    color 0.5s ease;
 
   &.fade-out {
+    pointer-events: none;
+    /* ✅ 페이드아웃 애니메이션을 강제로 실행 */
+    animation: intro-fade-out 2.2s ease forwards;
+    animation-delay: 0.6s; /* 클릭 후 잠깐 있다가 사라지기 시작 */
+  }
+}
+
+/* ✅ fade-out 전용 키프레임 */
+@keyframes intro-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
     opacity: 0;
     transform: translateY(8px) scale(0.98);
-    pointer-events: none;
-
-    /* ✅ 페이드아웃 시작을 살짝 늦춤 */
-    transition-delay: 0.6s; 
   }
 }
 
