@@ -105,12 +105,6 @@
   top: 50%;
   left: 50%;
 
-  /* ✅ pseudo 위치 기준 잡아주기 */
-  position: absolute;
-  display: block;
-  transform: translate(-50%, -50%);
-  opacity: 0.95;
-
   background-color: var(--theme-primary);
   box-shadow: none;
 
@@ -118,61 +112,46 @@
 
   -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
   mask: var(--leaf-dot-mask) center / contain no-repeat;
-}
 
-/* ✅ 서브 잎 공통 */
-.dot::before,
-.dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background-color: var(--theme-primary);
-
-  -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
-  mask: var(--leaf-dot-mask) center / contain no-repeat;
-
-  opacity: 0.55;
-}
-
-/* ✅ 서브 잎 1: 왼쪽 아래 */
-.dot::before {
-  transform: translate(-65%, 55%) rotate(-18deg) scale(0.6);
-}
-
-/* ✅ 서브 잎 2: 오른쪽 위 */
-.dot::after {
-  transform: translate(55%, -70%) rotate(22deg) scale(0.5);
-  opacity: 0.45;
-}
-
-/* 커버처럼 약간씩 방향 다르게 */
-.timeline-item:nth-child(3n) .dot {
-  transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
-  opacity: 0.9;
-}
-.timeline-item:nth-child(3n + 1) .dot {
-  transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
+  transform: translate(-50%, -50%);
   opacity: 0.95;
-}
-.timeline-item:nth-child(3n + 2) .dot {
-  transform: translate(-50%, -50%) rotate(16deg) scale(1.0);
-  opacity: 0.85;
+
+  /* ✅ 서브 잎 공통 */
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--theme-primary);
+    -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
+    mask: var(--leaf-dot-mask) center / contain no-repeat;
+    opacity: 0.7;          /* ✅ 0.55 → 0.7 : 더 잘 보이게 */
+  }
+
+  /* ✅ 서브 잎 1: 왼쪽 아래 “조금 더 멀리 + 조금 더 큼” */
+  &::before {
+    transform: translate(-95%, 75%) rotate(-22deg) scale(0.72);
+  }
+
+  /* ✅ 서브 잎 2: 오른쪽 위 “더 멀리 + 조금 더 큼” */
+  &::after {
+    transform: translate(80%, -95%) rotate(26deg) scale(0.62);
+    opacity: 0.6;          /* 메인보다 살짝 연하게 */
+  }
 }
 
-/* 모바일 */
 @media (max-width: 640px) {
   .dot {
     width: 12px;
     height: 12px;
-  }
 
-  .dot::before {
-    transform: translate(-62%, 52%) rotate(-18deg) scale(0.55);
-  }
+    &::before {
+      transform: translate(-90%, 70%) rotate(-22deg) scale(0.68);
+    }
 
-  .dot::after {
-    transform: translate(52%, -66%) rotate(22deg) scale(0.45);
+    &::after {
+      transform: translate(74%, -90%) rotate(26deg) scale(0.58);
+    }
   }
 }
 
