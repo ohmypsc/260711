@@ -149,7 +149,7 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
   };
 
   // ✅ 꽃잎이 "완전히 덮은 뒤" 메인 전환되게 하는 타이밍
-  const COVER_TIME = 1000;
+  const COVER_TIME = 2000;
 
   const handleClick = () => {
     if (animationRef.current) cancelAnimationFrame(animationRef.current);
