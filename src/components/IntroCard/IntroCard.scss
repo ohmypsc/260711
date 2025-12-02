@@ -33,19 +33,23 @@
   color: var(--ink);
   overflow: hidden;
 
-  /* ✅ 페이드아웃을 위한 opacity/transform transition 추가 */
+  .intro-wrap {
   transition:
     background 0.5s ease,
     color 0.5s ease,
-    opacity 0.8s ease,
-    transform 0.8s ease;
+    opacity 2s ease,
+    transform 2s ease;
 
-  /* ✅ 페이드아웃 상태 */
   &.fade-out {
     opacity: 0;
     transform: translateY(8px) scale(0.98);
-    pointer-events: none; /* 사라지는 동안 클릭 방지 */
+    pointer-events: none;
+
+    /* ✅ 페이드아웃 시작을 살짝 늦춤 */
+    transition-delay: 0.6s; 
   }
+}
+
 
   /* 🎴 카드 (인트로 내부 스코프) */
   .invite-card {
