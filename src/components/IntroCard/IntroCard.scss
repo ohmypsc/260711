@@ -142,7 +142,8 @@
 
    &.exiting {
     background: transparent;
-    transition: background 0.6s ease;
+    opacity: 0;                 // ✅ 추가
+    transition: background 0.6s ease, opacity 0.6s ease;  // ✅ 수정
 
     .invite-card {
       opacity: 0;
