@@ -44,7 +44,7 @@
 
   left: 50%;
   transform: translateX(-50%);
-  width: 32px;
+  width: 22px;
 
   background-color: var(--theme-primary);
   opacity: 0.75;
@@ -53,8 +53,8 @@
   /* ✅ 큰 타일(240px) 안에 잎을 제각각 배치 */
   --leafline-mask-1: url("data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2050%20240'%3E%20%3Cg%20fill='black'%3E%20%3Cpath%20d='M14%2018%20C12%2014,6%2014,5%2018%20C6%2022,12%2022,14%2018%20Z'%20opacity='0.55'%20transform='rotate(-12%2010%2018)'/%3E%20%3Cpath%20d='M36%2034%20C34%2030,28%2030,27%2034%20C28%2038,34%2038,36%2034%20Z'%20opacity='0.42'%20transform='rotate(18%2032%2034)'/%3E%20%3Cpath%20d='M18%2052%20C16%2048,9%2048,8%2052%20C9%2056,16%2056,18%2052%20Z'%20opacity='0.50'%20transform='rotate(6%2013%2052)'/%3E%20%3Cpath%20d='M34%2068%20C32%2064,25%2064,24%2068%20C25%2072,32%2072,34%2068%20Z'%20opacity='0.46'%20transform='rotate(-20%2029%2068)'/%3E%20%3Cpath%20d='M12%2086%20C10%2082,4%2082,3%2086%20C4%2090,10%2090,12%2086%20Z'%20opacity='0.58'%20transform='rotate(14%208%2086)'/%3E%20%3Cpath%20d='M38%20104%20C36%20100,29%20100,28%20104%20C29%20108,36%20108,38%20104%20Z'%20opacity='0.38'%20transform='rotate(-8%2033%20104)'/%3E%20%3Cpath%20d='M20%20124%20C18%20120,11%20120,10%20124%20C11%20128,18%20128,20%20124%20Z'%20opacity='0.52'%20transform='rotate(-16%2015%20124)'/%3E%20%3Cpath%20d='M30%20142%20C28%20138,22%20138,21%20142%20C22%20146,28%20146,30%20142%20Z'%20opacity='0.44'%20transform='rotate(10%2026%20142)'/%3E%20%3Cpath%20d='M16%20160%20C14%20156,7%20156,6%20160%20C7%20164,14%20164,16%20160%20Z'%20opacity='0.56'%20transform='rotate(22%2011%20160)'/%3E%20%3Cpath%20d='M36%20176%20C34%20172,27%20172,26%20176%20C27%20180,34%20180,36%20176%20Z'%20opacity='0.42'%20transform='rotate(-14%2031%20176)'/%3E%20%3Cpath%20d='M22%20198%20C20%20194,13%20194,12%20198%20C13%20202,20%20202,22%20198%20Z'%20opacity='0.50'%20transform='rotate(8%2017%20198)'/%3E%20%3Cpath%20d='M28%20214%20C26%20210,20%20210,19%20214%20C20%20218,26%20218,28%20214%20Z'%20opacity='0.46'%20transform='rotate(-18%2024%20214)'/%3E%20%3C/g%3E%20%3C/svg%3E");
 
-  -webkit-mask: var(--leafline-mask-1) center top / 100% auto repeat-y;
-  mask: var(--leafline-mask-1) center top / 100% auto repeat-y;
+  -webkit-mask: var(--leafline-mask-1) center top / 72% auto repeat-y;
+  mask: var(--leafline-mask-1) center top / 72% auto repeat-y;
 }
 
 /* 2겹째 잎 라인 (조금 옆으로 밀고 다른 타일) */
@@ -66,8 +66,8 @@
 
   left: 50%;
   /* ✅ 살짝 옆으로 오프셋해서 패턴 반복 티 줄임 */
-  transform: translateX(-50%) translateX(5px);
-  width: 34px;
+  transform: translateX(-50%) translateX(3px);
+  width: 24px;
 
   background-color: var(--theme-primary);
   opacity: 0.45;
@@ -75,8 +75,8 @@
 
   --leafline-mask-2: url("data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2050%20260'%3E%20%3Cg%20fill='black'%3E%20%3Cpath%20d='M32%2022%20C30%2018,23%2018,22%2022%20C23%2026,30%2026,32%2022%20Z'%20opacity='0.50'%20transform='rotate(-18%2027%2022)'/%3E%20%3Cpath%20d='M16%2040%20C14%2036,7%2036,6%2040%20C7%2044,14%2044,16%2040%20Z'%20opacity='0.40'%20transform='rotate(12%2011%2040)'/%3E%20%3Cpath%20d='M34%2060%20C32%2056,25%2056,24%2060%20C25%2064,32%2064,34%2060%20Z'%20opacity='0.58'%20transform='rotate(20%2029%2060)'/%3E%20%3Cpath%20d='M14%2078%20C12%2074,5%2074,4%2078%20C5%2082,12%2082,14%2078%20Z'%20opacity='0.44'%20transform='rotate(-8%209%2078)'/%3E%20%3Cpath%20d='M36%2098%20C34%2094,27%2094,26%2098%20C27%20102,34%20102,36%2098%20Z'%20opacity='0.52'%20transform='rotate(-22%2031%2098)'/%3E%20%3Cpath%20d='M18%20118%20C16%20114,9%20114,8%20118%20C9%20122,16%20122,18%20118%20Z'%20opacity='0.36'%20transform='rotate(18%2013%20118)'/%3E%20%3Cpath%20d='M32%20140%20C30%20136,23%20136,22%20140%20C23%20144,30%20144,32%20140%20Z'%20opacity='0.56'%20transform='rotate(6%2027%20140)'/%3E%20%3Cpath%20d='M12%20158%20C10%20154,3%20154,2%20158%20C3%20162,10%20162,12%20158%20Z'%20opacity='0.42'%20transform='rotate(24%207%20158)'/%3E%20%3Cpath%20d='M38%20180%20C36%20176,29%20176,28%20180%20C29%20184,36%20184,38%20180%20Z'%20opacity='0.50'%20transform='rotate(-10%2033%20180)'/%3E%20%3Cpath%20d='M20%20202%20C18%20198,11%20198,10%20202%20C11%20206,18%20206,20%20202%20Z'%20opacity='0.44'%20transform='rotate(-16%2015%20202)'/%3E%20%3Cpath%20d='M34%20224%20C32%20220,25%20220,24%20224%20C25%20228,32%20228,34%20224%20Z'%20opacity='0.58'%20transform='rotate(14%2029%20224)'/%3E%20%3Cpath%20d='M16%20244%20C14%20240,7%20240,6%20244%20C7%20248,14%20248,16%20244%20Z'%20opacity='0.40'%20transform='rotate(-20%2011%20244)'/%3E%20%3C/g%3E%20%3C/svg%3E");
 
-  -webkit-mask: var(--leafline-mask-2) center top / 100% auto repeat-y;
-  mask: var(--leafline-mask-2) center top / 100% auto repeat-y;
+  -webkit-mask: var(--leafline-mask-2) center top / 70% auto repeat-y;
+  mask: var(--leafline-mask-2) center top / 70% auto repeat-y;
 }
 
 
