@@ -1,3 +1,8 @@
+/* ============================================
+   Timeline (Global tone)
+   - 가운데 라인/점 => 랜덤 덩굴 느낌으로 교체
+   ============================================ */
+
 .w-timeline {
   background: transparent;
   position: relative;
@@ -33,22 +38,32 @@
   gap: 0.6rem;
 }
 
-/* 가운데 세로 라인 */
+/* =========================================
+   ✅ 가운데 세로 "덩굴" 라인
+   - 기존 그라데이션 라인 제거
+   - SVG 마스크 반복으로 덩굴 느낌
+   ========================================= */
 .timeline-list::before {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%;
-  transform: translateX(calc(var(--center-line-width) / -2));
-  width: var(--center-line-width);
 
-  background: linear-gradient(
-    to bottom,
-    rgba(231, 163, 169, 0.45),
-    rgba(231, 163, 169, 0.06)
-  );
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* 덩굴 폭 */
+  width: 26px;
+
+  background-color: var(--theme-primary);
+  opacity: 0.55;
   z-index: 0;
+
+  /* 덩굴 실루엣 마스크 */
+  --vine-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2040%20160%27%3E%0A%20%20%3Cpath%20d%3D%27M20%200%20C10%2020%2C30%2040%2C20%2060%20C10%2080%2C30%20100%2C20%20120%20C10%20140%2C30%20150%2C20%20160%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27/%3E%0A%20%20%3Cpath%20d%3D%27M18%2018%20C8%2010%2C4%2022%2C14%2028%20C18%2030%2C22%2026%2C18%2018%20Z%27%20fill%3D%27black%27/%3E%0A%20%20%3Cpath%20d%3D%27M22%2042%20C32%2034%2C36%2046%2C26%2052%20C22%2054%2C18%2050%2C22%2042%20Z%27%20fill%3D%27black%27/%3E%0A%20%20%3Cpath%20d%3D%27M18%2074%20C8%2066%2C4%2078%2C14%2084%20C18%2086%2C22%2082%2C18%2074%20Z%27%20fill%3D%27black%27/%3E%0A%20%20%3Cpath%20d%3D%27M22%2098%20C32%2090%2C36%20102%2C26%20108%20C22%20110%2C18%20106%2C22%2098%20Z%27%20fill%3D%27black%27/%3E%0A%20%20%3Cpath%20d%3D%27M18%20130%20C8%20122%2C4%20134%2C14%20140%20C18%20142%2C22%20138%2C18%20130%20Z%27%20fill%3D%27black%27/%3E%0A%3C/svg%3E");
+
+  -webkit-mask: var(--vine-mask) center top / 100% auto repeat-y;
+  mask: var(--vine-mask) center top / 100% auto repeat-y;
 }
 
 /* ✅ 아이템: photo / line / caption */
@@ -120,22 +135,46 @@
 
   position: relative; /* dot 기준 */
 
-  /* ✅ 추가: 점도 사진 offset과 같이 이동 */
+  /* ✅ 점도 사진 offset과 같이 이동 */
   transform: translateY(var(--offset));
 }
 
+/* =========================================
+   ✅ 덩굴 "마디 잎" (dot 대체)
+   - 원형 점 대신 잎 svg 마스크
+   - nth-child로 랜덤 느낌
+   ========================================= */
 .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: var(--theme-primary);
-  box-shadow: 0 0 0 4px rgba(231, 163, 169, 0.18);
+  width: 18px;
+  height: 18px;
   z-index: 3;
 
-  position: absolute; /* 데스크톱/모바일 동일 중앙 고정 */
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  background-color: var(--theme-primary);
+  box-shadow: none;
+
+  --leaf-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%0A%20%20%3Cpath%20d%3D%27M12%202%20C7%205%2C4%209%2C4%2013%20C4%2018%2C8%2022%2C12%2022%20C16%2022%2C20%2018%2C20%2013%20C20%209%2C17%205%2C12%202%20Z%27%20fill%3D%27black%27/%3E%0A%20%20%3Cpath%20d%3D%27M12%206%20L12%2020%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27/%3E%0A%3C/svg%3E");
+
+  -webkit-mask: var(--leaf-mask) center / contain no-repeat;
+  mask: var(--leaf-mask) center / contain no-repeat;
+}
+
+/* 랜덤 덩굴 느낌 */
+.timeline-item:nth-child(3n) .dot {
+  transform: translate(-50%, -50%) rotate(12deg) scale(0.9);
+  opacity: 0.9;
+}
+.timeline-item:nth-child(3n + 1) .dot {
+  transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
+  opacity: 0.95;
+}
+.timeline-item:nth-child(3n + 2) .dot {
+  transform: translate(-50%, -50%) rotate(18deg) scale(0.98);
+  opacity: 0.85;
 }
 
 /* 캡션 */
@@ -147,7 +186,7 @@
   align-self: center;
   padding: 0;
 
-  /* ✅ 추가: 캡션도 점 높이와 같이 이동 */
+  /* ✅ 캡션도 점 높이와 같이 이동 */
   transform: translateY(var(--offset));
 }
 
@@ -245,6 +284,16 @@
 
     --lift-ratio: 0.04;
     --center-line-width: 1px;
+  }
+
+  .timeline-list::before {
+    width: 22px;
+    opacity: 0.5;
+  }
+
+  .dot {
+    width: 16px;
+    height: 16px;
   }
 
   .caption-col .title {
