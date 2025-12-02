@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "./IntroCard.scss";
 
 type Props = {
@@ -22,10 +22,6 @@ export default function IntroCard({ onFinish }: Props) {
   const petalImgRef = useRef<HTMLImageElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 
-  // ✅ 페이드아웃 상태
-  const [fadeOut, setFadeOut] = useState(false);
-  const clickedRef = useRef(false); // 중복 클릭 방지
-
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
@@ -36,6 +32,7 @@ export default function IntroCard({ onFinish }: Props) {
     petalImgRef.current = petalImg;
 
     function resize() {
+      // ✅ DPR 반영: 모바일에서도 선명/크기 체감 일관성
       const dpr = window.devicePixelRatio || 1;
 
       canvas.width = window.innerWidth * dpr;
@@ -44,6 +41,7 @@ export default function IntroCard({ onFinish }: Props) {
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
 
+      // 좌표계 보정
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
@@ -56,6 +54,11 @@ export default function IntroCard({ onFinish }: Props) {
     };
   }, []);
 
+  /**
+   * ✅ Depth Burst (풍성 버전 + 모바일 풍성 보정)
+   * - 모바일: density 낮춤 + 최소 개수 보장
+   * - DPR 반영으로 선명도/체감 개선
+   */
   const createBurst = () => {
     const petals: any[] = [];
     const w = window.innerWidth;
@@ -64,8 +67,13 @@ export default function IntroCard({ onFinish }: Props) {
     const area = w * h;
     const isMobile = w <= 480;
 
+    // ✅ 모바일은 더 촘촘하게(풍성)
     const density = isMobile ? 700 : 1200;
+
+    // ✅ 모바일 최소 개수 보장
     const minCount = isMobile ? 900 : 0;
+
+    // ✅ 모바일 상한은 너무 무겁지 않게 조절
     const maxCount = isMobile ? 2200 : 3200;
 
     const count = Math.min(
@@ -73,13 +81,14 @@ export default function IntroCard({ onFinish }: Props) {
       Math.max(minCount, Math.floor(area / density))
     );
 
+    // ✅ 모바일은 폭발 반경 살짝 줄여 빈 공간 줄임(선택 보정)
     const baseRadius = isMobile ? 140 : 180;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
 
       const size = Math.max(10, gaussianRandom(24, 8));
-      const aspect = 0.8 + Math.random() * 0.6;
+      const aspect = 0.8 + Math.random() * 0.6; // 0.8~1.4
 
       const depth = Math.min(size / 20, 2.1);
       const r = Math.random() * baseRadius * depth;
@@ -147,24 +156,15 @@ export default function IntroCard({ onFinish }: Props) {
     }
   };
 
-const handleClick = () => {
-  if (clickedRef.current) return;
-  clickedRef.current = true;
-
-  if (animationRef.current) cancelAnimationFrame(animationRef.current);
-  createBurst();
-  draw();
-
-  // ✅ fade-out 애니메이션 시작 트리거
-  setFadeOut(true);
-
-  // ✅ (0.6s 딜레이 + 2.2s 페이드) = 2.8s 뒤 전환
-  setTimeout(() => onFinish(), 2800);
-};
-
+  const handleClick = () => {
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    createBurst();
+    draw();
+    setTimeout(() => onFinish(), 2600);
+  };
 
   return (
-    <div className={`intro-wrap ${fadeOut ? "fade-out" : ""}`}>
+    <div className="intro-wrap">
       <div id="inviteCard" className="invite-card" onPointerDown={handleClick}>
         <div className="names">백승철 · 오미영</div>
         <div className="subtitle">결혼합니다</div>
