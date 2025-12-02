@@ -21,7 +21,7 @@ export default function App() {
   const [introExiting, setIntroExiting] = useState(false);
 
   // ✅ IntroCard의 COVER_TIME과 반드시 같은 값
-  const COVER_TIME = 1000;
+  const COVER_TIME = 2000;
 
   // ✅ onFinish 받은 뒤, 꽃잎 내려오는 시간까지 더 유지
   const EXIT_AFTER = 2300 + COVER_TIME;
