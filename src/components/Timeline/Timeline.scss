@@ -1,6 +1,7 @@
 /* ============================================
-   Timeline (Global tone)
-   - 가운데 라인/점 => 랜덤 덩굴 느낌으로 교체
+   Timeline (Cover-leaf vine edition)
+   - 가운데 라인/점 => 커버 LeafLine 결로 통일
+   - 줄기 선 없이 잎방울들이 모여 라인 형성
    ============================================ */
 
 .w-timeline {
@@ -9,22 +10,11 @@
 }
 
 :root {
-  /* ✅ 사진 크기 */
   --photo: clamp(140px, 16vw, 205px);
-
-  /* 라인 컬럼 너비 */
   --line-col-w: 44px;
-
-  /* 사진-캡션 간격 */
   --gutter: clamp(14px, 2vw, 26px);
-
-  /* ✅ 겹침 정도 줄임 */
   --overlap: calc(var(--photo) * -0.18);
-
-  /* 교차 리듬 세기 */
   --lift-ratio: 0.06;
-
-  /* 중앙 세로선 두께(데스크톱 기본) */
   --center-line-width: 2px;
 }
 
@@ -39,9 +29,9 @@
 }
 
 /* =========================================
-   ✅ 가운데 세로 "덩굴" 라인
-   - 기존 그라데이션 라인 제거
-   - SVG 마스크 반복으로 덩굴 느낌
+   ✅ 가운데 세로 "잎 라인"
+   - 줄기 path 없음
+   - 커버 느낌의 잎방울만 세로로 반복
    ========================================= */
 .timeline-list::before {
   content: "";
@@ -52,51 +42,45 @@
   left: 50%;
   transform: translateX(-50%);
 
-  /* 덩굴 폭 */
-  width: 26px;
+  /* 잎 라인 폭(커버 라인 두께 느낌) */
+  width: 30px;
 
   background-color: var(--theme-primary);
-  opacity: 0.55;
+  opacity: 0.9; /* 잎 자체는 선명, 배경에서 자연스러운 톤 */
   z-index: 0;
 
-  /* 덩굴 실루엣 마스크 */
-  /* ✅ 커버 LeafLine 결에 맞춘 덩굴 마스크 */
---vine-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2040%20180%27%3E%0A%20%20%3C!--%20얇은%20줄기%20--%3E%0A%20%20%3Cpath%20d%3D%27M20%200%20C16%2020%2C24%2040%2C20%2060%20C16%2080%2C24%20100%2C20%20120%20C16%20140%2C24%20160%2C20%20180%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27/%3E%0A%0A%20%20%3C!--%20커버처럼%20작은%20잎방울%20(좌우%20교차)%20--%3E%0A%20%20%3Cpath%20d%3D%27M12%2020%20C10%2017%2C6%2017%2C5%2020%20C6%2023%2C10%2023%2C12%2020%20Z%27%20fill%3D%27black%27%20opacity%3D%270.9%27/%3E%0A%20%20%3Cpath%20d%3D%27M28%2035%20C26%2032%2C22%2032%2C21%2035%20C22%2038%2C26%2038%2C28%2035%20Z%27%20fill%3D%27black%27%20opacity%3D%270.8%27/%3E%0A%20%20%3Cpath%20d%3D%27M13%2052%20C11%2049%2C7%2049%2C6%2052%20C7%2055%2C11%2055%2C13%2052%20Z%27%20fill%3D%27black%27%20opacity%3D%270.85%27/%3E%0A%20%20%3Cpath%20d%3D%27M27%2068%20C25%2065%2C21%2065%2C20%2068%20C21%2071%2C25%2071%2C27%2068%20Z%27%20fill%3D%27black%27%20opacity%3D%270.9%27/%3E%0A%20%20%3Cpath%20d%3D%27M14%2086%20C12%2083%2C8%2083%2C7%2086%20C8%2089%2C12%2089%2C14%2086%20Z%27%20fill%3D%27black%27%20opacity%3D%270.75%27/%3E%0A%20%20%3Cpath%20d%3D%27M26%20104%20C24%20101%2C20%20101%2C19%20104%20C20%20107%2C24%20107%2C26%20104%20Z%27%20fill%3D%27black%27%20opacity%3D%270.85%27/%3E%0A%20%20%3Cpath%20d%3D%27M13%20122%20C11%20119%2C7%20119%2C6%20122%20C7%20125%2C11%20125%2C13%20122%20Z%27%20fill%3D%27black%27%20opacity%3D%270.9%27/%3E%0A%20%20%3Cpath%20d%3D%27M27%20138%20C25%20135%2C21%20135%2C20%20138%20C21%20141%2C25%20141%2C27%20138%20Z%27%20fill%3D%27black%27%20opacity%3D%270.8%27/%3E%0A%20%20%3Cpath%20d%3D%27M14%20156%20C12%20153%2C8%20153%2C7%20156%20C8%20159%2C12%20159%2C14%20156%20Z%27%20fill%3D%27black%27%20opacity%3D%270.85%27/%3E%0A%0A%3C/svg%3E");
+  /* ✅ 커버 LeafLine 결의 잎방울만 모아 만든 패턴 */
+  --leafline-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2038%20180%27%3E%0A%20%20%3C!--%20커버%20느낌%20잎방울%20패턴%20(세로%20반복용)%20--%3E%0A%20%20%3Cpath%20d%3D%27M14%2014%20C12%2011%2C7%2011%2C6%2014%20C7%2017%2C12%2017%2C14%2014%20Z%27%20fill%3D%27black%27%20opacity%3D%270.55%27/%3E%0A%20%20%3Cpath%20d%3D%27M26%2028%20C24%2025%2C19%2025%2C18%2028%20C19%2031%2C24%2031%2C26%2028%20Z%27%20fill%3D%27black%27%20opacity%3D%270.42%27/%3E%0A%20%20%3Cpath%20d%3D%27M15%2044%20C13%2041%2C8%2041%2C7%2044%20C8%2047%2C13%2047%2C15%2044%20Z%27%20fill%3D%27black%27%20opacity%3D%270.5%27/%3E%0A%20%20%3Cpath%20d%3D%27M27%2058%20C25%2055%2C20%2055%2C19%2058%20C20%2061%2C25%2061%2C27%2058%20Z%27%20fill%3D%27black%27%20opacity%3D%270.44%27/%3E%0A%20%20%3Cpath%20d%3D%27M14%2072%20C12%2069%2C7%2069%2C6%2072%20C7%2075%2C12%2075%2C14%2072%20Z%27%20fill%3D%27black%27%20opacity%3D%270.56%27/%3E%0A%20%20%3Cpath%20d%3D%27M26%2088%20C24%2085%2C19%2085%2C18%2088%20C19%2091%2C24%2091%2C26%2088%20Z%27%20fill%3D%27black%27%20opacity%3D%270.38%27/%3E%0A%20%20%3Cpath%20d%3D%27M15%20104%20C13%20101%2C8%20101%2C7%20104%20C8%20107%2C13%20107%2C15%20104%20Z%27%20fill%3D%27black%27%20opacity%3D%270.52%27/%3E%0A%20%20%3Cpath%20d%3D%27M27%20120%20C25%20117%2C20%20117%2C19%20120%20C20%20123%2C25%20123%2C27%20120%20Z%27%20fill%3D%27black%27%20opacity%3D%270.46%27/%3E%0A%20%20%3Cpath%20d%3D%27M14%20136%20C12%20133%2C7%20133%2C6%20136%20C7%20139%2C12%20139%2C14%20136%20Z%27%20fill%3D%27black%27%20opacity%3D%270.55%27/%3E%0A%20%20%3Cpath%20d%3D%27M26%20152%20C24%20149%2C19%20149%2C18%20152%20C19%20155%2C24%20155%2C26%20152%20Z%27%20fill%3D%27black%27%20opacity%3D%270.42%27/%3E%0A%3C/svg%3E");
 
-  -webkit-mask: var(--vine-mask) center top / 100% auto repeat-y;
-  mask: var(--vine-mask) center top / 100% auto repeat-y;
+  -webkit-mask: var(--leafline-mask) center top / 100% auto repeat-y;
+  mask: var(--leafline-mask) center top / 100% auto repeat-y;
 }
 
 /* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
-  z-index: 1; /* 중앙선보다 위로 */
+  z-index: 1;
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
   align-items: center;
 
-  /* 실제 사진 안전 사이즈 */
   --photo-safe: min(
     var(--photo),
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
   );
 
-  /* 아이템 높이를 사진 높이로 고정 */
   min-height: var(--photo-safe);
-
-  /* ✅ offset 변수는 유지하되, 아이템은 움직이지 않음 */
   --offset: 0;
   transform: none;
 }
 
-/* 그리드가 내용에 밀리지 않게 */
 .media,
 .caption-col {
   min-width: 0;
 }
 
-/* ✅ 사진 영역 */
+/* 사진 */
 .media {
   grid-row: 1;
   position: relative;
@@ -104,8 +88,6 @@
   width: var(--photo-safe);
   height: var(--photo-safe);
   display: flex;
-
-  /* ✅ 사진만 위/아래로 리듬 */
   transform: translateY(var(--offset));
 }
 
@@ -134,20 +116,16 @@
   align-items: center;
   z-index: 2;
 
-  position: relative; /* dot 기준 */
-
-  /* ✅ 점도 사진 offset과 같이 이동 */
+  position: relative;
   transform: translateY(var(--offset));
 }
 
 /* =========================================
-   ✅ 덩굴 "마디 잎" (dot 대체)
-   - 원형 점 대신 잎 svg 마스크
-   - nth-child로 랜덤 느낌
+   ✅ 잎 마디(dot)도 커버 잎방울 느낌
    ========================================= */
 .dot {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   z-index: 3;
 
   position: absolute;
@@ -158,17 +136,15 @@
   background-color: var(--theme-primary);
   box-shadow: none;
 
-  /* ✅ 커버 LeafLine 같은 잎방울 형태 */
---leaf-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%0A%20%20%3Cpath%20d%3D%27M4%2012%20C6%207%2C12%204%2C18%207%20C21%2010%2C19%2017%2C12%2020%20C6%2017%2C3%2014%2C4%2012%20Z%27%20fill%3D%27black%27/%3E%0A%3C/svg%3E");
+  --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%0A%20%20%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%0A%3C/svg%3E");
 
-
-  -webkit-mask: var(--leaf-mask) center / contain no-repeat;
-  mask: var(--leaf-mask) center / contain no-repeat;
+  -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
+  mask: var(--leaf-dot-mask) center / contain no-repeat;
 }
 
-/* 랜덤 덩굴 느낌 */
+/* 커버처럼 약간씩 방향 다르게 */
 .timeline-item:nth-child(3n) .dot {
-  transform: translate(-50%, -50%) rotate(12deg) scale(0.9);
+  transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
   opacity: 0.9;
 }
 .timeline-item:nth-child(3n + 1) .dot {
@@ -176,7 +152,7 @@
   opacity: 0.95;
 }
 .timeline-item:nth-child(3n + 2) .dot {
-  transform: translate(-50%, -50%) rotate(18deg) scale(0.98);
+  transform: translate(-50%, -50%) rotate(16deg) scale(1.0);
   opacity: 0.85;
 }
 
@@ -188,8 +164,6 @@
   gap: 0.22rem;
   align-self: center;
   padding: 0;
-
-  /* ✅ 캡션도 점 높이와 같이 이동 */
   transform: translateY(var(--offset));
 }
 
@@ -214,9 +188,7 @@
   line-height: 1.35;
 }
 
-/* ---------------- 좌/우 교차 ---------------- */
-
-/* 왼쪽 사진 / 오른쪽 캡션 */
+/* 좌/우 교차 */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
 
@@ -235,7 +207,6 @@
   }
 }
 
-/* 오른쪽 사진 / 왼쪽 캡션 */
 .timeline-item.right {
   --offset: calc(var(--photo-safe) * var(--lift-ratio));
 
@@ -254,49 +225,42 @@
   }
 }
 
-/* ---------------- 겹침 + 간격 균일 보정 ---------------- */
-
-/* 기본 겹침 */
+/* 겹침 보정 */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
 
-/* left → right : 리프트 때문에 늘어난 간격(2d)만큼 더 겹치게 */
 .timeline-item.left + .timeline-item.right {
   margin-top: calc(
     var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2)
   );
 }
 
-/* right → left : 리프트 때문에 줄어든 간격(2d)만큼 덜 겹치게 */
 .timeline-item.right + .timeline-item.left {
   margin-top: calc(
     var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2)
   );
 }
 
-/* ---------------- 모바일 ---------------- */
+/* 모바일 */
 @media (max-width: 640px) {
   :root {
     --photo: clamp(108px, 40vw, 148px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
-
-    /* 모바일도 같은 겹침 비율 유지 */
     --overlap: calc(var(--photo) * -0.18);
-
     --lift-ratio: 0.04;
     --center-line-width: 1px;
   }
 
   .timeline-list::before {
-    width: 22px;
-    opacity: 0.5;
+    width: 24px;
+    opacity: 0.85;
   }
 
   .dot {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
   }
 
   .caption-col .title {
