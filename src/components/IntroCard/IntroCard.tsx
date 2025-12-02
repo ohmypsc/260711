@@ -152,13 +152,18 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     }
   };
 
-  const handleClick = () => {
-    if (animationRef.current) cancelAnimationFrame(animationRef.current);
-    createBurst();
-    draw();
 
-    // ✅ 꽃잎이 화면을 덮는 "바로 그 순간" 메인으로 전환
-    setTimeout(() => onFinish(), 320);
+const COVER_TIME = 1000; // ✅ 꽃잎이 화면 덮는 데 필요한 시간(조절 포인트)
+
+const handleClick = () => {
+  if (animationRef.current) cancelAnimationFrame(animationRef.current);
+  createBurst();
+  draw();
+
+  // ✅ 꽃잎이 충분히 덮은 다음에 메인 전환
+  setTimeout(() => onFinish(), COVER_TIME);
+};
+
   };
 
   return (
