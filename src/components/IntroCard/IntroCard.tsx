@@ -33,7 +33,6 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     petalImgRef.current = petalImg;
 
     function resize() {
-      // ✅ DPR 반영: 모바일에서도 선명/크기 체감 일관성
       const dpr = window.devicePixelRatio || 1;
 
       canvas.width = window.innerWidth * dpr;
@@ -42,7 +41,6 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
 
-      // 좌표계 보정
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
@@ -57,7 +55,6 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
 
   /**
    * ✅ Depth Burst (풍성 버전 + 모바일 풍성 보정)
-   * - 꽃잎이 초반에 더 "덮는" 느낌 나도록 opacity 약간 높임
    */
   const createBurst = () => {
     const petals: any[] = [];
@@ -90,7 +87,6 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
       const speedScale = 1 / (0.75 + depth * 0.45);
       const gravity = (0.045 + Math.random() * 0.07) * depth;
 
-      // ✅ 초반 덮임을 강화
       const opacity = 0.75 + Math.random() * 0.35 * depth;
       const fade = 0.0016 + (1 / depth) * 0.0008;
 
@@ -152,18 +148,15 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     }
   };
 
+  // ✅ 꽃잎이 "완전히 덮은 뒤" 메인 전환되게 하는 타이밍
+  const COVER_TIME = 1000;
 
-const COVER_TIME = 1000; // ✅ 꽃잎이 화면 덮는 데 필요한 시간(조절 포인트)
+  const handleClick = () => {
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    createBurst();
+    draw();
 
-const handleClick = () => {
-  if (animationRef.current) cancelAnimationFrame(animationRef.current);
-  createBurst();
-  draw();
-
-  // ✅ 꽃잎이 충분히 덮은 다음에 메인 전환
-  setTimeout(() => onFinish(), COVER_TIME);
-};
-
+    setTimeout(() => onFinish(), COVER_TIME);
   };
 
   return (
