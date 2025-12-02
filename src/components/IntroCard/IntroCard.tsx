@@ -147,20 +147,23 @@ export default function IntroCard({ onFinish }: Props) {
     }
   };
 
-  const handleClick = () => {
-    if (clickedRef.current) return; // ✅ 두 번 눌러도 한 번만 실행
-    clickedRef.current = true;
+ const handleClick = () => {
+  if (clickedRef.current) return;
+  clickedRef.current = true;
 
-    if (animationRef.current) cancelAnimationFrame(animationRef.current);
-    createBurst();
-    draw();
+  if (animationRef.current) cancelAnimationFrame(animationRef.current);
+  createBurst();
+  draw();
 
-    // ✅ 카드/배경을 먼저 사르륵 페이드아웃
+  // ✅ 0.6초 후 페이드 시작 (SCSS delay와 감각 맞춤)
+  setTimeout(() => {
     setFadeOut(true);
+  }, 600);
 
-    // ✅ 꽃잎 애니메이션 끝난 뒤 메인으로 전환
-    setTimeout(() => onFinish(), 2600);
-  };
+  // ✅ 페이드(2s) + 딜레이(0.6s) 끝난 뒤 메인 전환
+  setTimeout(() => onFinish(), 2600);
+};
+
 
   return (
     <div className={`intro-wrap ${fadeOut ? "fade-out" : ""}`}>
