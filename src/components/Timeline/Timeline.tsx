@@ -22,9 +22,15 @@ type Caption = {
 };
 
 const captions: Caption[] = [
-  { imgIndex: 1, title: "2024년 가을" },
-  { imgIndex: 3, title: "2025년 봄" },
-  { imgIndex: 5, title: "2025년 가을" },
+  { imgIndex: 1, title: "1989년 가을에 태어난 승철이와" },
+  { imgIndex: 2, title: "1990년 봄에 태어난 미영이가" },
+  { imgIndex: 3, title: "2024년 가을" },
+  { imgIndex: 4, title: "2024년 겨울" },
+  { imgIndex: 5, title: "2025년 봄" },
+  { imgIndex: 6, title: "2025년 여름" },
+  { imgIndex: 7, title: "2025년 가을" },
+  { imgIndex: 8, title: "2025년 겨울" },
+  { imgIndex: 9, title: "2026년 봄을 지나" },
 ];
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
