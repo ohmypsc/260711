@@ -4,6 +4,7 @@ import { ContactModal } from "@/components/Cover/ContactModal";
 import { useContactInfo } from "@/ContactInfoProvider";
 import "./Cover.scss";
 
+/** Leaf line divider (same as before) */
 function LeafLine({ variant }: { variant: "top" | "bottom" }) {
   const EndCaps =
     variant === "top" ? (
@@ -111,16 +112,45 @@ export function Cover() {
   }, [info]);
 
   return (
-    <div className="w-cover">
+    <section className="w-cover cover-with-invitation">
+      {/* 1) 신랑·신부 이름 */}
       <h1 className="names">
         <span>{names.groom}</span>
         <span className="diamond">♥</span>
         <span>{names.bride}</span>
       </h1>
 
-      <p className="date">2026.07.11. (토) 오전 11시</p>
-      <p className="place">유성컨벤션웨딩홀 3층 그랜드홀</p>
+      {/* 2) 시 전문 전체 */}
+      <div className="cover-poetry">
+        <div className="poetry-block">
+          <p>나는 오래된 거리처럼 너를 사랑하고</p>
+          <p>별들은 벌들처럼 웅성거리고</p>
+        </div>
 
+        <div className="poetry-block">
+          <p>여름에는 작은 은색 드럼을 치는 것처럼</p>
+          <p>네 손바닥을 두드리는 비를 줄게</p>
+          <p>과거에게 그랬듯 미래에게도 아첨하지 않을게</p>
+        </div>
+
+        <div className="poetry-block">
+          <p>어린 시절 순결한 비누 거품 속에서 우리가 했던 맹세들을 찾아</p>
+          <p>너의 팔에 모두 적어줄게</p>
+        </div>
+
+        <p className="poet">진은영, &lt;청혼&gt; 중</p>
+      </div>
+
+      {/* 3) 초대글 전문 */}
+      <div className="cover-message">
+        <p>오래된 거리처럼 익숙하지만,</p>
+        <p>여름비도 즐겁게 맞고,</p>
+        <p>시간의 흐름에 기대지 않고 서로에게 최선을 다하며,</p>
+        <p>어린 시절 순수한 마음으로 서로를 대하는 부부가 되고자 합니다.</p>
+        <p>이 시작을 함께해 주신다면 더없이 감사하겠습니다.</p>
+      </div>
+
+      {/* 4) 가족관계(필수) */}
       <div className="family-section">
         <LeafLine variant="top" />
 
@@ -143,11 +173,12 @@ export function Cover() {
         <LeafLine variant="bottom" />
       </div>
 
+      {/* 5) CTA */}
       <Button variant="basic" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
 
       {open && <ContactModal onClose={() => setOpen(false)} />}
-    </div>
+    </section>
   );
 }
