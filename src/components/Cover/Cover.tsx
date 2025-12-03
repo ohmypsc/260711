@@ -113,14 +113,9 @@ export function Cover() {
 
   return (
     <section className="w-cover cover-with-invitation">
-      {/* 1) 신랑·신부 이름 */}
-      <h1 className="names">
-        <span>{names.groom}</span>
-        <span className="diamond">♥</span>
-        <span>{names.bride}</span>
-      </h1>
+      {/* ✅ 이름 타이틀 제거 */}
 
-      {/* 2) 시 전문 전체 */}
+      {/* 1) 시 전문 전체 */}
       <div className="cover-poetry">
         <div className="poetry-block">
           <p>나는 오래된 거리처럼 너를 사랑하고</p>
@@ -141,7 +136,7 @@ export function Cover() {
         <p className="poet">진은영, &lt;청혼&gt; 중</p>
       </div>
 
-      {/* 3) 초대글 전문 */}
+      {/* 2) 초대글 전문 */}
       <div className="cover-message">
         <p>오래된 거리처럼 익숙하지만,</p>
         <p>여름비도 즐겁게 맞고,</p>
@@ -150,7 +145,7 @@ export function Cover() {
         <p>이 시작을 함께해 주신다면 더없이 감사하겠습니다.</p>
       </div>
 
-      {/* 4) 가족관계(필수) */}
+      {/* 3) 가족관계 */}
       <div className="family-section">
         <LeafLine variant="top" />
 
@@ -173,7 +168,7 @@ export function Cover() {
         <LeafLine variant="bottom" />
       </div>
 
-      {/* 5) CTA */}
+      {/* 4) CTA */}
       <Button variant="basic" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
