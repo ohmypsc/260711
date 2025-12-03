@@ -52,7 +52,6 @@ const items: TimelineItem[] = images.map((img, i) => {
 export function Timeline() {
   return (
     <div className="w-timeline">
-      <h2 className="section-title">우리의 시간</h2>
 
       <ol className="timeline-list">
         {items.map((item, idx) => {
