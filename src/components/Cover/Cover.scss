@@ -1,6 +1,6 @@
 /* ============================================
    Cover (Clean / Global tone + Invitation merged)
-   - 날짜/시간/장소 제거
+   - 이름 타이틀 제거
    - 시 전문 + 초대글 + 가족관계 + CTA 통합
    ============================================ */
 
@@ -12,26 +12,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-}
-
-/* -------------------------
-   신랑·신부 이름
--------------------------- */
-.names {
-  font-weight: 600;
-  line-height: 1.28;
-  font-size: clamp(2.45rem, 7.5vw, 3.05rem);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.diamond {
-  color: var(--theme-primary);
-  font-size: 1.45rem;
-  opacity: 0.9;
 }
 
 /* -------------------------
@@ -160,10 +140,6 @@
 @media (max-width: 420px) {
   .w-cover {
     gap: 1.1rem;
-  }
-
-  .diamond {
-    font-size: 1.3rem;
   }
 
   .cover-poetry p {
