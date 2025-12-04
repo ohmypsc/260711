@@ -1,3 +1,6 @@
+/* =========================================================
+   Headline
+   ========================================================= */
 .calendar-headline {
   text-align: center;
   font-weight: 900;
@@ -25,14 +28,16 @@
     0  0px 10px rgba(233, 167, 175, 0.22);
 }
 
-
-
-
+/* =========================================================
+   Container
+   ========================================================= */
 .calendar-container {
   width: 100%;
 }
 
-/* 탑라인 */
+/* =========================================================
+   Topline
+   ========================================================= */
 .calendar-topline {
   width: 100%;
   text-align: center;
@@ -68,7 +73,9 @@
   }
 }
 
-/* 요일 헤더 */
+/* =========================================================
+   Weekdays
+   ========================================================= */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -88,7 +95,9 @@
   .weekday.sat { color: #3b82f6; }
 }
 
-/* 달력 본문 */
+/* =========================================================
+   Calendar body
+   ========================================================= */
 .calendar-box {
   background: transparent;
 }
@@ -148,11 +157,42 @@
   filter: drop-shadow(0 0 0 rgba(255,140,148,0));
 }
 
-/* =========================
-   Countdown (TUNED)
-   가독성 + 실키 숫자 + 은은한 튀는 효과
-   ========================= */
+/* =========================================================
+   ✅ Leaf Divider (Calendar 전용)
+   - Cover 계열 느낌 유지
+   - 전역 누수 없이 calendar scope만 적용
+   ========================================================= */
+.calendar-leaf-divider {
+  margin: 0.9rem 0 0.6rem;
+  display: grid;
+  gap: 0.35rem;
+}
 
+.calendar-parent-line {
+  width: 100%;
+  margin: 0 auto;
+  color: var(--theme-primary);
+  opacity: 0.9;
+
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: none;
+  }
+
+  &.top {
+    margin-bottom: 0.2rem;
+  }
+
+  &.bottom {
+    margin-top: 0.2rem;
+  }
+}
+
+/* =========================================================
+   Countdown (TUNED)
+   ========================================================= */
 .countdown-wrap {
   margin-top: 2rem;
   text-align: center;
@@ -192,31 +232,25 @@
   padding: 0.04rem 0;
 }
 
-/* ✅ 숫자: 크기 살짝 업 + 실키 하이라이트 + 숨쉬는 미세 애니메이션 */
+/* ✅ 숫자 */
 .num {
   position: relative;
-
-  /* ✅ 기존보다 약 10% 정도 시원하게 */
   font-size: clamp(2.05rem, 6.8vw, 2.75rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0.005rem;
   font-variant-numeric: tabular-nums;
-
-  /* 가독성은 컬러로 확보 */
   color: var(--text-main);
 
-  /* 과하지 않은 선명도 보정 */
   text-shadow:
     0 1px 0 var(--theme-bg),
     0 2px 6px var(--shadow-color);
 
-  /* ✅ 숫자 자체가 아주 은은하게 “튀는” 느낌 */
   animation: numBreath 4.8s ease-in-out infinite;
   transform-origin: center bottom;
 }
 
-/* ✅ 실키한 광택(전역 색만) + 살짝 흐르는 느낌 */
+/* ✅ 실키한 광택 */
 .num::after {
   content: "";
   position: absolute;
@@ -266,7 +300,7 @@
   }
 }
 
-/* ✅ 실키 하이라이트가 미세하게 이동 */
+/* ✅ 실키 하이라이트 미세 이동 */
 @keyframes silkDrift {
   0%, 100% {
     transform: translateY(0px);
@@ -277,4 +311,3 @@
     opacity: 0.95;
   }
 }
-
