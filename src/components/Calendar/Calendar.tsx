@@ -34,103 +34,49 @@ function isSameKstDate(a: Date, b: Date) {
 }
 
 /* =========================================================
-   ✅ Cover 계열 리프 디바이더 (Calendar 내부 전용)
-   - 같은 계열 느낌 유지
-   - 위치 / 각도 / opacity 약간 변주
+   ✅ Cover 계열 리프 디바이더 (한 줄 / 끊김 없는 버전)
+   - 달력과 카운트다운 사이에 1줄만 사용
+   - 중앙이 비어 보이지 않도록 연속 배치
    ========================================================= */
-function CalendarLeafLine({ variant }: { variant: "top" | "bottom" }) {
-  const flip = variant === "bottom";
+function CalendarLeafLine() {
   return (
-    <div className={`calendar-parent-line ${variant}`}>
+    <div className="calendar-parent-line">
       <svg viewBox="0 0 320 34" aria-hidden="true" preserveAspectRatio="none">
         <g fill="currentColor">
-          {/* end caps (각도/opacity 살짝 변주) */}
+          {/* 양끝 캡 */}
           <path
             d="M10 19 C8 16,3 16,2 19 C3 22,8 22,10 19 Z"
-            transform={`translate(6 19) rotate(${flip ? 4 : -10}) scale(0.92) translate(-6 -19)`}
+            transform="translate(6 19) rotate(-9) scale(0.92) translate(-6 -19)"
             opacity="0.45"
           />
           <path
             d="M318 19 C316 16,311 16,310 19 C311 22,316 22,318 19 Z"
-            transform={`translate(314 19) rotate(${flip ? -6 : 12}) scale(0.92) translate(-314 -19)`}
+            transform="translate(314 19) rotate(11) scale(0.92) translate(-314 -19)"
             opacity="0.45"
           />
 
-          {/* leaves (커버 계열인데 배치/각도 약간 다름) */}
-          <path
-            d="M18 20 C16 17,11 17,10 20 C11 23,16 23,18 20 Z"
-            transform={`translate(14 20) rotate(${flip ? 10 : -16}) scale(1.02) translate(-14 -20)`}
-            opacity="0.55"
-          />
-          <path
-            d="M36 15 C34 12,29 12,28 15 C29 18,34 18,36 15 Z"
-            transform={`translate(32 15) rotate(${flip ? -12 : 18}) scale(0.82) translate(-32 -15)`}
-            opacity="0.4"
-          />
-          <path
-            d="M56 22 C54 19,49 19,48 22 C49 25,54 25,56 22 Z"
-            transform={`translate(52 22) rotate(${flip ? 6 : -8}) scale(0.98) translate(-52 -22)`}
-            opacity="0.52"
-          />
-          <path
-            d="M78 14 C76 11,71 11,70 14 C71 17,76 17,78 14 Z"
-            transform={`translate(74 14) rotate(${flip ? 22 : -20}) scale(0.86) translate(-74 -14)`}
-            opacity="0.46"
-          />
-          <path
-            d="M98 21 C96 18,90 18,89 21 C90 24,96 24,98 21 Z"
-            transform={`translate(93.5 21) rotate(${flip ? -14 : 12}) scale(1.0) translate(-93.5 -21)`}
-            opacity="0.58"
-          />
+          {/* 잎들 — 촘촘/연속 배치 */}
+          <path d="M18 20 C16 17,11 17,10 20 C11 23,16 23,18 20 Z" transform="translate(14 20) rotate(-14) scale(1.02) translate(-14 -20)" opacity="0.55" />
+          <path d="M34 15 C32 12,27 12,26 15 C27 18,32 18,34 15 Z" transform="translate(30 15) rotate(18) scale(0.86) translate(-30 -15)" opacity="0.42" />
+          <path d="M52 22 C50 19,45 19,44 22 C45 25,50 25,52 22 Z" transform="translate(48 22) rotate(-8) scale(0.98) translate(-48 -22)" opacity="0.52" />
+          <path d="M70 14 C68 11,63 11,62 14 C63 17,68 17,70 14 Z" transform="translate(66 14) rotate(22) scale(0.88) translate(-66 -14)" opacity="0.46" />
+          <path d="M90 21 C88 18,82 18,81 21 C82 24,88 24,90 21 Z" transform="translate(85.5 21) rotate(-12) scale(1.0) translate(-85.5 -21)" opacity="0.58" />
 
-          <path
-            d="M148 14 C146 11,141 11,140 14 C141 17,146 17,148 14 Z"
-            transform={`translate(144 14) rotate(${flip ? -8 : 14}) scale(0.9) translate(-144 -14)`}
-            opacity="0.46"
-          />
-          <path
-            d="M170 19 C168 16,163 16,162 19 C163 22,168 22,170 19 Z"
-            transform={`translate(166 19) rotate(${flip ? 16 : -14}) scale(0.92) translate(-166 -19)`}
-            opacity="0.5"
-          />
-          <path
-            d="M188 13 C186 10,181 10,180 13 C181 16,186 16,188 13 Z"
-            transform={`translate(184 13) rotate(${flip ? 12 : -10}) scale(0.86) translate(-184 -13)`}
-            opacity="0.42"
-          />
+          <path d="M112 14 C110 11,105 11,104 14 C105 17,110 17,112 14 Z" transform="translate(108 14) rotate(6) scale(0.8) translate(-108 -14)" opacity="0.38" />
+          <path d="M132 19 C130 16,125 16,124 19 C125 22,130 22,132 19 Z" transform="translate(128 19) rotate(-18) scale(0.9) translate(-128 -19)" opacity="0.48" />
+          <path d="M152 13 C150 10,145 10,144 13 C145 16,150 16,152 13 Z" transform="translate(148 13) rotate(12) scale(0.86) translate(-148 -13)" opacity="0.44" />
+          <path d="M172 19 C170 16,165 16,164 19 C165 22,170 22,172 19 Z" transform="translate(168 19) rotate(-14) scale(0.9) translate(-168 -19)" opacity="0.5" />
+          <path d="M192 13 C190 10,185 10,184 13 C185 16,190 16,192 13 Z" transform="translate(188 13) rotate(-8) scale(0.84) translate(-188 -13)" opacity="0.42" />
 
-          <path
-            d="M214 20 C212 17,206 17,205 20 C206 23,212 23,214 20 Z"
-            transform={`translate(209.5 20) rotate(${flip ? -10 : 8}) scale(1.02) translate(-209.5 -20)`}
-            opacity="0.56"
-          />
-          <path
-            d="M236 15 C234 12,229 12,228 15 C229 18,234 18,236 15 Z"
-            transform={`translate(232 15) rotate(${flip ? 18 : -16}) scale(0.82) translate(-232 -15)`}
-            opacity="0.38"
-          />
-          <path
-            d="M258 21 C256 18,251 18,250 21 C251 24,256 24,258 21 Z"
-            transform={`translate(254 21) rotate(${flip ? -6 : 20}) scale(0.96) translate(-254 -21)`}
-            opacity="0.52"
-          />
-          <path
-            d="M282 18 C280 15,275 15,274 18 C275 21,280 21,282 18 Z"
-            transform={`translate(278 18) rotate(${flip ? 8 : -12}) scale(0.98) translate(-278 -18)`}
-            opacity="0.54"
-          />
+          <path d="M212 20 C210 17,204 17,203 20 C204 23,210 23,212 20 Z" transform="translate(207.5 20) rotate(8) scale(1.02) translate(-207.5 -20)" opacity="0.56" />
+          <path d="M232 15 C230 12,225 12,224 15 C225 18,230 18,232 15 Z" transform="translate(228 15) rotate(-16) scale(0.86) translate(-228 -15)" opacity="0.4" />
+          <path d="M252 21 C250 18,245 18,244 21 C245 24,250 24,252 21 Z" transform="translate(248 21) rotate(20) scale(0.96) translate(-248 -21)" opacity="0.52" />
+          <path d="M272 18 C270 15,265 15,264 18 C265 21,270 21,272 18 Z" transform="translate(268 18) rotate(-10) scale(0.98) translate(-268 -18)" opacity="0.54" />
+          <path d="M292 18 C290 15,285 15,284 18 C285 21,290 21,292 18 Z" transform="translate(288 18) rotate(6) scale(0.96) translate(-288 -18)" opacity="0.5" />
 
-          {/* tiny leaves */}
-          <path
-            d="M56 8 C54 6,51 6,50 8 C51 10,54 10,56 8 Z"
-            transform="translate(53 8) rotate(18) scale(0.6) translate(-53 -8)"
-            opacity="0.18"
-          />
-          <path
-            d="M262 7 C260 5,257 5,256 7 C257 9,260 9,262 7 Z"
-            transform="translate(259 7) rotate(-12) scale(0.6) translate(-259 -7)"
-            opacity="0.18"
-          />
+          {/* 아주 작은 잎 */}
+          <path d="M56 8 C54 6,51 6,50 8 C51 10,54 10,56 8 Z" transform="translate(53 8) rotate(18) scale(0.6) translate(-53 -8)" opacity="0.18" />
+          <path d="M262 7 C260 5,257 5,256 7 C257 9,260 9,262 7 Z" transform="translate(259 7) rotate(-12) scale(0.6) translate(-259 -7)" opacity="0.18" />
         </g>
       </svg>
     </div>
@@ -285,12 +231,9 @@ export const Calendar = () => {
       </div>
 
       {/* =========================================================
-         ✅ Leaf Divider (달력 ↔ 카운트다운 사이)
+         ✅ Leaf Divider (한 줄 / 끊김 없이)
          ========================================================= */}
-      <div className="calendar-leaf-divider">
-        <CalendarLeafLine variant="top" />
-        <CalendarLeafLine variant="bottom" />
-      </div>
+      <CalendarLeafLine />
 
       {/* =========================================================
          Countdown
@@ -323,7 +266,7 @@ export const Calendar = () => {
           )}
 
           {countdown.mode === "today" && (
-            <div className="countdown-status">오늘입니다🎉</div>
+            <div className="countdown-status">오늘입니다.</div>
           )}
 
           {countdown.mode === "past" && (
