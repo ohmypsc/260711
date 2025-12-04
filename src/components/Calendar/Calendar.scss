@@ -158,19 +158,11 @@
 }
 
 /* =========================================================
-   ✅ Leaf Divider (Calendar 전용)
-   - Cover 계열 느낌 유지
-   - 전역 누수 없이 calendar scope만 적용
+   ✅ Leaf Divider (한 줄 / 끊김 없음)
    ========================================================= */
-.calendar-leaf-divider {
-  margin: 0.9rem 0 0.6rem;
-  display: grid;
-  gap: 0.35rem;
-}
-
 .calendar-parent-line {
   width: 100%;
-  margin: 0 auto;
+  margin: 0.9rem auto 0.6rem;  // 달력 ↔ 카운트다운 사이 간격
   color: var(--theme-primary);
   opacity: 0.9;
 
@@ -179,14 +171,6 @@
     height: auto;
     display: block;
     filter: none;
-  }
-
-  &.top {
-    margin-bottom: 0.2rem;
-  }
-
-  &.bottom {
-    margin-top: 0.2rem;
   }
 }
 
