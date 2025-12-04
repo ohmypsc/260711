@@ -40,7 +40,7 @@ function isSameKstDate(a: Date, b: Date) {
    ========================================================= */
 function CalendarLeafLine() {
   return (
-    <div className="calendar-parent-line">
+    <div className="calendar-leaf-line">
       <svg viewBox="0 0 320 34" aria-hidden="true" preserveAspectRatio="none">
         <g fill="currentColor">
           {/* 양끝 캡 */}
