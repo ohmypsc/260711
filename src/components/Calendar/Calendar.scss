@@ -5,15 +5,17 @@
   line-height: 1.15;
   margin-bottom: 1.4rem;
 
-  /* ✅ 한 줄 고정 */
+  /* ✅ 한 줄 유지 */
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
 
-  /* ✅ 화면 폭에 맞춰 자동으로 커졌다 작아졌다 */
-  font-size: clamp(1.6rem, 7vw, 2.6rem);
+  /* ✅ 양 옆 여백 살짝 확보 */
+  padding: 0 0.6rem;   // 숨 쉴 공간
+  box-sizing: border-box;
 
-  /* (원래 쓰던 “글자 꾸미기” 스타일은 여기 아래에 그대로 붙이면 됨) */
+  /* ✅ 단정하게 화면에 맞춰 조절 */
+  font-size: clamp(1.55rem, 5.6vw, 2.2rem);
+
+  /* ✅ (너가 원하던 글자 꾸미기 스타일) */
   background: linear-gradient(
     90deg,
     var(--theme-primary),
@@ -24,6 +26,7 @@
   background-clip: text;
   color: transparent;
 }
+
 
 
 
