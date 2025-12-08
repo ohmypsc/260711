@@ -1,4 +1,4 @@
-
+// Timeline.tsx
 import React, { useState, useEffect } from "react";
 import "./Timeline.scss";
 
@@ -6,6 +6,8 @@ import "./Timeline.scss";
 const imageModules = import.meta.glob("/src/image/*.jpg", {
   import: "default",
 });
+
+// --- 타입 및 데이터 정의 ---
 
 type Caption = {
   imgIndex: number; // 1-based
@@ -20,7 +22,7 @@ const captions: Caption[] = [
   { imgIndex: 3, title: "2024년 가을에 만나" },
   { imgIndex: 4, title: "2024년 겨울," },
   { imgIndex: 5, title: "2025년 봄," },
-  { imgIndex: 6, title: "2025년 여름," },
+  { imgIndex: 6, "title": "2025년 여름," },
   { imgIndex: 7, title: "2025년 가을," },
   { imgIndex: 8, title: "2025년 겨울," },
   { imgIndex: 9, title: "2026년 봄을 지나" },
@@ -53,7 +55,8 @@ const itemsWithPromise: ItemWithPromise[] = sortedKeys.map((k, i) => {
   };
 });
 
-// 이미지 로딩을 처리하는 내부 컴포넌트
+// --- 이미지 로딩 처리 컴포넌트 ---
+
 const LazyTimelineImage: React.FC<ItemWithPromise & { loading: 'lazy' | 'eager' }> = ({
   imgIndex,
   imgPromiseLoader,
@@ -61,27 +64,45 @@ const LazyTimelineImage: React.FC<ItemWithPromise & { loading: 'lazy' | 'eager' 
   loading,
 }) => {
   const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
+    if (imgSrc || isError) return;
+
     imgPromiseLoader()
       .then((module) => {
         setImgSrc(module.default);
+        setIsError(false);
       })
       .catch((error) => {
         console.error(`Error loading image ${imgIndex}:`, error);
+        setIsError(true);
       });
-  }, [imgPromiseLoader, imgIndex]);
+  }, [imgPromiseLoader, imgIndex, imgSrc, isError]);
+
+  const placeholderStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+
+  if (isError) {
+    return <div 
+            className="photo-placeholder" 
+            style={{ ...placeholderStyle, backgroundColor: '#c72e2e', color: 'white' }}
+        >
+            Error
+        </div>;
+  }
 
   if (!imgSrc) {
     return (
       <div
         className="photo-placeholder"
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'var(--text-light)',
-          borderRadius: '50%',
-        }}
+        style={{ ...placeholderStyle, backgroundColor: 'var(--text-light)' }}
       ></div>
     );
   }
@@ -95,20 +116,25 @@ const LazyTimelineImage: React.FC<ItemWithPromise & { loading: 'lazy' | 'eager' 
   );
 };
 
+// --- 메인 Timeline 컴포넌트 ---
+
 export function Timeline() {
   return (
     <div className="w-timeline">
       <ol className="timeline-list">
         {itemsWithPromise.map((item, idx) => {
           const side = idx % 2 === 0 ? "left" : "right";
+          // 첫 번째 항목은 즉시 로드(eager), 나머지는 지연 로드(lazy)
           const loadingAttr = idx === 0 ? 'eager' : 'lazy';
 
           return (
             <li key={item.imgIndex} className={`timeline-item ${side}`}>
+              {/* 가운데 라인 */}
               <div className="line-col">
                 <span className="dot" aria-hidden="true" />
               </div>
 
+              {/* 사진 */}
               <div className="media">
                 <div className="photo-wrap">
                   <LazyTimelineImage
@@ -118,6 +144,7 @@ export function Timeline() {
                 </div>
               </div>
 
+              {/* 캡션(반대편 칼럼) */}
               {item.hasCaption && (
                 <div className="caption-col">
                   {item.caption?.date && <p className="date">{item.caption.date}</p>}
