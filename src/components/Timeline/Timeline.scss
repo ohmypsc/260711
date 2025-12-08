@@ -28,7 +28,6 @@
   gap: 0.6rem;
 }
 
-
 /* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
@@ -79,16 +78,26 @@
     display: block;
   }
 }
+
+/* =========================================
+   ✅ Caption line-break control
+   ========================================= */
+
 /* "1989년에 태어난" 같은 구간 줄바꿈 금지 */
 .no-break {
   white-space: nowrap;
 }
+
+/* =========================================
+   ✅ LazyImage UI (skeleton + fade-in)
+   ========================================= */
 
 /* LazyImage 래퍼 */
 .lazy-photo {
   position: relative;
   width: 100%;
   height: 100%;
+  display: block;           /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
 }
 
 /* 로딩 스켈레톤(원형) */
@@ -96,14 +105,15 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: rgba(0,0,0,0.06);
+  background: rgba(0, 0, 0, 0.06);
   animation: pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes pulse {
-  0% { opacity: .45; }
-  50% { opacity: .8; }
-  100% { opacity: .45; }
+  0% { opacity: 0.45; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.45; }
 }
 
 /* 이미지 페이드 인 */
@@ -112,9 +122,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  /* photo-wrap에서 이미 원형 클립되지만,
+     안전하게 원형 유지하고 싶으면 아래 유지 */
   border-radius: 50%;
+
   opacity: 0;
-  transition: opacity .35s ease;
+  transition: opacity 0.35s ease;
 }
 
 .lazy-photo.is-loaded img {
@@ -168,15 +181,13 @@
   opacity: 0.95;
 }
 .timeline-item:nth-child(3n + 2) .dot {
-  transform: translate(-50%, -50%) rotate(16deg) scale(1.0);
+  transform: translate(-50%, -50%) rotate(16deg) scale(1);
   opacity: 0.85;
 }
 
-
-
 /* 캡션 */
 .caption-col {
-  grid-row: 1; 
+  grid-row: 1;
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -271,8 +282,6 @@
     --lift-ratio: 0.04;
     --center-line-width: 1px;
   }
-
- 
 
   .dot {
     width: 12px;
