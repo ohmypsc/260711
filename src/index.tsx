@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
-import { Cover } from "@/components/Cover/Cover";
 import { Timeline } from "@/components/Timeline/Timeline";
 import { Calendar } from "@/components/Calendar/Calendar";
 import { Location } from "@/components/Location/Location";
+import { Cover } from "@/components/Cover/Cover";
 import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook";
@@ -126,12 +126,7 @@ export default function MainWeddingPage() {
       <BgEffect />
 
       <main className="wedding-page">
-        <section id="cover">
-          <div className="section-inner">
-            <Cover />
-          </div>
-        </section>
-
+        
         <section id="timeline">
           <div className="section-inner">
             <Timeline />
@@ -147,6 +142,12 @@ export default function MainWeddingPage() {
         <section id="location">
           <div className="section-inner">
             <Location />
+          </div>
+        </section>
+
+        <section id="cover">
+          <div className="section-inner">
+            <Cover />
           </div>
         </section>
 
