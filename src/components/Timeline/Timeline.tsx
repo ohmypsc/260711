@@ -1,10 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import "./Timeline.scss";
 
-/** Vite: src/image 안 jpg 자동 로드
- *  ✅ eager:false 로 바꿔서 "모듈을 미리 다 불러오는" 느낌도 줄임
- *  (IntersectionObserver lazy와 같이 쓰면 가장 체감이 좋음)
- */
+/** Vite: src/image 안 jpg 자동 로드 (동적 import) */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
   eager: false,
   import: "default",
@@ -19,14 +16,29 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 
 type Caption = {
   imgIndex: number; // 1-based
-  title?: string;
+  title?: ReactNode; // ✅ JSX도 받게
   date?: string;
   desc?: string;
 };
 
+/** ✅ 1,2번 타이틀을 no-break span으로 감쌈 */
 const captions: Caption[] = [
-  { imgIndex: 1, title: "1989년 가을에 태어난 승철이와" },
-  { imgIndex: 2, title: "1990년 봄에 태어난 미영이가" },
+  {
+    imgIndex: 1,
+    title: (
+      <>
+        <span className="no-break">1989년에 태어난</span> 승철이와
+      </>
+    ),
+  },
+  {
+    imgIndex: 2,
+    title: (
+      <>
+        <span className="no-break">1990년에 태어난</span> 미영이가
+      </>
+    ),
+  },
   { imgIndex: 3, title: "2024년 가을에 만나" },
   { imgIndex: 4, title: "2024년 겨울," },
   { imgIndex: 5, title: "2025년 봄," },
@@ -40,49 +52,59 @@ const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c])
 
 type TimelineItem = {
   imgIndex: number;
-  key: string;         // glob key
+  key: string; // glob key
   caption?: Caption;
   hasCaption: boolean;
 };
 
-/** ✅ IntersectionObserver 기반 LazyImage */
+/**
+ * ✅ 체감 lazy 개선 버전 LazyImage
+ * - aboveFold(첫 화면) 이미지는 즉시 로드
+ * - 나머지는 IO로 600px 전에 미리 import 시작
+ * - 로딩 스켈레톤 + 페이드인
+ */
 function LazyImage({
   srcPromise,
   alt,
-  className,
+  aboveFold = false,
 }: {
   srcPromise: () => Promise<string>;
   alt: string;
-  className?: string;
+  aboveFold?: boolean;
 }) {
-  const ref = useRef<HTMLImageElement | null>(null);
-  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [shouldLoad, setShouldLoad] = useState(aboveFold);
   const [src, setSrc] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
+  // IO로 "근처 오면" 로드 시작
   useEffect(() => {
+    if (aboveFold) return; // 첫 화면은 IO 불필요
+
     const el = ref.current;
     if (!el) return;
 
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
+          setShouldLoad(true);
           io.disconnect();
         }
       },
       {
-        root: null,          // viewport 기준
-        rootMargin: "200px", // 200px 전부터 미리 로드
+        root: null,
+        rootMargin: "600px", // ✅ 훨씬 일찍 받아서 "느리게 뜸" 완화
         threshold: 0.01,
       }
     );
 
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [aboveFold]);
 
+  // 실제 src import
   useEffect(() => {
-    if (!visible || src) return;
+    if (!shouldLoad || src) return;
 
     let cancelled = false;
     srcPromise().then((url) => {
@@ -92,17 +114,29 @@ function LazyImage({
     return () => {
       cancelled = true;
     };
-  }, [visible, src, srcPromise]);
+  }, [shouldLoad, src, srcPromise]);
 
   return (
-    <img
+    <div
       ref={ref}
-      src={src ?? undefined}    // ✅ 보이기 전엔 src 없음 → 네트워크 요청 X
-      alt={alt}
-      className={className}
-      loading="lazy"            // 보조용 (native)
-      decoding="async"
-    />
+      className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`}
+      aria-label={alt}
+    >
+      {/* 스켈레톤(로딩 중) */}
+      {!loaded && <div className="photo-skeleton" aria-hidden="true" />}
+
+      {/* 실제 이미지 */}
+      {src && (
+        <img
+          src={src}
+          alt={alt}
+          loading={aboveFold ? "eager" : "lazy"} // ✅ 첫 2장은 eager
+          fetchPriority={aboveFold ? "high" : "auto"}
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+        />
+      )}
+    </div>
   );
 }
 
@@ -135,12 +169,13 @@ export function Timeline() {
                 <div className="photo-wrap">
                   <LazyImage
                     srcPromise={imageModules[item.key]}
-                    alt={cap?.title ?? `timeline-${item.imgIndex}`}
+                    alt={(cap?.title as string) ?? `timeline-${item.imgIndex}`}
+                    aboveFold={item.imgIndex <= 2} // ✅ 첫 2장은 즉시 로드
                   />
                 </div>
               </div>
 
-              {/* 캡션(반대편 칼럼) */}
+              {/* 캡션 */}
               {item.hasCaption && (
                 <div className="caption-col">
                   {cap?.date && <p className="date">{cap.date}</p>}
