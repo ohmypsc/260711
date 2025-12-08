@@ -1,161 +1,92 @@
-// Timeline.tsx
-import React, { useState, useEffect } from "react";
 import "./Timeline.scss";
 
-/** Vite: src/image 안 jpg 동적 로드 */
+/** Vite: src/image 안 jpg 자동 로드 */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
-  import: "default",
-});
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
 
-// --- 타입 및 데이터 정의 ---
+const images = Object.keys(imageModules)
+  .sort((a, b) => {
+    const na = Number(a.match(/(\d+)\.jpg$/)?.[1] ?? 0);
+    const nb = Number(b.match(/(\d+)\.jpg$/)?.[1] ?? 0);
+    return na - nb;
+  })
+  .map((k) => imageModules[k]);
 
 type Caption = {
-  imgIndex: number; // 1-based
-  title?: string;
-  date?: string;
-  desc?: string;
+  imgIndex: number; // 1-based
+  title?: string;
+  date?: string;
+  desc?: string;
 };
 
 const captions: Caption[] = [
-  { imgIndex: 1, title: "1989년 가을에 태어난 승철이와" },
-  { imgIndex: 2, title: "1990년 봄에 태어난 미영이가" },
-  { imgIndex: 3, title: "2024년 가을에 만나" },
-  { imgIndex: 4, title: "2024년 겨울," },
-  { imgIndex: 5, title: "2025년 봄," },
-  { imgIndex: 6, "title": "2025년 여름," },
-  { imgIndex: 7, title: "2025년 가을," },
-  { imgIndex: 8, title: "2025년 겨울," },
-  { imgIndex: 9, title: "2026년 봄을 지나" },
+  { imgIndex: 1, title: "1989년 가을에 태어난 승철이와" },
+  { imgIndex: 2, title: "1990년 봄에 태어난 미영이가" },
+  { imgIndex: 3, title: "2024년 가을에 만나" },
+  { imgIndex: 4, title: "2024년 겨울," },
+  { imgIndex: 5, title: "2025년 봄," },
+  { imgIndex: 6, title: "2025년 여름," },
+  { imgIndex: 7, title: "2025년 가을," },
+  { imgIndex: 8, title: "2025년 겨울," },
+  { imgIndex: 9, title: "2026년 봄을 지나" },
 ];
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
 
-const sortedKeys = Object.keys(imageModules).sort((a, b) => {
-  const na = Number(a.match(/(\d+)\.jpg$/)?.[1] ?? 0);
-  const nb = Number(b.match(/(\d+)\.jpg$/)?.[1] ?? 0);
-  return na - nb;
-});
-
-type ItemWithPromise = {
-  imgIndex: number;
-  imgPromiseLoader: () => Promise<{ default: string }>;
-  caption?: Caption;
-  hasCaption: boolean;
+type TimelineItem = {
+  imgIndex: number;
+  img: string;
+  caption?: Caption;
+  hasCaption: boolean;
 };
 
-const itemsWithPromise: ItemWithPromise[] = sortedKeys.map((k, i) => {
-  const imgIndex = i + 1;
-  const caption = captionMap.get(imgIndex);
-  const hasCaption = Boolean(caption?.title || caption?.date || caption?.desc);
-  return {
-    imgIndex,
-    imgPromiseLoader: imageModules[k] as () => Promise<{ default: string }>,
-    caption,
-    hasCaption,
-  };
+const items: TimelineItem[] = images.map((img, i) => {
+  const imgIndex = i + 1;
+  const caption = captionMap.get(imgIndex);
+  const hasCaption = Boolean(caption?.title || caption?.date || caption?.desc);
+  return { imgIndex, img, caption, hasCaption };
 });
-
-// --- 이미지 로딩 처리 컴포넌트 ---
-
-const LazyTimelineImage: React.FC<ItemWithPromise & { loading: 'lazy' | 'eager' }> = ({
-  imgIndex,
-  imgPromiseLoader,
-  caption,
-  loading,
-}) => {
-  const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    if (imgSrc || isError) return;
-
-    imgPromiseLoader()
-      .then((module) => {
-        setImgSrc(module.default);
-        setIsError(false);
-      })
-      .catch((error) => {
-        console.error(`Error loading image ${imgIndex}:`, error);
-        setIsError(true);
-      });
-  }, [imgPromiseLoader, imgIndex, imgSrc, isError]);
-
-  const placeholderStyle: React.CSSProperties = {
-    width: '100%',
-    height: '100%',
-    borderRadius: '50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-
-  if (isError) {
-    return <div 
-            className="photo-placeholder" 
-            style={{ ...placeholderStyle, backgroundColor: '#c72e2e', color: 'white' }}
-        >
-            Error
-        </div>;
-  }
-
-  if (!imgSrc) {
-    return (
-      <div
-        className="photo-placeholder"
-        style={{ ...placeholderStyle, backgroundColor: 'var(--text-light)' }}
-      ></div>
-    );
-  }
-
-  return (
-    <img
-      src={imgSrc}
-      alt={caption?.title ?? `timeline-${imgIndex}`}
-      loading={loading}
-    />
-  );
-};
-
-// --- 메인 Timeline 컴포넌트 ---
 
 export function Timeline() {
-  return (
-    <div className="w-timeline">
-      <ol className="timeline-list">
-        {itemsWithPromise.map((item, idx) => {
-          const side = idx % 2 === 0 ? "left" : "right";
-          // 첫 번째 항목은 즉시 로드(eager), 나머지는 지연 로드(lazy)
-          const loadingAttr = idx === 0 ? 'eager' : 'lazy';
+  return (
+    <div className="w-timeline">
 
-          return (
-            <li key={item.imgIndex} className={`timeline-item ${side}`}>
-              {/* 가운데 라인 */}
-              <div className="line-col">
-                <span className="dot" aria-hidden="true" />
-              </div>
+      <ol className="timeline-list">
+        {items.map((item, idx) => {
+          const side = idx % 2 === 0 ? "left" : "right";
 
-              {/* 사진 */}
-              <div className="media">
-                <div className="photo-wrap">
-                  <LazyTimelineImage
-                    {...item}
-                    loading={loadingAttr}
-                  />
-                </div>
-              </div>
+          return (
+            <li key={item.imgIndex} className={`timeline-item ${side}`}>
+              {/* 가운데 라인 */}
+              <div className="line-col">
+                <span className="dot" aria-hidden="true" />
+              </div>
 
-              {/* 캡션(반대편 칼럼) */}
-              {item.hasCaption && (
-                <div className="caption-col">
-                  {item.caption?.date && <p className="date">{item.caption.date}</p>}
-                  {item.caption?.title && <h3 className="title">{item.caption.title}</h3>}
-                  {item.caption?.desc && <p className="desc">{item.caption.desc}</p>}
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-    </div>
-  );
+              {/* 사진 */}
+              <div className="media">
+                <div className="photo-wrap">
+                  <img
+                    src={item.img}
+                    alt={item.caption?.title ?? `timeline-${item.imgIndex}`}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+              {/* 캡션(반대편 칼럼) */}
+              {item.hasCaption && (
+                <div className="caption-col">
+                  {item.caption?.date && <p className="date">{item.caption.date}</p>}
+                  {item.caption?.title && <h3 className="title">{item.caption.title}</h3>}
+                  {item.caption?.desc && <p className="desc">{item.caption.desc}</p>}
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
 }
