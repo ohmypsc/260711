@@ -1,9 +1,3 @@
-/* ============================================
-    Timeline (Cover-leaf vine edition)
-    - 가운데 라인/점 => 커버 LeafLine 결로 통일
-    - 줄기 선 없이 잎방울들이 모여 라인 형성
-    ============================================ */
-
 .w-timeline {
   background: transparent;
   position: relative;
@@ -97,7 +91,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  display: block;          /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
+  display: block; /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
 }
 
 /* 로딩 스켈레톤(원형) */
@@ -111,9 +105,15 @@
 }
 
 @keyframes pulse {
-  0% { opacity: 0.45; }
-  50% { opacity: 0.8; }
-  100% { opacity: 0.45; }
+  0% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.45;
+  }
 }
 
 /* 이미지 페이드 인 */
@@ -209,12 +209,16 @@
   font-weight: 600;
   color: var(--text-main);
 
-  /* ✅ 여기만 "자동 축소 + 한 줄"에 맞게 수정 */
+  /* ✅ 자동 축소가 "부모 폭" 기준으로 정확히 먹도록 필수 */
+  display: block;
   width: 100%;
+  max-width: 100%;
   min-width: 0;
+
+  /* ✅ 절대 줄바꿈 금지 */
   white-space: nowrap;
 
-  /* 기존: overflow: hidden;  ->  축소되기 전에 잘려서 모바일에서 문제 발생 */
+  /* ✅ overflow hidden이면 축소되기 전에 모바일에서 잘려 보일 수 있어서 해제 */
   overflow: visible;
 }
 
@@ -314,7 +318,7 @@
 }
 
 .timeline-item {
-  transition: opacity 2.0s ease-out, transform 2.0s ease-out;
+  transition: opacity 2s ease-out, transform 2s ease-out;
 }
 
 .timeline-item.left {
