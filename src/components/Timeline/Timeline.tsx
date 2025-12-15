@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import "./Timeline.scss";
 
-// ... (기존 ImageModules, Captions, TimelineItem 타입 정의는 변경 없음) ...
 /** Vite: src/image 안 jpg 자동 로드 (동적 import) */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
     eager: false,
@@ -224,7 +223,7 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
 };
 
 // ===============================================
-// ⭐ 개선된: 글자 크기 자동 조절을 위한 Hook
+// ⭐ 최종 개선: 최소 폰트 크기 제한 제거 (무조건 한 줄에 맞춤)
 // ===============================================
 
 /**
@@ -236,6 +235,7 @@ const useAutoResizeText = (
     hasCaption: boolean
 ) => {
     const [fontSize, setFontSize] = useState<string>('inherit');
+    // 글자 크기가 바뀔 때마다 다시 측정하도록 유도하는 카운터
     const [recheckCount, setRecheckCount] = useState(0); 
 
     // 1. 뷰포트 변경 감지 이벤트 추가 (모바일 대응)
@@ -277,26 +277,22 @@ const useAutoResizeText = (
             const parentWidth = parentElement.getBoundingClientRect().width;
             
             let currentFontSize = parseFloat(window.getComputedStyle(textElement).fontSize);
-            // 💡 최소 글자 크기를 12px에서 10px로 낮춰서 더 긴 텍스트도 한 줄에 표시되도록 함
-            const minFontSize = 10; 
+            // ⭐ minFontSize 제한을 완전히 제거합니다.
             const paddingTolerance = 0.95; 
 
+            // 텍스트가 부모 컨테이너를 넘치는지 확인
             if (textWidth > parentWidth && parentWidth > 0) {
+                // 넘치는 경우, 비율에 맞춰 글자 크기 조절 (제한 없음)
                 const newFontSize = currentFontSize * (parentWidth / textWidth) * paddingTolerance;
 
-                if (newFontSize >= minFontSize) {
-                    const newFontSizeString = `${newFontSize}px`;
-                    if (fontSize !== newFontSizeString) {
-                        setFontSize(newFontSizeString);
-                        setRecheckCount(c => c + 1); 
-                    }
-                } else {
-                    const minFontSizeString = `${minFontSize}px`;
-                    if (fontSize !== minFontSizeString) {
-                        setFontSize(minFontSizeString);
-                    }
+                const newFontSizeString = `${newFontSize}px`;
+                if (fontSize !== newFontSizeString) {
+                    setFontSize(newFontSizeString);
+                    // 폰트 크기가 변경되었으므로, 다음 렌더링 후 다시 측정하도록 유도
+                    setRecheckCount(c => c + 1); 
                 }
             } else {
+                // 넘치지 않으면 기본 크기 'inherit' 설정
                 if (fontSize !== 'inherit') {
                     setFontSize('inherit');
                 }
@@ -308,12 +304,14 @@ const useAutoResizeText = (
             }
         };
 
+        // DOM이 안정화된 후 측정 실행
         const rafId = requestAnimationFrame(adjustFontSize);
 
         return () => {
             cancelAnimationFrame(rafId);
         };
         
+    // fontSize나 recheckCount가 변하면 Hook을 재실행하여 재측정
     }, [itemIndex, hasCaption, ref, fontSize, recheckCount]); 
 
     return { fontSize };
@@ -322,8 +320,6 @@ const useAutoResizeText = (
 
 /**
  * ✅ 체감 lazy 개선 버전 LazyImage (기존 로직 그대로 유지)
- * - aboveFold(첫 화면) 이미지는 즉시 로드 (첫 2장)
- * - 나머지는 IO로 600px 전에 미리 import 시작
  */
 function LazyImage({
     srcPromise,
@@ -408,7 +404,6 @@ function LazyImage({
 
 export function Timeline() {
     const items: TimelineItem[] = useMemo(() => {
-        // 기존 로직 유지
         return imageKeys.map((key, i) => {
             const imgIndex = i + 1;
             const caption = captionMap.get(imgIndex);
@@ -417,7 +412,6 @@ export function Timeline() {
         });
     }, []);
 
-    // ⭐ NEW: 하이브리드 등장 Hook 적용 (초기 등장 간격 500ms)
     const { itemRefs, visibleItems } = useHybridTimelineAppear(items.length, 500); 
 
     return (
@@ -427,19 +421,16 @@ export function Timeline() {
                     const side = idx % 2 === 0 ? "left" : "right";
                     const cap = item.caption;
                     
-                    // ⭐ NEW: 캡션 제목용 Ref
                     const capRef = useRef<HTMLHeadingElement | null>(null);
 
-                    // ⭐ NEW: 자동 크기 조절 Hook 적용
+                    // ⭐ NEW: 자동 크기 조절 Hook 적용 (제한 없음)
                     const { fontSize } = useAutoResizeText(capRef, idx, item.hasCaption);
                     
-                    // ⭐ NEW: is-visible 클래스 적용 여부 결정
                     const isVisible = visibleItems.has(idx);
 
                     return (
                         <li 
                             key={item.imgIndex} 
-                            // ⭐ NEW: ref 및 data-index 설정 (Hook 작동에 필수)
                             ref={el => itemRefs.current[idx] = el}
                             data-index={idx}
                             className={`timeline-item ${side} ${isVisible ? 'is-visible' : 'not-visible'}`}
@@ -454,9 +445,8 @@ export function Timeline() {
                                 <div className="photo-wrap">
                                     <LazyImage
                                         srcPromise={imageModules[item.key]}
-                                        // title이 ReactNode 타입일 수 있으므로 string으로 변환 시도
                                         alt={typeof cap?.title === 'string' ? cap.title : `timeline-${item.imgIndex}`}
-                                        aboveFold={item.imgIndex <= 2} // ✅ 기존 로직 그대로 유지
+                                        aboveFold={item.imgIndex <= 2}
                                     />
                                 </div>
                             </div>
@@ -468,9 +458,9 @@ export function Timeline() {
                                     {cap?.title && (
                                         <h3 
                                             className="title"
-                                            // ⭐ NEW: ref 및 계산된 스타일 적용
+                                            // ⭐ ref 및 계산된 스타일 적용
                                             ref={capRef}
-                                            // Hook에서 계산된 fontSize를 적용하고, 줄 바꿈 방지 속성도 함께 적용합니다.
+                                            // fontSize를 계산된 크기로 적용하며, 줄 바꿈 방지 속성 유지
                                             style={{ fontSize: fontSize, whiteSpace: 'nowrap' }} 
                                         >
                                             {cap.title}
