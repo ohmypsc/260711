@@ -57,11 +57,59 @@ type TimelineItem = {
   hasCaption: boolean;
 };
 
+// ===============================================
+// ⭐ 1. 아이템 등장 애니메이션을 위한 Hook
+// ===============================================
+
 /**
- * ✅ 체감 lazy 개선 버전 LazyImage
- * - aboveFold(첫 화면) 이미지는 즉시 로드
- * - 나머지는 IO로 600px 전에 미리 import 시작
- * - 로딩 스켈레톤 + 페이드인
+ * 스크롤 시 뷰포트에 들어온 아이템에 is-visible 클래스를 추가하는 Hook
+ */
+const useAppearOnScroll = (rootMargin: string = "0px") => {
+  // 아이템의 ref를 저장할 객체
+  const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
+  // 뷰포트에 보이는 아이템의 인덱스 Set
+  const [visibleItems, setVisibleItems] = useState(new Set<number>());
+
+  useEffect(() => {
+    // Intersection Observer 인스턴스 생성
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          // data-index 속성에서 인덱스 값을 가져옴
+          const index = Number(entry.target.getAttribute('data-index'));
+          
+          if (entry.isIntersecting) {
+            setVisibleItems(prev => {
+              const newSet = new Set(prev);
+              newSet.add(index);
+              return newSet;
+            });
+            // 일단 나타난 아이템은 다시 숨기지 않기 위해 관찰 중단
+            observer.unobserve(entry.target); 
+          }
+        });
+      },
+      // rootMargin을 통해 조금 더 일찍 감지 시작 (0px 기본)
+      { rootMargin, threshold: 0.1 } 
+    );
+
+    // 모든 타임라인 아이템 관찰 시작
+    Object.values(itemRefs.current).forEach(el => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [rootMargin]);
+
+  return { itemRefs, visibleItems };
+};
+
+// ===============================================
+// 2. LazyImage 컴포넌트
+// ===============================================
+
+/**
+ * 체감 Lazy 로딩 컴포넌트 (IO로 600px 전에 미리 import 시작)
  */
 function LazyImage({
   srcPromise,
@@ -77,9 +125,9 @@ function LazyImage({
   const [src, setSrc] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
-  // IO로 "근처 오면" 로드 시작
+  // IO로 "근처 오면" 로드 시작 (첫 화면 제외)
   useEffect(() => {
-    if (aboveFold) return; // 첫 화면은 IO 불필요
+    if (aboveFold) return; 
 
     const el = ref.current;
     if (!el) return;
@@ -93,7 +141,7 @@ function LazyImage({
       },
       {
         root: null,
-        rootMargin: "600px", // ✅ 훨씬 일찍 받아서 "느리게 뜸" 완화
+        rootMargin: "600px", // 훨씬 일찍 받아서 "느리게 뜸" 완화
         threshold: 0.01,
       }
     );
@@ -130,7 +178,7 @@ function LazyImage({
         <img
           src={src}
           alt={alt}
-          loading={aboveFold ? "eager" : "lazy"} // ✅ 첫 2장은 eager
+          loading={aboveFold ? "eager" : "lazy"} // 첫 2장은 eager
           fetchPriority={aboveFold ? "high" : "auto"}
           decoding="async"
           onLoad={() => setLoaded(true)}
@@ -139,6 +187,10 @@ function LazyImage({
     </div>
   );
 }
+
+// ===============================================
+// 3. Timeline 메인 컴포넌트
+// ===============================================
 
 export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
@@ -150,15 +202,28 @@ export function Timeline() {
     });
   }, []);
 
+  // ⭐ 등장 Hook 사용
+  const { itemRefs, visibleItems } = useAppearOnScroll("0px"); 
+
   return (
     <div className="w-timeline">
       <ol className="timeline-list">
         {items.map((item, idx) => {
           const side = idx % 2 === 0 ? "left" : "right";
           const cap = item.caption;
+          
+          // ⭐ is-visible 클래스 적용
+          const isVisible = visibleItems.has(idx);
 
           return (
-            <li key={item.imgIndex} className={`timeline-item ${side}`}>
+            <li 
+              key={item.imgIndex} 
+              // ⭐ 클래스 추가: is-visible / not-visible
+              className={`timeline-item ${side} ${isVisible ? 'is-visible' : 'not-visible'}`}
+              // ⭐ ref 및 data-index 설정
+              ref={el => itemRefs.current[idx] = el}
+              data-index={idx}
+            >
               {/* 가운데 라인 */}
               <div className="line-col">
                 <span className="dot" aria-hidden="true" />
@@ -170,7 +235,7 @@ export function Timeline() {
                   <LazyImage
                     srcPromise={imageModules[item.key]}
                     alt={(cap?.title as string) ?? `timeline-${item.imgIndex}`}
-                    aboveFold={item.imgIndex <= 2} // ✅ 첫 2장은 즉시 로드
+                    aboveFold={item.imgIndex <= 2} // 첫 2장은 즉시 로드
                   />
                 </div>
               </div>
