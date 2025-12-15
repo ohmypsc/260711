@@ -27,7 +27,7 @@ const captions: Caption[] = [
     imgIndex: 1,
     title: (
       <>
-        <span className="no-break">1989년에 태어난 승철이와</span>
+        <span className="no-break">1989년에 태어난</span> 승철이와
       </>
     ),
   },
@@ -35,7 +35,7 @@ const captions: Caption[] = [
     imgIndex: 2,
     title: (
       <>
-        <span className="no-break">1990년에 태어난 미영이가</span>
+        <span className="no-break">1990년에 태어난</span> 미영이가
       </>
     ),
   },
@@ -58,62 +58,75 @@ type TimelineItem = {
 };
 
 // ===============================================
-// ⭐ 1. 자동 순차 등장 애니메이션을 위한 Hook (Timer 기반)
+// ⭐ 1. 스크롤 기반 등장 애니메이션을 위한 Hook (Intersection Observer 기반)
 // ===============================================
 
 /**
- * 컴포넌트 마운트 후 지정된 딜레이 간격으로 아이템을 순차적으로 나타나게 하는 Hook
+ * 스크롤 시 뷰포트에 들어온 아이템에 is-visible 클래스를 추가하는 Hook
  */
-const useSequentialAppear = (itemCount: number, delayMs: number = 300) => {
-  // 현재 is-visible 상태인 아이템의 개수 (0부터 시작)
-  const [visibleCount, setVisibleCount] = useState(0);
+const useAppearOnScroll = (rootMargin: string = "0px") => {
+  // 아이템의 ref를 저장할 객체
+  const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
+  // 뷰포트에 보이는 아이템의 인덱스 Set
+  const [visibleItems, setVisibleItems] = useState(new Set<number>());
 
   useEffect(() => {
-    if (visibleCount >= itemCount) return; // 모든 아이템이 나타났다면 종료
+    // Intersection Observer 인스턴스 생성
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          // data-index 속성에서 인덱스 값을 가져옴
+          const index = Number(entry.target.getAttribute('data-index'));
+          
+          if (entry.isIntersecting) {
+            setVisibleItems(prev => {
+              const newSet = new Set(prev);
+              newSet.add(index);
+              return newSet;
+            });
+            // 일단 나타난 아이템은 다시 숨기지 않기 위해 관찰 중단
+            observer.unobserve(entry.target); 
+          }
+        });
+      },
+      // rootMargin을 통해 조금 더 일찍 감지 시작 (0px 기본)
+      { rootMargin, threshold: 0.1 } 
+    );
 
-    const timer = setTimeout(() => {
-      // 딜레이 간격으로 visibleCount 증가
-      setVisibleCount(prev => prev + 1);
-    }, delayMs);
+    // 모든 타임라인 아이템 관찰 시작
+    Object.values(itemRefs.current).forEach(el => {
+      if (el) observer.observe(el);
+    });
 
-    // 컴포넌트 언마운트 시 타이머 정리
-    return () => clearTimeout(timer);
-  }, [visibleCount, itemCount, delayMs]);
+    return () => observer.disconnect();
+  }, [rootMargin]);
 
-  // 해당 인덱스가 현재 visibleCount 범위 내에 있는지 확인하는 함수
-  const isVisible = (index: number) => index < visibleCount;
-  
-  return { isVisible };
+  return { itemRefs, visibleItems };
 };
 
 
 // ===============================================
-// 2. LazyImage 컴포넌트 (AboveFold 로직 수정)
+// 2. LazyImage 컴포넌트 (모든 이미지 지연 로드 유지)
 // ===============================================
 
 /**
- * 체감 Lazy 로딩 컴포넌트 (AboveFold 로직이 제거되거나 비활성화되어 모든 이미지에 Lazy Loading 적용)
+ * 체감 Lazy 로딩 컴포넌트 (IO로 1000px 전에 미리 import 시작)
  */
 function LazyImage({
   srcPromise,
   alt,
-  aboveFold = false,
 }: {
   srcPromise: () => Promise<string>;
   alt: string;
-  aboveFold?: boolean; // 이 값은 이제 항상 false로 전달될 것임
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  // ⭐ shouldLoad는 이제 Intersection Observer에 의해서만 결정됨
+  // aboveFold가 제거되었으므로, 초기값은 항상 false로 설정하여 지연 로드를 시작
   const [shouldLoad, setShouldLoad] = useState(false); 
   const [src, setSrc] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
-  // IO로 "근처 오면" 로드 시작
+  // IO로 "근처 오면" 로드 시작 (모든 이미지에 적용)
   useEffect(() => {
-    // aboveFold 체크를 제거하거나, (위에 이미 false로 고정했으므로)
-    // 혹은 아래의 IO 로직이 모든 이미지에 적용되도록 수정
-
     const el = ref.current;
     if (!el) return;
 
@@ -126,14 +139,15 @@ function LazyImage({
       },
       {
         root: null,
-        rootMargin: "600px", // 훨씬 일찍 받아서 "느리게 뜸" 완화
+        // ⭐ 감지 범위를 1000px로 확대하여 로드를 더 일찍 시작 (로딩 지연 개선)
+        rootMargin: "1000px", 
         threshold: 0.01,
       }
     );
 
     io.observe(el);
     return () => io.disconnect();
-  }, []); // 의존성 배열에서 aboveFold를 제거하거나, 아예 false로 고정하여 모든 이미지에 IO 적용
+  }, []);
 
   // 실제 src import
   useEffect(() => {
@@ -163,8 +177,8 @@ function LazyImage({
         <img
           src={src}
           alt={alt}
-          loading={"lazy"} // ⭐ 모든 이미지에 lazy 고정
-          fetchPriority={"auto"} // ⭐ 모든 이미지에 auto 고정
+          loading="lazy" // ⭐ 모든 이미지에 lazy 고정
+          fetchPriority="auto" // ⭐ 모든 이미지에 auto 고정
           decoding="async"
           onLoad={() => setLoaded(true)}
         />
@@ -174,7 +188,7 @@ function LazyImage({
 }
 
 // ===============================================
-// 3. Timeline 메인 컴포넌트 (AboveFold 호출 제거)
+// 3. Timeline 메인 컴포넌트
 // ===============================================
 
 export function Timeline() {
@@ -187,8 +201,8 @@ export function Timeline() {
     });
   }, []);
 
-  // 자동 순차 등장 Hook 사용
-  const { isVisible } = useSequentialAppear(items.length, 300); 
+  // ⭐ 스크롤 기반 등장 Hook 재적용
+  const { itemRefs, visibleItems } = useAppearOnScroll("0px"); 
 
   return (
     <div className="w-timeline">
@@ -197,12 +211,17 @@ export function Timeline() {
           const side = idx % 2 === 0 ? "left" : "right";
           const cap = item.caption;
           
-          const shouldAppear = isVisible(idx);
+          // ⭐ is-visible 클래스 적용
+          const isVisible = visibleItems.has(idx);
 
           return (
             <li 
               key={item.imgIndex} 
-              className={`timeline-item ${side} ${shouldAppear ? 'is-visible' : 'not-visible'}`}
+              // ⭐ 클래스 추가: is-visible / not-visible
+              className={`timeline-item ${side} ${isVisible ? 'is-visible' : 'not-visible'}`}
+              // ⭐ ref 및 data-index 설정 (IO 작동에 필수)
+              ref={el => itemRefs.current[idx] = el}
+              data-index={idx}
             >
               {/* 가운데 라인 */}
               <div className="line-col">
@@ -215,7 +234,7 @@ export function Timeline() {
                   <LazyImage
                     srcPromise={imageModules[item.key]}
                     alt={(cap?.title as string) ?? `timeline-${item.imgIndex}`}
-                    aboveFold={false} 
+                    // aboveFold 속성을 제거하거나 false로 고정하여 모든 이미지 지연 로드
                   />
                 </div>
               </div>
