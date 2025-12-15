@@ -1,4 +1,11 @@
-import { ReactNode, useEffect, useMemo, useRef, useState, useLayoutEffect } from "react";
+import {
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 import "./Timeline.scss";
 
 /** Vite: src/image 안 jpg 자동 로드 (동적 import) */
@@ -16,12 +23,12 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 
 type Caption = {
   imgIndex: number; // 1-based
-  title?: ReactNode; // ✅ JSX도 받게
+  title?: ReactNode; // JSX 가능
   date?: string;
   desc?: string;
 };
 
-/** ✅ 모든 타이틀을 no-break span으로 감쌈 */
+/** 타이틀 no-break */
 const captions: Caption[] = [
   { imgIndex: 1, title: <span className="no-break">1989년에 태어난 승철이와</span> },
   { imgIndex: 2, title: <span className="no-break">1990년에 태어난 미영이가</span> },
@@ -44,13 +51,12 @@ type TimelineItem = {
 };
 
 // ===============================================
-// ⭐ NEW: 하이브리드 등장 애니메이션을 위한 Hook (유지)
+// 하이브리드 등장 애니메이션 Hook (그대로)
 // ===============================================
-
-/**
- * 초기 뷰포트 아이템은 타이머로, 나머지 아이템은 스크롤(IO)로 제어하는 Hook
- */
-const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500) => {
+const useHybridTimelineAppear = (
+  itemCount: number,
+  initialDelayMs: number = 500
+) => {
   const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
   const [visibleItems, setVisibleItems] = useState(new Set<number>());
 
@@ -74,22 +80,6 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
         initialVisibleIndices.sort((a, b) => a - b);
         let currentTimerIndex = 0;
 
-        const startInitialTimer = () => {
-          if (currentTimerIndex < initialVisibleIndices.length) {
-            const indexToReveal = initialVisibleIndices[currentTimerIndex];
-            setVisibleItems((prev) => {
-              const newSet = new Set(prev);
-              newSet.add(indexToReveal);
-              return newSet;
-            });
-            currentTimerIndex++;
-            timerId = setTimeout(startInitialTimer, initialDelayMs) as unknown as number;
-          } else {
-            startScrollObserver();
-          }
-        };
-        startInitialTimer();
-
         const startScrollObserver = () => {
           scrollObserver = new IntersectionObserver(
             (entries, observer) => {
@@ -99,9 +89,9 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
                 if (entry.isIntersecting) {
                   setVisibleItems((prev) => {
                     if (prev.has(index)) return prev;
-                    const newSet = new Set(prev);
-                    newSet.add(index);
-                    return newSet;
+                    const next = new Set(prev);
+                    next.add(index);
+                    return next;
                   });
                   observer.unobserve(entry.target);
                 }
@@ -117,6 +107,26 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
             }
           });
         };
+
+        const startInitialTimer = () => {
+          if (currentTimerIndex < initialVisibleIndices.length) {
+            const indexToReveal = initialVisibleIndices[currentTimerIndex];
+            setVisibleItems((prev) => {
+              const next = new Set(prev);
+              next.add(indexToReveal);
+              return next;
+            });
+            currentTimerIndex++;
+            timerId = setTimeout(
+              startInitialTimer,
+              initialDelayMs
+            ) as unknown as number;
+          } else {
+            startScrollObserver();
+          }
+        };
+
+        startInitialTimer();
       },
       { rootMargin: "0px", threshold: 0.1 }
     );
@@ -136,9 +146,18 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
 };
 
 // ===============================================
-// ✅ NEW: 캡션 타이틀 "무제한 축소" 컴포넌트
+// ✅ 캡션 타이틀 무제한 자동 축소 (모바일 잘림 해결 핵심)
+// - 기준 폭: h3가 아니라 caption-col(부모) 폭 사용
+// - ResizeObserver: h3 + 부모 둘 다 관찰
+// - 최초/등장 직후/리사이즈 시 계속 재계산
 // ===============================================
-function AutoFitTitle({ children }: { children: ReactNode }) {
+function AutoFitTitle({
+  children,
+  watchKey,
+}: {
+  children: ReactNode;
+  watchKey: string;
+}) {
   const ref = useRef<HTMLHeadingElement | null>(null);
   const [fontSize, setFontSize] = useState<string>("");
 
@@ -149,16 +168,20 @@ function AutoFitTitle({ children }: { children: ReactNode }) {
     let raf = 0;
 
     const fit = () => {
-      // 기준 크기로 리셋 후 측정
+      // reset
       el.style.fontSize = "";
       el.style.whiteSpace = "nowrap";
 
-      const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
-      const cw = el.clientWidth;   // 컨테이너 폭
-      const sw = el.scrollWidth;   // 텍스트 실제 폭
+      const parent = el.parentElement as HTMLElement | null;
 
-      if (cw > 0 && sw > cw) {
-        const next = base * (cw / sw) * 0.98; // 약간 여유
+      // ✅ 기준 폭은 반드시 "캡션 컬럼 폭"
+      const containerWidth = parent?.clientWidth ?? el.clientWidth;
+      const textWidth = el.scrollWidth;
+
+      const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
+
+      if (containerWidth > 0 && textWidth > containerWidth) {
+        const next = base * (containerWidth / textWidth) * 0.985;
         setFontSize(`${next}px`);
       } else {
         setFontSize("");
@@ -170,25 +193,34 @@ function AutoFitTitle({ children }: { children: ReactNode }) {
       raf = requestAnimationFrame(fit);
     };
 
-    // 모바일 주소창/회전 등 폭 변화 대응
     const ro = new ResizeObserver(schedule);
     ro.observe(el);
+    if (el.parentElement) ro.observe(el.parentElement);
 
+    // 최초 + 다음 tick(레이아웃 확정) + 폰트/이미지 영향 방지
     schedule();
+    const t1 = window.setTimeout(schedule, 0);
+    const t2 = window.setTimeout(schedule, 120);
+
     window.addEventListener("resize", schedule);
 
     return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("resize", schedule);
     };
-  }, []);
+  }, [watchKey]);
 
   return (
     <h3
       ref={ref}
       className="title"
-      style={{ fontSize: fontSize || undefined, whiteSpace: "nowrap" }}
+      style={{
+        fontSize: fontSize || undefined,
+        whiteSpace: "nowrap",
+      }}
     >
       {children}
     </h3>
@@ -196,7 +228,7 @@ function AutoFitTitle({ children }: { children: ReactNode }) {
 }
 
 /**
- * ✅ 체감 lazy 개선 버전 LazyImage (기존 로직 그대로 유지)
+ * ✅ LazyImage (그대로)
  */
 function LazyImage({
   srcPromise,
@@ -272,9 +304,8 @@ function LazyImage({
 }
 
 // ===============================================
-// 3. Timeline 메인 컴포넌트
+// Timeline 메인 (그대로)
 // ===============================================
-
 export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
     return imageKeys.map((key, i) => {
@@ -300,7 +331,9 @@ export function Timeline() {
               key={item.imgIndex}
               ref={(el) => (itemRefs.current[idx] = el)}
               data-index={idx}
-              className={`timeline-item ${side} ${isVisible ? "is-visible" : "not-visible"}`}
+              className={`timeline-item ${side} ${
+                isVisible ? "is-visible" : "not-visible"
+              }`}
             >
               {/* 가운데 라인 */}
               <div className="line-col">
@@ -312,7 +345,11 @@ export function Timeline() {
                 <div className="photo-wrap">
                   <LazyImage
                     srcPromise={imageModules[item.key]}
-                    alt={typeof cap?.title === "string" ? cap.title : `timeline-${item.imgIndex}`}
+                    alt={
+                      typeof cap?.title === "string"
+                        ? cap.title
+                        : `timeline-${item.imgIndex}`
+                    }
                     aboveFold={item.imgIndex <= 2}
                   />
                 </div>
@@ -322,7 +359,15 @@ export function Timeline() {
               {item.hasCaption && (
                 <div className="caption-col">
                   {cap?.date && <p className="date">{cap.date}</p>}
-                  {cap?.title && <AutoFitTitle>{cap.title}</AutoFitTitle>}
+
+                  {cap?.title && (
+                    <AutoFitTitle
+                      watchKey={`${idx}-${isVisible ? "v" : "h"}`}
+                    >
+                      {cap.title}
+                    </AutoFitTitle>
+                  )}
+
                   {cap?.desc && <p className="desc">{cap.desc}</p>}
                 </div>
               )}
@@ -333,4 +378,3 @@ export function Timeline() {
     </div>
   );
 }
-
