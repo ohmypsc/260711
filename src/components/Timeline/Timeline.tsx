@@ -1,11 +1,13 @@
-import { ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState, useLayoutEffect } from "react";
 import "./Timeline.scss";
 
+/** Vite: src/image 안 jpg 자동 로드 (동적 import) */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
   eager: false,
   import: "default",
 }) as Record<string, () => Promise<string>>;
 
+/** 이미지 경로를 번호순으로 정렬한 "키 목록" */
 const imageKeys = Object.keys(imageModules).sort((a, b) => {
   const na = Number(a.match(/(\d+)\.jpg$/)?.[1] ?? 0);
   const nb = Number(b.match(/(\d+)\.jpg$/)?.[1] ?? 0);
@@ -13,12 +15,13 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 });
 
 type Caption = {
-  imgIndex: number;
-  title?: ReactNode;
+  imgIndex: number; // 1-based
+  title?: ReactNode; // ✅ JSX도 받게
   date?: string;
   desc?: string;
 };
 
+/** ✅ 모든 타이틀을 no-break span으로 감쌈 */
 const captions: Caption[] = [
   { imgIndex: 1, title: <span className="no-break">1989년에 태어난 승철이와</span> },
   { imgIndex: 2, title: <span className="no-break">1990년에 태어난 미영이가</span> },
@@ -31,19 +34,110 @@ const captions: Caption[] = [
   { imgIndex: 9, title: <span className="no-break">2026년 봄을 지나</span> },
 ];
 
-const captionMap = new Map<number, Caption>(captions.map(c => [c.imgIndex, c]));
+const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
 
 type TimelineItem = {
   imgIndex: number;
-  key: string;
+  key: string; // glob key
   caption?: Caption;
   hasCaption: boolean;
 };
 
-/* ======================================================
-   ✅ NEW: 타이틀 전용 "무한 축소" 컴포넌트
-   ====================================================== */
+// ===============================================
+// ⭐ NEW: 하이브리드 등장 애니메이션을 위한 Hook (유지)
+// ===============================================
 
+/**
+ * 초기 뷰포트 아이템은 타이머로, 나머지 아이템은 스크롤(IO)로 제어하는 Hook
+ */
+const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500) => {
+  const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
+  const [visibleItems, setVisibleItems] = useState(new Set<number>());
+
+  useEffect(() => {
+    let timerId: number | undefined;
+    let initialVisibleIndices: number[] = [];
+    let initialObserver: IntersectionObserver | null = null;
+    let scrollObserver: IntersectionObserver | null = null;
+
+    initialObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          const index = Number(entry.target.getAttribute("data-index"));
+          if (entry.isIntersecting) {
+            initialVisibleIndices.push(index);
+          }
+        });
+
+        obs.disconnect();
+
+        initialVisibleIndices.sort((a, b) => a - b);
+        let currentTimerIndex = 0;
+
+        const startInitialTimer = () => {
+          if (currentTimerIndex < initialVisibleIndices.length) {
+            const indexToReveal = initialVisibleIndices[currentTimerIndex];
+            setVisibleItems((prev) => {
+              const newSet = new Set(prev);
+              newSet.add(indexToReveal);
+              return newSet;
+            });
+            currentTimerIndex++;
+            timerId = setTimeout(startInitialTimer, initialDelayMs) as unknown as number;
+          } else {
+            startScrollObserver();
+          }
+        };
+        startInitialTimer();
+
+        const startScrollObserver = () => {
+          scrollObserver = new IntersectionObserver(
+            (entries, observer) => {
+              entries.forEach((entry) => {
+                const index = Number(entry.target.getAttribute("data-index"));
+
+                if (entry.isIntersecting) {
+                  setVisibleItems((prev) => {
+                    if (prev.has(index)) return prev;
+                    const newSet = new Set(prev);
+                    newSet.add(index);
+                    return newSet;
+                  });
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { rootMargin: "0px", threshold: 0.1 }
+          );
+
+          Object.values(itemRefs.current).forEach((el) => {
+            const index = Number(el?.getAttribute("data-index"));
+            if (el && !initialVisibleIndices.includes(index)) {
+              scrollObserver!.observe(el);
+            }
+          });
+        };
+      },
+      { rootMargin: "0px", threshold: 0.1 }
+    );
+
+    Object.values(itemRefs.current).forEach((el) => {
+      if (el) initialObserver!.observe(el);
+    });
+
+    return () => {
+      clearTimeout(timerId);
+      initialObserver?.disconnect();
+      scrollObserver?.disconnect();
+    };
+  }, [itemCount, initialDelayMs]);
+
+  return { itemRefs, visibleItems };
+};
+
+// ===============================================
+// ✅ NEW: 캡션 타이틀 "무제한 축소" 컴포넌트
+// ===============================================
 function AutoFitTitle({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLHeadingElement | null>(null);
   const [fontSize, setFontSize] = useState<string>("");
@@ -55,18 +149,17 @@ function AutoFitTitle({ children }: { children: ReactNode }) {
     let raf = 0;
 
     const fit = () => {
-      // 기준 크기로 리셋
+      // 기준 크기로 리셋 후 측정
       el.style.fontSize = "";
       el.style.whiteSpace = "nowrap";
 
-      const baseSize = parseFloat(getComputedStyle(el).fontSize) || 16;
-      const containerWidth = el.clientWidth;
-      const textWidth = el.scrollWidth;
+      const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
+      const cw = el.clientWidth;   // 컨테이너 폭
+      const sw = el.scrollWidth;   // 텍스트 실제 폭
 
-      if (containerWidth > 0 && textWidth > containerWidth) {
-        const ratio = containerWidth / textWidth;
-        const nextSize = baseSize * ratio * 0.98; // 여유 2%
-        setFontSize(`${nextSize}px`);
+      if (cw > 0 && sw > cw) {
+        const next = base * (cw / sw) * 0.98; // 약간 여유
+        setFontSize(`${next}px`);
       } else {
         setFontSize("");
       }
@@ -77,6 +170,7 @@ function AutoFitTitle({ children }: { children: ReactNode }) {
       raf = requestAnimationFrame(fit);
     };
 
+    // 모바일 주소창/회전 등 폭 변화 대응
     const ro = new ResizeObserver(schedule);
     ro.observe(el);
 
@@ -94,22 +188,92 @@ function AutoFitTitle({ children }: { children: ReactNode }) {
     <h3
       ref={ref}
       className="title"
-      style={{
-        fontSize,
-        whiteSpace: "nowrap",
-      }}
+      style={{ fontSize: fontSize || undefined, whiteSpace: "nowrap" }}
     >
       {children}
     </h3>
   );
 }
 
-/* ---------- LazyImage, Hook, 나머지 전부 기존 그대로 ---------- */
-/* (중간 코드 생략 없이 그대로 유지되어야 함) */
+/**
+ * ✅ 체감 lazy 개선 버전 LazyImage (기존 로직 그대로 유지)
+ */
+function LazyImage({
+  srcPromise,
+  alt,
+  aboveFold = false,
+}: {
+  srcPromise: () => Promise<string>;
+  alt: string;
+  aboveFold?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [shouldLoad, setShouldLoad] = useState(aboveFold);
+  const [src, setSrc] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
-/* ======================================================
-   Timeline 메인
-   ====================================================== */
+  useEffect(() => {
+    if (aboveFold) return;
+
+    const el = ref.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          io.disconnect();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "600px",
+        threshold: 0.01,
+      }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [aboveFold]);
+
+  useEffect(() => {
+    if (!shouldLoad || src) return;
+
+    let cancelled = false;
+    srcPromise().then((url) => {
+      if (!cancelled) setSrc(url);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [shouldLoad, src, srcPromise]);
+
+  return (
+    <div
+      ref={ref}
+      className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`}
+      aria-label={alt}
+    >
+      {!loaded && <div className="photo-skeleton" aria-hidden="true" />}
+
+      {src && (
+        <img
+          src={src}
+          alt={alt}
+          loading={aboveFold ? "eager" : "lazy"}
+          fetchPriority={aboveFold ? "high" : "auto"}
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+        />
+      )}
+    </div>
+  );
+}
+
+// ===============================================
+// 3. Timeline 메인 컴포넌트
+// ===============================================
 
 export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
@@ -134,24 +298,27 @@ export function Timeline() {
           return (
             <li
               key={item.imgIndex}
-              ref={el => (itemRefs.current[idx] = el)}
+              ref={(el) => (itemRefs.current[idx] = el)}
               data-index={idx}
               className={`timeline-item ${side} ${isVisible ? "is-visible" : "not-visible"}`}
             >
+              {/* 가운데 라인 */}
               <div className="line-col">
-                <span className="dot" />
+                <span className="dot" aria-hidden="true" />
               </div>
 
+              {/* 사진 */}
               <div className="media">
                 <div className="photo-wrap">
                   <LazyImage
                     srcPromise={imageModules[item.key]}
-                    alt={`timeline-${item.imgIndex}`}
+                    alt={typeof cap?.title === "string" ? cap.title : `timeline-${item.imgIndex}`}
                     aboveFold={item.imgIndex <= 2}
                   />
                 </div>
               </div>
 
+              {/* 캡션 */}
               {item.hasCaption && (
                 <div className="caption-col">
                   {cap?.date && <p className="date">{cap.date}</p>}
@@ -166,3 +333,4 @@ export function Timeline() {
     </div>
   );
 }
+
