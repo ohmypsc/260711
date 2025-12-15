@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import "./Timeline.scss";
 
+// ... (기존 ImageModules, Captions, TimelineItem 타입 정의는 변경 없음) ...
 /** Vite: src/image 안 jpg 자동 로드 (동적 import) */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
     eager: false,
@@ -105,7 +106,6 @@ type TimelineItem = {
     caption?: Caption;
     hasCaption: boolean;
 };
-
 
 // ===============================================
 // ⭐ NEW: 하이브리드 등장 애니메이션을 위한 Hook (유지)
@@ -236,80 +236,84 @@ const useAutoResizeText = (
     hasCaption: boolean
 ) => {
     const [fontSize, setFontSize] = useState<string>('inherit');
-    // 글자 크기가 바뀔 때마다 다시 측정하도록 유도하는 카운터
     const [recheckCount, setRecheckCount] = useState(0); 
 
+    // 1. 뷰포트 변경 감지 이벤트 추가 (모바일 대응)
     useEffect(() => {
         if (!hasCaption) return;
 
-        const parentElement = ref.current; // h3.title 엘리먼트
-        // h3의 첫 번째 자식 (텍스트 내용이 담긴 span.no-break)
+        const handleResize = () => {
+            // 창 크기 변경(모바일 회전, 키보드 등장 등) 시 재측정을 강제합니다.
+            setFontSize('inherit'); 
+            setRecheckCount(c => c + 1);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+        
+    }, [hasCaption]); // 초기 마운트 시 한 번만 등록
+
+
+    // 2. 글자 크기 계산 로직
+    useEffect(() => {
+        if (!hasCaption) return;
+
+        const parentElement = ref.current;
         const textElement = parentElement?.children[0] as HTMLElement | undefined;
 
         if (!parentElement || !textElement) return;
 
-        // ------------------------------------------
-        // 렌더링된 후 정확한 측정 및 조절을 위해 requestAnimationFrame 사용
         const adjustFontSize = () => {
             
-            // 텍스트를 측정하기 위해 일시적으로 글자 크기를 기본값(1rem)으로 설정합니다.
-            // 이렇게 해야 현재 글자가 얼마나 긴지 (넘치는 정도)를 정확히 측정할 수 있습니다.
-            // SCSS에서 .title의 기본 크기는 1rem입니다.
+            // 텍스트를 측정하기 위해 일시적으로 기본 크기(1rem)로 설정합니다.
             if (fontSize !== 'inherit') {
                 parentElement.style.fontSize = '1rem';
             }
 
-            // 텍스트 내용이 담긴 span의 너비 (줄 바꿈 금지 상태)
             const textWidth = textElement.getBoundingClientRect().width;
-            // h3 컨테이너의 허용 너비
             const parentWidth = parentElement.getBoundingClientRect().width;
             
-            // 현재 계산된 글자 크기 (px). (임시로 1rem으로 설정했거나 이전 계산 결과)
-            // 여기서는 textElement를 기준으로 현재 폰트 크기를 가져옵니다.
             let currentFontSize = parseFloat(window.getComputedStyle(textElement).fontSize);
-            const minFontSize = 12; // 최소 글자 크기 제한 (px)
-            const paddingTolerance = 0.95; // 5% 여유 공간 (안정적인 한 줄 맞춤)
+            // 💡 최소 글자 크기를 12px에서 10px로 낮춰서 더 긴 텍스트도 한 줄에 표시되도록 함
+            const minFontSize = 10; 
+            const paddingTolerance = 0.95; 
 
-            // 1. 텍스트가 부모 컨테이너를 넘치는지 확인
             if (textWidth > parentWidth && parentWidth > 0) {
-                // 넘치는 경우, 비율에 맞춰 글자 크기 조절
                 const newFontSize = currentFontSize * (parentWidth / textWidth) * paddingTolerance;
 
                 if (newFontSize >= minFontSize) {
                     const newFontSizeString = `${newFontSize}px`;
                     if (fontSize !== newFontSizeString) {
                         setFontSize(newFontSizeString);
-                        // 폰트 크기가 변경되었으므로, 다음 렌더링 후 다시 측정하도록 유도
                         setRecheckCount(c => c + 1); 
                     }
                 } else {
-                    // 최소 크기 적용
                     const minFontSizeString = `${minFontSize}px`;
                     if (fontSize !== minFontSizeString) {
                         setFontSize(minFontSizeString);
                     }
                 }
             } else {
-                // 넘치지 않으면 기본 크기 'inherit' 설정
                 if (fontSize !== 'inherit') {
                     setFontSize('inherit');
                 }
             }
             
-            // 임시로 변경했던 스타일을 초기 상태로 되돌림 (다음 렌더링에 반영)
+            // 임시로 변경했던 스타일을 초기 상태로 되돌림
             if (fontSize !== 'inherit') {
                 parentElement.style.fontSize = ''; 
             }
         };
 
-        // DOM이 안정화된 후 측정 실행
         const rafId = requestAnimationFrame(adjustFontSize);
 
         return () => {
             cancelAnimationFrame(rafId);
         };
         
-    // ⭐ 핵심: fontSize나 recheckCount가 변하면 Hook을 재실행하여 재측정
     }, [itemIndex, hasCaption, ref, fontSize, recheckCount]); 
 
     return { fontSize };
@@ -337,7 +341,7 @@ function LazyImage({
 
     // IO로 "근처 오면" 로드 시작
     useEffect(() => {
-        if (aboveFold) return; // 첫 화면은 IO 불필요
+        if (aboveFold) return; 
 
         const el = ref.current;
         if (!el) return;
@@ -351,7 +355,7 @@ function LazyImage({
             },
             {
                 root: null,
-                rootMargin: "600px", // ✅ 훨씬 일찍 받아서 "느리게 뜸" 완화
+                rootMargin: "600px", 
                 threshold: 0.01,
             }
         );
@@ -388,7 +392,7 @@ function LazyImage({
                 <img
                     src={src}
                     alt={alt}
-                    loading={aboveFold ? "eager" : "lazy"} // ✅ 첫 2장은 eager
+                    loading={aboveFold ? "eager" : "lazy"} 
                     fetchPriority={aboveFold ? "high" : "auto"}
                     decoding="async"
                     onLoad={() => setLoaded(true)}
