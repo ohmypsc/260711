@@ -21,13 +21,13 @@ type Caption = {
   desc?: string;
 };
 
-/** ✅ 1,2번 타이틀을 no-break span으로 감쌈 */
+/** ✅ 모든 타이틀을 no-break span으로 감쌈 */
 const captions: Caption[] = [
   {
     imgIndex: 1,
     title: (
       <>
-        <span className="no-break">1989년에 태어난</span> 승철이와
+        <span className="no-break">1989년에 태어난 승철이와</span>
       </>
     ),
   },
@@ -35,17 +35,66 @@ const captions: Caption[] = [
     imgIndex: 2,
     title: (
       <>
-        <span className="no-break">1990년에 태어난</span> 미영이가
+        <span className="no-break">1990년에 태어난 미영이가</span>
       </>
     ),
   },
-  { imgIndex: 3, title: "2024년 가을에 만나" },
-  { imgIndex: 4, title: "2024년 겨울," },
-  { imgIndex: 5, title: "2025년 봄," },
-  { imgIndex: 6, title: "2025년 여름," },
-  { imgIndex: 7, title: "2025년 가을," },
-  { imgIndex: 8, title: "2025년 겨울," },
-  { imgIndex: 9, title: "2026년 봄을 지나" },
+  {
+    imgIndex: 3,
+    title: (
+      <>
+        <span className="no-break">2024년 가을에 만나</span>
+      </>
+    ),
+  },
+  {
+    imgIndex: 4,
+    title: (
+      <>
+        <span className="no-break">2024년 겨울,</span>
+      </>
+    ),
+  },
+  {
+    imgIndex: 5,
+    title: (
+      <>
+        <span className="no-break">2025년 봄,</span>
+      </>
+    ),
+  },
+  {
+    imgIndex: 6,
+    title: (
+      <>
+        <span className="no-break">2025년 여름,</span>
+      </>
+    ),
+  },
+  {
+    imgIndex: 7,
+    title: (
+      <>
+        <span className="no-break">2025년 가을,</span>
+      </>
+    ),
+  },
+  {
+    imgIndex: 8,
+    title: (
+      <>
+        <span className="no-break">2025년 겨울,</span>
+      </>
+    ),
+  },
+  {
+    imgIndex: 9,
+    title: (
+      <>
+        <span className="no-break">2026년 봄을 지나</span>
+      </>
+    ),
+  },
 ];
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
@@ -174,6 +223,71 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
   return { itemRefs, visibleItems };
 };
 
+// ===============================================
+// ⭐ NEW: 글자 크기 자동 조절을 위한 Hook
+// ===============================================
+
+/**
+ * 텍스트 내용이 부모 컨테이너를 넘칠 경우, 글자 크기를 조절하여 한 줄에 맞춥니다.
+ */
+const useAutoResizeText = (ref: React.RefObject<HTMLElement>, itemIndex: number, hasCaption: boolean) => {
+    const [fontSize, setFontSize] = useState<string>('inherit');
+    const resizeAttempted = useRef(false);
+
+    useEffect(() => {
+        if (!hasCaption) return;
+
+        const element = ref.current;
+        // 캡션 타이틀 엘리먼트가 없으면 무시
+        if (!element || element.children.length === 0) return;
+
+        // 실제 텍스트가 담긴 span (h3의 첫 번째 자식)
+        const textElement = element.children[0] as HTMLElement;
+        if (!textElement) return;
+        
+        // 부모 너비를 측정할 캡션 컨테이너 (h3)
+        const parent = element;
+        
+        // 렌더링된 후 정확한 측정 및 조절을 위해 requestAnimationFrame 사용
+        const adjustFontSize = () => {
+            // 기본 스타일 초기화 
+            textElement.style.whiteSpace = 'nowrap'; 
+            
+            // h3 컨테이너의 너비
+            const parentWidth = parent.getBoundingClientRect().width;
+            // 텍스트 내용이 담긴 span의 너비
+            const textWidth = textElement.getBoundingClientRect().width;
+            
+            let currentFontSize = parseFloat(window.getComputedStyle(textElement).fontSize);
+            const minFontSize = 12; // 최소 글자 크기 제한 (px)
+            const paddingTolerance = 0.95; // 여유 공간 5%
+
+            if (textWidth > parentWidth && parentWidth > 0) {
+                // 넘치는 경우, 비율에 맞춰 글자 크기 조절
+                const newFontSize = currentFontSize * (parentWidth / textWidth) * paddingTolerance;
+                
+                if (newFontSize >= minFontSize) {
+                    setFontSize(`${newFontSize}px`);
+                } else {
+                    setFontSize(`${minFontSize}px`);
+                }
+            } else {
+                // 넘치지 않거나 부모 너비가 0이면 기본 크기 유지
+                setFontSize('inherit');
+            }
+        };
+
+        const rafId = requestAnimationFrame(adjustFontSize);
+        
+        return () => {
+            cancelAnimationFrame(rafId);
+        };
+        
+    }, [itemIndex, hasCaption, ref]); 
+    
+    return { fontSize };
+};
+
 
 /**
  * ✅ 체감 lazy 개선 버전 LazyImage (기존 로직 그대로 유지)
@@ -263,6 +377,7 @@ function LazyImage({
 
 export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
+    // 기존 로직 유지
     return imageKeys.map((key, i) => {
       const imgIndex = i + 1;
       const caption = captionMap.get(imgIndex);
@@ -280,6 +395,12 @@ export function Timeline() {
         {items.map((item, idx) => {
           const side = idx % 2 === 0 ? "left" : "right";
           const cap = item.caption;
+          
+          // ⭐ NEW: 캡션 제목용 Ref
+          const capRef = useRef<HTMLHeadingElement | null>(null);
+
+          // ⭐ NEW: 자동 크기 조절 Hook 적용
+          const { fontSize } = useAutoResizeText(capRef, idx, item.hasCaption);
           
           // ⭐ NEW: is-visible 클래스 적용 여부 결정
           const isVisible = visibleItems.has(idx);
@@ -302,7 +423,8 @@ export function Timeline() {
                 <div className="photo-wrap">
                   <LazyImage
                     srcPromise={imageModules[item.key]}
-                    alt={(cap?.title as string) ?? `timeline-${item.imgIndex}`}
+                    // title이 ReactNode 타입일 수 있으므로 string으로 변환 시도
+                    alt={typeof cap?.title === 'string' ? cap.title : `timeline-${item.imgIndex}`}
                     aboveFold={item.imgIndex <= 2} // ✅ 기존 로직 그대로 유지
                   />
                 </div>
@@ -312,7 +434,16 @@ export function Timeline() {
               {item.hasCaption && (
                 <div className="caption-col">
                   {cap?.date && <p className="date">{cap.date}</p>}
-                  {cap?.title && <h3 className="title">{cap.title}</h3>}
+                  {cap?.title && (
+                    <h3 
+                      className="title"
+                      // ⭐ NEW: ref 및 계산된 스타일 적용
+                      ref={capRef}
+                      style={{ fontSize: fontSize, whiteSpace: 'nowrap' }}
+                    >
+                      {cap.title}
+                    </h3>
+                  )}
                   {cap?.desc && <p className="desc">{cap.desc}</p>}
                 </div>
               )}
