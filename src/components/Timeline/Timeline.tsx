@@ -16,15 +16,29 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 
 type Caption = {
   imgIndex: number; // 1-based
-  title?: ReactNode;
+  title?: ReactNode; // ✅ JSX도 받게
   date?: string;
   desc?: string;
 };
 
-/** 캡션 데이터 (기존과 동일) */
+/** ✅ 1,2번 타이틀을 no-break span으로 감쌈 */
 const captions: Caption[] = [
-  { imgIndex: 1, title: (<><span className="no-break">1989년에 태어난</span> 승철이와</>), },
-  { imgIndex: 2, title: (<><span className="no-break">1990년에 태어난</span> 미영이가</>), },
+  {
+    imgIndex: 1,
+    title: (
+      <>
+        <span className="no-break">1989년에 태어난</span> 승철이와
+      </>
+    ),
+  },
+  {
+    imgIndex: 2,
+    title: (
+      <>
+        <span className="no-break">1990년에 태어난</span> 미영이가
+      </>
+    ),
+  },
   { imgIndex: 3, title: "2024년 가을에 만나" },
   { imgIndex: 4, title: "2024년 겨울," },
   { imgIndex: 5, title: "2025년 봄," },
@@ -38,117 +52,152 @@ const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c])
 
 type TimelineItem = {
   imgIndex: number;
-  key: string; 
+  key: string; // glob key
   caption?: Caption;
   hasCaption: boolean;
 };
 
+
 // ===============================================
-// ⭐ 1. 초기/스크롤 분리 등장 애니메이션을 위한 Hook
+// ⭐ NEW: 하이브리드 등장 애니메이션을 위한 Hook
 // ===============================================
 
 /**
- * 초기 화면의 N개 아이템은 타이머로, 나머지는 스크롤로 순차 등장시키는 Hook
+ * 초기 뷰포트 아이템은 타이머로, 나머지 아이템은 스크롤(IO)로 제어하는 Hook
  */
-const useAppearOnScrollAndInitialTimer = (
-  itemCount: number, 
-  initialItemsCount: number = 3, // 초기 자동 등장시킬 아이템 개수 (조정 가능)
-  initialDelayMs: number = 500
-) => {
+const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500) => {
   const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
-  // 타이머나 스크롤에 의해 등장한 아이템의 인덱스 Set
   const [visibleItems, setVisibleItems] = useState(new Set<number>());
 
   useEffect(() => {
     let timerId: number | undefined;
-
-    // ------------------------------------------
-    // A. 초기 아이템 (0 ~ N-1) 타이머로 등장
-    // ------------------------------------------
-    let currentTimerIndex = 0;
-    const startInitialTimer = () => {
-        if (currentTimerIndex < initialItemsCount && currentTimerIndex < itemCount) {
-            setVisibleItems(prev => {
-                const newSet = new Set(prev);
-                newSet.add(currentTimerIndex);
-                return newSet;
-            });
-            currentTimerIndex++;
-            timerId = setTimeout(startInitialTimer, initialDelayMs) as unknown as number;
-        }
-    };
+    let initialVisibleIndices: number[] = [];
+    let initialObserver: IntersectionObserver | null = null;
+    let scrollObserver: IntersectionObserver | null = null;
     
-    // 타이머 시작 (컴포넌트 마운트 시)
-    startInitialTimer();
-
-
     // ------------------------------------------
-    // B. 나머지 아이템 (N 이상) Intersection Observer로 등장
+    // A. 초기 감지: 페이지 로드 시 화면에 보이는 아이템 인덱스 수집
     // ------------------------------------------
-    const observer = new IntersectionObserver(
-      (entries) => {
+
+    initialObserver = new IntersectionObserver(
+      (entries, obs) => {
         entries.forEach(entry => {
           const index = Number(entry.target.getAttribute('data-index'));
-          
           if (entry.isIntersecting) {
-            // ⭐ 타이머로 이미 처리된 아이템은 무시
-            if (index < initialItemsCount) return; 
-
-            setVisibleItems(prev => {
-              const newSet = new Set(prev);
-              newSet.add(index);
-              return newSet;
-            });
-            // 등장했으니 관찰 중단
-            observer.unobserve(entry.target); 
+            initialVisibleIndices.push(index);
           }
         });
+        
+        obs.disconnect(); // 초기 감지 역할이 끝나면 중지
+        
+        // ------------------------------------------
+        // B. 초기 아이템 타이머로 순차 등장 시작 (스르륵 효과)
+        // ------------------------------------------
+        
+        // 인덱스를 오름차순으로 정렬
+        initialVisibleIndices.sort((a, b) => a - b); 
+        let currentTimerIndex = 0;
+
+        const startInitialTimer = () => {
+            if (currentTimerIndex < initialVisibleIndices.length) {
+                const indexToReveal = initialVisibleIndices[currentTimerIndex];
+                setVisibleItems(prev => {
+                    const newSet = new Set(prev);
+                    newSet.add(indexToReveal);
+                    return newSet;
+                });
+                currentTimerIndex++;
+                timerId = setTimeout(startInitialTimer, initialDelayMs) as unknown as number;
+            } else {
+                // 타이머가 끝나면, 남은 아이템에 대해 스크롤 감지 시작
+                startScrollObserver();
+            }
+        };
+        startInitialTimer();
+
+
+        // ------------------------------------------
+        // C. 화면 밖 아이템은 스크롤로 감지 시작 (이어서 등장)
+        // ------------------------------------------
+        const startScrollObserver = () => {
+             scrollObserver = new IntersectionObserver(
+                (entries, observer) => {
+                    entries.forEach(entry => {
+                        const index = Number(entry.target.getAttribute('data-index'));
+                        
+                        if (entry.isIntersecting) {
+                            // 이미 타이머로 등장했거나, Set에 있으면 무시
+                            if (visibleItems.has(index)) return; 
+
+                            setVisibleItems(prev => {
+                                const newSet = new Set(prev);
+                                newSet.add(index);
+                                return newSet;
+                            });
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                },
+                // 스크롤 시 등장이므로 rootMargin을 0px로 유지
+                { rootMargin: "0px", threshold: 0.1 } 
+            );
+
+            // 초기 화면에 포함되지 않았던 아이템만 IO 관찰 대상으로 등록
+            Object.values(itemRefs.current).forEach(el => {
+                const index = Number(el?.getAttribute('data-index'));
+                // 초기 감지 인덱스에 포함되지 않았던 항목들만 관찰 시작
+                if (el && !initialVisibleIndices.includes(index)) {
+                    scrollObserver!.observe(el);
+                }
+            });
+        };
       },
-      // IO 감지 영역: 뷰포트에 들어올 때 (0px) 감지 시작
+      // IO 감지 영역: 뷰포트에 들어왔을 때만 (0px) 감지
       { rootMargin: "0px", threshold: 0.1 } 
     );
 
-    // N번째 아이템부터 관찰 시작
+
+    // 모든 타임라인 아이템을 초기 감지 대상으로 등록
     Object.values(itemRefs.current).forEach(el => {
-      const index = Number(el?.getAttribute('data-index'));
-      if (el && index >= initialItemsCount) {
-        observer.observe(el);
-      }
+      if (el) initialObserver!.observe(el);
     });
 
     // 클린업
     return () => {
       clearTimeout(timerId);
-      observer.disconnect();
+      initialObserver?.disconnect();
+      scrollObserver?.disconnect();
     };
 
-  }, [itemCount, initialItemsCount, initialDelayMs]);
+  }, [itemCount, initialDelayMs]);
 
   return { itemRefs, visibleItems };
 };
 
 
-// ===============================================
-// 2. LazyImage 컴포넌트 (지연 로딩 및 로드 범위 확대 유지)
-// ===============================================
-
 /**
- * 체감 Lazy 로딩 컴포넌트 (IO로 1000px 전에 미리 import 시작)
+ * ✅ 체감 lazy 개선 버전 LazyImage (기존 로직 그대로 유지)
+ * - aboveFold(첫 화면) 이미지는 즉시 로드 (첫 2장)
+ * - 나머지는 IO로 600px 전에 미리 import 시작
  */
 function LazyImage({
   srcPromise,
   alt,
+  aboveFold = false,
 }: {
   srcPromise: () => Promise<string>;
   alt: string;
+  aboveFold?: boolean;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [shouldLoad, setShouldLoad] = useState(false); 
+  const [shouldLoad, setShouldLoad] = useState(aboveFold);
   const [src, setSrc] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
-  // IO로 "근처 오면" 로드 시작 (모든 이미지에 적용)
+  // IO로 "근처 오면" 로드 시작
   useEffect(() => {
+    if (aboveFold) return; // 첫 화면은 IO 불필요
+
     const el = ref.current;
     if (!el) return;
 
@@ -161,15 +210,14 @@ function LazyImage({
       },
       {
         root: null,
-        // 로딩 지연 개선을 위해 1000px로 유지
-        rootMargin: "1000px", 
+        rootMargin: "600px", // ✅ 훨씬 일찍 받아서 "느리게 뜸" 완화
         threshold: 0.01,
       }
     );
 
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [aboveFold]);
 
   // 실제 src import
   useEffect(() => {
@@ -199,8 +247,8 @@ function LazyImage({
         <img
           src={src}
           alt={alt}
-          loading="lazy" 
-          fetchPriority="auto"
+          loading={aboveFold ? "eager" : "lazy"} // ✅ 첫 2장은 eager
+          fetchPriority={aboveFold ? "high" : "auto"}
           decoding="async"
           onLoad={() => setLoaded(true)}
         />
@@ -216,15 +264,15 @@ function LazyImage({
 export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
     return imageKeys.map((key, i) => {
-        const imgIndex = i + 1;
-        const caption = captionMap.get(imgIndex);
-        const hasCaption = Boolean(caption?.title || caption?.date || caption?.desc);
-        return { imgIndex, key, caption, hasCaption };
+      const imgIndex = i + 1;
+      const caption = captionMap.get(imgIndex);
+      const hasCaption = Boolean(caption?.title || caption?.date || caption?.desc);
+      return { imgIndex, key, caption, hasCaption };
     });
   }, []);
 
-  // ⭐ 하이브리드 등장 Hook 사용: 첫 3개 아이템을 0.5초 간격으로 자동 등장
-  const { itemRefs, visibleItems } = useAppearOnScrollAndInitialTimer(items.length, 3, 500); 
+  // ⭐ NEW: 하이브리드 등장 Hook 적용 (초기 등장 간격 500ms)
+  const { itemRefs, visibleItems } = useHybridTimelineAppear(items.length, 500); 
 
   return (
     <div className="w-timeline">
@@ -233,12 +281,13 @@ export function Timeline() {
           const side = idx % 2 === 0 ? "left" : "right";
           const cap = item.caption;
           
+          // ⭐ NEW: is-visible 클래스 적용 여부 결정
           const isVisible = visibleItems.has(idx);
 
           return (
             <li 
               key={item.imgIndex} 
-              // IO 감지를 위해 ref와 data-index 사용
+              // ⭐ NEW: ref 및 data-index 설정 (Hook 작동에 필수)
               ref={el => itemRefs.current[idx] = el}
               data-index={idx}
               className={`timeline-item ${side} ${isVisible ? 'is-visible' : 'not-visible'}`}
@@ -254,6 +303,7 @@ export function Timeline() {
                   <LazyImage
                     srcPromise={imageModules[item.key]}
                     alt={(cap?.title as string) ?? `timeline-${item.imgIndex}`}
+                    aboveFold={item.imgIndex <= 2} // ✅ 기존 로직 그대로 유지
                   />
                 </div>
               </div>
