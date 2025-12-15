@@ -27,7 +27,7 @@ const captions: Caption[] = [
     imgIndex: 1,
     title: (
       <>
-        <span className="no-break">1989년에 태어난</span> 승철이와
+        <span className="no-break">1989년에 태어난 승철이와</span>
       </>
     ),
   },
@@ -35,7 +35,7 @@ const captions: Caption[] = [
     imgIndex: 2,
     title: (
       <>
-        <span className="no-break">1990년에 태어난</span> 미영이가
+        <span className="no-break">1990년에 태어난 미영이가</span>
       </>
     ),
   },
@@ -88,11 +88,11 @@ const useSequentialAppear = (itemCount: number, delayMs: number = 300) => {
 
 
 // ===============================================
-// 2. LazyImage 컴포넌트 (기존 로직 유지)
+// 2. LazyImage 컴포넌트 (AboveFold 로직 수정)
 // ===============================================
 
 /**
- * 체감 Lazy 로딩 컴포넌트 (IO로 600px 전에 미리 import 시작)
+ * 체감 Lazy 로딩 컴포넌트 (AboveFold 로직이 제거되거나 비활성화되어 모든 이미지에 Lazy Loading 적용)
  */
 function LazyImage({
   srcPromise,
@@ -101,16 +101,18 @@ function LazyImage({
 }: {
   srcPromise: () => Promise<string>;
   alt: string;
-  aboveFold?: boolean;
+  aboveFold?: boolean; // 이 값은 이제 항상 false로 전달될 것임
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [shouldLoad, setShouldLoad] = useState(aboveFold);
+  // ⭐ shouldLoad는 이제 Intersection Observer에 의해서만 결정됨
+  const [shouldLoad, setShouldLoad] = useState(false); 
   const [src, setSrc] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
-  // IO로 "근처 오면" 로드 시작 (첫 화면 제외)
+  // IO로 "근처 오면" 로드 시작
   useEffect(() => {
-    if (aboveFold) return; 
+    // aboveFold 체크를 제거하거나, (위에 이미 false로 고정했으므로)
+    // 혹은 아래의 IO 로직이 모든 이미지에 적용되도록 수정
 
     const el = ref.current;
     if (!el) return;
@@ -131,7 +133,7 @@ function LazyImage({
 
     io.observe(el);
     return () => io.disconnect();
-  }, [aboveFold]);
+  }, []); // 의존성 배열에서 aboveFold를 제거하거나, 아예 false로 고정하여 모든 이미지에 IO 적용
 
   // 실제 src import
   useEffect(() => {
@@ -161,8 +163,8 @@ function LazyImage({
         <img
           src={src}
           alt={alt}
-          loading={aboveFold ? "eager" : "lazy"} // 첫 2장은 eager
-          fetchPriority={aboveFold ? "high" : "auto"}
+          loading={"lazy"} // ⭐ 모든 이미지에 lazy 고정
+          fetchPriority={"auto"} // ⭐ 모든 이미지에 auto 고정
           decoding="async"
           onLoad={() => setLoaded(true)}
         />
@@ -172,7 +174,7 @@ function LazyImage({
 }
 
 // ===============================================
-// 3. Timeline 메인 컴포넌트
+// 3. Timeline 메인 컴포넌트 (AboveFold 호출 제거)
 // ===============================================
 
 export function Timeline() {
@@ -185,7 +187,7 @@ export function Timeline() {
     });
   }, []);
 
-  // ⭐ 수정된 등장 Hook 사용 (300ms 간격으로 등장)
+  // 자동 순차 등장 Hook 사용
   const { isVisible } = useSequentialAppear(items.length, 300); 
 
   return (
@@ -195,13 +197,11 @@ export function Timeline() {
           const side = idx % 2 === 0 ? "left" : "right";
           const cap = item.caption;
           
-          // ⭐ isVisible 함수로 클래스 적용
           const shouldAppear = isVisible(idx);
 
           return (
             <li 
               key={item.imgIndex} 
-              // 'ref'와 'data-index'는 자동 등장에서는 불필요하므로 제거됨
               className={`timeline-item ${side} ${shouldAppear ? 'is-visible' : 'not-visible'}`}
             >
               {/* 가운데 라인 */}
@@ -215,7 +215,7 @@ export function Timeline() {
                   <LazyImage
                     srcPromise={imageModules[item.key]}
                     alt={(cap?.title as string) ?? `timeline-${item.imgIndex}`}
-                    aboveFold={item.imgIndex <= 2} // 첫 2장은 즉시 로드 (성능)
+                    aboveFold={false} 
                   />
                 </div>
               </div>
