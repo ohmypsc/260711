@@ -58,54 +58,37 @@ type TimelineItem = {
 };
 
 // ===============================================
-// ⭐ 1. 아이템 등장 애니메이션을 위한 Hook
+// ⭐ 1. 자동 순차 등장 애니메이션을 위한 Hook (Timer 기반)
 // ===============================================
 
 /**
- * 스크롤 시 뷰포트에 들어온 아이템에 is-visible 클래스를 추가하는 Hook
+ * 컴포넌트 마운트 후 지정된 딜레이 간격으로 아이템을 순차적으로 나타나게 하는 Hook
  */
-const useAppearOnScroll = (rootMargin: string = "0px") => {
-  // 아이템의 ref를 저장할 객체
-  const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
-  // 뷰포트에 보이는 아이템의 인덱스 Set
-  const [visibleItems, setVisibleItems] = useState(new Set<number>());
+const useSequentialAppear = (itemCount: number, delayMs: number = 300) => {
+  // 현재 is-visible 상태인 아이템의 개수 (0부터 시작)
+  const [visibleCount, setVisibleCount] = useState(0);
 
   useEffect(() => {
-    // Intersection Observer 인스턴스 생성
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          // data-index 속성에서 인덱스 값을 가져옴
-          const index = Number(entry.target.getAttribute('data-index'));
-          
-          if (entry.isIntersecting) {
-            setVisibleItems(prev => {
-              const newSet = new Set(prev);
-              newSet.add(index);
-              return newSet;
-            });
-            // 일단 나타난 아이템은 다시 숨기지 않기 위해 관찰 중단
-            observer.unobserve(entry.target); 
-          }
-        });
-      },
-      // rootMargin을 통해 조금 더 일찍 감지 시작 (0px 기본)
-      { rootMargin, threshold: 0.1 } 
-    );
+    if (visibleCount >= itemCount) return; // 모든 아이템이 나타났다면 종료
 
-    // 모든 타임라인 아이템 관찰 시작
-    Object.values(itemRefs.current).forEach(el => {
-      if (el) observer.observe(el);
-    });
+    const timer = setTimeout(() => {
+      // 딜레이 간격으로 visibleCount 증가
+      setVisibleCount(prev => prev + 1);
+    }, delayMs);
 
-    return () => observer.disconnect();
-  }, [rootMargin]);
+    // 컴포넌트 언마운트 시 타이머 정리
+    return () => clearTimeout(timer);
+  }, [visibleCount, itemCount, delayMs]);
 
-  return { itemRefs, visibleItems };
+  // 해당 인덱스가 현재 visibleCount 범위 내에 있는지 확인하는 함수
+  const isVisible = (index: number) => index < visibleCount;
+  
+  return { isVisible };
 };
 
+
 // ===============================================
-// 2. LazyImage 컴포넌트
+// 2. LazyImage 컴포넌트 (기존 로직 유지)
 // ===============================================
 
 /**
@@ -202,8 +185,8 @@ export function Timeline() {
     });
   }, []);
 
-  // ⭐ 등장 Hook 사용
-  const { itemRefs, visibleItems } = useAppearOnScroll("0px"); 
+  // ⭐ 수정된 등장 Hook 사용 (300ms 간격으로 등장)
+  const { isVisible } = useSequentialAppear(items.length, 300); 
 
   return (
     <div className="w-timeline">
@@ -212,17 +195,14 @@ export function Timeline() {
           const side = idx % 2 === 0 ? "left" : "right";
           const cap = item.caption;
           
-          // ⭐ is-visible 클래스 적용
-          const isVisible = visibleItems.has(idx);
+          // ⭐ isVisible 함수로 클래스 적용
+          const shouldAppear = isVisible(idx);
 
           return (
             <li 
               key={item.imgIndex} 
-              // ⭐ 클래스 추가: is-visible / not-visible
-              className={`timeline-item ${side} ${isVisible ? 'is-visible' : 'not-visible'}`}
-              // ⭐ ref 및 data-index 설정
-              ref={el => itemRefs.current[idx] = el}
-              data-index={idx}
+              // 'ref'와 'data-index'는 자동 등장에서는 불필요하므로 제거됨
+              className={`timeline-item ${side} ${shouldAppear ? 'is-visible' : 'not-visible'}`}
             >
               {/* 가운데 라인 */}
               <div className="line-col">
@@ -235,7 +215,7 @@ export function Timeline() {
                   <LazyImage
                     srcPromise={imageModules[item.key]}
                     alt={(cap?.title as string) ?? `timeline-${item.imgIndex}`}
-                    aboveFold={item.imgIndex <= 2} // 첫 2장은 즉시 로드
+                    aboveFold={item.imgIndex <= 2} // 첫 2장은 즉시 로드 (성능)
                   />
                 </div>
               </div>
