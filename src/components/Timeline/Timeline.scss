@@ -1,8 +1,8 @@
 /* ============================================
-   Timeline (Cover-leaf vine edition)
-   - 가운데 라인/점 => 커버 LeafLine 결로 통일
-   - 줄기 선 없이 잎방울들이 모여 라인 형성
-   ============================================ */
+    Timeline (Cover-leaf vine edition)
+    - 가운데 라인/점 => 커버 LeafLine 결로 통일
+    - 줄기 선 없이 잎방울들이 모여 라인 형성
+    ============================================ */
 
 .w-timeline {
   background: transparent;
@@ -97,7 +97,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  display: block;           /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
+  display: block;          /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
 }
 
 /* 로딩 스켈레톤(원형) */
@@ -209,6 +209,9 @@
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
+  
+  // ✅ Hook이 글자 크기를 조절하는 동안 레이아웃 깨짐을 방지하기 위해 숨김
+  overflow: hidden; 
 }
 
 .caption-col .desc {
@@ -298,7 +301,6 @@
 }
 
 
-
 /* ============================================
    ✅ NEW: 순차적 등장 애니메이션 (Fade-in-up)
    ============================================ */
@@ -307,13 +309,13 @@
 .timeline-item.not-visible {
   opacity: 0;
   /* 살짝 아래로 내려서 스르륵 올라오는 효과 연출 */
-  transform: translateY(20px); 
+  transform: translateY(20px);
 }
 
 /* 모든 아이템에 transition 정의 */
 .timeline-item {
   /* opacity 및 transform 변화에 애니메이션 적용 */
-  transition: opacity 2.0s ease-out, transform 2.0s ease-out; 
+  transition: opacity 2.0s ease-out, transform 2.0s ease-out;
 }
 
 /* 'left' 아이템 (짝수 순서): 스크롤 순서에 따라 미세한 시간차를 줘서 더욱 순차적인 느낌 */
