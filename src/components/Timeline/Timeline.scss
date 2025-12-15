@@ -313,7 +313,7 @@
 /* 모든 아이템에 transition 정의 */
 .timeline-item {
   /* opacity 및 transform 변화에 애니메이션 적용 */
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out; 
+  transition: opacity 1.0s ease-out, transform 1.0s ease-out; 
 }
 
 /* 'left' 아이템 (짝수 순서): 스크롤 순서에 따라 미세한 시간차를 줘서 더욱 순차적인 느낌 */
