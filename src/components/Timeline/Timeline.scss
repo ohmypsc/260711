@@ -122,8 +122,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  /* photo-wrap에서 이미 원형 클립되지만,
-     안전하게 원형 유지하고 싶으면 아래 유지 */
   border-radius: 50%;
 
   opacity: 0;
@@ -187,15 +185,15 @@
 
 /* 캡션 */
 .caption-col {
-  grid-row: 1;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.22rem;
-  align-self: center;
-  padding: 0;
-  transform: translateY(var(--offset));
-  overflow: hidden; 
+  grid-row: 1;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  align-self: center;
+  padding: 0;
+  transform: translateY(var(--offset));
+  overflow: hidden;
 }
 
 .caption-col .date {
@@ -206,13 +204,18 @@
 }
 
 .caption-col .title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-main);
-  
-  // Hook이 글자 크기를 조절하는 동안 레이아웃 깨짐 방지 (기존 유지)
-  overflow: hidden; 
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+
+  /* ✅ 여기만 "자동 축소 + 한 줄"에 맞게 수정 */
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+
+  /* 기존: overflow: hidden;  ->  축소되기 전에 잘려서 모바일에서 문제 발생 */
+  overflow: visible;
 }
 
 .caption-col .desc {
@@ -301,30 +304,23 @@
   }
 }
 
-
 /* ============================================
    ✅ NEW: 순차적 등장 애니메이션 (Fade-in-up)
    ============================================ */
 
-/* 기본 상태: 숨겨져 있고, 살짝 아래에 위치 */
 .timeline-item.not-visible {
   opacity: 0;
-  /* 살짝 아래로 내려서 스르륵 올라오는 효과 연출 */
   transform: translateY(20px);
 }
 
-/* 모든 아이템에 transition 정의 */
 .timeline-item {
-  /* opacity 및 transform 변화에 애니메이션 적용 */
   transition: opacity 2.0s ease-out, transform 2.0s ease-out;
 }
 
-/* 'left' 아이템 (짝수 순서): 스크롤 순서에 따라 미세한 시간차를 줘서 더욱 순차적인 느낌 */
 .timeline-item.left {
-    transition-delay: 0.1s;
+  transition-delay: 0.1s;
 }
 
-/* 'is-visible'이 되면 원래 상태로 복귀 (애니메이션 발생) */
 .timeline-item.is-visible {
   opacity: 1;
   transform: translateY(0);
