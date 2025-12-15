@@ -296,3 +296,33 @@
     font-size: 0.86rem;
   }
 }
+
+
+
+/* ============================================
+   ✅ NEW: 순차적 등장 애니메이션 (Fade-in-up)
+   ============================================ */
+
+/* 기본 상태: 숨겨져 있고, 살짝 아래에 위치 */
+.timeline-item.not-visible {
+  opacity: 0;
+  /* 살짝 아래로 내려서 스르륵 올라오는 효과 연출 */
+  transform: translateY(20px); 
+}
+
+/* 모든 아이템에 transition 정의 */
+.timeline-item {
+  /* opacity 및 transform 변화에 애니메이션 적용 */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out; 
+}
+
+/* 'left' 아이템 (짝수 순서): 스크롤 순서에 따라 미세한 시간차를 줘서 더욱 순차적인 느낌 */
+.timeline-item.left {
+    transition-delay: 0.1s;
+}
+
+/* 'is-visible'이 되면 원래 상태로 복귀 (애니메이션 발생) */
+.timeline-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
