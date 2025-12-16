@@ -191,9 +191,17 @@
   flex-direction: column;
   gap: 0.22rem;
   align-self: center;
+
+  /* ✅ 그리드 칸 폭을 제대로 먹도록 (핵심) */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  /* ✅ 모바일 잘림 방지: hidden 금지 */
+  overflow: visible;
+
   padding: 0;
   transform: translateY(var(--offset));
-  overflow: hidden;
 }
 
 .caption-col .date {
@@ -209,16 +217,14 @@
   font-weight: 600;
   color: var(--text-main);
 
-  /* ✅ 자동 축소가 "부모 폭" 기준으로 정확히 먹도록 필수 */
   display: block;
   width: 100%;
   max-width: 100%;
   min-width: 0;
 
-  /* ✅ 절대 줄바꿈 금지 */
   white-space: nowrap;
 
-  /* ✅ overflow hidden이면 축소되기 전에 모바일에서 잘려 보일 수 있어서 해제 */
+  /* ✅ overflow hidden이면 축소되기 전에 잘려보일 수 있어 해제 */
   overflow: visible;
 }
 
@@ -241,8 +247,14 @@
 
   .caption-col {
     grid-column: 3;
-    justify-self: start;
-    margin-left: var(--gutter);
+
+    /* ✅ start 대신 stretch로 칸 폭 고정 */
+    justify-self: stretch;
+
+    /* ✅ margin으로 밀지 말고 padding으로 내부 여백 */
+    margin-left: 0;
+    padding-left: var(--gutter);
+
     text-align: left;
     align-items: flex-start;
   }
@@ -259,8 +271,14 @@
 
   .caption-col {
     grid-column: 1;
-    justify-self: end;
-    margin-right: var(--gutter);
+
+    /* ✅ end 대신 stretch로 칸 폭 고정 */
+    justify-self: stretch;
+
+    /* ✅ margin으로 밀지 말고 padding으로 내부 여백 */
+    margin-right: 0;
+    padding-right: var(--gutter);
+
     text-align: right;
     align-items: flex-end;
   }
@@ -309,7 +327,7 @@
 }
 
 /* ============================================
-   ✅ NEW: 순차적 등장 애니메이션 (Fade-in-up)
+   ✅ 순차적 등장 애니메이션 (Fade-in-up)
    ============================================ */
 
 .timeline-item.not-visible {
