@@ -147,9 +147,9 @@ const useHybridTimelineAppear = (
 
 // ===============================================
 // ✅ 캡션 타이틀 무제한 자동 축소 (모바일 잘림 해결 핵심)
-// - 기준 폭: h3가 아니라 caption-col(부모) 폭 사용
-// - ResizeObserver: h3 + 부모 둘 다 관찰
-// - 최초/등장 직후/리사이즈 시 계속 재계산
+// - 기준 폭: h3가 아니라 caption-col(closest) 폭 사용
+// - ResizeObserver: h3 + caption-col 둘 다 관찰
+// - 폰트 로딩/등장 직후/리사이즈 시 계속 재계산
 // ===============================================
 function AutoFitTitle({
   children,
@@ -172,12 +172,12 @@ function AutoFitTitle({
       el.style.fontSize = "";
       el.style.whiteSpace = "nowrap";
 
-      const parent = el.parentElement as HTMLElement | null;
+      // ✅ 기준 컨테이너: caption-col 폭
+      const container = el.closest(".caption-col") as HTMLElement | null;
+      const containerWidth =
+        container?.getBoundingClientRect().width ?? el.getBoundingClientRect().width;
 
-      // ✅ 기준 폭은 반드시 "캡션 컬럼 폭"
-      const containerWidth = parent?.clientWidth ?? el.clientWidth;
       const textWidth = el.scrollWidth;
-
       const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
 
       if (containerWidth > 0 && textWidth > containerWidth) {
@@ -195,18 +195,25 @@ function AutoFitTitle({
 
     const ro = new ResizeObserver(schedule);
     ro.observe(el);
-    if (el.parentElement) ro.observe(el.parentElement);
+
+    const container = el.closest(".caption-col") as HTMLElement | null;
+    if (container) ro.observe(container);
 
     // 최초 + 다음 tick(레이아웃 확정) + 폰트/이미지 영향 방지
     schedule();
     const t1 = window.setTimeout(schedule, 0);
     const t2 = window.setTimeout(schedule, 120);
 
+    // ✅ 폰트 로딩 완료 후 한 번 더
+    (document as any).fonts?.ready?.then(() => schedule());
+    const t3 = window.setTimeout(schedule, 300);
+
     window.addEventListener("resize", schedule);
 
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
+      window.clearTimeout(t3);
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("resize", schedule);
@@ -361,9 +368,7 @@ export function Timeline() {
                   {cap?.date && <p className="date">{cap.date}</p>}
 
                   {cap?.title && (
-                    <AutoFitTitle
-                      watchKey={`${idx}-${isVisible ? "v" : "h"}`}
-                    >
+                    <AutoFitTitle watchKey={`${idx}-${isVisible ? "v" : "h"}`}>
                       {cap.title}
                     </AutoFitTitle>
                   )}
