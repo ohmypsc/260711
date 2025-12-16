@@ -22,7 +22,7 @@
   gap: 0.6rem;
 }
 
-/* 아이템: photo / line / caption */
+/* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
   z-index: 1;
@@ -64,28 +64,37 @@
   overflow: hidden;
   background: #fff;
   box-shadow: 0 10px 20px var(--shadow-color);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 }
 
-.photo-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+/* =========================================
+   ✅ Caption line-break control
+   ========================================= */
 
-/* 줄바꿈 금지 */
+/* "1989년에 태어난" 같은 구간 줄바꿈 금지 */
 .no-break {
   white-space: nowrap;
 }
 
-/* LazyImage */
+/* =========================================
+   ✅ LazyImage UI (skeleton + fade-in)
+   ========================================= */
+
+/* LazyImage 래퍼 */
 .lazy-photo {
   position: relative;
   width: 100%;
   height: 100%;
-  display: block;
+  display: block; /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
 }
 
+/* 로딩 스켈레톤(원형) */
 .photo-skeleton {
   position: absolute;
   inset: 0;
@@ -107,12 +116,14 @@
   }
 }
 
+/* 이미지 페이드 인 */
 .lazy-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   border-radius: 50%;
+
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -134,7 +145,9 @@
   transform: translateY(var(--offset));
 }
 
-/* dot */
+/* =========================================
+   ✅ 잎 마디(dot)도 커버 잎방울 느낌
+   ========================================= */
 .dot {
   width: 14px;
   height: 14px;
@@ -156,6 +169,7 @@
   mask: var(--leaf-dot-mask) center / contain no-repeat;
 }
 
+/* 커버처럼 약간씩 방향 다르게 */
 .timeline-item:nth-child(3n) .dot {
   transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
   opacity: 0.9;
@@ -169,7 +183,7 @@
   opacity: 0.85;
 }
 
-/* 캡션 (✅ 핵심 수정: 폭/스트레치 안정화) */
+/* 캡션 */
 .caption-col {
   grid-row: 1;
   z-index: 1;
@@ -178,19 +192,8 @@
   gap: 0.22rem;
   align-self: center;
   padding: 0;
-
-  /* ✅ 그리드 칸 폭을 제대로 먹도록 */
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-
   transform: translateY(var(--offset));
-
-  /* 원래 네 코드가 hidden이었는데,
-     여기서는 “잘림” 이슈 줄이려고 visible로 둠.
-     만약 desc가 튀어나오는 게 싫으면 hidden으로 되돌려도 됨. */
-  overflow: visible;
+  overflow: hidden;
 }
 
 .caption-col .date {
@@ -206,12 +209,16 @@
   font-weight: 600;
   color: var(--text-main);
 
+  /* ✅ 자동 축소가 "부모 폭" 기준으로 정확히 먹도록 필수 */
   display: block;
   width: 100%;
   max-width: 100%;
   min-width: 0;
 
+  /* ✅ 절대 줄바꿈 금지 */
   white-space: nowrap;
+
+  /* ✅ overflow hidden이면 축소되기 전에 모바일에서 잘려 보일 수 있어서 해제 */
   overflow: visible;
 }
 
@@ -222,48 +229,41 @@
   line-height: 1.35;
 }
 
-/* 좌/우 교차 (✅ 중첩 제거 + margin→padding + stretch) */
+/* 좌/우 교차 */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
-}
 
-.timeline-item.left .media {
-  grid-column: 1;
-  justify-self: end;
-  margin-right: var(--gutter);
-}
+  .media {
+    grid-column: 1;
+    justify-self: end;
+    margin-right: var(--gutter);
+  }
 
-.timeline-item.left .caption-col {
-  grid-column: 3;
-  justify-self: stretch;
-
-  /* ✅ margin으로 밀면 칸 밖으로 나가며 잘리는 케이스가 생김 */
-  margin-left: 0;
-  padding-left: var(--gutter);
-
-  text-align: left;
-  align-items: flex-start;
+  .caption-col {
+    grid-column: 3;
+    justify-self: start;
+    margin-left: var(--gutter);
+    text-align: left;
+    align-items: flex-start;
+  }
 }
 
 .timeline-item.right {
   --offset: calc(var(--photo-safe) * var(--lift-ratio));
-}
 
-.timeline-item.right .media {
-  grid-column: 3;
-  justify-self: start;
-  margin-left: var(--gutter);
-}
+  .media {
+    grid-column: 3;
+    justify-self: start;
+    margin-left: var(--gutter);
+  }
 
-.timeline-item.right .caption-col {
-  grid-column: 1;
-  justify-self: stretch;
-
-  margin-right: 0;
-  padding-right: var(--gutter);
-
-  text-align: right;
-  align-items: flex-end;
+  .caption-col {
+    grid-column: 1;
+    justify-self: end;
+    margin-right: var(--gutter);
+    text-align: right;
+    align-items: flex-end;
+  }
 }
 
 /* 겹침 보정 */
@@ -308,7 +308,10 @@
   }
 }
 
-/* 순차적 등장 애니메이션 */
+/* ============================================
+   ✅ NEW: 순차적 등장 애니메이션 (Fade-in-up)
+   ============================================ */
+
 .timeline-item.not-visible {
   opacity: 0;
   transform: translateY(20px);
