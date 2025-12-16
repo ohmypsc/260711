@@ -198,11 +198,11 @@
   max-width: 100%;
   min-width: 0;
 
-  /* 절대 줄바꿈 금지 */
-  white-space: nowrap;
+  /* ✅ 변경됨: 텍스트 폭 초과 시 어절 단위로 줄바꿈 허용 */
+  white-space: normal; 
 
-  /* overflow hidden이면 축소되기 전에 모바일에서 잘려 보일 수 있어서 해제 */
-  overflow: visible; 
+  /* 줄바꿈 허용 후 오버플로우는 숨김 처리 */
+  overflow: hidden;
 }
 
 /* 좌/우 교차 */
