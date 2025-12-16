@@ -1,32 +1,25 @@
+/* =================================
+   Base
+================================= */
+
 .w-timeline {
-  background: transparent;
   position: relative;
 }
 
-:root {
-  --photo: clamp(140px, 16vw, 205px);
-  --line-col-w: 44px;
-  --gutter: clamp(14px, 2vw, 26px);
-  --overlap: calc(var(--photo) * -0.18);
-  --lift-ratio: 0.06;
-  --center-line-width: 2px;
-}
-
-/* 리스트 */
 .timeline-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  position: relative;
   display: grid;
   gap: 0.6rem;
 }
 
-/* ✅ 아이템: photo / line / caption */
+/* =================================
+   Timeline Item Grid
+================================= */
+
 .timeline-item {
   position: relative;
-  z-index: 1;
-
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
   align-items: center;
@@ -37,24 +30,42 @@
   );
 
   min-height: var(--photo-safe);
-  --offset: 0;
-  transform: none;
 }
 
-.media,
-.caption-col {
-  min-width: 0;
-}
+/* =================================
+   Line / Dot
+================================= */
 
-/* 사진 */
-.media {
-  grid-row: 1;
+.line-col {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  z-index: 1;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  background-color: var(--text-main);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 2 C7 4,4 7,4 10 C4 14,7 18,10 18 C13 18,16 14,16 10 C16 7,13 4,10 2 Z' fill='black'/%3E%3C/svg%3E");
+  mask: var(--leaf-dot-mask) center / contain no-repeat;
+  -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
+}
+
+/* =================================
+   Photo
+================================= */
+
+.media {
   width: var(--photo-safe);
   height: var(--photo-safe);
   display: flex;
-  transform: translateY(var(--offset));
 }
 
 .photo-wrap {
@@ -62,288 +73,73 @@
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  background: #fff;
-  box-shadow: 0 10px 20px var(--shadow-color);
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
 }
 
-/* =========================================
-   ✅ Caption line-break control
-   ========================================= */
+/* =================================
+   Caption (핵심)
+================================= */
 
-/* "1989년에 태어난" 같은 구간 줄바꿈 금지 */
-.no-break {
-  white-space: nowrap;
-}
-
-/* =========================================
-   ✅ LazyImage UI (skeleton + fade-in)
-   ========================================= */
-
-/* LazyImage 래퍼 */
-.lazy-photo {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: block; /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
-}
-
-/* 로딩 스켈레톤(원형) */
-.photo-skeleton {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.06);
-  animation: pulse 1.2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0.45;
-  }
-}
-
-/* 이미지 페이드 인 */
-.lazy-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 50%;
-
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.lazy-photo.is-loaded img {
-  opacity: 1;
-}
-
-/* 라인 컬럼 */
-.line-col {
-  grid-column: 2;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-
-  position: relative;
-  transform: translateY(var(--offset));
-}
-
-/* =========================================
-   ✅ 잎 마디(dot)도 커버 잎방울 느낌
-   ========================================= */
-.dot {
-  width: 14px;
-  height: 14px;
-  z-index: 3;
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  transform: translate(-50%, -50%);
-  opacity: 0.95;
-
-  background-color: var(--text-main);
-  box-shadow: none;
-
-  --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E");
-
-  -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
-  mask: var(--leaf-dot-mask) center / contain no-repeat;
-}
-
-/* 커버처럼 약간씩 방향 다르게 */
-.timeline-item:nth-child(3n) .dot {
-  transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
-  opacity: 0.9;
-}
-.timeline-item:nth-child(3n + 1) .dot {
-  transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
-  opacity: 0.95;
-}
-.timeline-item:nth-child(3n + 2) .dot {
-  transform: translate(-50%, -50%) rotate(16deg) scale(1);
-  opacity: 0.85;
-}
-
-/* 캡션 */
 .caption-col {
-  grid-row: 1;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.22rem;
-  align-self: center;
 
-  /* ✅ 그리드 칸 폭을 제대로 먹도록 (핵심) */
+  /* 🔑 핵심: 칼럼 폭 고정 */
   width: 100%;
-  max-width: 100%;
   min-width: 0;
-
-  /* ✅ 모바일 잘림 방지: hidden 금지 */
-  overflow: visible;
-
-  padding: 0;
-  transform: translateY(var(--offset));
-}
-
-.caption-col .date {
-  margin: 0;
-  font-size: 0.82rem;
-  color: var(--text-light);
-  letter-spacing: 0.02rem;
+  max-width: 100%;
 }
 
 .caption-col .title {
-  margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-main);
-
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
   white-space: nowrap;
 
-  /* ✅ overflow hidden이면 축소되기 전에 잘려보일 수 있어 해제 */
-  overflow: visible;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
-.caption-col .desc {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-sub);
-  line-height: 1.35;
+/* =================================
+   Left / Right (중첩 제거 핵심)
+================================= */
+
+/* LEFT ITEM */
+.timeline-item.left .media {
+  grid-column: 1;
+  justify-self: end;
+  margin-right: var(--gutter);
 }
 
-/* 좌/우 교차 */
-.timeline-item.left {
-  --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
+.timeline-item.left .caption-col {
+  grid-column: 3;
+  justify-self: stretch;
 
-  .media {
-    grid-column: 1;
-    justify-self: end;
-    margin-right: var(--gutter);
-  }
-
-  .caption-col {
-    grid-column: 3;
-
-    /* ✅ start 대신 stretch로 칸 폭 고정 */
-    justify-self: stretch;
-
-    /* ✅ margin으로 밀지 말고 padding으로 내부 여백 */
-    margin-left: 0;
-    padding-left: var(--gutter);
-
-    text-align: left;
-    align-items: flex-start;
-  }
+  padding-left: var(--gutter);
+  text-align: left;
+  align-items: flex-start;
 }
 
-.timeline-item.right {
-  --offset: calc(var(--photo-safe) * var(--lift-ratio));
-
-  .media {
-    grid-column: 3;
-    justify-self: start;
-    margin-left: var(--gutter);
-  }
-
-  .caption-col {
-    grid-column: 1;
-
-    /* ✅ end 대신 stretch로 칸 폭 고정 */
-    justify-self: stretch;
-
-    /* ✅ margin으로 밀지 말고 padding으로 내부 여백 */
-    margin-right: 0;
-    padding-right: var(--gutter);
-
-    text-align: right;
-    align-items: flex-end;
-  }
+/* RIGHT ITEM */
+.timeline-item.right .media {
+  grid-column: 3;
+  justify-self: start;
+  margin-left: var(--gutter);
 }
 
-/* 겹침 보정 */
+.timeline-item.right .caption-col {
+  grid-column: 1;
+  justify-self: stretch;
+
+  padding-right: var(--gutter);
+  text-align: right;
+  align-items: flex-end;
+}
+
+/* =================================
+   Overlap
+================================= */
+
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
-}
-
-.timeline-item.left + .timeline-item.right {
-  margin-top: calc(
-    var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2)
-  );
-}
-
-.timeline-item.right + .timeline-item.left {
-  margin-top: calc(
-    var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2)
-  );
-}
-
-/* 모바일 */
-@media (max-width: 640px) {
-  :root {
-    --photo: clamp(108px, 40vw, 148px);
-    --line-col-w: 32px;
-    --gutter: clamp(10px, 3vw, 16px);
-    --overlap: calc(var(--photo) * -0.18);
-    --lift-ratio: 0.04;
-    --center-line-width: 1px;
-  }
-
-  .dot {
-    width: 12px;
-    height: 12px;
-  }
-
-  .caption-col .title {
-    font-size: 0.95rem;
-  }
-
-  .caption-col .desc {
-    font-size: 0.86rem;
-  }
-}
-
-/* ============================================
-   ✅ 순차적 등장 애니메이션 (Fade-in-up)
-   ============================================ */
-
-.timeline-item.not-visible {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.timeline-item {
-  transition: opacity 2s ease-out, transform 2s ease-out;
-}
-
-.timeline-item.left {
-  transition-delay: 0.1s;
-}
-
-.timeline-item.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
