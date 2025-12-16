@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import "./Timeline.scss"; // ✅ 이 SCSS 파일을 수정해야 합니다.
+import "./Timeline.scss";
 
 /** Vite: src/image 안 jpg 동적 로드 */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
@@ -16,21 +16,20 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 
 type Caption = {
   imgIndex: number; // 1-based
-  title?: string; // 단순 string 타입
-  date?: string;
-  desc?: string;
+  title?: string; // 타이틀만 사용
 };
 
+/** 캡션 데이터 (타이틀만 남김) */
 const captions: Caption[] = [
   { imgIndex: 1, title: "1989년 가을에 태어난 승철이와" },
   { imgIndex: 2, title: "1990년 봄에 태어난 미영이가" },
-  { imgIndex: 3, title: "2024년 가을에 만나" },
-  { imgIndex: 4, title: "2024년 겨울, 행복한 일들이 펼쳐집니다." },
-  { imgIndex: 5, title: "2025년 봄, 새로운 시작을 함께합니다." },
-  { imgIndex: 6, title: "2025년 여름, 뜨거운 추억을 쌓아갑니다." },
-  { imgIndex: 7, title: "2025년 가을, 결실의 계절을 맞이합니다." },
-  { imgIndex: 8, title: "2025년 겨울, 따뜻한 사랑을 나눕니다." },
-  { imgIndex: 9, title: "2026년 봄을 지나, 영원한 사랑을 약속합니다." },
+  { imgIndex: 3, title: "2024년 가을," },
+  { imgIndex: 4, title: "2024년 겨울," },
+  { imgIndex: 5, title: "2025년 봄," },
+  { imgIndex: 6, title: "2025년 여름," },
+  { imgIndex: 7, title: "2025년 가을," },
+  { imgIndex: 8, title: "2025년 겨울," },
+  { imgIndex: 9, title: "2026년 봄을 지나," },
 ];
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
@@ -220,8 +219,9 @@ export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
     return imageKeys.map((key, i) => {
       const imgIndex = i + 1;
+      // hasCaption 체크 로직 변경: title만 확인
       const caption = captionMap.get(imgIndex);
-      const hasCaption = Boolean(caption?.title || caption?.date || caption?.desc);
+      const hasCaption = Boolean(caption?.title); 
       return { imgIndex, key, caption, hasCaption };
     });
   }, []);
@@ -261,12 +261,10 @@ export function Timeline() {
                 </div>
               </div>
 
-              {/* 캡션 */}
+              {/* 캡션: 타이틀만 렌더링하도록 간소화 */}
               {item.hasCaption && (
                 <div className="caption-col">
-                  {cap?.date && <p className="date">{cap.date}</p>}
                   {cap?.title && <h3 className="title">{cap.title}</h3>}
-                  {cap?.desc && <p className="desc">{cap.desc}</p>}
                 </div>
               )}
             </li>
