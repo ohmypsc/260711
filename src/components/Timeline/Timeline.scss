@@ -1,3 +1,9 @@
+/* ============================================
+   Timeline (Cover-leaf vine edition)
+   - 가운데 라인/점 => 커버 LeafLine 결로 통일
+   - 줄기 선 없이 잎방울들이 모여 라인 형성
+   ============================================ */
+
 .w-timeline {
   background: transparent;
   position: relative;
@@ -21,6 +27,7 @@
   display: grid;
   gap: 0.6rem;
 }
+
 
 /* ✅ 아이템: photo / line / caption */
 .timeline-item {
@@ -73,65 +80,6 @@
   }
 }
 
-/* =========================================
-    ✅ Caption line-break control
-    ========================================= */
-
-/* "1989년에 태어난" 같은 구간 줄바꿈 금지 */
-.no-break {
-  white-space: nowrap;
-}
-
-/* =========================================
-    ✅ LazyImage UI (skeleton + fade-in)
-    ========================================= */
-
-/* LazyImage 래퍼 */
-.lazy-photo {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: block; /* ✅ flex/grid 환경에서도 확실히 꽉 차게 */
-}
-
-/* 로딩 스켈레톤(원형) */
-.photo-skeleton {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.06);
-  animation: pulse 1.2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0.45;
-  }
-}
-
-/* 이미지 페이드 인 */
-.lazy-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 50%;
-
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.lazy-photo.is-loaded img {
-  opacity: 1;
-}
-
 /* 라인 컬럼 */
 .line-col {
   grid-column: 2;
@@ -146,8 +94,8 @@
 }
 
 /* =========================================
-    ✅ 잎 마디(dot)도 커버 잎방울 느낌
-    ========================================= */
+   ✅ 잎 마디(dot)도 커버 잎방울 느낌
+   ========================================= */
 .dot {
   width: 14px;
   height: 14px;
@@ -179,13 +127,15 @@
   opacity: 0.95;
 }
 .timeline-item:nth-child(3n + 2) .dot {
-  transform: translate(-50%, -50%) rotate(16deg) scale(1);
+  transform: translate(-50%, -50%) rotate(16deg) scale(1.0);
   opacity: 0.85;
 }
 
+
+
 /* 캡션 */
 .caption-col {
-  grid-row: 1;
+  grid-row: 1; 
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -193,14 +143,6 @@
   align-self: center;
   padding: 0;
   transform: translateY(var(--offset));
-  overflow: hidden;
-}
-
-.caption-col .date {
-  margin: 0;
-  font-size: 0.82rem;
-  color: var(--text-light);
-  letter-spacing: 0.02rem;
 }
 
 .caption-col .title {
@@ -208,25 +150,6 @@
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
-
-  /* ✅ 자동 축소가 "부모 폭" 기준으로 정확히 먹도록 필수 */
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  /* ✅ 절대 줄바꿈 금지 */
-  white-space: nowrap;
-
-  /* ✅ overflow hidden이면 축소되기 전에 모바일에서 잘려 보일 수 있어서 해제 */
-  overflow: visible; 
-}
-
-.caption-col .desc {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-sub);
-  line-height: 1.35;
 }
 
 /* 좌/우 교차 */
@@ -294,6 +217,8 @@
     --center-line-width: 1px;
   }
 
+ 
+
   .dot {
     width: 12px;
     height: 12px;
@@ -302,30 +227,4 @@
   .caption-col .title {
     font-size: 0.95rem;
   }
-
-  .caption-col .desc {
-    font-size: 0.86rem;
-  }
-}
-
-/* ============================================
-    ✅ NEW: 순차적 등장 애니메이션 (Fade-in-up)
-    ============================================ */
-
-.timeline-item.not-visible {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.timeline-item {
-  transition: opacity 2s ease-out, transform 2s ease-out;
-}
-
-.timeline-item.left {
-  transition-delay: 0.1s;
-}
-
-.timeline-item.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
