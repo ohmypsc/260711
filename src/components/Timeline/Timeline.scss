@@ -206,7 +206,12 @@
 
   .caption-col {
     grid-column: 3;
-    justify-self: start;
+
+    /* ✅ 변경(필수): 모바일에서 캡션 컬럼 폭이 내용만큼 커지는 현상 방지 */
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+
     margin-left: var(--gutter);
     text-align: left;
     align-items: flex-start;
@@ -224,7 +229,12 @@
 
   .caption-col {
     grid-column: 1;
-    justify-self: end;
+
+    /* ✅ 변경(필수): 모바일에서 캡션 컬럼 폭이 내용만큼 커지는 현상 방지 */
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+
     margin-right: var(--gutter);
     text-align: right;
     align-items: flex-end;
