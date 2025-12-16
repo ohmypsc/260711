@@ -1,7 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 import "./Timeline.scss";
 
-/** Vite: src/image 안 jpg 동적 로드 */
+/** Vite: src/image 안 jpg 자동 로드 (동적 import) */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
   eager: false,
   import: "default",
@@ -16,20 +23,22 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 
 type Caption = {
   imgIndex: number; // 1-based
-  title?: string; // 타이틀만 사용
+  title?: ReactNode; // JSX 가능
+  // date?: string; // ✅ 제거됨
+  // desc?: string; // ✅ 제거됨
 };
 
-/** 캡션 데이터 (타이틀만 남김) */
+/** 타이틀 no-break */
 const captions: Caption[] = [
-  { imgIndex: 1, title: "1989년 가을에 태어난 승철이와" },
-  { imgIndex: 2, title: "1990년 봄에 태어난 미영이가" },
-  { imgIndex: 3, title: "2024년 가을," },
-  { imgIndex: 4, title: "2024년 겨울," },
-  { imgIndex: 5, title: "2025년 봄," },
-  { imgIndex: 6, title: "2025년 여름," },
-  { imgIndex: 7, title: "2025년 가을," },
-  { imgIndex: 8, title: "2025년 겨울," },
-  { imgIndex: 9, title: "2026년 봄을 지나," },
+  { imgIndex: 1, title: <span className="no-break">1989년에 태어난 승철이와</span> },
+  { imgIndex: 2, title: <span className="no-break">1990년에 태어난 미영이가</span> },
+  { imgIndex: 3, title: <span className="no-break">2024년 가을에 만나</span> },
+  { imgIndex: 4, title: <span className="no-break">2024년 겨울,</span> },
+  { imgIndex: 5, title: <span className="no-break">2025년 봄,</span> },
+  { imgIndex: 6, title: <span className="no-break">2025년 여름,</span> },
+  { imgIndex: 7, title: <span className="no-break">2025년 가을,</span> },
+  { imgIndex: 8, title: <span className="no-break">2025년 겨울,</span> },
+  { imgIndex: 9, title: <span className="no-break">2026년 봄을 지나</span> },
 ];
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
@@ -39,6 +48,18 @@ type TimelineItem = {
   key: string; // glob key
   caption?: Caption;
   hasCaption: boolean;
+};
+
+// ===============================================
+// 폰트 로딩 감지 Hook (유지)
+// ===============================================
+const useFontLoaded = () => {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    // document.fonts.ready는 모든 웹 폰트가 로드되거나 레이아웃을 표시할 준비가 되었을 때 완료됨
+    document.fonts.ready.then(() => setLoaded(true));
+  }, []);
+  return loaded;
 };
 
 // ===============================================
@@ -136,8 +157,86 @@ const useHybridTimelineAppear = (
   return { itemRefs, visibleItems };
 };
 
+// ===============================================
+// 캡션 타이틀 자동 축소 Hook (유지)
+// ===============================================
+function AutoFitTitle({
+  children,
+  watchKey,
+}: {
+  children: ReactNode;
+  watchKey: string;
+}) {
+  const ref = useRef<HTMLHeadingElement | null>(null);
+  const [fontSize, setFontSize] = useState<string>("");
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let raf = 0;
+
+    const fit = () => {
+      // 1. 리셋: 폰트 크기와 줄바꿈 설정을 초기화하여 실제 폭(scrollWidth) 측정
+      el.style.fontSize = "";
+      el.style.whiteSpace = "nowrap";
+
+      const parent = el.parentElement as HTMLElement | null;
+
+      // 2. 폭 측정: 기준 폭은 반드시 "캡션 컬럼 폭"
+      const containerWidth = parent?.clientWidth ?? el.clientWidth;
+      const textWidth = el.scrollWidth;
+
+      const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
+
+      // 3. 축소 계산
+      if (containerWidth > 0 && textWidth > containerWidth) {
+        // 0.985는 안전 마진
+        const next = base * (containerWidth / textWidth) * 0.985;
+        setFontSize(`${next}px`);
+      } else {
+        setFontSize("");
+      }
+    };
+
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(fit);
+    };
+
+    const ro = new ResizeObserver(schedule);
+    ro.observe(el);
+    if (el.parentElement) ro.observe(el.parentElement);
+
+    // 1. 최초 실행
+    schedule();
+
+    // 2. 다음 틱(레이아웃 확정 및 폰트 로딩) 시 재계산
+    const t1 = window.setTimeout(schedule, 0);
+
+    return () => {
+      window.clearTimeout(t1);
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, [watchKey]);
+
+  return (
+    <h3
+      ref={ref}
+      className="title"
+      style={{
+        fontSize: fontSize || undefined,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {children}
+    </h3>
+  );
+}
+
 /**
- * LazyImage (이미지 지연 로딩 컴포넌트 유지)
+ * LazyImage (유지)
  */
 function LazyImage({
   srcPromise,
@@ -208,7 +307,7 @@ function LazyImage({
           onLoad={() => setLoaded(true)}
         />
       )}
-    </div>
+      </div>
   );
 }
 
@@ -219,14 +318,15 @@ export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
     return imageKeys.map((key, i) => {
       const imgIndex = i + 1;
-      // hasCaption 체크 로직 변경: title만 확인
       const caption = captionMap.get(imgIndex);
-      const hasCaption = Boolean(caption?.title); 
+      // ✅ hasCaption 계산에서 date와 desc 제거
+      const hasCaption = Boolean(caption?.title);
       return { imgIndex, key, caption, hasCaption };
     });
   }, []);
 
   const { itemRefs, visibleItems } = useHybridTimelineAppear(items.length, 500);
+  const isFontLoaded = useFontLoaded(); // 폰트 로딩 상태를 가져옴
 
   return (
     <div className="w-timeline">
@@ -255,16 +355,29 @@ export function Timeline() {
                 <div className="photo-wrap">
                   <LazyImage
                     srcPromise={imageModules[item.key]}
-                    alt={cap?.title ?? `timeline-${item.imgIndex}`}
+                    alt={
+                      typeof cap?.title === "string"
+                        ? cap.title
+                        : `timeline-${item.imgIndex}`
+                    }
                     aboveFold={item.imgIndex <= 2}
                   />
                 </div>
               </div>
 
-              {/* 캡션: 타이틀만 렌더링하도록 간소화 */}
+              {/* 캡션 */}
               {item.hasCaption && (
                 <div className="caption-col">
-                  {cap?.title && <h3 className="title">{cap.title}</h3>}
+                  {/* ✅ cap?.date 및 cap?.desc 렌더링 제거됨 */}
+                  {cap?.title && (
+                    <AutoFitTitle
+                      watchKey={`${idx}-${isVisible ? "v" : "h"}-${
+                        isFontLoaded ? "f" : "u"
+                      }`}
+                    >
+                      {cap.title}
+                    </AutoFitTitle>
+                  )}
                 </div>
               )}
             </li>
