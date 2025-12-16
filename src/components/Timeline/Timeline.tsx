@@ -51,7 +51,20 @@ type TimelineItem = {
 };
 
 // ===============================================
-// 하이브리드 등장 애니메이션 Hook (그대로)
+// 폰트 로딩 감지 Hook
+// - 폰트 로딩 완료 시 AutoFitTitle을 재계산하도록 유도
+// ===============================================
+const useFontLoaded = () => {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    // document.fonts.ready는 모든 웹 폰트가 로드되거나 레이아웃을 표시할 준비가 되었을 때 완료됨
+    document.fonts.ready.then(() => setLoaded(true));
+  }, []);
+  return loaded;
+};
+
+// ===============================================
+// 하이브리드 등장 애니메이션 Hook
 // ===============================================
 const useHybridTimelineAppear = (
   itemCount: number,
@@ -146,10 +159,8 @@ const useHybridTimelineAppear = (
 };
 
 // ===============================================
-// ✅ 캡션 타이틀 무제한 자동 축소 (모바일 잘림 해결 핵심)
-// - 기준 폭: h3가 아니라 caption-col(부모) 폭 사용
-// - ResizeObserver: h3 + 부모 둘 다 관찰
-// - 최초/등장 직후/리사이즈 시 계속 재계산
+// ✅ 캡션 타이틀 자동 축소 Hook (개선됨)
+// - ResizeObserver와 다음 틱 측정에만 의존
 // ===============================================
 function AutoFitTitle({
   children,
@@ -168,19 +179,21 @@ function AutoFitTitle({
     let raf = 0;
 
     const fit = () => {
-      // reset
+      // 1. 리셋: 폰트 크기와 줄바꿈 설정을 초기화하여 실제 폭(scrollWidth) 측정
       el.style.fontSize = "";
       el.style.whiteSpace = "nowrap";
 
       const parent = el.parentElement as HTMLElement | null;
 
-      // ✅ 기준 폭은 반드시 "캡션 컬럼 폭"
+      // 2. 폭 측정: 기준 폭은 반드시 "캡션 컬럼 폭"
       const containerWidth = parent?.clientWidth ?? el.clientWidth;
       const textWidth = el.scrollWidth;
 
       const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
 
+      // 3. 축소 계산
       if (containerWidth > 0 && textWidth > containerWidth) {
+        // 0.985는 안전 마진
         const next = base * (containerWidth / textWidth) * 0.985;
         setFontSize(`${next}px`);
       } else {
@@ -197,19 +210,16 @@ function AutoFitTitle({
     ro.observe(el);
     if (el.parentElement) ro.observe(el.parentElement);
 
-    // 최초 + 다음 tick(레이아웃 확정) + 폰트/이미지 영향 방지
+    // 1. 최초 실행
     schedule();
-    const t1 = window.setTimeout(schedule, 0);
-    const t2 = window.setTimeout(schedule, 120);
 
-    window.addEventListener("resize", schedule);
+    // 2. 다음 틱(레이아웃 확정 및 폰트 로딩) 시 재계산
+    const t1 = window.setTimeout(schedule, 0);
 
     return () => {
       window.clearTimeout(t1);
-      window.clearTimeout(t2);
       cancelAnimationFrame(raf);
       ro.disconnect();
-      window.removeEventListener("resize", schedule);
     };
   }, [watchKey]);
 
@@ -228,7 +238,7 @@ function AutoFitTitle({
 }
 
 /**
- * ✅ LazyImage (그대로)
+ * ✅ LazyImage
  */
 function LazyImage({
   srcPromise,
@@ -304,7 +314,7 @@ function LazyImage({
 }
 
 // ===============================================
-// Timeline 메인 (그대로)
+// Timeline 메인
 // ===============================================
 export function Timeline() {
   const items: TimelineItem[] = useMemo(() => {
@@ -317,6 +327,7 @@ export function Timeline() {
   }, []);
 
   const { itemRefs, visibleItems } = useHybridTimelineAppear(items.length, 500);
+  const isFontLoaded = useFontLoaded(); // 폰트 로딩 상태를 가져옴
 
   return (
     <div className="w-timeline">
@@ -362,7 +373,10 @@ export function Timeline() {
 
                   {cap?.title && (
                     <AutoFitTitle
-                      watchKey={`${idx}-${isVisible ? "v" : "h"}`}
+                      // ✅ 폰트 로딩 상태를 watchKey에 추가하여 재계산 유도
+                      watchKey={`${idx}-${isVisible ? "v" : "h"}-${
+                        isFontLoaded ? "f" : "u"
+                      }`}
                     >
                       {cap.title}
                     </AutoFitTitle>
