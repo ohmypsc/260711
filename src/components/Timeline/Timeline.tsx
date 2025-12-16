@@ -24,8 +24,6 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 type Caption = {
   imgIndex: number; // 1-based
   title?: ReactNode; // JSX 가능
-  // date?: string; // ✅ 제거됨
-  // desc?: string; // ✅ 제거됨
 };
 
 /** 타이틀 no-break */
@@ -56,7 +54,6 @@ type TimelineItem = {
 const useFontLoaded = () => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    // document.fonts.ready는 모든 웹 폰트가 로드되거나 레이아웃을 표시할 준비가 되었을 때 완료됨
     document.fonts.ready.then(() => setLoaded(true));
   }, []);
   return loaded;
@@ -158,7 +155,9 @@ const useHybridTimelineAppear = (
 };
 
 // ===============================================
-// 캡션 타이틀 자동 축소 Hook (유지)
+// ✅ 캡션 타이틀 자동 축소 Hook (모바일 안정 버전)
+// - "컬럼 실제 내부 폭(clientWidth - padding)" 기준
+// - overflow hidden에 의해 잘리는 현상 방지 (SCSS도 함께 수정 필요)
 // ===============================================
 function AutoFitTitle({
   children,
@@ -177,22 +176,25 @@ function AutoFitTitle({
     let raf = 0;
 
     const fit = () => {
-      // 1. 리셋: 폰트 크기와 줄바꿈 설정을 초기화하여 실제 폭(scrollWidth) 측정
+      // 리셋(정확한 scrollWidth 측정)
       el.style.fontSize = "";
       el.style.whiteSpace = "nowrap";
 
       const parent = el.parentElement as HTMLElement | null;
 
-      // 2. 폭 측정: 기준 폭은 반드시 "캡션 컬럼 폭"
-      const containerWidth =
-        parent?.getBoundingClientRect().width ?? el.getBoundingClientRect().width;
-      const textWidth = el.scrollWidth;
+      // ✅ 가장 안정적인 폭: 컬럼의 실제 텍스트 영역 폭
+      let containerWidth = parent?.clientWidth ?? el.clientWidth;
+      if (parent) {
+        const ps = window.getComputedStyle(parent);
+        const pl = parseFloat(ps.paddingLeft) || 0;
+        const pr = parseFloat(ps.paddingRight) || 0;
+        containerWidth = Math.max(0, containerWidth - pl - pr);
+      }
 
+      const textWidth = el.scrollWidth;
       const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
 
-      // 3. 축소 계산
       if (containerWidth > 0 && textWidth > containerWidth) {
-        // 0.985는 안전 마진
         const next = base * (containerWidth / textWidth) * 0.985;
         setFontSize(`${next}px`);
       } else {
@@ -209,10 +211,7 @@ function AutoFitTitle({
     ro.observe(el);
     if (el.parentElement) ro.observe(el.parentElement);
 
-    // 1. 최초 실행
     schedule();
-
-    // 2. 다음 틱(레이아웃 확정 및 폰트 로딩) 시 재계산
     const t1 = window.setTimeout(schedule, 0);
 
     return () => {
@@ -308,7 +307,7 @@ function LazyImage({
           onLoad={() => setLoaded(true)}
         />
       )}
-      </div>
+    </div>
   );
 }
 
@@ -320,14 +319,13 @@ export function Timeline() {
     return imageKeys.map((key, i) => {
       const imgIndex = i + 1;
       const caption = captionMap.get(imgIndex);
-      // ✅ hasCaption 계산에서 date와 desc 제거
       const hasCaption = Boolean(caption?.title);
       return { imgIndex, key, caption, hasCaption };
     });
   }, []);
 
   const { itemRefs, visibleItems } = useHybridTimelineAppear(items.length, 500);
-  const isFontLoaded = useFontLoaded(); // 폰트 로딩 상태를 가져옴
+  const isFontLoaded = useFontLoaded();
 
   return (
     <div className="w-timeline">
@@ -369,7 +367,6 @@ export function Timeline() {
               {/* 캡션 */}
               {item.hasCaption && (
                 <div className="caption-col">
-                  {/* ✅ cap?.date 및 cap?.desc 렌더링 제거됨 */}
                   {cap?.title && (
                     <AutoFitTitle
                       watchKey={`${idx}-${isVisible ? "v" : "h"}-${
