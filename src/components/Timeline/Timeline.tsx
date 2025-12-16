@@ -155,9 +155,9 @@ const useHybridTimelineAppear = (
 };
 
 // ===============================================
-// ✅ 캡션 타이틀 자동 축소 Hook (모바일 안정 버전)
+// ✅ 캡션 타이틀 자동 축소 Hook (모바일 안정 완성본)
 // - "컬럼 실제 내부 폭(clientWidth - padding)" 기준
-// - overflow hidden에 의해 잘리는 현상 방지 (SCSS도 함께 수정 필요)
+// - ✅ 첫 페인트 전에 fit() 1회 즉시 실행 (잘림/깜빡임 방지)
 // ===============================================
 function AutoFitTitle({
   children,
@@ -182,7 +182,7 @@ function AutoFitTitle({
 
       const parent = el.parentElement as HTMLElement | null;
 
-      // ✅ 가장 안정적인 폭: 컬럼의 실제 텍스트 영역 폭
+      // ✅ 컬럼 실제 텍스트 영역 폭
       let containerWidth = parent?.clientWidth ?? el.clientWidth;
       if (parent) {
         const ps = window.getComputedStyle(parent);
@@ -202,6 +202,9 @@ function AutoFitTitle({
       }
     };
 
+    // ✅ 핵심: 첫 페인트 전에 즉시 1회 실행
+    fit();
+
     const schedule = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(fit);
@@ -211,7 +214,7 @@ function AutoFitTitle({
     ro.observe(el);
     if (el.parentElement) ro.observe(el.parentElement);
 
-    schedule();
+    // 폰트 로딩/레이아웃 확정 이후 재측정
     const t1 = window.setTimeout(schedule, 0);
 
     return () => {
