@@ -8,12 +8,13 @@ import {
 } from "react";
 import "./Timeline.scss";
 
-/** Vite: 이미지 로드 로직 */
+/** Vite: src/image 안 jpg 자동 로드 (동적 import) */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
   eager: false,
   import: "default",
 }) as Record<string, () => Promise<string>>;
 
+/** 이미지 경로를 번호순으로 정렬한 "키 목록" */
 const imageKeys = Object.keys(imageModules).sort((a, b) => {
   const na = Number(a.match(/(\d+)\.jpg$/)?.[1] ?? 0);
   const nb = Number(b.match(/(\d+)\.jpg$/)?.[1] ?? 0);
@@ -21,10 +22,11 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 });
 
 type Caption = {
-  imgIndex: number;
-  title?: ReactNode;
+  imgIndex: number; // 1-based
+  title?: ReactNode; // JSX 가능
 };
 
+/** 타이틀 no-break */
 const captions: Caption[] = [
   { imgIndex: 1, title: <span className="no-break">1989년에 태어난 승철이와</span> },
   { imgIndex: 2, title: <span className="no-break">1990년에 태어난 미영이가</span> },
@@ -39,6 +41,16 @@ const captions: Caption[] = [
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
 
+type TimelineItem = {
+  imgIndex: number;
+  key: string; // glob key
+  caption?: Caption;
+  hasCaption: boolean;
+};
+
+// ===============================================
+// 폰트 로딩 감지 Hook (유지)
+// ===============================================
 const useFontLoaded = () => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -47,116 +59,219 @@ const useFontLoaded = () => {
   return loaded;
 };
 
-const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500) => {
+// ===============================================
+// 하이브리드 등장 애니메이션 Hook (유지)
+// ===============================================
+const useHybridTimelineAppear = (
+  itemCount: number,
+  initialDelayMs: number = 500
+) => {
   const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
   const [visibleItems, setVisibleItems] = useState(new Set<number>());
 
   useEffect(() => {
     let timerId: number | undefined;
     let initialVisibleIndices: number[] = [];
-    
-    const initialObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        const index = Number(entry.target.getAttribute("data-index"));
-        if (entry.isIntersecting) initialVisibleIndices.push(index);
-      });
-      obs.disconnect();
-      initialVisibleIndices.sort((a, b) => a - b);
-      
-      let currentTimerIndex = 0;
-      const startInitialTimer = () => {
-        if (currentTimerIndex < initialVisibleIndices.length) {
-          setVisibleItems(prev => new Set(prev).add(initialVisibleIndices[currentTimerIndex++]));
-          timerId = window.setTimeout(startInitialTimer, initialDelayMs);
-        } else {
-          startScrollObserver();
-        }
-      };
+    let initialObserver: IntersectionObserver | null = null;
+    let scrollObserver: IntersectionObserver | null = null;
 
-      const startScrollObserver = () => {
-        const scrollObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const index = Number(entry.target.getAttribute("data-index"));
-              setVisibleItems(prev => new Set(prev).add(index));
+    initialObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          const index = Number(entry.target.getAttribute("data-index"));
+          if (entry.isIntersecting) {
+            initialVisibleIndices.push(index);
+          }
+        });
+
+        obs.disconnect();
+
+        initialVisibleIndices.sort((a, b) => a - b);
+        let currentTimerIndex = 0;
+
+        const startScrollObserver = () => {
+          scrollObserver = new IntersectionObserver(
+            (entries, observer) => {
+              entries.forEach((entry) => {
+                const index = Number(entry.target.getAttribute("data-index"));
+
+                if (entry.isIntersecting) {
+                  setVisibleItems((prev) => {
+                    if (prev.has(index)) return prev;
+                    const next = new Set(prev);
+                    next.add(index);
+                    return next;
+                  });
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { rootMargin: "0px", threshold: 0.1 }
+          );
+
+          Object.values(itemRefs.current).forEach((el) => {
+            const index = Number(el?.getAttribute("data-index"));
+            if (el && !initialVisibleIndices.includes(index)) {
+              scrollObserver!.observe(el);
             }
           });
-        }, { threshold: 0.1 });
-        Object.values(itemRefs.current).forEach(el => el && scrollObserver.observe(el));
-      };
-      startInitialTimer();
-    }, { threshold: 0.1 });
+        };
 
-    Object.values(itemRefs.current).forEach(el => el && initialObserver.observe(el));
-    return () => clearTimeout(timerId);
+        const startInitialTimer = () => {
+          if (currentTimerIndex < initialVisibleIndices.length) {
+            const indexToReveal = initialVisibleIndices[currentTimerIndex];
+            setVisibleItems((prev) => {
+              const next = new Set(prev);
+              next.add(indexToReveal);
+              return next;
+            });
+            currentTimerIndex++;
+            timerId = setTimeout(
+              startInitialTimer,
+              initialDelayMs
+            ) as unknown as number;
+          } else {
+            startScrollObserver();
+          }
+        };
+
+        startInitialTimer();
+      },
+      { rootMargin: "0px", threshold: 0.1 }
+    );
+
+    Object.values(itemRefs.current).forEach((el) => {
+      if (el) initialObserver!.observe(el);
+    });
+
+    return () => {
+      clearTimeout(timerId);
+      initialObserver?.disconnect();
+      scrollObserver?.disconnect();
+    };
   }, [itemCount, initialDelayMs]);
 
   return { itemRefs, visibleItems };
 };
 
-/**
- * ✅ 수정된 AutoFitTitle: 부모 너비를 물리적으로 고정된 상태에서 측정
- */
-function AutoFitTitle({ children, watchKey }: { children: ReactNode; watchKey: string }) {
-  const ref = useRef<HTMLHeadingElement | null>(null);
+// ===============================================
+// ✅ 캡션 타이틀 자동 축소 (모바일 안정 완성본)
+// - "h3"가 아니라 "텍스트 span" 폭으로 측정(모바일/Safari 안정)
+// - 컬럼 실제 내부 폭(clientWidth - padding) 기준
+// - 첫 페인트 전에 fit() 1회 즉시 실행
+// ===============================================
+function AutoFitTitle({
+  children,
+  watchKey,
+}: {
+  children: ReactNode;
+  watchKey: string;
+}) {
+  const containerRef = useRef<HTMLHeadingElement | null>(null);
+  const textRef = useRef<HTMLSpanElement | null>(null);
   const [fontSize, setFontSize] = useState<string>("");
 
   useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const container = containerRef.current;
+    const textEl = textRef.current;
+    if (!container || !textEl) return;
+
+    let raf = 0;
 
     const fit = () => {
-      el.style.fontSize = ""; 
-      const parent = el.parentElement;
-      if (!parent) return;
+      // 리셋(정확한 측정용)
+      container.style.fontSize = "";
+      container.style.whiteSpace = "nowrap";
+      setFontSize("");
 
-      // getBoundingClientRect는 소수점까지 포함한 실제 렌더링 너비를 가져옴
-      const parentWidth = parent.getBoundingClientRect().width;
-      const ps = window.getComputedStyle(parent);
-      const paddingX = parseFloat(ps.paddingLeft) + parseFloat(ps.paddingRight);
-      const containerWidth = parentWidth - paddingX;
+      // ✅ 컬럼 실제 텍스트 영역 폭(부모 padding 제외)
+      const parent = container.parentElement as HTMLElement | null;
+      let containerWidth = parent?.clientWidth ?? container.clientWidth;
 
-      const textWidth = el.scrollWidth;
-      const currentFontSize = parseFloat(window.getComputedStyle(el).fontSize);
+      if (parent) {
+        const ps = window.getComputedStyle(parent);
+        const pl = parseFloat(ps.paddingLeft) || 0;
+        const pr = parseFloat(ps.paddingRight) || 0;
+        containerWidth = Math.max(0, containerWidth - pl - pr);
+      }
+
+      // ✅ 텍스트 자체 폭 (모바일 안정)
+      const textWidth = textEl.scrollWidth;
+
+      const base =
+        parseFloat(window.getComputedStyle(container).fontSize) || 16;
 
       if (containerWidth > 0 && textWidth > containerWidth) {
-        // 0.95 안전 계수를 두어 글자가 경계면에 닿지 않게 함
-        const nextSize = (currentFontSize * (containerWidth / textWidth)) * 0.95;
-        setFontSize(`${nextSize}px`);
+        const next = base * (containerWidth / textWidth) * 0.98;
+        setFontSize(`${next}px`);
       } else {
         setFontSize("");
       }
     };
 
-    // 레이아웃 지연을 고려하여 2중 보정
-    const timeout = setTimeout(() => requestAnimationFrame(fit), 30);
-    const ro = new ResizeObserver(fit);
-    ro.observe(el);
-    if (el.parentElement) ro.observe(el.parentElement);
+    // ✅ 첫 페인트 전에 1회
+    fit();
+
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(fit);
+    };
+
+    const ro = new ResizeObserver(schedule);
+    ro.observe(container);
+    if (container.parentElement) ro.observe(container.parentElement);
+
+    // 폰트/레이아웃 확정 타이밍 보강
+    const t1 = window.setTimeout(schedule, 0);
+    const t2 = window.setTimeout(schedule, 120);
+
+    const onResize = () => schedule();
+    window.addEventListener("resize", onResize);
 
     return () => {
-      clearTimeout(timeout);
+      window.removeEventListener("resize", onResize);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, [watchKey, children]);
+  }, [watchKey]);
 
   return (
-    <h3 
-      ref={ref} 
-      className="title" 
-      style={{ 
-        fontSize: fontSize || undefined, 
+    <h3
+      ref={containerRef}
+      className="title"
+      style={{
+        fontSize: fontSize || undefined,
         whiteSpace: "nowrap",
-        display: "block",
-        width: "100%"
       }}
     >
-      {children}
+      <span
+        ref={textRef}
+        className="title-text"
+        style={{
+          display: "inline-block",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {children}
+      </span>
     </h3>
   );
 }
 
-function LazyImage({ srcPromise, alt, aboveFold = false }: { srcPromise: () => Promise<string>; alt: string; aboveFold?: boolean }) {
+/**
+ * LazyImage (유지)
+ */
+function LazyImage({
+  srcPromise,
+  alt,
+  aboveFold = false,
+}: {
+  srcPromise: () => Promise<string>;
+  alt: string;
+  aboveFold?: boolean;
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(aboveFold);
   const [src, setSrc] = useState<string | null>(null);
@@ -164,32 +279,75 @@ function LazyImage({ srcPromise, alt, aboveFold = false }: { srcPromise: () => P
 
   useEffect(() => {
     if (aboveFold) return;
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setShouldLoad(true); io.disconnect(); }
-    }, { rootMargin: "600px" });
-    if (ref.current) io.observe(ref.current);
+
+    const el = ref.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          io.disconnect();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "600px",
+        threshold: 0.01,
+      }
+    );
+
+    io.observe(el);
     return () => io.disconnect();
   }, [aboveFold]);
 
   useEffect(() => {
-    if (shouldLoad && !src) srcPromise().then(url => setSrc(url));
+    if (!shouldLoad || src) return;
+
+    let cancelled = false;
+    srcPromise().then((url) => {
+      if (!cancelled) setSrc(url);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [shouldLoad, src, srcPromise]);
 
   return (
-    <div ref={ref} className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`} aria-label={alt}>
+    <div
+      ref={ref}
+      className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`}
+      aria-label={alt}
+    >
       {!loaded && <div className="photo-skeleton" aria-hidden="true" />}
-      {src && <img src={src} alt={alt} onLoad={() => setLoaded(true)} loading={aboveFold ? "eager" : "lazy"} />}
+
+      {src && (
+        <img
+          src={src}
+          alt={alt}
+          loading={aboveFold ? "eager" : "lazy"}
+          fetchPriority={aboveFold ? "high" : "auto"}
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+        />
+      )}
     </div>
   );
 }
 
+// ===============================================
+// Timeline 메인
+// ===============================================
 export function Timeline() {
-  const items = useMemo(() => imageKeys.map((key, i) => ({
-    imgIndex: i + 1,
-    key,
-    caption: captionMap.get(i + 1),
-    hasCaption: !!captionMap.get(i + 1)?.title
-  })), []);
+  const items: TimelineItem[] = useMemo(() => {
+    return imageKeys.map((key, i) => {
+      const imgIndex = i + 1;
+      const caption = captionMap.get(imgIndex);
+      const hasCaption = Boolean(caption?.title);
+      return { imgIndex, key, caption, hasCaption };
+    });
+  }, []);
 
   const { itemRefs, visibleItems } = useHybridTimelineAppear(items.length, 500);
   const isFontLoaded = useFontLoaded();
@@ -198,26 +356,51 @@ export function Timeline() {
     <div className="w-timeline">
       <ol className="timeline-list">
         {items.map((item, idx) => {
-          const isVisible = visibleItems.has(idx);
           const side = idx % 2 === 0 ? "left" : "right";
+          const cap = item.caption;
+          const isVisible = visibleItems.has(idx);
+
           return (
             <li
               key={item.imgIndex}
               ref={(el) => (itemRefs.current[idx] = el)}
               data-index={idx}
-              className={`timeline-item ${side} ${isVisible ? "is-visible" : "not-visible"}`}
+              className={`timeline-item ${side} ${
+                isVisible ? "is-visible" : "not-visible"
+              }`}
             >
-              <div className="line-col"><span className="dot" aria-hidden="true" /></div>
+              {/* 가운데 라인 */}
+              <div className="line-col">
+                <span className="dot" aria-hidden="true" />
+              </div>
+
+              {/* 사진 */}
               <div className="media">
                 <div className="photo-wrap">
-                  <LazyImage srcPromise={imageModules[item.key]} alt={`img-${item.imgIndex}`} aboveFold={item.imgIndex <= 2} />
+                  <LazyImage
+                    srcPromise={imageModules[item.key]}
+                    alt={
+                      typeof cap?.title === "string"
+                        ? cap.title
+                        : `timeline-${item.imgIndex}`
+                    }
+                    aboveFold={item.imgIndex <= 2}
+                  />
                 </div>
               </div>
+
+              {/* 캡션 */}
               {item.hasCaption && (
                 <div className="caption-col">
-                  <AutoFitTitle watchKey={`${idx}-${isVisible}-${isFontLoaded}`}>
-                    {item.caption?.title}
-                  </AutoFitTitle>
+                  {cap?.title && (
+                    <AutoFitTitle
+                      watchKey={`${idx}-${isVisible ? "v" : "h"}-${
+                        isFontLoaded ? "f" : "u"
+                      }`}
+                    >
+                      {cap.title}
+                    </AutoFitTitle>
+                  )}
                 </div>
               )}
             </li>
