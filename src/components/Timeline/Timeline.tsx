@@ -28,7 +28,7 @@ type Caption = {
 
 /** 타이틀 no-break */
 const captions: Caption[] = [
-  { imgIndex: 1, title: <span className="no-break">1989년에 태어난 승철이와</span> },
+  { imgIndex: 1, title: <span className="no-break">1989년에 태어난 승철이와대체뭐가문제야머리아파죽겠네짜증짜증제발좀</span> },
   { imgIndex: 2, title: <span className="no-break">1990년에 태어난 미영이가</span> },
   { imgIndex: 3, title: <span className="no-break">2024년 가을에 만나</span> },
   { imgIndex: 4, title: <span className="no-break">2024년 겨울,</span> },
