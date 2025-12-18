@@ -16,7 +16,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  position: relative;
   display: grid;
   gap: 0.6rem;
 }
@@ -25,8 +24,8 @@
   position: relative;
   z-index: 1;
   display: grid;
-  /* 핵심: minmax(0, 1fr)가 자식의 nowrap 텍스트에 의해 늘어나지 않게 고정 */
-  grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
+  /* ✅ 수정: 1fr 대신 영역을 강제로 반반(50%) 고정하여 침범 방지 */
+  grid-template-columns: calc(50% - (var(--line-col-w) / 2)) var(--line-col-w) calc(50% - (var(--line-col-w) / 2));
   align-items: center;
   width: 100%;
 
@@ -36,23 +35,21 @@
   );
 
   min-height: var(--photo-safe);
-  --offset: 0;
 }
 
-/* ✅ 캡션 컬럼: 중앙 라인 침범 방지의 핵심 */
 .caption-col {
   grid-row: 1;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.22rem;
   align-self: center;
   transform: translateY(var(--offset));
 
-  /* 수정된 속성 */
-  width: 100% !important; 
-  min-width: 0 !important; 
-  overflow: visible; // AutoFitTitle이 줄이기 전까진 보여야 함
+  /* ✅ 수정: 텍스트 때문에 늘어나지 않도록 강제 제한 */
+  width: 100%; 
+  min-width: 0; 
+  max-width: 100%;
+  overflow: visible; 
   box-sizing: border-box;
 }
 
@@ -61,15 +58,14 @@
   font-weight: 600;
   color: var(--text-main);
   display: block;
+  white-space: nowrap;
   width: 100%;
   max-width: 100%;
-  white-space: nowrap;
 }
 
+/* 사진 스타일 */
 .media {
   grid-row: 1;
-  position: relative;
-  z-index: 1;
   width: var(--photo-safe);
   height: var(--photo-safe);
   display: flex;
@@ -77,29 +73,15 @@
 }
 
 .photo-wrap {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #fff;
+  width: 100%; height: 100%; border-radius: 50%;
+  overflow: hidden; background: #fff;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.lazy-photo { position: relative; width: 100%; height: 100%; display: block; }
-.photo-skeleton { position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.06); animation: pulse 1.2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.8; } }
-.lazy-photo img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.35s; border-radius: 50%; }
-.lazy-photo.is-loaded img { opacity: 1; }
-
 .line-col {
   grid-column: 2;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  position: relative;
-  transform: translateY(var(--offset));
+  display: flex; justify-content: center; align-items: center;
+  position: relative; transform: translateY(var(--offset));
 }
 
 .dot {
@@ -107,7 +89,7 @@
   -webkit-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-/* 좌/우 배치 */
+/* 좌/우 배치 정밀 수정 */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
   .media { grid-column: 1; justify-self: end; margin-right: var(--gutter); }
@@ -122,14 +104,13 @@
 
 @media (max-width: 640px) {
   :root {
-    --photo: clamp(108px, 40vw, 148px);
+    --photo: clamp(100px, 38vw, 140px);
     --line-col-w: 32px;
-    --gutter: 12px;
+    --gutter: 10px; // 모바일 여백 축소
     --lift-ratio: 0.04;
   }
   .caption-col .title { font-size: 0.95rem; }
 }
 
 .timeline-item.not-visible { opacity: 0; transform: translateY(20px); }
-.timeline-item { transition: opacity 1.5s ease-out, transform 1.5s ease-out; }
-.timeline-item.is-visible { opacity: 1; transform: translateY(0); }
+.timeline-item.is-visible { opacity: 1; transform: translateY(0); transition: all 1.5s ease-out; }
