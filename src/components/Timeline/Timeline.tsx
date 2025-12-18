@@ -167,69 +167,69 @@ function AutoFitTitle({
   children: ReactNode;
   watchKey: string;
 }) {
-  const containerRef = useRef<HTMLHeadingElement | null>(null);
-  const textRef = useRef<HTMLSpanElement | null>(null);
-  const [fontSize, setFontSize] = useState<string>("");
+  const hRef = useRef<HTMLHeadingElement | null>(null);
+  const sRef = useRef<HTMLSpanElement | null>(null);
 
   useLayoutEffect(() => {
-    const container = containerRef.current;
-    const textEl = textRef.current;
-    if (!container || !textEl) return;
+    const h = hRef.current;
+    const s = sRef.current;
+    if (!h || !s) return;
 
     let raf = 0;
 
-    const fit = () => {
-      // 리셋(정확한 측정용)
-      container.style.fontSize = "";
-      container.style.whiteSpace = "nowrap";
-      setFontSize("");
+    const measureTextWidth = () => {
+      const range = document.createRange();
+      range.selectNodeContents(s);
+      const w = range.getBoundingClientRect().width;
+      range.detach?.();
+      return w;
+    };
 
-      // ✅ 컬럼 실제 텍스트 영역 폭(부모 padding 제외)
-      const parent = container.parentElement as HTMLElement | null;
-      let containerWidth = parent?.clientWidth ?? container.clientWidth;
+    const fit = () => {
+      // 1) 리셋
+      h.style.whiteSpace = "nowrap";
+      h.style.fontSize = "";
+
+      // 2) 컨테이너 폭(캡션 컬럼 폭)
+      const parent = h.parentElement as HTMLElement | null;
+      let cw = parent ? parent.getBoundingClientRect().width : h.getBoundingClientRect().width;
 
       if (parent) {
-        const ps = window.getComputedStyle(parent);
+        const ps = getComputedStyle(parent);
         const pl = parseFloat(ps.paddingLeft) || 0;
         const pr = parseFloat(ps.paddingRight) || 0;
-        containerWidth = Math.max(0, containerWidth - pl - pr);
+        cw = Math.max(0, cw - pl - pr);
       }
 
-      // ✅ 텍스트 자체 폭 (모바일 안정)
-      const textWidth = textEl.scrollWidth;
+      // 3) 텍스트 폭
+      const tw = measureTextWidth();
 
-      const base =
-        parseFloat(window.getComputedStyle(container).fontSize) || 16;
-
-      if (containerWidth > 0 && textWidth > containerWidth) {
-        const next = base * (containerWidth / textWidth) * 0.98;
-        setFontSize(`${next}px`);
-      } else {
-        setFontSize("");
+      // 4) 줄이기(즉시 적용)
+      if (cw > 0 && tw > cw) {
+        const base = parseFloat(getComputedStyle(h).fontSize) || 16;
+        const next = base * (cw / tw) * 0.98;
+        h.style.fontSize = `${next}px`;
       }
     };
 
-    // ✅ 첫 페인트 전에 1회
-    fit();
-
-    const schedule = () => {
+    // 레이아웃 확정 후 측정(더블 rAF가 안정적)
+    const run = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(fit);
+      raf = requestAnimationFrame(() => {
+        requestAnimationFrame(fit);
+      });
     };
 
-    const ro = new ResizeObserver(schedule);
-    ro.observe(container);
-    if (container.parentElement) ro.observe(container.parentElement);
+    run();
 
-    // 폰트/레이아웃 확정 타이밍 보강
-    const t1 = window.setTimeout(schedule, 0);
-    const t2 = window.setTimeout(schedule, 120);
+    const ro = new ResizeObserver(run);
+    ro.observe(h);
+    if (h.parentElement) ro.observe(h.parentElement);
 
-    const onResize = () => schedule();
-    window.addEventListener("resize", onResize);
+    const t1 = window.setTimeout(run, 0);
+    const t2 = window.setTimeout(run, 120);
 
     return () => {
-      window.removeEventListener("resize", onResize);
       window.clearTimeout(t1);
       window.clearTimeout(t2);
       cancelAnimationFrame(raf);
@@ -238,27 +238,14 @@ function AutoFitTitle({
   }, [watchKey]);
 
   return (
-    <h3
-      ref={containerRef}
-      className="title"
-      style={{
-        fontSize: fontSize || undefined,
-        whiteSpace: "nowrap",
-      }}
-    >
-      <span
-        ref={textRef}
-        className="title-text"
-        style={{
-          display: "inline-block",
-          whiteSpace: "nowrap",
-        }}
-      >
+    <h3 ref={hRef} className="title" style={{ whiteSpace: "nowrap" }}>
+      <span ref={sRef} style={{ display: "inline-block", whiteSpace: "nowrap" }}>
         {children}
       </span>
     </h3>
   );
 }
+
 
 /**
  * LazyImage (유지)
