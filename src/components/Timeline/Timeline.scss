@@ -30,7 +30,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
 
-  /* ✅ 중앙선 기준 좌/우 간격을 grid gap으로 통일 */
+  /* ✅ 중앙선 기준 좌/우 간격 “유일한” 기준 */
   column-gap: var(--gutter);
 
   align-items: center;
@@ -91,15 +91,9 @@
 }
 
 @keyframes pulse {
-  0% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0.45;
-  }
+  0% { opacity: 0.45; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.45; }
 }
 
 .lazy-photo img {
@@ -156,18 +150,16 @@
   transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
   opacity: 0.9;
 }
-
 .timeline-item:nth-child(3n + 1) .dot {
   transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
   opacity: 0.95;
 }
-
 .timeline-item:nth-child(3n + 2) .dot {
   transform: translate(-50%, -50%) rotate(16deg) scale(1);
   opacity: 0.85;
 }
 
-/* ✅ 캡션: AutoFitTitle이 한 줄 유지 + 축소 */
+/* ✅ 캡션 */
 .caption-col {
   grid-row: 1;
   z-index: 1;
@@ -183,6 +175,7 @@
   box-sizing: border-box;
 }
 
+/* ✅ AutoFitTitle가 폭을 제대로 읽도록 h3는 100% 유지 */
 .caption-col .title {
   margin: 0;
   font-size: 1rem;
@@ -190,15 +183,28 @@
   color: var(--text-main);
 
   display: block;
-
-  /* ✅ stretch/100% 제거: 텍스트 기준 거리 착시 제거 */
-  width: auto;
+  width: 100%;
   max-width: 100%;
+  min-width: 0;
 
   white-space: nowrap;
   overflow: visible;
-
   word-break: keep-all;
+}
+
+/* ✅ 텍스트(span)를 중앙선 쪽에 정확히 붙여 “체감 거리” 좌우 통일 */
+.timeline-item.left .caption-col .title > span {
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: 0;
+  margin-right: auto; /* 왼쪽: span이 왼쪽(=컬럼 시작, 중앙선 쪽) 기준 */
+}
+
+.timeline-item.right .caption-col .title > span {
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: auto;  /* 오른쪽: span이 오른쪽(=컬럼 끝, 중앙선 쪽) 기준 */
+  margin-right: 0;
 }
 
 .no-break {
@@ -212,17 +218,16 @@
 
   .media {
     grid-column: 1;
-    justify-self: end;
-
-    /* ✅ margin 제거 (gap으로 통일했으니 중복 금지) */
+    justify-self: end;   /* ✅ 중앙선 쪽으로 붙임 */
     margin-right: 0;
   }
 
   .caption-col {
     grid-column: 3;
 
-    /* ✅ 중앙선(컬럼 시작) 쪽으로 붙임 */
-    justify-self: start;
+    /* ✅ 캡션 박스는 컬럼 폭(오토핏용) 유지, 정렬은 span이 담당 */
+    justify-self: stretch;
+    width: 100%;
 
     margin-left: 0;
     text-align: left;
@@ -235,15 +240,15 @@
 
   .media {
     grid-column: 3;
-    justify-self: start;
-    margin-left: 0; /* ✅ 제거 */
+    justify-self: start; /* ✅ 중앙선 쪽으로 붙임 */
+    margin-left: 0;
   }
 
   .caption-col {
     grid-column: 1;
 
-    /* ✅ 중앙선(컬럼 끝) 쪽으로 붙임 */
-    justify-self: end;
+    justify-self: stretch;
+    width: 100%;
 
     margin-right: 0;
     text-align: right;
