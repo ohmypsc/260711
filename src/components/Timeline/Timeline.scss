@@ -29,6 +29,10 @@
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
+
+  /* ✅ 중앙선 기준 좌/우 간격을 grid gap으로 통일 */
+  column-gap: var(--gutter);
+
   align-items: center;
 
   --photo-safe: min(
@@ -186,14 +190,14 @@
   color: var(--text-main);
 
   display: block;
-  width: 100%;
+
+  /* ✅ stretch/100% 제거: 텍스트 기준 거리 착시 제거 */
+  width: auto;
   max-width: 100%;
-  min-width: 0;
 
   white-space: nowrap;
   overflow: visible;
 
-  /* ✅ 한글 임의 줄바꿈 방지 보강 */
   word-break: keep-all;
 }
 
@@ -209,17 +213,18 @@
   .media {
     grid-column: 1;
     justify-self: end;
-    margin-right: var(--gutter);
+
+    /* ✅ margin 제거 (gap으로 통일했으니 중복 금지) */
+    margin-right: 0;
   }
 
   .caption-col {
     grid-column: 3;
 
-    justify-self: stretch;
-    width: 100%;
-    max-width: 100%;
+    /* ✅ 중앙선(컬럼 시작) 쪽으로 붙임 */
+    justify-self: start;
 
-    margin-left: var(--gutter);
+    margin-left: 0;
     text-align: left;
     align-items: flex-start;
   }
@@ -231,17 +236,16 @@
   .media {
     grid-column: 3;
     justify-self: start;
-    margin-left: var(--gutter);
+    margin-left: 0; /* ✅ 제거 */
   }
 
   .caption-col {
     grid-column: 1;
 
-    justify-self: stretch;
-    width: 100%;
-    max-width: 100%;
+    /* ✅ 중앙선(컬럼 끝) 쪽으로 붙임 */
+    justify-self: end;
 
-    margin-right: var(--gutter);
+    margin-right: 0;
     text-align: right;
     align-items: flex-end;
   }
