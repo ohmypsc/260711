@@ -8,13 +8,12 @@ import {
 } from "react";
 import "./Timeline.scss";
 
-/** Vite: src/image 안 jpg 자동 로드 (동적 import) */
+/** Vite: 이미지 로드 로직 */
 const imageModules = import.meta.glob("/src/image/*.jpg", {
   eager: false,
   import: "default",
 }) as Record<string, () => Promise<string>>;
 
-/** 이미지 경로를 번호순으로 정렬한 "키 목록" */
 const imageKeys = Object.keys(imageModules).sort((a, b) => {
   const na = Number(a.match(/(\d+)\.jpg$/)?.[1] ?? 0);
   const nb = Number(b.match(/(\d+)\.jpg$/)?.[1] ?? 0);
@@ -22,11 +21,10 @@ const imageKeys = Object.keys(imageModules).sort((a, b) => {
 });
 
 type Caption = {
-  imgIndex: number; // 1-based
-  title?: ReactNode; // JSX 가능
+  imgIndex: number;
+  title?: ReactNode;
 };
 
-/** 타이틀 no-break */
 const captions: Caption[] = [
   { imgIndex: 1, title: <span className="no-break">1989년에 태어난 승철이와</span> },
   { imgIndex: 2, title: <span className="no-break">1990년에 태어난 미영이가</span> },
@@ -41,16 +39,7 @@ const captions: Caption[] = [
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
 
-type TimelineItem = {
-  imgIndex: number;
-  key: string; // glob key
-  caption?: Caption;
-  hasCaption: boolean;
-};
-
-// ===============================================
-// 폰트 로딩 감지 Hook (유지)
-// ===============================================
+// 폰트 로딩 감지
 const useFontLoaded = () => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -59,113 +48,59 @@ const useFontLoaded = () => {
   return loaded;
 };
 
-// ===============================================
-// 하이브리드 등장 애니메이션 Hook (유지)
-// ===============================================
-const useHybridTimelineAppear = (
-  itemCount: number,
-  initialDelayMs: number = 500
-) => {
+// 등장 애니메이션 Hook
+const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500) => {
   const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
   const [visibleItems, setVisibleItems] = useState(new Set<number>());
 
   useEffect(() => {
     let timerId: number | undefined;
     let initialVisibleIndices: number[] = [];
-    let initialObserver: IntersectionObserver | null = null;
-    let scrollObserver: IntersectionObserver | null = null;
+    
+    const initialObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        const index = Number(entry.target.getAttribute("data-index"));
+        if (entry.isIntersecting) initialVisibleIndices.push(index);
+      });
+      obs.disconnect();
+      initialVisibleIndices.sort((a, b) => a - b);
+      
+      let currentTimerIndex = 0;
+      const startInitialTimer = () => {
+        if (currentTimerIndex < initialVisibleIndices.length) {
+          setVisibleItems(prev => new Set(prev).add(initialVisibleIndices[currentTimerIndex++]));
+          timerId = window.setTimeout(startInitialTimer, initialDelayMs);
+        } else {
+          startScrollObserver();
+        }
+      };
 
-    initialObserver = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          const index = Number(entry.target.getAttribute("data-index"));
-          if (entry.isIntersecting) {
-            initialVisibleIndices.push(index);
-          }
-        });
-
-        obs.disconnect();
-
-        initialVisibleIndices.sort((a, b) => a - b);
-        let currentTimerIndex = 0;
-
-        const startScrollObserver = () => {
-          scrollObserver = new IntersectionObserver(
-            (entries, observer) => {
-              entries.forEach((entry) => {
-                const index = Number(entry.target.getAttribute("data-index"));
-
-                if (entry.isIntersecting) {
-                  setVisibleItems((prev) => {
-                    if (prev.has(index)) return prev;
-                    const next = new Set(prev);
-                    next.add(index);
-                    return next;
-                  });
-                  observer.unobserve(entry.target);
-                }
-              });
-            },
-            { rootMargin: "0px", threshold: 0.1 }
-          );
-
-          Object.values(itemRefs.current).forEach((el) => {
-            const index = Number(el?.getAttribute("data-index"));
-            if (el && !initialVisibleIndices.includes(index)) {
-              scrollObserver!.observe(el);
+      const startScrollObserver = () => {
+        const scrollObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = Number(entry.target.getAttribute("data-index"));
+              setVisibleItems(prev => new Set(prev).add(index));
             }
           });
-        };
+        }, { threshold: 0.1 });
+        Object.values(itemRefs.current).forEach(el => el && scrollObserver.observe(el));
+      };
 
-        const startInitialTimer = () => {
-          if (currentTimerIndex < initialVisibleIndices.length) {
-            const indexToReveal = initialVisibleIndices[currentTimerIndex];
-            setVisibleItems((prev) => {
-              const next = new Set(prev);
-              next.add(indexToReveal);
-              return next;
-            });
-            currentTimerIndex++;
-            timerId = setTimeout(
-              startInitialTimer,
-              initialDelayMs
-            ) as unknown as number;
-          } else {
-            startScrollObserver();
-          }
-        };
+      startInitialTimer();
+    }, { threshold: 0.1 });
 
-        startInitialTimer();
-      },
-      { rootMargin: "0px", threshold: 0.1 }
-    );
-
-    Object.values(itemRefs.current).forEach((el) => {
-      if (el) initialObserver!.observe(el);
-    });
-
-    return () => {
-      clearTimeout(timerId);
-      initialObserver?.disconnect();
-      scrollObserver?.disconnect();
-    };
+    Object.values(itemRefs.current).forEach(el => el && initialObserver.observe(el));
+    return () => clearTimeout(timerId);
   }, [itemCount, initialDelayMs]);
 
   return { itemRefs, visibleItems };
 };
 
-// ===============================================
-// ✅ 캡션 타이틀 자동 축소 Hook (모바일 안정 완성본)
-// - "컬럼 실제 내부 폭(clientWidth - padding)" 기준
-// - ✅ 첫 페인트 전에 fit() 1회 즉시 실행 (잘림/깜빡임 방지)
-// ===============================================
-function AutoFitTitle({
-  children,
-  watchKey,
-}: {
-  children: ReactNode;
-  watchKey: string;
-}) {
+/**
+ * ✅ 수정된 AutoFitTitle: 부모 너비를 정밀 측정하여 폰트 축소
+ */
+function AutoFitTitle({ children, watchKey }: { children: ReactNode; watchKey: string }) {
   const ref = useRef<HTMLHeadingElement | null>(null);
   const [fontSize, setFontSize] = useState<string>("");
 
@@ -173,83 +108,45 @@ function AutoFitTitle({
     const el = ref.current;
     if (!el) return;
 
-    let raf = 0;
-
     const fit = () => {
-      // 리셋(정확한 scrollWidth 측정)
-      el.style.fontSize = "";
-      el.style.whiteSpace = "nowrap";
+      el.style.fontSize = ""; // 측정 전 초기화
+      const parent = el.parentElement;
+      if (!parent) return;
 
-      const parent = el.parentElement as HTMLElement | null;
-
-      // ✅ 컬럼 실제 텍스트 영역 폭
-      let containerWidth = parent?.clientWidth ?? el.clientWidth;
-      if (parent) {
-        const ps = window.getComputedStyle(parent);
-        const pl = parseFloat(ps.paddingLeft) || 0;
-        const pr = parseFloat(ps.paddingRight) || 0;
-        containerWidth = Math.max(0, containerWidth - pl - pr);
-      }
+      // 부모의 실제 가용 너비 계산 (소수점 포함)
+      const parentRect = parent.getBoundingClientRect();
+      const ps = window.getComputedStyle(parent);
+      const paddingX = (parseFloat(ps.paddingLeft) || 0) + (parseFloat(ps.paddingRight) || 0);
+      const containerWidth = parentRect.width - paddingX;
 
       const textWidth = el.scrollWidth;
-      const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
+      const baseFontSize = parseFloat(window.getComputedStyle(el).fontSize) || 16;
 
       if (containerWidth > 0 && textWidth > containerWidth) {
-        const next = base * (containerWidth / textWidth) * 0.985;
-        setFontSize(`${next}px`);
+        // 여유 계수 0.97 적용하여 잘림 방지
+        const nextSize = baseFontSize * (containerWidth / textWidth) * 0.97;
+        setFontSize(`${nextSize}px`);
       } else {
         setFontSize("");
       }
     };
 
-    // ✅ 핵심: 첫 페인트 전에 즉시 1회 실행
     fit();
-
-    const schedule = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(fit);
-    };
-
-    const ro = new ResizeObserver(schedule);
+    const ro = new ResizeObserver(() => requestAnimationFrame(fit));
     ro.observe(el);
     if (el.parentElement) ro.observe(el.parentElement);
 
-    // 폰트 로딩/레이아웃 확정 이후 재측정
-    const t1 = window.setTimeout(schedule, 0);
-
-    return () => {
-      window.clearTimeout(t1);
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-    };
-  }, [watchKey]);
+    return () => ro.disconnect();
+  }, [watchKey, children]);
 
   return (
-    <h3
-      ref={ref}
-      className="title"
-      style={{
-        fontSize: fontSize || undefined,
-        whiteSpace: "nowrap",
-      }}
-    >
+    <h3 ref={ref} className="title" style={{ fontSize: fontSize || undefined, whiteSpace: "nowrap" }}>
       {children}
     </h3>
   );
 }
 
-/**
- * LazyImage (유지)
- */
-function LazyImage({
-  srcPromise,
-  alt,
-  aboveFold = false,
-}: {
-  srcPromise: () => Promise<string>;
-  alt: string;
-  aboveFold?: boolean;
-}) {
+function LazyImage({ srcPromise, alt, aboveFold = false }: { srcPromise: () => Promise<string>; alt: string; aboveFold?: boolean }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(aboveFold);
   const [src, setSrc] = useState<string | null>(null);
@@ -257,75 +154,34 @@ function LazyImage({
 
   useEffect(() => {
     if (aboveFold) return;
-
-    const el = ref.current;
-    if (!el) return;
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true);
-          io.disconnect();
-        }
-      },
-      {
-        root: null,
-        rootMargin: "600px",
-        threshold: 0.01,
-      }
-    );
-
-    io.observe(el);
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setShouldLoad(true); io.disconnect(); }
+    }, { rootMargin: "600px" });
+    if (ref.current) io.observe(ref.current);
     return () => io.disconnect();
   }, [aboveFold]);
 
   useEffect(() => {
-    if (!shouldLoad || src) return;
-
-    let cancelled = false;
-    srcPromise().then((url) => {
-      if (!cancelled) setSrc(url);
-    });
-
-    return () => {
-      cancelled = true;
-    };
+    if (shouldLoad && !src) {
+      srcPromise().then(url => setSrc(url));
+    }
   }, [shouldLoad, src, srcPromise]);
 
   return (
-    <div
-      ref={ref}
-      className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`}
-      aria-label={alt}
-    >
+    <div ref={ref} className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`} aria-label={alt}>
       {!loaded && <div className="photo-skeleton" aria-hidden="true" />}
-
-      {src && (
-        <img
-          src={src}
-          alt={alt}
-          loading={aboveFold ? "eager" : "lazy"}
-          fetchPriority={aboveFold ? "high" : "auto"}
-          decoding="async"
-          onLoad={() => setLoaded(true)}
-        />
-      )}
+      {src && <img src={src} alt={alt} onLoad={() => setLoaded(true)} loading={aboveFold ? "eager" : "lazy"} />}
     </div>
   );
 }
 
-// ===============================================
-// Timeline 메인
-// ===============================================
 export function Timeline() {
-  const items: TimelineItem[] = useMemo(() => {
-    return imageKeys.map((key, i) => {
-      const imgIndex = i + 1;
-      const caption = captionMap.get(imgIndex);
-      const hasCaption = Boolean(caption?.title);
-      return { imgIndex, key, caption, hasCaption };
-    });
-  }, []);
+  const items = useMemo(() => imageKeys.map((key, i) => ({
+    imgIndex: i + 1,
+    key,
+    caption: captionMap.get(i + 1),
+    hasCaption: !!captionMap.get(i + 1)?.title
+  })), []);
 
   const { itemRefs, visibleItems } = useHybridTimelineAppear(items.length, 500);
   const isFontLoaded = useFontLoaded();
@@ -334,51 +190,26 @@ export function Timeline() {
     <div className="w-timeline">
       <ol className="timeline-list">
         {items.map((item, idx) => {
-          const side = idx % 2 === 0 ? "left" : "right";
-          const cap = item.caption;
           const isVisible = visibleItems.has(idx);
-
+          const side = idx % 2 === 0 ? "left" : "right";
           return (
             <li
               key={item.imgIndex}
               ref={(el) => (itemRefs.current[idx] = el)}
               data-index={idx}
-              className={`timeline-item ${side} ${
-                isVisible ? "is-visible" : "not-visible"
-              }`}
+              className={`timeline-item ${side} ${isVisible ? "is-visible" : "not-visible"}`}
             >
-              {/* 가운데 라인 */}
-              <div className="line-col">
-                <span className="dot" aria-hidden="true" />
-              </div>
-
-              {/* 사진 */}
+              <div className="line-col"><span className="dot" aria-hidden="true" /></div>
               <div className="media">
                 <div className="photo-wrap">
-                  <LazyImage
-                    srcPromise={imageModules[item.key]}
-                    alt={
-                      typeof cap?.title === "string"
-                        ? cap.title
-                        : `timeline-${item.imgIndex}`
-                    }
-                    aboveFold={item.imgIndex <= 2}
-                  />
+                  <LazyImage srcPromise={imageModules[item.key]} alt={`img-${item.imgIndex}`} aboveFold={item.imgIndex <= 2} />
                 </div>
               </div>
-
-              {/* 캡션 */}
               {item.hasCaption && (
                 <div className="caption-col">
-                  {cap?.title && (
-                    <AutoFitTitle
-                      watchKey={`${idx}-${isVisible ? "v" : "h"}-${
-                        isFontLoaded ? "f" : "u"
-                      }`}
-                    >
-                      {cap.title}
-                    </AutoFitTitle>
-                  )}
+                  <AutoFitTitle watchKey={`${idx}-${isVisible}-${isFontLoaded}`}>
+                    {item.caption?.title}
+                  </AutoFitTitle>
                 </div>
               )}
             </li>
