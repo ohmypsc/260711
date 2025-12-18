@@ -39,7 +39,6 @@ const captions: Caption[] = [
 
 const captionMap = new Map<number, Caption>(captions.map((c) => [c.imgIndex, c]));
 
-// 폰트 로딩 감지
 const useFontLoaded = () => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -48,7 +47,6 @@ const useFontLoaded = () => {
   return loaded;
 };
 
-// 등장 애니메이션 Hook
 const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500) => {
   const itemRefs = useRef<Record<number, HTMLLIElement | null>>({});
   const [visibleItems, setVisibleItems] = useState(new Set<number>());
@@ -86,7 +84,6 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
         }, { threshold: 0.1 });
         Object.values(itemRefs.current).forEach(el => el && scrollObserver.observe(el));
       };
-
       startInitialTimer();
     }, { threshold: 0.1 });
 
@@ -98,7 +95,7 @@ const useHybridTimelineAppear = (itemCount: number, initialDelayMs: number = 500
 };
 
 /**
- * ✅ 수정된 AutoFitTitle: 부모 너비를 정밀 측정하여 폰트 축소
+ * ✅ 수정된 AutoFitTitle: 부모 너비를 물리적으로 고정된 상태에서 측정
  */
 function AutoFitTitle({ children, watchKey }: { children: ReactNode; watchKey: string }) {
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -109,38 +106,51 @@ function AutoFitTitle({ children, watchKey }: { children: ReactNode; watchKey: s
     if (!el) return;
 
     const fit = () => {
-      el.style.fontSize = ""; // 측정 전 초기화
+      el.style.fontSize = ""; 
       const parent = el.parentElement;
       if (!parent) return;
 
-      // 부모의 실제 가용 너비 계산 (소수점 포함)
-      const parentRect = parent.getBoundingClientRect();
+      // getBoundingClientRect는 소수점까지 포함한 실제 렌더링 너비를 가져옴
+      const parentWidth = parent.getBoundingClientRect().width;
       const ps = window.getComputedStyle(parent);
-      const paddingX = (parseFloat(ps.paddingLeft) || 0) + (parseFloat(ps.paddingRight) || 0);
-      const containerWidth = parentRect.width - paddingX;
+      const paddingX = parseFloat(ps.paddingLeft) + parseFloat(ps.paddingRight);
+      const containerWidth = parentWidth - paddingX;
 
       const textWidth = el.scrollWidth;
-      const baseFontSize = parseFloat(window.getComputedStyle(el).fontSize) || 16;
+      const currentFontSize = parseFloat(window.getComputedStyle(el).fontSize);
 
       if (containerWidth > 0 && textWidth > containerWidth) {
-        // 여유 계수 0.97 적용하여 잘림 방지
-        const nextSize = baseFontSize * (containerWidth / textWidth) * 0.97;
+        // 0.95 안전 계수를 두어 글자가 경계면에 닿지 않게 함
+        const nextSize = (currentFontSize * (containerWidth / textWidth)) * 0.95;
         setFontSize(`${nextSize}px`);
       } else {
         setFontSize("");
       }
     };
 
-    fit();
-    const ro = new ResizeObserver(() => requestAnimationFrame(fit));
+    // 레이아웃 지연을 고려하여 2중 보정
+    const timeout = setTimeout(() => requestAnimationFrame(fit), 30);
+    const ro = new ResizeObserver(fit);
     ro.observe(el);
     if (el.parentElement) ro.observe(el.parentElement);
 
-    return () => ro.disconnect();
+    return () => {
+      clearTimeout(timeout);
+      ro.disconnect();
+    };
   }, [watchKey, children]);
 
   return (
-    <h3 ref={ref} className="title" style={{ fontSize: fontSize || undefined, whiteSpace: "nowrap" }}>
+    <h3 
+      ref={ref} 
+      className="title" 
+      style={{ 
+        fontSize: fontSize || undefined, 
+        whiteSpace: "nowrap",
+        display: "block",
+        width: "100%"
+      }}
+    >
       {children}
     </h3>
   );
@@ -162,9 +172,7 @@ function LazyImage({ srcPromise, alt, aboveFold = false }: { srcPromise: () => P
   }, [aboveFold]);
 
   useEffect(() => {
-    if (shouldLoad && !src) {
-      srcPromise().then(url => setSrc(url));
-    }
+    if (shouldLoad && !src) srcPromise().then(url => setSrc(url));
   }, [shouldLoad, src, srcPromise]);
 
   return (
