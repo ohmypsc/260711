@@ -12,22 +12,24 @@
   --center-line-width: 2px;
 }
 
+/* 리스트 */
 .timeline-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  position: relative;
   display: grid;
   gap: 0.6rem;
 }
 
+/* ✅ 아이템: photo / line / caption */
 .timeline-item {
   position: relative;
   z-index: 1;
+
   display: grid;
-  /* ✅ 수정: 1fr 대신 영역을 강제로 반반(50%) 고정하여 침범 방지 */
-  grid-template-columns: calc(50% - (var(--line-col-w) / 2)) var(--line-col-w) calc(50% - (var(--line-col-w) / 2));
+  grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
   align-items: center;
-  width: 100%;
 
   --photo-safe: min(
     var(--photo),
@@ -35,37 +37,20 @@
   );
 
   min-height: var(--photo-safe);
+  --offset: 0;
+  transform: none;
 }
 
+.media,
 .caption-col {
-  grid-row: 1;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  transform: translateY(var(--offset));
-
-  /* ✅ 수정: 텍스트 때문에 늘어나지 않도록 강제 제한 */
-  width: 100%; 
-  min-width: 0; 
-  max-width: 100%;
-  overflow: visible; 
-  box-sizing: border-box;
+  min-width: 0;
 }
 
-.caption-col .title {
-  margin: 0;
-  font-weight: 600;
-  color: var(--text-main);
-  display: block;
-  white-space: nowrap;
-  width: 100%;
-  max-width: 100%;
-}
-
-/* 사진 스타일 */
+/* 사진 */
 .media {
   grid-row: 1;
+  position: relative;
+  z-index: 1;
   width: var(--photo-safe);
   height: var(--photo-safe);
   display: flex;
@@ -73,44 +58,248 @@
 }
 
 .photo-wrap {
-  width: 100%; height: 100%; border-radius: 50%;
-  overflow: hidden; background: #fff;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 20px var(--shadow-color);
 }
 
+/* =========================================
+   ✅ LazyImage UI (skeleton + fade-in)
+   ========================================= */
+
+.lazy-photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.photo-skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  animation: pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.45;
+  }
+}
+
+.lazy-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.lazy-photo.is-loaded img {
+  opacity: 1;
+}
+
+/* 라인 컬럼 */
 .line-col {
   grid-column: 2;
-  display: flex; justify-content: center; align-items: center;
-  position: relative; transform: translateY(var(--offset));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  position: relative;
+  transform: translateY(var(--offset));
 }
 
+/* 잎 마디(dot) */
 .dot {
-  width: 14px; height: 14px; background-color: var(--text-main);
-  -webkit-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E") center / contain no-repeat;
+  width: 14px;
+  height: 14px;
+  z-index: 3;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  opacity: 0.95;
+
+  background-color: var(--text-main);
+  box-shadow: none;
+
+  --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E");
+
+  -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
+  mask: var(--leaf-dot-mask) center / contain no-repeat;
 }
 
-/* 좌/우 배치 정밀 수정 */
+.timeline-item:nth-child(3n) .dot {
+  transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
+  opacity: 0.9;
+}
+
+.timeline-item:nth-child(3n + 1) .dot {
+  transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
+  opacity: 0.95;
+}
+
+.timeline-item:nth-child(3n + 2) .dot {
+  transform: translate(-50%, -50%) rotate(16deg) scale(1);
+  opacity: 0.85;
+}
+
+/* ✅ 캡션: AutoFitTitle이 한 줄 유지 + 축소 */
+.caption-col {
+  grid-row: 1;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  align-self: center;
+  padding: 0;
+  transform: translateY(var(--offset));
+
+  overflow: visible;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.caption-col .title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  white-space: nowrap;
+  overflow: visible;
+
+  /* ✅ 한글 임의 줄바꿈 방지 보강 */
+  word-break: keep-all;
+}
+
+.no-break {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+/* 좌/우 교차 */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
-  .media { grid-column: 1; justify-self: end; margin-right: var(--gutter); }
-  .caption-col { grid-column: 3; text-align: left; align-items: flex-start; padding-left: var(--gutter); }
+
+  .media {
+    grid-column: 1;
+    justify-self: end;
+    margin-right: var(--gutter);
+  }
+
+  .caption-col {
+    grid-column: 3;
+
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+
+    margin-left: var(--gutter);
+    text-align: left;
+    align-items: flex-start;
+  }
 }
 
 .timeline-item.right {
   --offset: calc(var(--photo-safe) * var(--lift-ratio));
-  .media { grid-column: 3; justify-self: start; margin-left: var(--gutter); }
-  .caption-col { grid-column: 1; text-align: right; align-items: flex-end; padding-right: var(--gutter); }
+
+  .media {
+    grid-column: 3;
+    justify-self: start;
+    margin-left: var(--gutter);
+  }
+
+  .caption-col {
+    grid-column: 1;
+
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+
+    margin-right: var(--gutter);
+    text-align: right;
+    align-items: flex-end;
+  }
 }
 
+/* 겹침 보정 */
+.timeline-item + .timeline-item {
+  margin-top: var(--overlap);
+}
+
+.timeline-item.left + .timeline-item.right {
+  margin-top: calc(
+    var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2)
+  );
+}
+
+.timeline-item.right + .timeline-item.left {
+  margin-top: calc(
+    var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2)
+  );
+}
+
+/* 모바일 */
 @media (max-width: 640px) {
   :root {
-    --photo: clamp(100px, 38vw, 140px);
+    --photo: clamp(108px, 40vw, 148px);
     --line-col-w: 32px;
-    --gutter: 10px; // 모바일 여백 축소
+    --gutter: clamp(10px, 3vw, 16px);
+    --overlap: calc(var(--photo) * -0.18);
     --lift-ratio: 0.04;
+    --center-line-width: 1px;
   }
-  .caption-col .title { font-size: 0.95rem; }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .caption-col .title {
+    font-size: 0.95rem;
+  }
 }
 
-.timeline-item.not-visible { opacity: 0; transform: translateY(20px); }
-.timeline-item.is-visible { opacity: 1; transform: translateY(0); transition: all 1.5s ease-out; }
+/* 순차적 등장 애니메이션 */
+.timeline-item.not-visible {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.timeline-item {
+  transition: opacity 2s ease-out, transform 2s ease-out;
+}
+
+.timeline-item.left {
+  transition-delay: 0.1s;
+}
+
+.timeline-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
