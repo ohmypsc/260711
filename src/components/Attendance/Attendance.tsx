@@ -101,7 +101,6 @@ export function Attendance() {
 
       {myRows.length > 0 && (
         <div className="my-attendance">
-          <h3 className="my-attendance__title">보내주신 참석 응답</h3>
           <div className="attendance-list">
             {myRows.map((row) => (
               <div key={row.id} className="attendance-card">
@@ -125,10 +124,26 @@ export function Attendance() {
                 </div>
                 <div className="divider"></div>
                 <div className="actions">
-                  <button type="button" className="action-btn" onClick={() => setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone })}>
+                  {/* 수정 버튼: type="button"과 e.stopPropagation() 추가 */}
+                  <button 
+                    type="button" 
+                    className="action-btn" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone });
+                    }}
+                  >
                     <i className="fa-solid fa-pen-to-square"></i> <span>수정</span>
                   </button>
-                  <button type="button" className="action-btn danger" onClick={() => setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone })}>
+                  {/* 삭제 버튼: type="button"과 e.stopPropagation() 추가 */}
+                  <button 
+                    type="button" 
+                    className="action-btn danger" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone });
+                    }}
+                  >
                     <i className="fa-solid fa-trash-can"></i> <span>삭제</span>
                   </button>
                 </div>
@@ -150,6 +165,7 @@ export function Attendance() {
   );
 }
 
+// Counter, WriteAttendanceModal, FindAttendanceModal, EditAttendanceModal, DeleteAttendanceModal 로직 유지
 function Counter({ value, onChange, min = 1 }: { value: number; onChange: (v: number) => void; min?: number }) {
   return (
     <div className="counter-ui">
