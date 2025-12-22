@@ -58,7 +58,9 @@ export function GuestBook() {
     }
   };
 
-  useEffect(() => { loadPage(0); }, []);
+  useEffect(() => {
+    loadPage(0);
+  }, []);
 
   useEffect(() => {
     const sub = supabase
@@ -66,7 +68,10 @@ export function GuestBook() {
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "guestbook" }, () => loadPage(currentPage))
       .on("postgres_changes", { event: "DELETE", schema: "public", table: "guestbook" }, () => loadPage(currentPage))
       .subscribe();
-    return () => { supabase.removeChannel(sub); };
+
+    return () => {
+      supabase.removeChannel(sub);
+    };
   }, [currentPage]);
 
   const pages = useMemo(() => Array.from({ length: totalPages }, (_, i) => i), [totalPages]);
@@ -80,15 +85,17 @@ export function GuestBook() {
 
       <div className="guestbook-list">
         {posts.length === 0 && (
-          <div className="guestbook-empty">첫 방명록을 작성해 주세요 💖</div>
+          <div className="guestbook-empty">첫 편지의 주인공이 되어주세요 ✉️</div>
         )}
 
         {posts.map((post) => (
           <article key={post.id} className="guestbook-item">
+            {/* ✉️ 우표 디테일 */}
+            <div className="ticket-label">LOVE</div>
+            
             <div className="guestbook-item__head">
               <span className="name">{post.name}</span>
               <div className="date">
-                <i className="fa-regular fa-calendar-check" />
                 <span>{formatDate(post.timestamp)}</span>
               </div>
               <button
@@ -104,6 +111,7 @@ export function GuestBook() {
               </button>
             </div>
             
+            {/* ✉️ 하트 포인트 구분선 */}
             <div className="divider"></div>
             
             <div className="guestbook-item__content">{post.content}</div>
