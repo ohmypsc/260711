@@ -58,9 +58,7 @@ export function GuestBook() {
     }
   };
 
-  useEffect(() => {
-    loadPage(0);
-  }, []);
+  useEffect(() => { loadPage(0); }, []);
 
   useEffect(() => {
     const sub = supabase
@@ -69,9 +67,7 @@ export function GuestBook() {
       .on("postgres_changes", { event: "DELETE", schema: "public", table: "guestbook" }, () => loadPage(currentPage))
       .subscribe();
 
-    return () => {
-      supabase.removeChannel(sub);
-    };
+    return () => { supabase.removeChannel(sub); };
   }, [currentPage]);
 
   const pages = useMemo(() => Array.from({ length: totalPages }, (_, i) => i), [totalPages]);
@@ -91,11 +87,15 @@ export function GuestBook() {
         {posts.map((post) => (
           <article key={post.id} className="guestbook-item">
             {/* ✉️ 우표 디테일 */}
-            <div className="ticket-label">LOVE</div>
+            <div className="ticket-label">
+              <i className="fa-solid fa-stamp"></i>
+              <span>LOVE</span>
+            </div>
             
             <div className="guestbook-item__head">
               <span className="name">{post.name}</span>
               <div className="date">
+                <i className="fa-regular fa-clock"></i>
                 <span>{formatDate(post.timestamp)}</span>
               </div>
               <button
@@ -112,7 +112,9 @@ export function GuestBook() {
             </div>
             
             {/* ✉️ 하트 포인트 구분선 */}
-            <div className="divider"></div>
+            <div className="divider">
+              <i className="fa-solid fa-heart"></i>
+            </div>
             
             <div className="guestbook-item__content">{post.content}</div>
           </article>
@@ -122,7 +124,9 @@ export function GuestBook() {
       {totalPages > 1 && (
         <div className="pagination">
           {currentPage > 0 && (
-            <button className="page-nav" onClick={() => loadPage(currentPage - 1)} type="button">이전</button>
+            <button className="page-nav" onClick={() => loadPage(currentPage - 1)} type="button">
+              <i className="fa-solid fa-chevron-left"></i>
+            </button>
           )}
           {pages.map((page) => (
             <button
@@ -135,14 +139,16 @@ export function GuestBook() {
             </button>
           ))}
           {currentPage < totalPages - 1 && (
-            <button className="page-nav" onClick={() => loadPage(currentPage + 1)} type="button">다음</button>
+            <button className="page-nav" onClick={() => loadPage(currentPage + 1)} type="button">
+              <i className="fa-solid fa-chevron-right"></i>
+            </button>
           )}
         </div>
       )}
 
       <div className="guestbook__actions">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
-          방명록 작성하기
+          <i className="fa-solid fa-pen-nib"></i> 방명록 작성하기
         </Button>
       </div>
 
