@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import "./Attendance.scss";
-
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
@@ -27,7 +26,6 @@ type ModalType =
 
 const STORAGE_KEY = "attendance_ids";
 
-/** ✅ 유틸리티: 연락처 정규화 및 포맷팅 */
 const normalizePhone = (v: string) => v.replace(/\D/g, "");
 const formatPhone = (digits: string) => {
   const d = digits.slice(0, 11);
@@ -44,15 +42,10 @@ const formatPhone = (digits: string) => {
 };
 
 const mealLabel = (meal: Meal) => {
-  const labels = {
-    yes: "식사 예정",
-    no: "식사 없이 축복만",
-    unknown: "식사 미정 (당일 결정)",
-  };
+  const labels = { yes: "식사 예정", no: "식사 없음", unknown: "식사 미정" };
   return labels[meal];
 };
 
-/** ✅ LocalStorage 커스텀 훅 */
 const useAttendanceIds = () => {
   const getIds = useCallback(() => JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as number[], []);
   const addId = (id: number) => {
@@ -91,41 +84,39 @@ export function Attendance() {
   return (
     <section className="attendance">
       <h2 className="section-title">참석 여부 전달</h2>
-
       <p className="attendance__desc keep-all">
-        소중한 걸음을 해주시는 분들을 위해 
-        정성껏 예식을 준비하고자 합니다.
-        참석 여부를 편히 알려주시면 감사하겠습니다.
+        소중한 걸음을 해주시는 분들을 위해 정성껏 예식을 준비하고자 합니다.
+        참석 여부를 알려주시면 감사하겠습니다.
       </p>
 
       <div className="attendance-buttons">
-        <Button variant="basic" onClick={() => setOpenModal("write")}>
-          참석 의사 전달하기
-        </Button>
+        <Button variant="basic" onClick={() => setOpenModal("write")}>참석 의사 전달하기</Button>
         {myRows.length === 0 && (
-          <Button variant="basic" onClick={() => setOpenModal("find")}>
-            내 응답 찾기
-          </Button>
+          <Button variant="close" onClick={() => setOpenModal("find")}>내 응답 찾기</Button>
         )}
       </div>
 
       {myRows.length > 0 && (
         <div className="my-attendance">
           <h3 className="my-attendance__title">보내주신 참석 응답</h3>
-          {myRows.map((row) => (
-            <div key={row.id} className="my-attendance__item">
-              <div className="info">
-                <span className="name">{row.name}님</span>
-                <span className="meta">
-                  {row.side === "groom" ? "신랑 측" : "신부 측"} · {row.count}명 · {mealLabel(row.meal)}
-                </span>
+          <div className="attendance-list">
+            {myRows.map((row) => (
+              <div key={row.id} className="attendance-card">
+                <div className="card-header">
+                  <span className={`side-badge ${row.side}`}>{row.side === "groom" ? "신랑 측" : "신부 측"}</span>
+                  <span className="card-name">{row.name}님</span>
+                </div>
+                <div className="card-body">
+                  <div className="info-item"><span>인원</span><strong>{row.count}명</strong></div>
+                  <div className="info-item"><span>식사</span><strong>{mealLabel(row.meal)}</strong></div>
+                </div>
+                <div className="card-actions">
+                  <button className="action-btn" onClick={() => setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone })}>수정</button>
+                  <button className="action-btn danger" onClick={() => setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone })}>삭제</button>
+                </div>
               </div>
-              <div className="actions">
-                <button className="mini-btn" onClick={() => setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone })}>수정</button>
-                <button className="mini-btn danger" onClick={() => setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone })}>삭제</button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
 
@@ -137,14 +128,14 @@ export function Attendance() {
       )}
       {typeof openModal === "object" && openModal?.type === "edit" && (
         <EditAttendanceModal 
-          row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone}
+          row={openModal.row} 
           onClose={() => setOpenModal(null)} 
           onSuccess={(updated) => setMyRows(prev => prev.map(r => r.id === updated.id ? updated : r))}
         />
       )}
       {typeof openModal === "object" && openModal?.type === "delete" && (
         <DeleteAttendanceModal 
-          row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone}
+          row={openModal.row} 
           onClose={() => setOpenModal(null)} 
           onSuccess={(id) => { setMyRows(prev => prev.filter(r => r.id !== id)); removeId(id); }}
         />
@@ -153,9 +144,6 @@ export function Attendance() {
   );
 }
 
-/* ------------------------------------------------------------------
-   UI 컴포넌트: Counter
------------------------------------------------------------------- */
 function Counter({ value, onChange, min = 1 }: { value: number; onChange: (v: number) => void; min?: number }) {
   return (
     <div className="counter-ui">
@@ -166,21 +154,18 @@ function Counter({ value, onChange, min = 1 }: { value: number; onChange: (v: nu
   );
 }
 
-/* ------------------------------------------------------------------
-   Write Modal
------------------------------------------------------------------- */
 function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", side: "" as Side | "", meal: "" as Meal | "", count: 1 });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.phone || !form.side || !form.meal) return alert("필수 항목을 모두 입력해주세요.");
+    if (!form.name || !form.phone || !form.side || !form.meal) return alert("모든 항목을 입력해 주세요.");
     setLoading(true);
     try {
       const { data, error } = await supabase.from("attendance").insert([{ ...form, phone: normalizePhone(form.phone) }]).select("*").single();
       if (error) throw error;
-      alert("참석 소식 감사합니다. 정성껏 준비하겠습니다.");
+      alert("참석 여부가 저장되었습니다.");
       onSuccess(data as AttendanceRow);
       onClose();
     } catch (err) { alert("등록에 실패했습니다."); } finally { setLoading(false); }
@@ -198,11 +183,11 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
         <form id="write-form" className="attendance-form" onSubmit={onSubmit}>
           <div className="field span-2">
             <label className="label">성함</label>
-            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="성함을 입력해주세요" />
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </div>
           <div className="field span-2">
             <label className="label">연락처</label>
-            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} placeholder="010-0000-0000" />
+            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
           </div>
           <div className="field">
             <label className="label">구분</label>
@@ -217,10 +202,10 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
           </div>
           <div className="field span-2">
             <label className="label">식사 여부</label>
-            <div className="toggle-row vertical">
-              <button type="button" className={`toggle-btn full ${form.meal === "yes" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "yes" })}>식사 예정</button>
-              <button type="button" className={`toggle-btn full ${form.meal === "no" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "no" })}>식사 없이 축복만</button>
-              <button type="button" className={`toggle-btn full ${form.meal === "unknown" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "unknown" })}>미정 (당일 결정)</button>
+            <div className="toggle-row">
+              <button type="button" className={`toggle-btn ${form.meal === "yes" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "yes" })}>O</button>
+              <button type="button" className={`toggle-btn ${form.meal === "no" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "no" })}>X</button>
+              <button type="button" className={`toggle-btn ${form.meal === "unknown" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "unknown" })}>미정</button>
             </div>
           </div>
         </form>
@@ -229,9 +214,6 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
   );
 }
 
-/* ------------------------------------------------------------------
-   Find Modal
------------------------------------------------------------------- */
 function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFound: (row: AttendanceRow) => void }) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -239,7 +221,7 @@ function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFoun
 
   const onFind = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone) return alert("성함과 연락처를 입력해주세요.");
+    if (!name || !phone) return alert("모든 항목을 입력해 주세요.");
     setLoading(true);
     try {
       const normPhone = normalizePhone(phone);
@@ -264,11 +246,11 @@ function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFoun
         <form id="find-form" className="attendance-form" onSubmit={onFind}>
           <div className="field span-2">
             <label className="label">성함</label>
-            <input value={name} onChange={e => setName(e.target.value)} placeholder="성함" />
+            <input value={name} onChange={e => setName(e.target.value)} />
           </div>
           <div className="field span-2">
             <label className="label">연락처</label>
-            <input type="tel" value={phone} onChange={e => setPhone(formatPhone(normalizePhone(e.target.value)))} placeholder="연락처" />
+            <input type="tel" value={phone} onChange={e => setPhone(formatPhone(normalizePhone(e.target.value)))} />
           </div>
         </form>
       </div>
@@ -276,15 +258,13 @@ function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFoun
   );
 }
 
-/* ------------------------------------------------------------------
-   Edit Modal
------------------------------------------------------------------- */
-function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
+function EditAttendanceModal({ row, onClose, onSuccess }: { row: AttendanceRow; onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ ...row, phone: formatPhone(row.phone) });
 
   const onUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.name || !form.phone || !form.side || !form.meal) return alert("모든 항목을 입력해 주세요.");
     setLoading(true);
     try {
       const { data, error } = await supabase.from("attendance").update({ ...form, phone: normalizePhone(form.phone) }).eq("id", row.id).select("*").single();
@@ -305,7 +285,6 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
       <div className="attendance-modal-content">
         <h2 className="modal-title">내 응답 수정</h2>
         <form id="edit-form" className="attendance-form" onSubmit={onUpdate}>
-          {/* WriteModal과 동일한 필드들 (생략 없이 모두 배치) */}
           <div className="field span-2">
             <label className="label">성함</label>
             <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
@@ -327,10 +306,10 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
           </div>
           <div className="field span-2">
             <label className="label">식사 여부</label>
-            <div className="toggle-row vertical">
-              <button type="button" className={`toggle-btn full ${form.meal === "yes" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "yes" })}>식사 예정</button>
-              <button type="button" className={`toggle-btn full ${form.meal === "no" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "no" })}>식사 없이 축복만</button>
-              <button type="button" className={`toggle-btn full ${form.meal === "unknown" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "unknown" })}>미정 (당일 결정)</button>
+            <div className="toggle-row">
+              <button type="button" className={`toggle-btn ${form.meal === "yes" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "yes" })}>O</button>
+              <button type="button" className={`toggle-btn ${form.meal === "no" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "no" })}>X</button>
+              <button type="button" className={`toggle-btn ${form.meal === "unknown" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "unknown" })}>미정</button>
             </div>
           </div>
         </form>
@@ -339,10 +318,7 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
   );
 }
 
-/* ------------------------------------------------------------------
-   Delete Modal
------------------------------------------------------------------- */
-function DeleteAttendanceModal({ row, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (id: number) => void }) {
+function DeleteAttendanceModal({ row, onClose, onSuccess }: { row: AttendanceRow; onClose: () => void; onSuccess: (id: number) => void }) {
   const [loading, setLoading] = useState(false);
   const onDelete = async () => {
     setLoading(true);
@@ -364,7 +340,7 @@ function DeleteAttendanceModal({ row, onClose, onSuccess }: { row: AttendanceRow
     }>
       <div className="attendance-modal-content">
         <h2 className="modal-title">응답 삭제</h2>
-        <p className="modal-subtitle keep-all" style={{ textAlign: 'center', margin: '20px 0' }}>
+        <p className="modal-subtitle keep-all" style={{ textAlign: 'center', margin: '20px 0', color: 'var(--text-main)' }}>
           참석 응답을 삭제하시겠습니까?<br/>삭제된 데이터는 복구할 수 없습니다.
         </p>
       </div>
