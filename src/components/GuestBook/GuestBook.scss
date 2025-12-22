@@ -19,7 +19,7 @@
 }
 
 .guestbook-empty {
-  padding: 3rem;
+  padding: 3.5rem 2rem;
   border-radius: 12px;
   font-size: 0.95rem;
   color: var(--text-light);
@@ -33,55 +33,56 @@
   border: 1px solid var(--border-color);
   border-radius: 4px; 
   padding: 40px 25px 30px;
-  box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.03);
+  box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.03);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 
+  /* 카드 내부 미세 스티치 효과 */
   &::after {
     content: "";
     position: absolute;
     top: 8px; left: 8px; right: 8px; bottom: 8px;
-    border: 1px dashed rgba(233, 167, 175, 0.25);
+    border: 1px dashed rgba(233, 167, 175, 0.2);
     pointer-events: none;
   }
 
-  .ticket-label {
+  /* 우측 상단 삭제 버튼 스타일 */
+  .item-delete-btn {
     position: absolute;
-    top: 22px;
-    right: 22px;
-    width: 34px;
-    height: 40px;
-    border: 1px double var(--theme-primary-light);
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    background: var(--theme-bg);
-    opacity: 0.85;
-    z-index: 1;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    color: #ccc;
+    font-size: 0.8rem;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.2s ease;
 
-    i { font-size: 0.7rem; color: var(--theme-primary); }
-    span {
-      font-size: 0.55rem;
-      font-weight: 800;
+    &:hover, &:active {
+      background: #fff0f0;
       color: var(--theme-primary);
-      writing-mode: vertical-rl;
-      letter-spacing: 1px;
+      border-color: var(--theme-primary-light);
     }
   }
 
   &__head {
-    margin-top: 10px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    margin-bottom: 5px;
 
     .name {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: var(--text-main);
       font-family: "Noto Serif KR", serif;
@@ -91,10 +92,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 6px;
       font-size: 0.8rem;
       color: var(--text-light);
-      i { font-size: 0.7rem; opacity: 0.6; }
+      i { font-size: 0.75rem; color: var(--theme-primary-light); }
     }
   }
 
@@ -102,8 +103,8 @@
     width: 100%;
     height: 1px;
     background: none;
-    border-top: 1px solid #f2f2f2;
-    margin: 24px 0;
+    border-top: 1px solid #f5f5f5;
+    margin: 22px 0;
     position: relative;
     display: flex;
     justify-content: center;
@@ -112,45 +113,32 @@
     i {
       position: absolute;
       background: #fff;
-      padding: 0 14px;
+      padding: 0 15px;
       color: var(--theme-primary-light);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       z-index: 1;
+      filter: drop-shadow(0 0 2px rgba(233, 167, 175, 0.2));
     }
   }
 
   &__content {
     width: 100%;
     color: var(--text-main);
-    font-size: 1rem;
-    line-height: 1.8;
+    font-size: 1.05rem;
+    line-height: 1.85;
     white-space: pre-wrap;
     word-break: break-all;
     overflow-wrap: break-word;
     font-family: "Noto Serif KR", serif;
     text-align: center;
-    background-image: linear-gradient(transparent 95%, #fcfcfc 95%);
-    background-size: 100% 1.8em;
-  }
-
-  .delete-btn {
-    position: absolute;
-    top: 16px;
-    left: 16px; 
-    background: transparent;
-    border: none;
-    color: #eee;
-    font-size: 1rem;
-    cursor: pointer;
-    z-index: 2;
-    transition: color 0.2s;
-    &:active { color: var(--theme-primary); }
+    
+    /* 편지지 줄노트 배경 효과 */
+    background-image: linear-gradient(transparent 95%, #f9f9f9 95%);
+    background-size: 100% 1.85em;
   }
 }
 
-/* -------------------------------------
-   💎 Pagination (맑은 유리구슬 스타일)
-------------------------------------- */
+/* 💎 Pagination (맑은 유리구슬 스타일) */
 .pagination {
   display: flex;
   justify-content: center;
@@ -164,61 +152,35 @@
     justify-content: center;
     min-width: 38px;
     height: 38px;
-    
-    /* 유리 질감: 투명도 + 블러 */
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    
-    /* 얇고 맑은 테두리 */
     border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: 50%;
-    
     font-family: inherit;
     font-size: 0.85rem;
     color: var(--text-light);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* 유리구슬 광택 효과 */
-    box-shadow: 
-      inset 0 1px 2px rgba(255, 255, 255, 0.8),
-      0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 4px 12px rgba(0, 0, 0, 0.04);
 
-    &:active {
-      transform: scale(0.9);
-      background: rgba(255, 255, 255, 0.6);
-    }
-    
-    i {
-      font-size: 0.75rem;
-      color: var(--text-light);
-      opacity: 0.8;
-    }
+    &:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.6); }
+    i { font-size: 0.75rem; color: var(--text-light); opacity: 0.8; }
   }
 
-  /* 현재 선택된 페이지: 핑크빛 맺힌 맑은 구슬 */
   .page-num.current {
     background: rgba(233, 167, 175, 0.6); 
     color: #fff;
     border-color: rgba(255, 255, 255, 0.5);
     font-weight: 700;
-    
-    box-shadow: 
-      inset 0 2px 4px rgba(255, 255, 255, 0.4),
-      0 6px 15px rgba(233, 167, 175, 0.25);
-    
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 6px 15px rgba(233, 167, 175, 0.25);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .page-nav {
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
-
-    &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.5);
-      border-color: rgba(255, 255, 255, 0.8);
-    }
+    &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.5); border-color: rgba(255, 255, 255, 0.8); }
   }
 }
 
