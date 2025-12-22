@@ -20,7 +20,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
-    width: 100%; /* 메인 버튼 화면 꽉 차게 유지 */
+    width: 100%;
   }
 }
 
@@ -52,7 +52,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    align-items: center; /* 카드 내부 전체 가운데 정렬 */
+    align-items: center;
     text-align: center;
     transition: transform 0.1s ease;
 
@@ -72,7 +72,7 @@
         padding: 4px 12px;
         border-radius: 100px;
         font-weight: 700;
-        
+
         &.groom {
           background: #eef6ff;
           color: #5a96e3;
@@ -116,21 +116,24 @@
         .meta-pill {
           display: flex;
           align-items: center;
-          gap: 6px;
+          /* 1. 아이콘 끝선과 글자 사이의 간격을 8px로 고정 */
+          gap: 8px; 
           font-size: 0.85rem;
           color: #888e91;
 
           i {
             font-size: 0.8rem;
             color: #ced4da;
-            width: 14px;
-            text-align: center;
+            /* 2. 아이콘 박스 너비를 고정하고 오른쪽 정렬 수행 */
+            width: 18px; 
+            display: inline-flex;
+            justify-content: flex-end; 
+            align-items: center;
           }
         }
       }
     }
 
-    /* 카드 중간 구분선 */
     .divider {
       width: 40px;
       height: 1px;
@@ -180,7 +183,7 @@
   }
 }
 
-/* ✅ 폼/모달 스타일 (요청사항 반영 유지) */
+/* ✅ 폼/모달 스타일 */
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
