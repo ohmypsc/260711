@@ -103,8 +103,9 @@
           color: var(--text-main);
         }
         .suffix {
-          font-size: 0.9rem;
-          color: #888e91;
+          font-size: 0.85rem;
+          color: var(--text-main);
+          opacity: 0.6;
         }
       }
 
@@ -114,40 +115,25 @@
         gap: 16px;
 
         .meta-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px; 
-  /* 1. 글자색을 이름과 동일하게 메인 색상으로 변경 */
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-main); 
+          display: flex;
+          align-items: center;
+          gap: 8px; 
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: var(--text-main); 
 
-  i {
-    /* 2. 아이콘 스타일 제안 (제안 1번: 유채색 포인트) */
-    font-size: 0.85rem;
-    width: 18px; 
-    display: inline-flex;
-    justify-content: flex-end; 
-    align-items: center;
+          i {
+            font-size: 0.85rem;
+            width: 18px; 
+            display: inline-flex;
+            justify-content: flex-end; 
+            align-items: center;
 
-    /* 신랑측/신부측 카드 내부의 아이콘 색상을 배지색과 맞춤 */
-    .attendance-card:has(.side-badge.groom) & { color: rgba(90, 150, 227, 0.6); }
-    .attendance-card:has(.side-badge.bride) & { color: rgba(227, 90, 122, 0.6); }
-  }
-}
-
-/* 이름 부분 가독성 추가 보정 */
-.name-row {
-  .name {
-    color: var(--text-main);
-  }
-  .suffix {
-    /* '님'자만 살짝 연하게 하여 이름을 강조 */
-    color: var(--text-main);
-    opacity: 0.6;
-    font-size: 0.85rem;
-  }
-}
+            /* 부모 카드 클래스에 따른 아이콘 색상 보정 */
+            .attendance-card:has(.side-badge.groom) & { color: rgba(90, 150, 227, 0.6); }
+            .attendance-card:has(.side-badge.bride) & { color: rgba(227, 90, 122, 0.6); }
+          }
+        }
       }
     }
 
@@ -181,16 +167,13 @@
         cursor: pointer;
         font-family: inherit;
 
-        i {
-          font-size: 0.75rem;
-        }
+        i { font-size: 0.75rem; }
 
         &.danger {
           color: #ff5e5e;
           border-color: #ffeaea;
           background: #fffafa;
         }
-
         &:active {
           background: #e9ecef;
           opacity: 0.7;
@@ -200,7 +183,7 @@
   }
 }
 
-/* ✅ 폼/모달 스타일 */
+/* ✅ 폼/모달/카운터 스타일 */
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
