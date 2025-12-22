@@ -2,30 +2,21 @@
   text-align: center;
 
   .attendance__desc {
-    margin: 1.2rem 0 2.2rem;
-    line-height: 1.8;
+    margin: 10px 0 16px;
+    line-height: 1.6;
     color: var(--text-main);
-    font-size: 0.92rem;
-
-    /* ✅ 어절 단위 줄바꿈 핵심 스타일 */
-    .keep-all {
-      word-break: keep-all; 
-      overflow-wrap: break-word;
-      margin: 0.3rem 0;
-    }
   }
 
   .attendance-buttons {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    max-width: 320px;
-    margin: 1rem auto 0;
+    margin-top: 1rem;
   }
 }
 
 /* -------------------------------------
-   Modal Content & Form (전역 모달 연동)
+   Modal Content (전역 모달 무드 따름)
 ------------------------------------- */
 
 .attendance-modal-content {
@@ -35,102 +26,175 @@
   gap: 12px;
 }
 
+/* -------------------------------------
+   Form Layout
+------------------------------------- */
+
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px 10px;
 
   .field {
     display: flex;
     flex-direction: column;
     gap: 6px;
     text-align: left;
-    
-    &.span-2 { grid-column: span 2; }
   }
 
   .label {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    font-weight: 600;
   }
 
+  /* ✅ input = 토글 리듬 동일, height 고정 제거 */
   input {
-    padding: 10px 12px;
-    font-size: 0.95rem;
+    padding: 9px 12px;     /* 토글과 동일 */
+    font-size: 0.92rem;    /* 토글과 동일 */
+    line-height: 1.2;      /* 토글과 동일 */
+
     border: 1px solid var(--border-color);
-    border-radius: 10px;
+    border-radius: 10px;   /* 토글과 동일 */
     background: #fff;
+    color: var(--text-main);
+
+    height: auto;          /* ✅ 자동 높이 */
+    min-height: 42px;      /* ✅ 기기별 작아지는 것만 방지 */
+    box-sizing: border-box;
+
     &:focus {
       outline: none;
       border-color: var(--theme-primary);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
     }
   }
+
+  .span-2 {
+    grid-column: span 2;
+  }
+
+  .attendance-form__actions {
+    grid-column: span 2;
+    margin-top: 2px;
+
+    button { width: 100%; }
+  }
 }
+
+/* -------------------------------------
+   Toggle / Chips
+------------------------------------- */
 
 .toggle-row {
   display: flex;
   gap: 6px;
-  .toggle-btn {
-    flex: 1;
-    padding: 10px;
-    font-size: 0.92rem;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    background: #fff;
-    &.active {
-      background: var(--theme-primary-light);
-      border-color: var(--theme-primary);
-      color: var(--theme-primary);
-      font-weight: 700;
-    }
-  }
-  &.no-wrap { flex-wrap: nowrap; }
+  flex-wrap: wrap;
 }
 
+/* ✅ 식사 3개 모바일에서도 한 줄 */
+.toggle-row.no-wrap {
+  flex-wrap: nowrap;
+}
+
+.toggle-btn {
+  flex: 1;
+  min-width: 88px;
+
+  padding: 9px 10px;
+  font-size: 0.92rem;
+  line-height: 1.2;  /* ✅ normal 제거 → 높이 기준 고정 */
+
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text-main);
+
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+
+  -webkit-tap-highlight-color: transparent; /* ✅ 모바일 파란효과 제거 */
+  user-select: none;
+
+  &.active {
+    background: var(--section-bg-soft);
+    border-color: var(--theme-primary);
+    font-weight: 700;
+  }
+}
+
+/* -------------------------------------
+   My Attendance Box
+------------------------------------- */
+
 .my-attendance {
-  margin-top: 2rem;
+  margin-top: 16px;
   text-align: left;
 
   .my-attendance__title {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-bottom: 10px;
+    font-size: 1rem;
+    color: var(--text-main);
+    margin-bottom: 8px;
     font-weight: 700;
   }
 
   .my-attendance__item {
-    background: var(--theme-accent);
+    background: #fff;
     border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 14px;
-    display: flex;
-    justify-content: space-between;
+    border-radius: 10px;
+    padding: 10px 12px;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
     align-items: center;
 
     .info {
-      .name { font-weight: 800; color: var(--text-main); }
-      .meta { font-size: 0.85rem; color: var(--text-light); display: block; }
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .name {
+        font-weight: 700;
+        color: var(--theme-primary);
+      }
+
+      .meta {
+        font-size: 0.9rem;
+        color: var(--text-light);
+      }
     }
 
     .actions {
       display: flex;
       gap: 6px;
+
       .mini-btn {
-        font-size: 0.8rem;
-        padding: 5px 10px;
-        border-radius: 6px;
-        border: 1px solid var(--border-color);
-        background: #fff;
-        &.danger { color: var(--theme-error); border-color: #fcc; }
+        font-size: 0.85rem;
+        padding: 6px 8px;
+        border: none;
+        border-radius: 8px;
+        background: var(--theme-accent);
+        color: var(--text-main);
+        cursor: pointer;
+
+        &.danger {
+          background: #ffe8e8;
+          color: var(--theme-error);
+        }
       }
     }
   }
 }
 
+
+/* ✅ 모달 footer: 저장/찾기/삭제 + 닫기 같은 행 */
 .attendance-footer-row {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
-  button { flex: 1; }
+  margin-top: 14px;  /* ✅ 위 간격 추가: 식사여부와 버튼 사이 벌어짐 */
+  button {
+    flex: 1;
+    width: auto; /* 전역 width:100% 무력화 */
+  }
 }
