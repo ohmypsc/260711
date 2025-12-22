@@ -1,19 +1,23 @@
 .account {
   text-align: center;
-  padding: 1.3rem 0;
 
   .account__desc {
-    margin: 0.9rem 0 1.4rem;
-    line-height: 1.7;
+    margin: 1.2rem 0 2.2rem;
+    line-height: 1.8;
     color: var(--text-main);
-    font-size: 1.2rem;
+    font-size: 0.92rem;
+
+    .keep-all {
+      word-break: keep-all; // 어절 단위 줄바꿈
+      overflow-wrap: break-word;
+      margin: 0;
+    }
   }
 
   .account-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
-    margin-top: 0.8rem;
 
     @media (max-width: 520px) {
       grid-template-columns: 1fr;
@@ -22,165 +26,131 @@
 
   .account-btn {
     border-radius: 14px;
-    padding: 0.95rem 0.8rem;
-    font-size: 1.02rem;
-    letter-spacing: 0.01rem;
-
+    padding: 1rem 0.8rem;
+    font-size: 1rem;
     background: #fff;
     border: 1px solid var(--border-color);
-    box-shadow: 0 6px 18px var(--shadow-color);
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    color: var(--text-main);
+    transition: transform 0.1s ease, background-color 0.2s ease;
 
     &:active {
       transform: translateY(1px);
-      box-shadow: 0 4px 10px var(--shadow-color);
-    }
-
-    &.groom,
-    &.bride {
-      border-color: rgba(231, 163, 169, 0.55);
+      background-color: var(--theme-accent);
     }
   }
 }
 
-/* -------------------------------------
-   AccountModal Content Styles
-------------------------------------- */
-
+/* 모달 내부 스타일 */
 .account-modal-content {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 0; // ✅ 전역 모달 패딩 사용
+  gap: 1.2rem;
+
+  .modal-title {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 0.2rem;
+  }
 }
 
 .account-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* 카드형 */
 .account-card {
-  background: #fff;
+  background: var(--theme-bg);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
+  border-radius: 16px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
+  gap: 12px;
 
-/* 상단: 관계 칩 + 이름 */
-.account-card__top {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
 
-  .chip {
-    font-size: 0.85rem;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: var(--section-bg-soft);
-    color: var(--theme-primary);
-    font-weight: 700;
-    letter-spacing: 0.01rem;
+    .chip {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: var(--theme-primary-light);
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .name {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 1.05rem;
+    }
   }
 
-  .name {
-    font-weight: 700;
-    color: var(--text-main);
-    font-size: 1.05rem;
-  }
-}
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 
-/* 하단: PC는 가로, 모바일은 세로 */
-.account-card__bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-@media (max-width: 480px) {
-  .account-card__bottom {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 }
 
-/* 계좌 라인 (긴 숫자 자동 줄바꿈) */
 .bank-line {
   font-size: 0.95rem;
   color: var(--text-main);
-  text-align: center;
+  text-align: left;
+  flex: 1;
 
-  flex-grow: 1;
-  min-width: 0;
-  white-space: normal; /* ✅ 줄바꿈 허용 */
-
-  strong {
+  .bank-name {
+    margin-right: 8px;
     font-weight: 700;
-    font-size: 0.98rem;
-    margin-right: 6px;
   }
 
   .account-number {
-    font-weight: 500;
     letter-spacing: 0.02rem;
+    // 긴 계좌번호 대응
+    word-break: break-all; 
+  }
 
-    overflow-wrap: anywhere; /* ✅ 긴 숫자도 자동 줄바꿈 */
-    word-break: break-all;
+  @media (max-width: 480px) {
+    text-align: center;
+    padding: 4px 0;
   }
 }
 
-/* Empty State */
-.no-account {
-  padding: 8px 0;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  color: var(--text-light);
-  background: var(--theme-accent);
-  text-align: center;
-}
-
-/* Copy Button (크게 + 모바일 풀버튼) */
 .copy-btn {
-  padding: 9px 16px;
+  padding: 9px 18px;
   border-radius: 10px;
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  min-width: 64px;
-
   background: var(--theme-primary);
   color: #fff;
   border: none;
-
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease;
   white-space: nowrap;
+  transition: opacity 0.2s;
 
   &:active {
-    transform: scale(0.96);
+    opacity: 0.8;
   }
-}
 
-@media (max-width: 480px) {
-  .copy-btn {
+  @media (max-width: 480px) {
     width: 100%;
     padding: 12px 0;
-    font-size: 1.02rem;
-    border-radius: 12px;
   }
 }
 
-@media (max-width: 360px) {
-  .copy-btn {
-    font-size: 0.95rem;
-    padding: 11px 0;
-  }
+.no-account {
+  padding: 2rem 0;
+  color: var(--text-light);
+  font-size: 0.9rem;
 }
