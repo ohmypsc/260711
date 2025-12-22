@@ -13,7 +13,7 @@
 }
 
 /* -------------------------------------
-   List & Item (Attendance 카드와 통일)
+   List & Item (Attendance 카드와 리듬 통일)
 ------------------------------------- */
 .guestbook-list {
   display: flex;
@@ -41,6 +41,7 @@
   align-items: center;
   text-align: center;
   position: relative;
+  /* 카드 눌림 효과(transform scale) 제거 */
 
   &__head {
     display: flex;
@@ -77,11 +78,16 @@
   }
 
   &__content {
-    white-space: pre-wrap;
-    word-break: keep-all;
+    /* ✅ 넘침 방지 핵심 로직 */
+    width: 100%;
+    white-space: pre-wrap;     // 줄바꿈 유지
+    word-break: break-all;      // 긴 단어 강제 줄바꿈
+    overflow-wrap: break-word; // 최신 줄바꿈 표준
+    
     color: var(--text-main);
     font-size: 0.98rem;
     line-height: 1.7;
+    text-align: center;
   }
 
   .delete-btn {
@@ -100,7 +106,7 @@
 }
 
 /* -------------------------------------
-   Pagination
+   Pagination & Actions
 ------------------------------------- */
 .pagination {
   display: flex;
@@ -134,13 +140,8 @@
 }
 
 /* -------------------------------------
-   Modal & Form (Attendance와 리듬 통일)
+   Modal & Form 스타일 유지
 ------------------------------------- */
-.guestbook-modal-content {
-  font-family: inherit;
-  .modal-title { font-size: 1.3rem; margin-bottom: 1.5rem; text-align: center; }
-}
-
 .guestbook-form {
   display: flex;
   flex-direction: column;
@@ -157,7 +158,6 @@
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-main);
-    margin-left: 2px;
   }
 
   input, textarea {
