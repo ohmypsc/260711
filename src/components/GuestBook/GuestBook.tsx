@@ -153,9 +153,6 @@ export function GuestBook() {
   );
 }
 
-/* ------------------------------------------------------------------
-   Write Modal
------------------------------------------------------------------- */
 function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void; }) {
   const inputRef = useRef({}) as React.RefObject<{
     name: HTMLInputElement;
@@ -219,9 +216,6 @@ function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSu
   );
 }
 
-/* ------------------------------------------------------------------
-   Delete Modal
------------------------------------------------------------------- */
 function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; onClose: () => void; onSuccess: () => void; }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
