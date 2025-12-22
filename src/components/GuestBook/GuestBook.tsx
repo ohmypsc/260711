@@ -81,7 +81,7 @@ export function GuestBook() {
       {/* 버튼 영역도 중앙 정렬을 위해 padding 유지 가능하나, 전체 흐름상 가로폭 최대로 설정 */}
       <div className="guestbook__actions top">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
-          <i className="fa-solid fa-feather-pointed"></i> 방명록 작성하기
+          방명록 작성하기
         </Button>
       </div>
 
