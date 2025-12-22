@@ -8,7 +8,7 @@
     font-size: 0.92rem;
 
     .keep-all {
-      word-break: keep-all; // 어절 단위 줄바꿈
+      word-break: keep-all;
       overflow-wrap: break-word;
       margin: 0;
     }
@@ -24,15 +24,17 @@
     }
   }
 
+  /* 메인 화면 버튼 스타일 */
   .account-btn {
     border-radius: 14px;
-    padding: 1rem 0.8rem;
-    font-size: 1rem;
+    padding: 1.1rem 0.8rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     background: #fff;
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 12px var(--shadow-color);
     color: var(--text-main);
-    transition: transform 0.1s ease, background-color 0.2s ease;
+    transition: all 0.2s ease;
 
     &:active {
       transform: translateY(1px);
@@ -41,34 +43,22 @@
   }
 }
 
-/* 모달 내부 스타일 */
-.account-modal-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-
-  .modal-title {
-    font-size: 1.1rem;
-    color: var(--text-main);
-    margin-bottom: 0.2rem;
-  }
-}
-
+/* 모달 내부 리스트 스타일 */
 .account-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 1rem;
 }
 
 .account-card {
-  background: var(--theme-bg);
+  background: var(--theme-accent); // 전역 오프화이트 사용
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 
   &__top {
     display: flex;
@@ -76,18 +66,18 @@
     gap: 0.6rem;
 
     .chip {
-      font-size: 0.75rem;
-      padding: 3px 10px;
-      border-radius: 6px;
-      background: var(--theme-primary-light);
-      color: var(--text-main);
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 5px;
+      background: var(--theme-primary-light); // 더스티 로즈 연한 톤
+      color: var(--theme-primary); // 더스티 로즈 메인 톤
       font-weight: 700;
     }
 
     .name {
       font-weight: 700;
       color: var(--text-main);
-      font-size: 1.05rem;
+      font-size: 1rem;
     }
   }
 
@@ -100,6 +90,7 @@
     @media (max-width: 480px) {
       flex-direction: column;
       align-items: stretch;
+      gap: 14px;
     }
   }
 }
@@ -117,22 +108,21 @@
 
   .account-number {
     letter-spacing: 0.02rem;
-    // 긴 계좌번호 대응
-    word-break: break-all; 
+    word-break: break-all;
+    font-family: sans-serif; // 계좌번호는 가독성을 위해 고딕 계열 추천
   }
 
   @media (max-width: 480px) {
     text-align: center;
-    padding: 4px 0;
   }
 }
 
 .copy-btn {
-  padding: 9px 18px;
-  border-radius: 10px;
-  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
   font-weight: 700;
-  background: var(--theme-primary);
+  background: var(--theme-primary); // 더스티 로즈 테마색
   color: #fff;
   border: none;
   cursor: pointer;
@@ -140,12 +130,12 @@
   transition: opacity 0.2s;
 
   &:active {
-    opacity: 0.8;
+    opacity: 0.85;
   }
 
   @media (max-width: 480px) {
     width: 100%;
-    padding: 12px 0;
+    padding: 10px 0;
   }
 }
 
@@ -153,4 +143,5 @@
   padding: 2rem 0;
   color: var(--text-light);
   font-size: 0.9rem;
+  text-align: center;
 }
