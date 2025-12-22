@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import "./Attendance.scss";
+
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
@@ -42,7 +43,11 @@ const formatPhone = (digits: string) => {
 };
 
 const mealLabel = (meal: Meal) => {
-  const labels = { yes: "식사 예정", no: "식사 없음", unknown: "식사 미정" };
+  const labels = {
+    yes: "O",
+    no: "X",
+    unknown: "미정",
+  };
   return labels[meal];
 };
 
@@ -84,39 +89,44 @@ export function Attendance() {
   return (
     <section className="attendance">
       <h2 className="section-title">참석 여부 전달</h2>
+
       <p className="attendance__desc keep-all">
-        소중한 걸음을 해주시는 분들을 위해 정성껏 예식을 준비하고자 합니다.
-        참석 여부를 알려주시면 감사하겠습니다.
+        소중한 걸음을 해주시는 분들을 위해 
+        정성껏 예식을 준비하고자 합니다.
+        참석 여부를 편히 알려주시면 감사하겠습니다.
       </p>
 
       <div className="attendance-buttons">
-        <Button variant="basic" onClick={() => setOpenModal("write")}>참석 의사 전달하기</Button>
+        <Button variant="basic" onClick={() => setOpenModal("write")}>
+          참석 의사 전달하기
+        </Button>
         {myRows.length === 0 && (
-          <Button variant="close" onClick={() => setOpenModal("find")}>내 응답 찾기</Button>
+          <Button variant="basic" onClick={() => setOpenModal("find")}>
+            내 응답 찾기
+          </Button>
         )}
       </div>
 
       {myRows.length > 0 && (
         <div className="my-attendance">
           <h3 className="my-attendance__title">보내주신 참석 응답</h3>
-          <div className="attendance-list">
-            {myRows.map((row) => (
-              <div key={row.id} className="attendance-card">
+          {myRows.map((row) => (
+            <div key={row.id} className="attendance-card">
+              <div className="card-content">
                 <div className="card-header">
                   <span className={`side-badge ${row.side}`}>{row.side === "groom" ? "신랑 측" : "신부 측"}</span>
-                  <span className="card-name">{row.name}님</span>
+                  <span className="name">{row.name}님</span>
                 </div>
-                <div className="card-body">
-                  <div className="info-item"><span>인원</span><strong>{row.count}명</strong></div>
-                  <div className="info-item"><span>식사</span><strong>{mealLabel(row.meal)}</strong></div>
-                </div>
-                <div className="card-actions">
-                  <button className="action-btn" onClick={() => setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone })}>수정</button>
-                  <button className="action-btn danger" onClick={() => setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone })}>삭제</button>
+                <div className="meta">
+                  {row.count}명 · {mealLabel(row.meal)}
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="actions">
+                <button className="mini-btn" onClick={() => setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone })}>수정</button>
+                <button className="mini-btn danger" onClick={() => setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone })}>삭제</button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
@@ -128,14 +138,14 @@ export function Attendance() {
       )}
       {typeof openModal === "object" && openModal?.type === "edit" && (
         <EditAttendanceModal 
-          row={openModal.row} 
+          row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone}
           onClose={() => setOpenModal(null)} 
           onSuccess={(updated) => setMyRows(prev => prev.map(r => r.id === updated.id ? updated : r))}
         />
       )}
       {typeof openModal === "object" && openModal?.type === "delete" && (
         <DeleteAttendanceModal 
-          row={openModal.row} 
+          row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone}
           onClose={() => setOpenModal(null)} 
           onSuccess={(id) => { setMyRows(prev => prev.filter(r => r.id !== id)); removeId(id); }}
         />
@@ -165,7 +175,7 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
     try {
       const { data, error } = await supabase.from("attendance").insert([{ ...form, phone: normalizePhone(form.phone) }]).select("*").single();
       if (error) throw error;
-      alert("참석 여부가 저장되었습니다.");
+      alert("저장되었습니다.");
       onSuccess(data as AttendanceRow);
       onClose();
     } catch (err) { alert("등록에 실패했습니다."); } finally { setLoading(false); }
@@ -258,7 +268,7 @@ function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFoun
   );
 }
 
-function EditAttendanceModal({ row, onClose, onSuccess }: { row: AttendanceRow; onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
+function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ ...row, phone: formatPhone(row.phone) });
 
@@ -318,7 +328,7 @@ function EditAttendanceModal({ row, onClose, onSuccess }: { row: AttendanceRow; 
   );
 }
 
-function DeleteAttendanceModal({ row, onClose, onSuccess }: { row: AttendanceRow; onClose: () => void; onSuccess: (id: number) => void }) {
+function DeleteAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (id: number) => void }) {
   const [loading, setLoading] = useState(false);
   const onDelete = async () => {
     setLoading(true);
