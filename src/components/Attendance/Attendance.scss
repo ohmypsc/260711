@@ -6,6 +6,13 @@
     line-height: 1.8;
     color: var(--text-main);
     font-size: 0.92rem;
+
+    /* ✅ 어절 단위 줄바꿈 핵심 스타일 */
+    .keep-all {
+      word-break: keep-all; 
+      overflow-wrap: break-word;
+      margin: 0.3rem 0;
+    }
   }
 
   .attendance-buttons {
@@ -13,23 +20,32 @@
     flex-direction: column;
     gap: 0.8rem;
     max-width: 320px;
-    margin: 0 auto;
+    margin: 1rem auto 0;
   }
 }
 
-/* 폼 스타일 */
+/* -------------------------------------
+   Modal Content & Form (전역 모달 연동)
+------------------------------------- */
+
+.attendance-modal-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px 12px;
-  padding-top: 0.5rem;
+  gap: 12px;
 
   .field {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     text-align: left;
-
+    
     &.span-2 { grid-column: span 2; }
   }
 
@@ -37,18 +53,14 @@
     font-size: 0.85rem;
     color: var(--text-light);
     font-weight: 700;
-    padding-left: 2px;
   }
 
   input {
-    padding: 12px;
-    font-size: 1rem;
+    padding: 10px 12px;
+    font-size: 0.95rem;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 10px;
     background: #fff;
-    color: var(--text-main);
-    transition: border-color 0.2s;
-
     &:focus {
       outline: none;
       border-color: var(--theme-primary);
@@ -56,23 +68,16 @@
   }
 }
 
-/* 토글 버튼 시스템 */
 .toggle-row {
   display: flex;
-  gap: 8px;
-  
-  &.no-wrap { flex-wrap: nowrap; }
-
+  gap: 6px;
   .toggle-btn {
     flex: 1;
     padding: 10px;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     background: #fff;
-    color: var(--text-main);
-    transition: all 0.2s;
-
     &.active {
       background: var(--theme-primary-light);
       border-color: var(--theme-primary);
@@ -80,71 +85,52 @@
       font-weight: 700;
     }
   }
+  &.no-wrap { flex-wrap: nowrap; }
 }
 
-/* 내 응답 박스 */
 .my-attendance {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   text-align: left;
 
   .my-attendance__title {
-    font-size: 0.95rem;
-    color: var(--text-main);
-    margin-bottom: 12px;
-    font-weight: 800;
-    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    font-weight: 700;
   }
 
   .my-attendance__item {
     background: var(--theme-accent);
     border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: 14px;
+    padding: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
 
     .info {
-      .name {
-        display: block;
-        font-weight: 800;
-        color: var(--text-main);
-        margin-bottom: 2px;
-      }
-      .meta {
-        font-size: 0.85rem;
-        color: var(--text-light);
-      }
+      .name { font-weight: 800; color: var(--text-main); }
+      .meta { font-size: 0.85rem; color: var(--text-light); display: block; }
     }
 
     .actions {
       display: flex;
       gap: 6px;
-
       .mini-btn {
         font-size: 0.8rem;
-        padding: 6px 12px;
-        border-radius: 8px;
+        padding: 5px 10px;
+        border-radius: 6px;
         border: 1px solid var(--border-color);
         background: #fff;
-        font-weight: 600;
-
-        &.danger {
-          color: var(--theme-error);
-          background: #fff;
-          border-color: #fdd;
-        }
+        &.danger { color: var(--theme-error); border-color: #fcc; }
       }
     }
   }
 }
 
-/* 모달 하단 버튼 열 */
 .attendance-footer-row {
   display: flex;
   gap: 8px;
-  width: 100%;
-  
+  margin-top: 10px;
   button { flex: 1; }
 }
