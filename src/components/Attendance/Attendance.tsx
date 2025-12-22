@@ -93,9 +93,9 @@ export function Attendance() {
       <h2 className="section-title">참석 여부 전달</h2>
 
       <p className="attendance__desc keep-all">
-        소중한 분들을 모시는 자리에 귀한 발걸음 해주시는 마음 깊이 감사드립니다.
-        보내주시는 참석 소식은 예식을 더 정성껏 준비하는 데에 큰 도움이 됩니다.
-        번거로우시겠지만 미리 알려주시면 세심히 준비하도록 하겠습니다.
+        소중한 걸음을 해주시는 분들을 위해 
+        정성껏 예식을 준비하고자 합니다.
+        참석 여부를 편히 알려주시면 감사하겠습니다.
       </p>
 
       <div className="attendance-buttons">
