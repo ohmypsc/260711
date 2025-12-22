@@ -31,7 +31,7 @@
 .guestbook-item {
   background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: 4px; /* 정갈한 편지지를 위해 라운딩 최소화 */
+  border-radius: 4px; 
   padding: 40px 25px 30px;
   box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.03);
   position: relative;
@@ -40,7 +40,6 @@
   align-items: center;
   text-align: center;
 
-  /* 카드 내부 미세 점선 (스티치 효과) */
   &::after {
     content: "";
     position: absolute;
@@ -49,7 +48,6 @@
     pointer-events: none;
   }
 
-  /* 우표(Stamp) 디테일 */
   .ticket-label {
     position: absolute;
     top: 22px;
@@ -100,7 +98,6 @@
     }
   }
 
-  /* 하트 포인트 구분선 */
   .divider {
     width: 100%;
     height: 1px;
@@ -132,8 +129,6 @@
     overflow-wrap: break-word;
     font-family: "Noto Serif KR", serif;
     text-align: center;
-    
-    /* 편지지 줄노트 배경 효과 */
     background-image: linear-gradient(transparent 95%, #fcfcfc 95%);
     background-size: 100% 1.8em;
   }
@@ -153,34 +148,77 @@
   }
 }
 
-/* Pagination */
+/* -------------------------------------
+   💎 Pagination (맑은 유리구슬 스타일)
+------------------------------------- */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  margin-top: 3rem;
+  gap: 12px;
+  margin-top: 3.5rem;
 
   .page-num, .page-nav {
-    background: #fff;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 0.8rem;
-    cursor: pointer;
-    color: var(--text-light);
-    padding: 6px 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 34px;
+    min-width: 38px;
+    height: 38px;
+    
+    /* 유리 질감: 투명도 + 블러 */
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    /* 얇고 맑은 테두리 */
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* 유리구슬 광택 효과 */
+    box-shadow: 
+      inset 0 1px 2px rgba(255, 255, 255, 0.8),
+      0 4px 12px rgba(0, 0, 0, 0.04);
+
+    &:active {
+      transform: scale(0.9);
+      background: rgba(255, 255, 255, 0.6);
+    }
+    
+    i {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      opacity: 0.8;
+    }
   }
 
+  /* 현재 선택된 페이지: 핑크빛 맺힌 맑은 구슬 */
   .page-num.current {
-    background: var(--theme-primary);
+    background: rgba(233, 167, 175, 0.6); 
     color: #fff;
-    border-color: var(--theme-primary);
+    border-color: rgba(255, 255, 255, 0.5);
     font-weight: 700;
+    
+    box-shadow: 
+      inset 0 2px 4px rgba(255, 255, 255, 0.4),
+      0 6px 15px rgba(233, 167, 175, 0.25);
+    
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .page-nav {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.5);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
   }
 }
 
