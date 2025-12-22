@@ -1,6 +1,6 @@
 .guestbook {
   text-align: center;
-  padding: 2.5rem 1.2rem;
+  padding: 2.5rem 0; // ✅ 좌우 여백을 0으로 수정하여 꽉 차게 변경
   font-family: inherit;
 
   .guestbook__desc {
@@ -10,15 +10,24 @@
     font-size: 0.95rem;
     opacity: 0.8;
   }
+
+  .guestbook__actions.top {
+    margin-bottom: 2.5rem;
+    padding: 0 1.2rem; // 버튼은 너무 끝에 붙지 않게 안쪽 여백 유지
+    width: 100%;
+    i { margin-right: 8px; font-size: 0.9rem; }
+  }
 }
 
 .guestbook-list {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%; // 가로폭 최대
 }
 
 .guestbook-empty {
+  margin: 0 1.2rem; // 빈 상태 안내문은 여백 유지
   padding: 3.5rem 2rem;
   border-radius: 12px;
   font-size: 0.95rem;
@@ -30,17 +39,21 @@
 /* ✉️ 감성 편지 카드 스타일 */
 .guestbook-item {
   background: #ffffff;
-  border: 1px solid var(--border-color);
-  border-radius: 4px; 
-  padding: 40px 25px 30px;
-  box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.03);
+  border-top: 1px solid var(--border-color); // 옆면 보더보다 위아래로 구분되는 느낌 강조 시 활용
+  border-bottom: 1px solid var(--border-color);
+  border-left: none; // ✅ 좌측 보더 제거
+  border-right: none; // ✅ 우측 보더 제거
+  border-radius: 0; // ✅ 꽉 차는 느낌을 위해 라운딩 제거 (원하시면 유지 가능)
+  padding: 40px 1.5rem 30px; // 내부 텍스트 여백은 유지하여 가독성 확보
+  box-shadow: none; // 꽉 찼을 때는 그림자가 어색할 수 있어 제거 혹은 미세하게 조정
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100%;
 
-  /* 카드 내부 미세 스티치 효과 */
+  /* 카드 내부 미세 스티치 효과도 가로폭에 맞춰 조정 */
   &::after {
     content: "";
     position: absolute;
@@ -49,7 +62,6 @@
     pointer-events: none;
   }
 
-  /* 우측 상단 삭제 버튼 스타일 */
   .item-delete-btn {
     position: absolute;
     top: 15px;
@@ -57,7 +69,7 @@
     width: 32px;
     height: 32px;
     display: flex;
-    align-items: center;
+    align-items: center;      
     justify-content: center;
     background: #f8f9fa;
     border: 1px solid #eee;
@@ -89,13 +101,8 @@
     }
 
     .date {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
       font-size: 0.8rem;
       color: var(--text-light);
-      i { font-size: 0.75rem; color: var(--theme-primary-light); }
     }
   }
 
@@ -131,20 +138,19 @@
     overflow-wrap: break-word;
     font-family: "Noto Serif KR", serif;
     text-align: center;
-    
-    /* 편지지 줄노트 배경 효과 */
     background-image: linear-gradient(transparent 95%, #f9f9f9 95%);
     background-size: 100% 1.85em;
   }
 }
 
-/* 💎 Pagination (맑은 유리구슬 스타일) */
+/* 💎 Pagination */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
   margin-top: 3.5rem;
+  padding: 0 1.2rem; // 하단 페이지네이션은 여백 확보
 
   .page-num, .page-nav {
     display: flex;
@@ -184,13 +190,7 @@
   }
 }
 
-.guestbook__actions {
-  margin-top: 3.5rem;
-  width: 100%;
-  i { margin-right: 8px; font-size: 0.9rem; }
-}
-
-/* Modal Form */
+/* Modal Form Styles */
 .guestbook-form {
   display: flex;
   flex-direction: column;
