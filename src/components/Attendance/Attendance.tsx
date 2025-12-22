@@ -91,8 +91,8 @@ export function Attendance() {
       <h2 className="section-title">참석 여부 전달</h2>
 
       <p className="attendance__desc keep-all">
-        소중한 걸음을 해주시는 분들을 위해 
-        정성껏 예식을 준비하고자 합니다.
+        소중한 걸음을 해주시는 분들을 위해<br/> 
+        정성껏 예식을 준비하고자 합니다.<br/>
         참석 여부를 편히 알려주시면 감사하겠습니다.
       </p>
 
