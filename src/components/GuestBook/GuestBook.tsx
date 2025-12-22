@@ -66,7 +66,6 @@ export function GuestBook() {
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "guestbook" }, () => loadPage(currentPage))
       .on("postgres_changes", { event: "DELETE", schema: "public", table: "guestbook" }, () => loadPage(currentPage))
       .subscribe();
-
     return () => { supabase.removeChannel(sub); };
   }, [currentPage]);
 
@@ -81,32 +80,30 @@ export function GuestBook() {
 
       <div className="guestbook-list">
         {posts.length === 0 && (
-          <div className="guestbook-empty">첫 편지의 주인공이 되어주세요 ✉️</div>
+          <div className="guestbook-empty">첫 번째 편지를 보내주세요 🕊️</div>
         )}
 
         {posts.map((post) => (
           <article key={post.id} className="guestbook-item">
-            <div className="ticket-label">
-              <i className="fa-solid fa-stamp"></i>
-              <span>LOVE</span>
-            </div>
+            {/* 삭제 버튼: 우측 상단 배치 */}
+            <button
+              className="item-delete-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenModal({ type: "delete", postId: post.id });
+              }}
+              type="button"
+              aria-label="delete"
+            >
+              <i className="fa-solid fa-trash-can"></i>
+            </button>
             
             <div className="guestbook-item__head">
               <span className="name">{post.name}</span>
               <div className="date">
+                <i className="fa-solid fa-paper-plane"></i>
                 <span>{formatDate(post.timestamp)}</span>
               </div>
-              <button
-                className="delete-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenModal({ type: "delete", postId: post.id });
-                }}
-                type="button"
-                aria-label="delete"
-              >
-                <i className="fa-solid fa-xmark" />
-              </button>
             </div>
             
             <div className="divider">
@@ -118,15 +115,13 @@ export function GuestBook() {
         ))}
       </div>
 
-      {/* ✅ 페이지네이션: 유리구슬 스타일 최적화 (텍스트 제거, 아이콘만 사용) */}
       {totalPages > 1 && (
         <div className="pagination">
           {currentPage > 0 && (
-            <button className="page-nav" onClick={() => loadPage(currentPage - 1)} type="button" aria-label="이전 페이지">
+            <button className="page-nav" onClick={() => loadPage(currentPage - 1)} type="button">
               <i className="fa-solid fa-chevron-left"></i>
             </button>
           )}
-          
           {pages.map((page) => (
             <button
               key={page}
@@ -137,9 +132,8 @@ export function GuestBook() {
               {page + 1}
             </button>
           ))}
-          
           {currentPage < totalPages - 1 && (
-            <button className="page-nav" onClick={() => loadPage(currentPage + 1)} type="button" aria-label="다음 페이지">
+            <button className="page-nav" onClick={() => loadPage(currentPage + 1)} type="button">
               <i className="fa-solid fa-chevron-right"></i>
             </button>
           )}
@@ -148,7 +142,7 @@ export function GuestBook() {
 
       <div className="guestbook__actions">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
-          <i className="fa-solid fa-pen-nib"></i> 방명록 작성하기
+        방명록 작성하기
         </Button>
       </div>
 
@@ -167,4 +161,121 @@ export function GuestBook() {
   );
 }
 
-// Write/Delete 모달 컴포넌트는 기존 로직 유지 (생략)
+function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void; }) {
+  const inputRef = useRef({}) as React.RefObject<{
+    name: HTMLInputElement;
+    content: HTMLTextAreaElement;
+    password: HTMLInputElement;
+  }>;
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="guestbook-footer-row">
+          <Button variant="submit" type="submit" form="guestbook-write-form" disabled={loading}>저장하기</Button>
+          <Button variant="close" type="button" onClick={onClose}>닫기</Button>
+        </div>
+      }
+    >
+      <div className="guestbook-modal-content">
+        <h2 className="modal-title">방명록 작성</h2>
+        <form
+          id="guestbook-write-form"
+          className="guestbook-form"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            try {
+              const name = inputRef.current.name.value.trim();
+              const content = inputRef.current.content.value.trim();
+              const password = inputRef.current.password.value;
+              if (!name || !content || !password) {
+                alert("모든 항목을 입력해 주세요.");
+                setLoading(false);
+                return;
+              }
+              const { error } = await supabase.from("guestbook").insert([{ name, content, password }]);
+              if (error) throw error;
+              alert("방명록이 등록되었습니다.");
+              onClose();
+              onSuccess();
+            } catch (err) {
+              alert("방명록 작성에 실패했습니다.");
+            } finally { setLoading(false); }
+          }}
+        >
+          <div className="field">
+            <label className="label">성함</label>
+            <input disabled={loading} type="text" autoComplete="off" ref={(ref) => (inputRef.current.name = ref as HTMLInputElement)} />
+          </div>
+          <div className="field">
+            <label className="label">메시지</label>
+            <textarea disabled={loading} ref={(ref) => (inputRef.current.content = ref as HTMLTextAreaElement)} />
+          </div>
+          <div className="field">
+            <label className="label">비밀번호</label>
+            <input disabled={loading} type="password" ref={(ref) => (inputRef.current.password = ref as HTMLInputElement)} />
+          </div>
+        </form>
+      </div>
+    </Modal>
+  );
+}
+
+function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; onClose: () => void; onSuccess: () => void; }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <Modal
+      onClose={onClose}
+      footer={
+        <div className="guestbook-footer-row">
+          <Button variant="submit" type="submit" form="guestbook-delete-form" disabled={loading}>삭제하기</Button>
+          <Button variant="close" type="button" onClick={onClose}>취소</Button>
+        </div>
+      }
+    >
+      <div className="guestbook-modal-content">
+        <h2 className="modal-title">방명록 삭제</h2>
+        <p className="modal-subtitle" style={{ textAlign: 'center', margin: '10px 0 20px', color: 'var(--text-main)', opacity: 0.8 }}>
+          삭제를 위해 비밀번호를 입력해주세요.
+        </p>
+        <form
+          id="guestbook-delete-form"
+          className="guestbook-form"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            try {
+              const password = inputRef.current?.value ?? "";
+              if (!password.trim()) {
+                alert("비밀번호를 입력해 주세요.");
+                setLoading(false);
+                return;
+              }
+              const { data, error } = await supabase.from("guestbook").select("password").eq("id", postId).single();
+              if (error || !data) throw new Error();
+              if (data.password !== password) {
+                alert("비밀번호가 일치하지 않습니다.");
+                setLoading(false);
+                return;
+              }
+              const { error: deleteError } = await supabase.from("guestbook").delete().eq("id", postId);
+              if (deleteError) throw deleteError;
+              alert("삭제되었습니다.");
+              onClose();
+              onSuccess();
+            } catch (err) {
+              alert("삭제 처리 중 오류가 발생했습니다.");
+            } finally { setLoading(false); }
+          }}
+        >
+          <input ref={inputRef} disabled={loading} type="password" />
+        </form>
+      </div>
+    </Modal>
+  );
+}
