@@ -114,23 +114,40 @@
         gap: 16px;
 
         .meta-pill {
-          display: flex;
-          align-items: center;
-          /* 1. 아이콘 끝선과 글자 사이의 간격을 8px로 고정 */
-          gap: 8px; 
-          font-size: 0.85rem;
-          color: #888e91;
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  /* 1. 글자색을 이름과 동일하게 메인 색상으로 변경 */
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-main); 
 
-          i {
-            font-size: 0.8rem;
-            color: #ced4da;
-            /* 2. 아이콘 박스 너비를 고정하고 오른쪽 정렬 수행 */
-            width: 18px; 
-            display: inline-flex;
-            justify-content: flex-end; 
-            align-items: center;
-          }
-        }
+  i {
+    /* 2. 아이콘 스타일 제안 (제안 1번: 유채색 포인트) */
+    font-size: 0.85rem;
+    width: 18px; 
+    display: inline-flex;
+    justify-content: flex-end; 
+    align-items: center;
+
+    /* 신랑측/신부측 카드 내부의 아이콘 색상을 배지색과 맞춤 */
+    .attendance-card:has(.side-badge.groom) & { color: rgba(90, 150, 227, 0.6); }
+    .attendance-card:has(.side-badge.bride) & { color: rgba(227, 90, 122, 0.6); }
+  }
+}
+
+/* 이름 부분 가독성 추가 보정 */
+.name-row {
+  .name {
+    color: var(--text-main);
+  }
+  .suffix {
+    /* '님'자만 살짝 연하게 하여 이름을 강조 */
+    color: var(--text-main);
+    opacity: 0.6;
+    font-size: 0.85rem;
+  }
+}
       }
     }
 
