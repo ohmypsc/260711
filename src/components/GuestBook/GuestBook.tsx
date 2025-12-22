@@ -78,6 +78,13 @@ export function GuestBook() {
         신랑, 신부에게<br />축하의 마음을 전해주세요.
       </p>
 
+      {/* 버튼 영역도 중앙 정렬을 위해 padding 유지 가능하나, 전체 흐름상 가로폭 최대로 설정 */}
+      <div className="guestbook__actions top">
+        <Button variant="basic" onClick={() => setOpenModal("write")}>
+          <i className="fa-solid fa-feather-pointed"></i> 방명록 작성하기
+        </Button>
+      </div>
+
       <div className="guestbook-list">
         {posts.length === 0 && (
           <div className="guestbook-empty">첫 번째 편지를 보내주세요 🕊️</div>
@@ -85,7 +92,6 @@ export function GuestBook() {
 
         {posts.map((post) => (
           <article key={post.id} className="guestbook-item">
-            {/* 삭제 버튼: 우측 상단 배치 */}
             <button
               className="item-delete-btn"
               onClick={(e) => {
@@ -101,7 +107,6 @@ export function GuestBook() {
             <div className="guestbook-item__head">
               <span className="name">{post.name}</span>
               <div className="date">
-                <i className="fa-solid fa-paper-plane"></i>
                 <span>{formatDate(post.timestamp)}</span>
               </div>
             </div>
@@ -118,7 +123,7 @@ export function GuestBook() {
       {totalPages > 1 && (
         <div className="pagination">
           {currentPage > 0 && (
-            <button className="page-nav" onClick={() => loadPage(currentPage - 1)} type="button">
+            <button className="page-nav" onClick={() => loadPage(currentPage - 1)} type="button" aria-label="이전 페이지">
               <i className="fa-solid fa-chevron-left"></i>
             </button>
           )}
@@ -133,18 +138,12 @@ export function GuestBook() {
             </button>
           ))}
           {currentPage < totalPages - 1 && (
-            <button className="page-nav" onClick={() => loadPage(currentPage + 1)} type="button">
+            <button className="page-nav" onClick={() => loadPage(currentPage + 1)} type="button" aria-label="다음 페이지">
               <i className="fa-solid fa-chevron-right"></i>
             </button>
           )}
         </div>
       )}
-
-      <div className="guestbook__actions">
-        <Button variant="basic" onClick={() => setOpenModal("write")}>
-        방명록 작성하기
-        </Button>
-      </div>
 
       {openModal === "write" && (
         <WriteGuestBookModal onClose={() => setOpenModal(null)} onSuccess={() => loadPage(0)} />
@@ -161,6 +160,9 @@ export function GuestBook() {
   );
 }
 
+/* ------------------------------------------------------------------
+   Write Modal
+------------------------------------------------------------------ */
 function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void; }) {
   const inputRef = useRef({}) as React.RefObject<{
     name: HTMLInputElement;
@@ -224,6 +226,9 @@ function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSu
   );
 }
 
+/* ------------------------------------------------------------------
+   Delete Modal
+------------------------------------------------------------------ */
 function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; onClose: () => void; onSuccess: () => void; }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
