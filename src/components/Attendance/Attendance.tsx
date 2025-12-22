@@ -43,7 +43,7 @@ const formatPhone = (digits: string) => {
 };
 
 const mealLabel = (meal: Meal) => {
-  const labels = { yes: "식사 예정", no: "식사 안 함", unknown: "식사 미정" };
+  const labels = { yes: "식사할 예정", no: "식사 안 함", unknown: "식사 여부 미정" };
   return labels[meal];
 };
 
