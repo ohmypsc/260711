@@ -115,16 +115,20 @@ export function Attendance() {
                     <span className="name">{row.name}</span><span className="suffix">님</span>
                   </div>
                   <div className="meta-container">
-                    <div className="meta-pill"><i className="fa-solid fa-users"></i> <span>{row.count}명</span></div>
-                    <div className="meta-pill"><i className="fa-solid fa-utensils"></i> <span>{mealLabel(row.meal)}</span></div>
+                    <div className="meta-pill">
+                      <i className="fa-solid fa-users"></i> <span>{row.count}명</span>
+                    </div>
+                    <div className="meta-pill">
+                      <i className="fa-solid fa-utensils"></i> <span>{mealLabel(row.meal)}</span>
+                    </div>
                   </div>
                 </div>
                 <div className="divider"></div>
                 <div className="actions">
-                  <button className="action-btn" onClick={() => setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone })}>
+                  <button type="button" className="action-btn" onClick={() => setOpenModal({ type: "edit", row, authName: row.name, authPhone: row.phone })}>
                     <i className="fa-solid fa-pen-to-square"></i> <span>수정</span>
                   </button>
-                  <button className="action-btn danger" onClick={() => setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone })}>
+                  <button type="button" className="action-btn danger" onClick={() => setOpenModal({ type: "delete", row, authName: row.name, authPhone: row.phone })}>
                     <i className="fa-solid fa-trash-can"></i> <span>삭제</span>
                   </button>
                 </div>
@@ -146,4 +150,206 @@ export function Attendance() {
   );
 }
 
-/* Modal 컴포넌트들 (Write, Find, Edit, Delete) 생략... 위에서 작성한 최신 로직 유지 */
+function Counter({ value, onChange, min = 1 }: { value: number; onChange: (v: number) => void; min?: number }) {
+  return (
+    <div className="counter-ui">
+      <button type="button" onClick={() => onChange(Math.max(min, value - 1))}>−</button>
+      <span className="count-value">{value}명</span>
+      <button type="button" onClick={() => onChange(value + 1)}>+</button>
+    </div>
+  );
+}
+
+function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "", side: "" as Side | "", meal: "" as Meal | "", count: 1 });
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.phone || !form.side || !form.meal) return alert("모든 항목을 입력해 주세요.");
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.from("attendance").insert([{ ...form, phone: normalizePhone(form.phone) }]).select("*").single();
+      if (error) throw error;
+      alert("참석 소식 감사합니다. 정성껏 준비하겠습니다.");
+      onSuccess(data as AttendanceRow);
+      onClose();
+    } catch (err) { alert("등록에 실패했습니다."); } finally { setLoading(false); }
+  };
+
+  return (
+    <Modal onClose={onClose} footer={
+      <div className="attendance-footer-row">
+        <Button variant="submit" type="submit" form="write-form" disabled={loading}>전달하기</Button>
+        <Button variant="close" onClick={onClose}>닫기</Button>
+      </div>
+    }>
+      <div className="attendance-modal-content">
+        <h2 className="modal-title">참석 의사 전달</h2>
+        <form id="write-form" className="attendance-form" onSubmit={onSubmit}>
+          <div className="field span-2">
+            <label className="label">성함</label>
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          </div>
+          <div className="field span-2">
+            <label className="label">연락처</label>
+            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
+          </div>
+          <div className="field">
+            <label className="label">구분</label>
+            <div className="toggle-row">
+              <button type="button" className={`toggle-btn ${form.side === "groom" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "groom" })}>신랑 측</button>
+              <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">참석 인원</label>
+            <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
+          </div>
+          <div className="field span-2">
+            <label className="label">식사 여부</label>
+            <div className="toggle-row">
+              <button type="button" className={`toggle-btn ${form.meal === "yes" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "yes" })}>O</button>
+              <button type="button" className={`toggle-btn ${form.meal === "no" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "no" })}>X</button>
+              <button type="button" className={`toggle-btn ${form.meal === "unknown" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "unknown" })}>미정</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </Modal>
+  );
+}
+
+function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFound: (row: AttendanceRow) => void }) {
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const onFind = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !phone) return alert("모든 항목을 입력해 주세요.");
+    setLoading(true);
+    try {
+      const normPhone = normalizePhone(phone);
+      const { data, error } = await supabase.from("attendance").select("*").eq("name", name.trim()).or(`phone.eq.${phone},phone.eq.${normPhone}`).maybeSingle();
+      if (error) throw error;
+      if (!data) return alert("일치하는 응답을 찾을 수 없습니다.");
+      alert("응답을 확인했습니다.");
+      onFound(data as AttendanceRow);
+      onClose();
+    } catch (err) { alert("찾기에 실패했습니다."); } finally { setLoading(false); }
+  };
+
+  return (
+    <Modal onClose={onClose} footer={
+      <div className="attendance-footer-row">
+        <Button variant="submit" type="submit" form="find-form" disabled={loading}>찾기</Button>
+        <Button variant="close" onClick={onClose}>닫기</Button>
+      </div>
+    }>
+      <div className="attendance-modal-content">
+        <h2 className="modal-title">내 응답 찾기</h2>
+        <form id="find-form" className="attendance-form" onSubmit={onFind}>
+          <div className="field span-2">
+            <label className="label">성함</label>
+            <input value={name} onChange={e => setName(e.target.value)} />
+          </div>
+          <div className="field span-2">
+            <label className="label">연락처</label>
+            <input type="tel" value={phone} onChange={e => setPhone(formatPhone(normalizePhone(e.target.value)))} />
+          </div>
+        </form>
+      </div>
+    </Modal>
+  );
+}
+
+function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ ...row, phone: formatPhone(row.phone) });
+
+  const onUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.phone || !form.side || !form.meal) return alert("모든 항목을 입력해 주세요.");
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.from("attendance").update({ ...form, phone: normalizePhone(form.phone) }).eq("id", row.id).select("*").single();
+      if (error) throw error;
+      alert("수정되었습니다.");
+      onSuccess(data as AttendanceRow);
+      onClose();
+    } catch (err) { alert("수정에 실패했습니다."); } finally { setLoading(false); }
+  };
+
+  return (
+    <Modal onClose={onClose} footer={
+      <div className="attendance-footer-row">
+        <Button variant="submit" type="submit" form="edit-form" disabled={loading}>수정하기</Button>
+        <Button variant="close" onClick={onClose}>닫기</Button>
+      </div>
+    }>
+      <div className="attendance-modal-content">
+        <h2 className="modal-title">내 응답 수정</h2>
+        <form id="edit-form" className="attendance-form" onSubmit={onUpdate}>
+          <div className="field span-2">
+            <label className="label">성함</label>
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          </div>
+          <div className="field span-2">
+            <label className="label">연락처</label>
+            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
+          </div>
+          <div className="field">
+            <label className="label">구분</label>
+            <div className="toggle-row">
+              <button type="button" className={`toggle-btn ${form.side === "groom" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "groom" })}>신랑 측</button>
+              <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">참석 인원</label>
+            <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
+          </div>
+          <div className="field span-2">
+            <label className="label">식사 여부</label>
+            <div className="toggle-row">
+              <button type="button" className={`toggle-btn ${form.meal === "yes" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "yes" })}>O</button>
+              <button type="button" className={`toggle-btn ${form.meal === "no" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "no" })}>X</button>
+              <button type="button" className={`toggle-btn ${form.meal === "unknown" ? "active" : ""}`} onClick={() => setForm({ ...form, meal: "unknown" })}>미정</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </Modal>
+  );
+}
+
+function DeleteAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (id: number) => void }) {
+  const [loading, setLoading] = useState(false);
+  const onDelete = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("attendance").delete().eq("id", row.id);
+      if (error) throw error;
+      alert("삭제되었습니다.");
+      onSuccess(row.id);
+      onClose();
+    } catch (err) { alert("삭제에 실패했습니다."); } finally { setLoading(false); }
+  };
+
+  return (
+    <Modal onClose={onClose} footer={
+      <div className="attendance-footer-row">
+        <Button variant="submit" onClick={onDelete} disabled={loading}>삭제하기</Button>
+        <Button variant="close" onClick={onClose}>취소</Button>
+      </div>
+    }>
+      <div className="attendance-modal-content">
+        <h2 className="modal-title">응답 삭제</h2>
+        <p className="modal-subtitle keep-all" style={{ textAlign: 'center', margin: '20px 0', color: 'var(--text-main)' }}>
+          참석 응답을 삭제하시겠습니까?<br />삭제된 데이터는 복구할 수 없습니다.
+        </p>
+      </div>
+    </Modal>
+  );
+}
