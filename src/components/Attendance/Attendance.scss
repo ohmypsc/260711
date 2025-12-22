@@ -1,7 +1,7 @@
 .attendance {
   text-align: center;
   padding: 2rem 1.2rem;
-  font-family: inherit; /* 전역 폰트 상속 */
+  font-family: inherit;
 
   .keep-all {
     word-break: keep-all;
@@ -20,74 +20,167 @@
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
-    width: 100%; /* 화면 꽉 차게 */
+    width: 100%; /* 메인 버튼 화면 꽉 차게 유지 */
   }
 }
 
-/* ✅ '보내주신 참석 응답' 스타일 개선 */
+/* ✅ '보내주신 참석 응답' 디자인 고도화 (중앙 정렬 카드) */
 .my-attendance {
-  margin-top: 2.5rem;
-  text-align: left;
+  margin-top: 3rem;
+  padding: 0 4px;
 
   &__title {
     font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
     color: var(--text-main);
+    letter-spacing: -0.02em;
+  }
+
+  .attendance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .attendance-card {
-    background: #fff;
+    background: #ffffff;
     border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 12px;
+    border-radius: 24px;
+    padding: 24px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    flex-direction: column;
+    align-items: center; /* 카드 내부 전체 가운데 정렬 */
+    text-align: center;
+    transition: transform 0.1s ease;
 
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      
-      .side-badge {
-        font-size: 0.7rem;
-        padding: 2px 6px;
-        border-radius: 6px;
-        font-weight: 600;
-        &.groom { background: #eef6ff; color: #5a96e3; }
-        &.bride { background: #fff0f3; color: #e35a7a; }
-      }
-      .name { font-weight: 700; color: var(--text-main); }
+    &:active {
+      transform: scale(0.98);
     }
 
-    .meta {
-      font-size: 0.85rem;
-      color: var(--text-main);
-      opacity: 0.7;
+    .card-top {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 16px;
+
+      .side-badge {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        border-radius: 100px;
+        font-weight: 700;
+        
+        &.groom {
+          background: #eef6ff;
+          color: #5a96e3;
+        }
+        &.bride {
+          background: #fff0f3;
+          color: #e35a7a;
+        }
+      }
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+
+      .name-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 2px;
+
+        .name {
+          font-size: 1.2rem;
+          font-weight: 800;
+          color: var(--text-main);
+        }
+        .suffix {
+          font-size: 0.9rem;
+          color: #888e91;
+        }
+      }
+
+      .meta-container {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+
+        .meta-pill {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.85rem;
+          color: #888e91;
+
+          i {
+            font-size: 0.8rem;
+            color: #ced4da;
+            width: 14px;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    /* 카드 중간 구분선 */
+    .divider {
+      width: 40px;
+      height: 1px;
+      background-color: #eee;
+      margin-bottom: 16px;
     }
 
     .actions {
       display: flex;
+      justify-content: center;
       gap: 8px;
+      width: 100%;
 
-      .mini-btn {
-        background: none;
-        border: none;
+      .action-btn {
+        flex: 1;
+        max-width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        background: #f8f9fa;
+        border: 1px solid #eee;
+        padding: 8px 12px;
+        border-radius: 12px;
         font-size: 0.8rem;
-        color: #999;
+        font-weight: 600;
+        color: #747d8c;
         cursor: pointer;
         font-family: inherit;
-        
-        &.danger { color: #ff6b6b; }
+
+        i {
+          font-size: 0.75rem;
+        }
+
+        &.danger {
+          color: #ff5e5e;
+          border-color: #ffeaea;
+          background: #fffafa;
+        }
+
+        &:active {
+          background: #e9ecef;
+          opacity: 0.7;
+        }
       }
     }
   }
 }
 
+/* ✅ 폼/모달 스타일 (요청사항 반영 유지) */
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
