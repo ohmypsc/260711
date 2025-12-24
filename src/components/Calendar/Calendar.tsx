@@ -35,8 +35,6 @@ function isSameKstDate(a: Date, b: Date) {
 
 /* =========================================================
    ✅ Cover 계열 리프 디바이더 (한 줄 / 끊김 없는 버전)
-   - 달력과 카운트다운 사이에 1줄만 사용
-   - 중앙이 비어 보이지 않도록 연속 배치
    ========================================================= */
 function CalendarLeafLine() {
   return (
@@ -160,25 +158,17 @@ export const Calendar = () => {
     return weeks;
   }, [year, month]);
 
-  const timeText = minute === 0 ? `${hour}시` : `${hour}시 ${minute}분`;
-
   return (
     <div className="calendar-container">
-      {/* =========================================================
-         Headline
-         ========================================================= */}
+      {/* Headline */}
       <div className="calendar-headline">2026년 여름, 결혼합니다.</div>
 
-      {/* =========================================================
-         Topline
-         ========================================================= */}
+      {/* Topline */}
       <div className="calendar-topline">
         {year}. {month}. {weddingDay}. (토) 오전 {hour}시
       </div>
 
-      {/* =========================================================
-         Weekdays
-         ========================================================= */}
+      {/* Weekdays */}
       <div className="calendar-weekdays">
         {WEEKDAYS.map((w, i) => (
           <div
@@ -192,9 +182,7 @@ export const Calendar = () => {
         ))}
       </div>
 
-      {/* =========================================================
-         Calendar Body
-         ========================================================= */}
+      {/* Calendar Body */}
       <div className="calendar-box">
         <div className="calendar-weeks">
           {calendarGrid.map((week, wi) => (
@@ -215,13 +203,6 @@ export const Calendar = () => {
                     key={ci}
                   >
                     <span className="day-number">{d}</span>
-
-                    {/* ✅ 11일 하트 */}
-                    {isWeddingDay && (
-                      <span className="heart" aria-hidden>
-                        <i className="fa-solid fa-heart" />
-                      </span>
-                    )}
                   </div>
                 );
               })}
@@ -230,14 +211,10 @@ export const Calendar = () => {
         </div>
       </div>
 
-      {/* =========================================================
-         ✅ Leaf Divider (한 줄 / 끊김 없이)
-         ========================================================= */}
+      {/* Leaf Divider */}
       <CalendarLeafLine />
 
-      {/* =========================================================
-         Countdown
-         ========================================================= */}
+      {/* Countdown */}
       <div className="countdown-wrap">
         <div className="countdown-line1">
           {groomName}과 {brideName}의 결혼식이
