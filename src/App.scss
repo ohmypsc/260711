@@ -8,29 +8,33 @@
   box-sizing: border-box;
 }
 
-:root {
-  --theme-bg: #F8F6F2;        /* 따뜻한 실크 아이보리 */
-  --theme-accent: #EEF1F5;    /* 아주 연한 쿨 오프화이트 */
+ :root {
+            /* 🎨 제안하신 베이스 컬러 조합 */
+            --theme-bg: #F8F6F2;           /* 따뜻한 실크 아이보리 */
+            --theme-accent: #EEF1F5;       /* 아주 연한 쿨 오프화이트 */
 
-  --theme-primary: #E9A7AF;   /* 더스티 로즈(핑크 티 눌림) */
-  --theme-primary-light: #F4CCD1; /* 아주 연한 블러쉬 */
+            --theme-primary: #E9A7AF;      /* 더스티 로즈(꽃잎 포인트) */
+            --theme-primary-light: #F4CCD1; /* 아주 연한 블러쉬 */
 
-  --section-bg-soft: #F6F2F0; /* 섹션 배경(종이톤) */
+            --section-bg-soft: #F6F2F0;    /* 섹션 배경(종이톤) */
 
-  --text-main: #242428;
-  --text-light: #8F9097;
+            --text-main: #242428;
+            --text-light: #8F9097;
 
-  --theme-success: #469C7A;
-  --theme-error: #E06B6B;
+            --theme-success: #469C7A;
+            --theme-error: #E06B6B;
 
-  --border-color: #E7E3E6;    /* 웜 그레이 보더 */
-  --shadow-color: rgba(0, 0, 0, 0.08); /* 핑크 0, 은은한 깊이 */
-  --section-max-width: clamp(640px, 60vw, 800px);
+            --border-color: #E7E3E6;       /* 웜 그레이 보더 */
+            --shadow-color: rgba(0, 0, 0, 0.08); /* 은은한 깊이 */
+            --section-max-width: clamp(640px, 60vw, 800px);
 
-  font-family: "Noto Serif KR", serif;
-  font-size: clamp(17px, 3.4vw, 21px);
-   
-}
+            font-family: "Noto Serif KR", serif;
+            font-size: clamp(17px, 3.4vw, 21px);
+
+            /* ✨ 빛나는 골드 & 네이비 (디자인 포인트 유지용) */
+            --color-navy: #1A2238; 
+            --gold-linear: linear-gradient(135deg, #B87D4B 0%, #F1E5AC 45%, #D4AF37 55%, #8A6628 100%);
+        }
 
 html,
 body {
