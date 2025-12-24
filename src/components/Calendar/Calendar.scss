@@ -131,39 +131,31 @@
   z-index: 2;
   font-weight: 500;
   letter-spacing: 0.01rem;
+
+  /* ✨ D-Day 원형 배경을 위한 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
 }
 
-.calendar-cell.day.wedding {
-  font-weight: 500;
-}
-
-/* 11일 하트(고정) */
-.heart {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  z-index: 1;
-  font-size: 2.35rem;
-  color: var(--theme-primary);
-  opacity: 0.30;
-  pointer-events: none;
-}
-
-.heart i {
-  font-size: 1em;
-  line-height: 1;
-  display: inline-block;
-  filter: drop-shadow(0 0 0 rgba(255,140,148,0));
+/* ✨ [수정] 하트 제거 -> 단정한 분홍색 원형 배경 */
+.calendar-cell.day.wedding .day-number {
+  font-weight: 700;
+  background-color: var(--theme-point-pink); /* 로즈 핑크 */
+  color: var(--theme-primary); /* 네이비 텍스트 */
 }
 
 /* =========================================================
-   ✅ Leaf Divider (한 줄 / 끊김 없음)
+   ✅ Leaf Divider (색상 수정됨)
    ========================================================= */
 .calendar-leaf-line {
   width: 100%;
-  margin: 0.9rem auto 0.6rem;  // 달력 ↔ 카운트다운 사이 간격
-  color: var(--theme-primary);
+  margin: 0.9rem auto 0.6rem;
+  /* ✨ [수정] 7월의 녹색 나뭇잎 컬러 적용 */
+  color: var(--theme-leaf-green);
   opacity: 0.9;
 
   svg {
@@ -216,7 +208,7 @@
   padding: 0.04rem 0;
 }
 
-/* ✅ 숫자 */
+/* ✅ 숫자 (숨쉬는 애니메이션 제거됨) */
 .num {
   position: relative;
   font-size: clamp(2.05rem, 6.8vw, 2.75rem);
@@ -230,11 +222,10 @@
     0 1px 0 var(--theme-bg),
     0 2px 6px var(--shadow-color);
 
-  animation: numBreath 4.8s ease-in-out infinite;
   transform-origin: center bottom;
 }
 
-/* ✅ 실키한 광택 */
+/* ✅ 실키한 광택 (유지) */
 .num::after {
   content: "";
   position: absolute;
@@ -270,18 +261,6 @@
   font-size: clamp(0.98rem, 3.2vw, 1.12rem);
   font-weight: 600;
   opacity: 0.95;
-}
-
-/* ✅ 은은한 ‘숨쉬는’ 숫자 애니메이션 */
-@keyframes numBreath {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-    filter: saturate(1) contrast(1);
-  }
-  50% {
-    transform: translateY(-1px) scale(1.045);
-    filter: saturate(1.06) contrast(1.03);
-  }
 }
 
 /* ✅ 실키 하이라이트 미세 이동 */
