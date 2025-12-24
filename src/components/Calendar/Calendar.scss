@@ -1,110 +1,65 @@
 /* =========================================================
-   Headline
+   📌 Calendar: Modern Editorial (Final Clean)
    ========================================================= */
-.calendar-headline {
-  text-align: center;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  line-height: 1.15;
 
-  white-space: nowrap;
-  padding: 0 0.6rem;
-  box-sizing: border-box;
-
-  font-size: clamp(1.55rem, 5.6vw, 2.2rem);
-
-  /* ✅ 섹션처럼 “완전 분리”되는 간격 */
-  margin-bottom: clamp(3.2rem, 9vw, 4.6rem);
-
-  /* ✅ 간격이 더 “덩어리”로 느껴지게 살짝 패딩까지 */
-  padding-bottom: 0.3rem;
-
-  color: var(--theme-primary);
-
-  text-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.95),
-    0  1px 0 rgba(0, 0, 0, 0.06),
-    0  6px 14px rgba(0, 0, 0, 0.12),
-    0  0px 10px rgba(233, 167, 175, 0.22);
-}
-
-/* =========================================================
-   Container
-   ========================================================= */
 .calendar-container {
   width: 100%;
-}
-
-/* =========================================================
-   Topline
-   ========================================================= */
-.calendar-topline {
-  width: 100%;
+  padding: 0 1rem;
+  margin: 0 auto;
   text-align: center;
-
-  font-size: clamp(1.15rem, 5.0vw, 1.75rem);
-  line-height: 1.22;
-  font-weight: 600;
-  letter-spacing: 0.01rem;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-
-  padding: 0 0.25rem 1.1rem;
-  margin-bottom: 0.8rem;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 4%;
-    right: 4%;
-    bottom: 0.25rem;
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      var(--theme-primary-light),
-      var(--theme-primary-light),
-      transparent
-    );
-    opacity: 0.9;
-  }
+  color: var(--text-main);
 }
 
-/* =========================================================
-   Weekdays
-   ========================================================= */
+/* 1. Headline */
+.calendar-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  font-weight: 700;
+  color: var(--theme-primary); /* Deep Green */
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+}
+
+/* 2. Topline */
+.calendar-topline {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color); /* Clean Line */
+  padding-bottom: 0.8rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* 3. Calendar Grid */
+.calendar-box {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  align-items: center;
-  margin-bottom: 0.25rem;
+  margin-bottom: 1rem;
 
   .weekday {
-    text-align: center;
-    font-size: 0.88rem;
+    font-size: 0.75rem;
+    color: var(--theme-primary);
+    opacity: 0.6;
     font-weight: 600;
-    color: var(--text-main);
-    letter-spacing: 0.02rem;
-    padding: 0.35rem 0;
+    text-align: center;
+    letter-spacing: 0.1em;
   }
-
-  .weekday.sun { color: #e74c3c; }
-  .weekday.sat { color: #3b82f6; }
-}
-
-/* =========================================================
-   Calendar body
-   ========================================================= */
-.calendar-box {
-  background: transparent;
+  
+  .weekday.sun { color: var(--theme-error); opacity: 0.8; }
 }
 
 .calendar-weeks {
-  display: grid;
-  gap: 0.12rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .calendar-week {
@@ -113,185 +68,99 @@
 }
 
 .calendar-cell {
-  height: 58px;
-  display: grid;
-  place-items: center;
-  font-size: 0.98rem;
-  color: var(--text-main);
-  background: transparent;
   position: relative;
-}
-
-.calendar-cell.empty {
-  background: transparent;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--text-main);
 }
 
 .day-number {
   position: relative;
   z-index: 2;
-  font-weight: 500;
-  letter-spacing: 0.01rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
-.calendar-cell.day.wedding {
-  font-weight: 500;
-}
-
-/* 11일 하트(고정) */
-.heart {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  z-index: 1;
-  font-size: 2.35rem;
+/* ✨ [Wedding Day] Misty Pink 원형 배경 */
+.calendar-cell.day.wedding .day-number {
+  background-color: var(--theme-primary-light);
   color: var(--theme-primary);
-  opacity: 0.30;
-  pointer-events: none;
+  font-weight: 700;
 }
 
-.heart i {
-  font-size: 1em;
-  line-height: 1;
-  display: inline-block;
-  filter: drop-shadow(0 0 0 rgba(255,140,148,0));
-}
-
-/* =========================================================
-   ✅ Leaf Divider (한 줄 / 끊김 없음)
-   ========================================================= */
+/* 4. Leaf Divider */
 .calendar-leaf-line {
   width: 100%;
-  margin: 0.9rem auto 0.6rem;  // 달력 ↔ 카운트다운 사이 간격
+  max-width: 240px;
+  margin: 3.5rem auto 2.5rem;
   color: var(--theme-primary);
-  opacity: 0.9;
-
+  opacity: 0.25;
+  
   svg {
+    display: block;
     width: 100%;
     height: auto;
-    display: block;
-    filter: none;
   }
 }
 
-/* =========================================================
-   Countdown (TUNED)
-   ========================================================= */
+/* 5. Countdown */
 .countdown-wrap {
-  margin-top: 2rem;
   text-align: center;
-  display: grid;
-  gap: 0.65rem;
+  font-family: var(--font-serif);
   color: var(--text-main);
-  letter-spacing: 0.01rem;
 }
 
-.countdown-line1,
-.countdown-line3 {
-  width: 100%;
-  display: block;
-  text-align: center;
-  font-size: clamp(1.02rem, 3.3vw, 1.2rem);
-  font-weight: 500;
-  opacity: 0.95;
-}
-
-.countdown-line2 {
-  display: flex;
-  justify-content: center;
+.countdown-line1 {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 1.8rem;
+  font-family: var(--font-serif);
 }
 
 .countdown-values {
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 0.9rem;
-  padding: 0;
-  background: transparent;
+  display: flex;
+  justify-content: center;
+  gap: 1.8rem;
+  margin-bottom: 1rem;
 }
 
 .unit-block {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.08rem;
-  padding: 0.04rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* ✅ 숫자 */
 .num {
-  position: relative;
-  font-size: clamp(2.05rem, 6.8vw, 2.75rem);
-  font-weight: 900;
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--theme-primary);
   line-height: 1;
-  letter-spacing: 0.005rem;
+  margin-bottom: 0.4rem;
   font-variant-numeric: tabular-nums;
-  color: var(--text-main);
-
-  text-shadow:
-    0 1px 0 var(--theme-bg),
-    0 2px 6px var(--shadow-color);
-
-  animation: numBreath 4.8s ease-in-out infinite;
-  transform-origin: center bottom;
-}
-
-/* ✅ 실키한 광택 */
-.num::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background: linear-gradient(
-    180deg,
-    var(--theme-primary-light) 0%,
-    transparent 48%,
-    var(--theme-primary) 100%
-  );
-
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-
-  opacity: 0.8;
-  pointer-events: none;
-
-  animation: silkDrift 4.8s ease-in-out infinite;
 }
 
 .unit {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--text-light);
-  letter-spacing: 0.04em;
-  transform: translateY(-1px);
-  white-space: nowrap;
+  font-family: var(--font-sans); 
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
 .countdown-status {
-  font-size: clamp(0.98rem, 3.2vw, 1.12rem);
-  font-weight: 600;
-  opacity: 0.95;
-}
-
-/* ✅ 은은한 ‘숨쉬는’ 숫자 애니메이션 */
-@keyframes numBreath {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-    filter: saturate(1) contrast(1);
-  }
-  50% {
-    transform: translateY(-1px) scale(1.045);
-    filter: saturate(1.06) contrast(1.03);
-  }
-}
-
-/* ✅ 실키 하이라이트 미세 이동 */
-@keyframes silkDrift {
-  0%, 100% {
-    transform: translateY(0px);
-    opacity: 0.75;
-  }
-  50% {
-    transform: translateY(-2px);
-    opacity: 0.95;
-  }
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-top: 1.5rem;
 }
