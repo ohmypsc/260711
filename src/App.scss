@@ -8,33 +8,32 @@
   box-sizing: border-box;
 }
 
- :root {
-            /* 🎨 제안하신 베이스 컬러 조합 */
-            --theme-bg: #F8F6F2;           /* 따뜻한 실크 아이보리 */
-            --theme-accent: #EEF1F5;       /* 아주 연한 쿨 오프화이트 */
+:root {
+    /* 🎨 1. 색상 조합: Summer Garden (Deep Green & Misty Pink) */
+    --theme-bg: #FCFCFA;           /* 차분한 쿨 화이트 */
+    --theme-accent: #F4F6F5;       /* 아주 연한 민트 그레이 */
 
-            --theme-primary: #E9A7AF;      /* 더스티 로즈(꽃잎 포인트) */
-            --theme-primary-light: #F4CCD1; /* 아주 연한 블러쉬 */
+    --theme-primary: #3E5448;      /* Deep Forest Green (메인, 텍스트) */
+    --theme-primary-light: #F3E1E4; /* Misty Pink (꽃잎, 포인트) */
 
-            --section-bg-soft: #F6F2F0;    /* 섹션 배경(종이톤) */
+    --section-bg-soft: #F6F2F0;    
 
-            --text-main: #242428;
-            --text-light: #8F9097;
+    --text-main: #2A2F33;          /* 짙은 차콜 */
+    --text-light: #5D6369;         /* 본문용 웜 그레이 */
 
-            --theme-success: #469C7A;
-            --theme-error: #E06B6B;
+    --theme-success: #469C7A;
+    --theme-error: #E06B6B;
 
-            --border-color: #E7E3E6;       /* 웜 그레이 보더 */
-            --shadow-color: rgba(0, 0, 0, 0.08); /* 은은한 깊이 */
-            --section-max-width: clamp(640px, 60vw, 800px);
+    --border-color: #E6E6E3;       
+    --shadow-color: rgba(62, 84, 72, 0.08); 
+    --section-max-width: clamp(640px, 60vw, 800px);
 
-            font-family: "Noto Serif KR", serif;
-            font-size: clamp(17px, 3.4vw, 21px);
+    font-family: "Noto Serif KR", serif;
+    font-size: clamp(17px, 3.4vw, 21px);
 
-            /* ✨ 빛나는 골드 & 네이비 (디자인 포인트 유지용) */
-            --color-navy: #1A2238; 
-            --gold-linear: linear-gradient(135deg, #B87D4B 0%, #F1E5AC 45%, #D4AF37 55%, #8A6628 100%);
-        }
+    --color-navy: #1A2238; 
+    --gold-linear: linear-gradient(135deg, #B87D4B 0%, #F1E5AC 45%, #D4AF37 55%, #8A6628 100%);
+}
 
 html,
 body {
@@ -45,18 +44,27 @@ body {
   overflow-y: auto;
 
   width: 100%;
-  background:
-    radial-gradient(150% 170% at 8% -12%,
-      #ffffff 0%,
-      var(--theme-bg) 55%,
-      var(--theme-accent) 100%
-    ),
-    radial-gradient(90% 110% at 88% 6%,
-      rgba(233, 167, 175, 0.22) 0%,  /* --theme-primary를 '빛'처럼만 */
-      rgba(233, 167, 175, 0) 62%
-    );
+  
+  /* 배경 컬러 및 빛 번짐 효과 */
+  background-color: var(--theme-bg);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(243, 225, 228, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(62, 84, 72, 0.05) 0%, transparent 40%);
 
   line-height: 1.65;
+  color: var(--text-main);
+}
+
+/* 🎨 2. 종이 질감 (Noise Texture) 유지 */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1; 
+  opacity: 0.4;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 
@@ -65,26 +73,17 @@ body {
    ============================================ */
 .wedding-page {
   position: relative;
-  background:
-    radial-gradient(150% 170% at 8% -12%,
-      #ffffff 0%,
-      var(--theme-bg) 55%,
-      var(--theme-accent) 100%
-    ),
-    radial-gradient(90% 110% at 88% 6%,
-      rgba(233, 167, 175, 0.22) 0%,  /* --theme-primary를 '빛'처럼만 */
-      rgba(233, 167, 175, 0) 62%
-    );
+  background: transparent; 
   width: 100%;
   overflow-x: hidden;
-  z-index: 1; /* BgEffect가 뒤로 가도록 */
+  z-index: 1;
 }
 
 /* ============================================
    📦 Section Layout
    ============================================ */
 section {
-  padding: 1.7rem 0;
+  padding: 3rem 0;
 }
 
 .section-inner {
@@ -94,46 +93,38 @@ section {
   width: 100%;
 }
 
+/* 🎨 3. 텍스트 스타일 (심플 버전) */
 .section-title {
   position: relative;
-  font-size: clamp(0.9rem, 2.3vw, 1.08rem);
-  font-weight: 800;
-  letter-spacing: 0.24em;
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: 0.2em; /* 넓은 자간으로 고급스러움 표현 */
   text-align: center;
-  margin-bottom: 2rem;
-  color: var(--text-main);
+  margin-bottom: 2.5rem; /* 장식이 빠진 만큼 여백 살짝 조정 */
+  color: var(--theme-primary); /* Deep Green */
+  line-height: 1.2;
 
-  /* ✅ 엠보싱(입체) 효과 */
-  text-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.9), /* 위쪽 하이라이트 */
-    0  2px 4px rgba(0, 0, 0, 0.18);    /* 아래쪽 약한 그림자 */
+  /* 엠보싱 제거 */
+  text-shadow: none;
 }
 
 
 
 /* ============================================
    ✨ Section Reveal Animation (Global)
-   ✅ 모달 fixed 깨지지 않는 버전 + 모바일 최적화
-   - section 자체에는 transform 절대 금지
-   - inner만 애니메이션
-   - will-change는 활성화된 섹션만
    ============================================ */
-
-/* section은 레이아웃 그대로 유지 */
 main.wedding-page section {
   /* padding 등 기존 레이아웃만 적용됨 */
 }
 
-/* inner 기본 상태 (숨김 + 아래에서 올라오기) */
 main.wedding-page section .section-inner {
-  opacity: 0; /* ✅ 0.001 → 0 */
-  transform: translate3d(0, 24px, 0); /* ✅ translateY → translate3d */
-  transition: opacity 800ms ease, transform 900ms ease; /* ✅ 모바일 부담 완화 */
+  opacity: 0; 
+  transform: translate3d(0, 24px, 0); 
+  transition: opacity 800ms ease, transform 900ms ease; 
 }
 
-/* lazy-active 붙으면 등장 */
 main.wedding-page section.lazy-active .section-inner {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  will-change: opacity, transform; /* ✅ 활성화된 요소만 GPU 힌트 */
+  will-change: opacity, transform; 
 }
