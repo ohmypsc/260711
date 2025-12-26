@@ -1,7 +1,11 @@
+/* =========================================================
+   Attendance Section
+   Theme: Warm Linen (#faf1e8) & Deep Navy (Old Money Style)
+   ========================================================= */
+
 .attendance {
   text-align: center;
-  padding: 2rem 0rem;
-  font-family: inherit;
+  padding: 1rem 0;
 
   .keep-all {
     word-break: keep-all;
@@ -9,186 +13,211 @@
   }
 
   .attendance__desc {
-    margin: 1rem 0 2rem;
-    line-height: 1.7;
-    font-size: 0.95rem;
+    margin: 1.5rem 0 2.5rem;
+    line-height: 1.75;
+    font-size: 0.96rem;
     color: var(--text-main);
-    opacity: 0.85;
+    opacity: 0.9;
   }
 
+  /* 메인 버튼 영역: 그리드 대신 컬럼으로 여유롭게 */
   .attendance-buttons {
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.8rem;
     width: 100%;
   }
 }
 
-/* ✅ '보내주신 참석 응답' 디자인 고도화 (중앙 정렬 카드) */
+/* =========================================================
+   My Attendance List (Card Style)
+   ========================================================= */
+
 .my-attendance {
-  margin-top: 3rem;
-
-  &__title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    color: var(--text-main);
-    letter-spacing: -0.02em;
-  }
-
+  margin-top: 3.5rem;
+  
   .attendance-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
   }
 
+  /* 🎨 응답 카드: Warm Linen Theme */
   .attendance-card {
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-    padding: 24px 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    /* 배경: 웜 리넨 적용 */
+    background: var(--section-bg-soft); 
+    border-radius: 12px;
+    
+    /* 테두리는 배경에 녹아들게 */
+    border: 1px solid rgba(27, 38, 59, 0.03);
+    box-shadow: none; /* 플랫한 종이 질감 */
+    
+    padding: 20px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    transition: transform 0.1s ease;
+    position: relative;
 
-    &:active {
-      transform: scale(0.98);
-    }
-
+    /* 상단: 배지 + 이름 */
     .card-top {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 10px;
       margin-bottom: 16px;
 
+      /* 구분 배지: 너무 튀지 않는 파스텔톤 */
       .side-badge {
         font-size: 0.75rem;
-        padding: 4px 12px;
-        border-radius: 100px;
-        font-weight: 700;
-
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-family: "Pretendard", sans-serif;
+        
         &.groom {
-          background: #eef6ff;
-          color: #5a96e3;
+          background: rgba(90, 150, 227, 0.1);
+          color: #4a86d3;
         }
         &.bride {
-          background: #fff0f3;
-          color: #e35a7a;
+          background: rgba(227, 90, 122, 0.1);
+          color: #d34a6a;
         }
       }
-    }
 
-    .card-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-
-      .name-row {
+      .name-area {
         display: flex;
         align-items: baseline;
-        justify-content: center;
-        gap: 2px;
-
+        gap: 3px;
+        
         .name {
-          font-size: 1.2rem;
-          font-weight: 800;
+          font-family: "Noto Serif KR", serif;
+          font-size: 1.3rem;
+          font-weight: 700;
           color: var(--text-main);
         }
         .suffix {
-          font-size: 0.85rem;
-          color: var(--text-main);
+          font-size: 0.9rem;
+          color: var(--text-light);
+        }
+      }
+    }
+
+    /* 정보 영역: 인원 / 식사여부 */
+    .card-content {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 16px;
+
+      .meta-pill {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        
+        background: #FFFFFF;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(27, 38, 59, 0.04);
+        
+        font-size: 0.9rem;
+        color: var(--text-main);
+        font-weight: 500;
+
+        i {
+          font-size: 0.8rem;
+          color: var(--theme-primary);
           opacity: 0.6;
         }
       }
-
-      .meta-container {
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-
-        .meta-pill {
-          display: flex;
-          align-items: center;
-          gap: 8px; 
-          font-size: 0.9rem;
-          font-weight: 500;
-          color: var(--text-main); 
-
-          i {
-            font-size: 0.85rem;
-            width: 18px; 
-            display: inline-flex;
-            justify-content: flex-end; 
-            align-items: center;
-
-            /* 부모 카드 클래스에 따른 아이콘 색상 보정 */
-            .attendance-card:has(.side-badge.groom) & { color: rgba(90, 150, 227, 0.6); }
-            .attendance-card:has(.side-badge.bride) & { color: rgba(227, 90, 122, 0.6); }
-          }
-        }
-      }
     }
 
+    /* 구분선 */
     .divider {
-      width: 40px;
+      width: 100%;
       height: 1px;
-      background-color: #eee;
+      background: rgba(27, 38, 59, 0.05);
       margin-bottom: 16px;
     }
 
+    /* 하단 액션 버튼 */
     .actions {
       display: flex;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       width: 100%;
 
       .action-btn {
         flex: 1;
-        max-width: 100px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
-        background: #f8f9fa;
-        border: 1px solid #eee;
-        padding: 8px 12px;
-        border-radius: 12px;
-        font-size: 0.8rem;
+        gap: 6px;
+        
+        /* 버튼 스타일: 투명 배경에 텍스트만 깔끔하게 */
+        background: transparent;
+        border: 1px solid rgba(27, 38, 59, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        
+        font-size: 0.85rem;
         font-weight: 600;
-        color: #747d8c;
+        color: var(--text-light);
         cursor: pointer;
-        font-family: inherit;
+        transition: all 0.2s;
 
-        i { font-size: 0.75rem; }
+        i { font-size: 0.8rem; }
 
+        /* 삭제 버튼은 붉은색 틴트 */
         &.danger {
-          color: #ff5e5e;
-          border-color: #ffeaea;
-          background: #fffafa;
+          color: #d65a5a;
+          border-color: rgba(214, 90, 90, 0.2);
+          background: rgba(214, 90, 90, 0.02);
         }
+
         &:active {
-          background: #e9ecef;
-          opacity: 0.7;
+          background: rgba(0,0,0,0.03);
+          transform: scale(0.98);
         }
       }
     }
   }
 }
 
-/* ✅ 폼/모달/카운터 스타일 */
+/* 추가 찾기 버튼 영역 */
+.find-more-wrap {
+  margin-top: 1.5rem;
+  text-align: center;
+  
+  .find-more-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 0.85rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 10px;
+    opacity: 0.7;
+  }
+}
+
+
+/* =========================================================
+   Modal Forms & Inputs
+   ========================================================= */
+
+.attendance-modal-content {
+  padding: 0 4px;
+}
+
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px 12px;
   text-align: left;
-  font-family: inherit;
+  margin-top: 10px;
 
   .field {
     display: flex;
@@ -198,70 +227,101 @@
   }
 
   .label {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text-main);
+    color: var(--theme-primary);
     margin-left: 2px;
   }
 
+  /* Input 스타일 고급화 */
   input {
-    font-family: inherit;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(27, 38, 59, 0.15);
+    background: #fff;
+    
+    font-family: "Pretendard", sans-serif;
     font-size: 0.95rem;
     color: var(--text-main);
-    &:focus { border-color: var(--theme-primary); outline: none; }
+    
+    transition: border-color 0.2s;
+
+    &::placeholder { color: #ccc; }
+    &:focus { 
+      border-color: var(--theme-primary); 
+      outline: none; 
+      box-shadow: 0 0 0 3px rgba(27, 38, 59, 0.05);
+    }
   }
 }
 
+/* 인원수 카운터 */
 .counter-ui {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f8f8f8;
-  border-radius: 12px;
+  
+  background: #fcfcfc;
+  border: 1px solid rgba(27, 38, 59, 0.1);
+  border-radius: 8px;
   padding: 4px;
-  height: 46px;
+  height: 48px;
 
-  button {
-    width: 38px;
-    height: 38px;
+  .counter-btn {
+    width: 40px;
+    height: 40px;
     border: none;
+    border-radius: 6px;
     background: #fff;
-    border-radius: 10px;
-    font-size: 1.2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    color: var(--theme-primary);
+    font-size: 0.9rem;
     cursor: pointer;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active { transform: scale(0.95); }
   }
 
   .count-value {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--text-main);
+    font-variant-numeric: tabular-nums;
   }
 }
 
+/* 토글 버튼 그룹 */
 .toggle-row {
   display: flex;
   gap: 8px;
+  
+  &.three-cols {
+     .toggle-btn { padding: 12px 4px; font-size: 0.85rem; }
+  }
 
   .toggle-btn {
     flex: 1;
-    font-family: inherit;
     padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border: 1px solid rgba(27, 38, 59, 0.1);
+    border-radius: 8px;
     background: #fff;
+    
     font-size: 0.9rem;
-    color: var(--text-main);
+    color: var(--text-light);
+    cursor: pointer;
     transition: all 0.2s ease;
 
+    /* 선택되었을 때: 네이비 포인트 */
     &.active {
       border-color: var(--theme-primary);
-      background: var(--section-bg-soft);
-      font-weight: 700;
-      color: var(--theme-primary);
+      background: var(--theme-primary);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(27, 38, 59, 0.15);
     }
   }
 }
@@ -269,6 +329,6 @@
 .attendance-footer-row {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 24px;
   button { flex: 1; }
 }
