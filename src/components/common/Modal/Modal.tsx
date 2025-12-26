@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Button } from "./Button"; // 경로 맞춰주세요
+import { Button } from "@/components/common/Button/Button";
 import "./Modal.scss";
 
 interface ModalProps {
