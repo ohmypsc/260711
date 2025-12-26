@@ -67,7 +67,7 @@ function CalendarLeafLine() {
 /* =========================================================
    Calendar Component
    ========================================================= */
-export default function Calendar() {
+export function Calendar() {
   // ✅ 이름 직접 할당 (외부 의존성 제거)
   const groomName = "백승철";
   const brideName = "오미영";
