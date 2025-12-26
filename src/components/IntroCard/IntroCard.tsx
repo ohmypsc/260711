@@ -160,8 +160,8 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
 
         <div className="info">
           <div className="row date">
-            2026. 07. 11. SAT<br/>
-            AM 11:00
+            2026. 07. 11. 토요일<br/>
+            오전 11시
           </div>
           <div className="row place">
             유성컨벤션웨딩홀<br/>
