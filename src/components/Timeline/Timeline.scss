@@ -1,8 +1,7 @@
 /* ============================================
    Timeline Section
    ✅ Layout: 원본 유지
-   🎨 Design: Navy + Sand Theme
-   🖼️ Shape: "Classic Circle Frame" (원형 유지)
+   🎨 Design: Borderless (테두리 없음) + Soft Shadow
    ============================================ */
 
 .w-timeline {
@@ -66,25 +65,25 @@
 .photo-wrap {
   width: 100%;
   height: 100%;
-  
-  /* ⭕️ 원형 유지: 우아하고 부드러운 느낌 */
   border-radius: 50%;
   overflow: hidden;
-  background: #fff;
+  background: #f0f0f0; /* 로딩 전 배경색 */
   
-  /* 🖼️ 프레임: 폴라로이드가 아닌 '매트 액자' 느낌의 흰색 테두리 */
-  border: 4px solid #FFFFFF; 
+  /* 🎨 디자인 수정: 테두리 삭제 & 그림자만 은은하게 */
+  border: none; 
   
-  /* 그림자: 바닥에서 살짝 떠 있는 듯한 입체감 */
-  box-shadow: 0 10px 25px rgba(27, 38, 59, 0.15); 
+  /* 그림자: 너무 진하지 않게, 네이비 톤을 살짝 섞어 깊이감만 줌 */
+  box-shadow: 0 10px 30px rgba(27, 38, 59, 0.18); 
   
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover 효과 */
 @media (hover: hover) {
   .photo-wrap:hover {
     transform: scale(1.02);
+    /* 호버 시 그림자가 조금 더 퍼짐 */
+    box-shadow: 0 15px 40px rgba(27, 38, 59, 0.25);
   }
 }
 
@@ -157,7 +156,7 @@
   mask: var(--leaf-dot-mask) center / contain no-repeat;
 }
 
-/* 🌿 잎사귀 방향: 사진 쪽으로 쏠림 */
+/* 잎사귀 방향 */
 .timeline-item.left .dot { transform: translate(-50%, -50%) rotate(-15deg); }
 .timeline-item.right .dot { transform: translate(-50%, -50%) rotate(15deg); }
 
@@ -209,7 +208,7 @@
   word-break: keep-all;
 }
 
-/* 좌/우 교차 배치 */
+/* 좌/우 교차 */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
 
