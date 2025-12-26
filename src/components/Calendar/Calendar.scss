@@ -10,60 +10,56 @@
 }
 
 .calendar-headline {
+  /* 1. 기본 스타일 (여기서 중괄호 시작!) */
   text-align: center;
   font-family: "Noto Serif KR", serif;
   font-weight: 700;
-  
-  /* 자간을 좁혀서 긴 문장이 한눈에 들어오게 */
-  letter-spacing: -0.04em; 
   line-height: 1.2;
-  
-  /* 줄바꿈 없이 한 줄 유지 */
   white-space: nowrap;
-  
-  font-size: clamp(1.25rem, 5.5vw, 2.6rem);
+
+  /* 데스크톱 기준 폰트 크기 */
+  letter-spacing: -0.04em; 
+  font-size: clamp(2rem, 5vw, 3.5rem);
   
   margin-bottom: 3.5rem;
-  
-  /* 좌우 여백을 아주 살짝만 줘서 화면 끝에 붙지 않게 */
+  padding: 0 0.5rem;
   width: 100%;
-  padding: 0 0.5rem; 
   box-sizing: border-box;
 
-  /* Navy -> Pink -> Navy 흐름 */
+  /* Gradient Text Effect */
   background: linear-gradient(
     120deg, 
     var(--theme-primary) 0%, 
     #D68C90 50%, 
     var(--theme-primary) 100%
   );
-  
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  
   animation: textFlow 8s linear infinite;
-}
-/* 📱 [핵심 수정] 모바일 전용 "꽉 참" 설정 */
+
+  /* 📱 2. 모바일 전용 스타일 (반드시 이 중괄호 안에 있어야 함!) */
   @media (max-width: 600px) {
-    /* 1. 폰트 크기: 화면 너비의 7.5%까지 강제로 키움 (기존 5.5vw -> 7.5vw) */
+    /* 화면 너비의 7.5%까지 강제로 키움 */
     font-size: 7.5vw; 
     
-    /* 2. 자간 축소: 글자가 커진 만큼 간격을 좁혀서 화면 밖으로 안 나가게 함 */
+    /* 글자가 커진 만큼 자간을 좁혀서 화면 밖으로 안 나가게 함 */
     letter-spacing: -0.07em; 
     
-    /* 3. 패딩 제거: 양옆 여백을 없애서 공간 확보 */
+    /* 양옆 여백을 없애서 공간 확보 (중요!) */
     padding: 0; 
   }
-}
+
+} /* 👈 여기가 .calendar-headline이 끝나는 곳입니다 */
+
 
 /* =========================================================
    Container & Topline
    ========================================================= */
 .calendar-container {
   width: 100%;
-  padding: 4rem 0; /* 좌우 패딩 0 유지 */
+  padding: 4rem 0; /* 좌우 패딩 0 (전역 설정 따름) */
   box-sizing: border-box;
 }
 
@@ -164,8 +160,7 @@
    ========================================================= */
 .calendar-leaf-line {
   width: 100%;
-  /* 꽉 차게 */
-  margin: 2.5rem 0 1.5rem; 
+  margin: 2.5rem 0 1.5rem; /* 좌우 margin auto 제거 */
   
   color: var(--theme-leaf-green);
   opacity: 0.8;
