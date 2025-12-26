@@ -31,7 +31,7 @@ export function Account() {
 
         <div className="account__desc">
           <p className="keep-all">참석이 어려우신 분들을 위해</p>
-          <p className="keep-all"계좌번호를 기재하였습니다.</p>
+          <p className="keep-all">계좌번호를 기재하였습니다.</p>
           <p className="keep-all">너그러운 마음으로 양해 부탁드립니다.</p>
         </div>
 
