@@ -101,7 +101,6 @@ export function Attendance() {
 
       {myRows.length > 0 && (
         <div className="my-attendance">
-          <h3 className="my-attendance__title">보내주신 참석 응답</h3>
           <div className="attendance-list">
             {myRows.map((row) => (
               <div key={row.id} className="attendance-card">
@@ -187,25 +186,34 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
       <div className="attendance-modal-content">
         <h2 className="modal-title">참석 의사 전달</h2>
         <form id="write-form" className="attendance-form" onSubmit={onSubmit}>
+          {/* 1. 구분 (한 줄 차지) */}
           <div className="field span-2">
-            <label className="label">성함</label>
-            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          </div>
-          <div className="field span-2">
-            <label className="label">연락처</label>
-            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
-          </div>
-          <div className="field">
             <label className="label">구분</label>
             <div className="toggle-row">
               <button type="button" className={`toggle-btn ${form.side === "groom" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "groom" })}>신랑 측</button>
               <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
             </div>
           </div>
-          <div className="field">
+
+          {/* 2. 성함 (한 줄 차지) */}
+          <div className="field span-2">
+            <label className="label">성함</label>
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          </div>
+
+          {/* 3. 연락처 (한 줄 차지) */}
+          <div className="field span-2">
+            <label className="label">연락처</label>
+            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
+          </div>
+
+          {/* 4. 참석 인원 (한 줄 차지) */}
+          <div className="field span-2">
             <label className="label">참석 인원</label>
             <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
           </div>
+
+          {/* 5. 식사 여부 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">식사 여부</label>
             <div className="toggle-row">
@@ -291,25 +299,34 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
       <div className="attendance-modal-content">
         <h2 className="modal-title">내 응답 수정</h2>
         <form id="edit-form" className="attendance-form" onSubmit={onUpdate}>
+          {/* 1. 구분 (한 줄 차지) */}
           <div className="field span-2">
-            <label className="label">성함</label>
-            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          </div>
-          <div className="field span-2">
-            <label className="label">연락처</label>
-            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
-          </div>
-          <div className="field">
             <label className="label">구분</label>
             <div className="toggle-row">
               <button type="button" className={`toggle-btn ${form.side === "groom" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "groom" })}>신랑 측</button>
               <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
             </div>
           </div>
-          <div className="field">
+
+          {/* 2. 성함 (한 줄 차지) */}
+          <div className="field span-2">
+            <label className="label">성함</label>
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          </div>
+
+          {/* 3. 연락처 (한 줄 차지) */}
+          <div className="field span-2">
+            <label className="label">연락처</label>
+            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
+          </div>
+
+          {/* 4. 참석 인원 (한 줄 차지) */}
+          <div className="field span-2">
             <label className="label">참석 인원</label>
             <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
           </div>
+
+          {/* 5. 식사 여부 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">식사 여부</label>
             <div className="toggle-row">
