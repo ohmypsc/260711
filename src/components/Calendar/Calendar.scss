@@ -14,18 +14,21 @@
   font-family: "Noto Serif KR", serif;
   font-weight: 700;
   
-  /* 자간을 살짝 좁혀서 큰 글씨가 퍼져 보이지 않게 */
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  /* 자간을 좁혀서 긴 문장이 한눈에 들어오게 */
+  letter-spacing: -0.04em; 
+  line-height: 1.2;
+  
+  /* 줄바꿈 없이 한 줄 유지 */
   white-space: nowrap;
   
-  /* 💥 수정됨: 화면에 꽉 차도록 폰트 크기 대폭 확대 */
-  /* 모바일에서 약 7.5vw (화면 폭의 75% 이상 차지) */
-  font-size: clamp(2rem, 7.5vw, 3.2rem);
+  font-size: clamp(1.25rem, 5.5vw, 2.6rem);
   
   margin-bottom: 3.5rem;
-  /* 좌우 패딩을 최소화해서 글자가 꽉 차게 */
-  padding: 0 0.2rem;
+  
+  /* 좌우 여백을 아주 살짝만 줘서 화면 끝에 붙지 않게 */
+  width: 100%;
+  padding: 0 0.5rem; 
+  box-sizing: border-box;
 
   /* Navy -> Pink -> Navy 흐름 */
   background: linear-gradient(
@@ -42,6 +45,7 @@
   
   animation: textFlow 8s linear infinite;
 }
+
 
 /* =========================================================
    Container & Topline
