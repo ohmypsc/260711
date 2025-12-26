@@ -1,5 +1,5 @@
 /* ============================================
-   📌 Global Reset & Layout
+   📌 Global Reset & Layout (Final: Original Navy)
    ============================================ */
 
 *,
@@ -9,27 +9,26 @@
 }
 
 :root {
-    /* 🎨 1. 색상 조합: Deep Navy & Warm Sand (단정하고 깊이 있는 네이비) */
-    --theme-bg: #FDFBF9;           /* 차분한 웜 화이트 (종이 질감과 잘 어울림) */
-    --theme-accent: #F4F1EE;       /* 섹션 구분용 따뜻한 베이지 그레이 */
+    /* 🎨 1. 색상 조합: 처음 주신 Deep Navy & Warm Sand 유지 */
+    --theme-bg: #FDFBF9;           
+    --theme-accent: #F4F1EE;       
 
-    --theme-primary: #1B263B;      /* Deep Navy (메인, 텍스트) - 신뢰감 있는 색 */
-    --theme-primary-light: #D9CEC1; /* Warm Sand (포인트) - 핑크 대신 모래색 */
+    --theme-primary: #1B263B;       /* Deep Navy (강조, 제목) */
+    --theme-primary-light: #D9CEC1; /* Warm Sand (서브 포인트) */
 
-    --theme-leaf-green: #1c9e64;
+    --theme-leaf-green: #1c9e64;    
+    --theme-point-pink: #E0B0B6;    
 
-    --theme-point-pink: #E0B0B6;
+    --section-bg-soft: #F9FAFB;     
 
-    --section-bg-soft: #F9FAFB;    
-
-    --text-main: #161B22;          /* 블랙에 가까운 네이비 (가독성) */
-    --text-light: #6E7278;         /* 본문용 웜 그레이 */
+    --text-main: #161B22;           /* 블랙에 가까운 네이비 (본문) */
+    --text-light: #6E7278;          
 
     --theme-success: #469C7A;
     --theme-error: #D65A5A;
 
-    --border-color: #E6E8EB;       
-    --shadow-color: rgba(27, 38, 59, 0.08); /* 네이비빛 그림자 */
+    --border-color: #E6E8EB;        
+    --shadow-color: rgba(27, 38, 59, 0.08); 
     --section-max-width: clamp(640px, 60vw, 800px);
 
     font-family: "Noto Serif KR", serif;
@@ -45,29 +44,16 @@ body {
   overflow-y: auto;
 
   width: 100%;
-  
-  /* 배경 컬러 및 빛 번짐 효과 (네이비 & 샌드 톤으로 변경) */
+   
+  /* 배경: 질감 제거, 색상 및 그라데이션 유지 */
   background-color: var(--theme-bg);
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(27, 38, 59, 0.03) 0%, transparent 50%), /* 상단: 은은한 네이비 그림자 */
-    radial-gradient(circle at 90% 90%, rgba(217, 206, 193, 0.15) 0%, transparent 50%); /* 하단: 따뜻한 모래빛 */
+    radial-gradient(circle at 50% 0%, rgba(27, 38, 59, 0.03) 0%, transparent 50%), 
+    radial-gradient(circle at 90% 90%, rgba(217, 206, 193, 0.15) 0%, transparent 50%);
 
   line-height: 1.65;
-  color: var(--text-main);
+  color: var(--text-main); /* 본문 색상 */
 }
-
-/* 🎨 2. 종이 질감 (Noise Texture) 유지 */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -1; 
-  opacity: 0.4;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
-}
-
 
 /* ============================================
    📄 Wedding Page Wrapper
@@ -94,27 +80,21 @@ section {
   width: 100%;
 }
 
-/* 🎨 3. 텍스트 스타일 (심플 버전 - 기존 유지) */
+/* 🎨 3. 텍스트 스타일 */
 .section-title {
   position: relative;
   font-size: clamp(1.1rem, 2.5vw, 1.3rem);
   font-weight: 700;
-  letter-spacing: 0.2em; /* 넓은 자간으로 고급스러움 표현 */
+  letter-spacing: 0.2em; 
   text-align: center;
-  margin-bottom: 2.5rem; /* 장식이 빠진 만큼 여백 살짝 조정 */
-  color: var(--theme-primary); /* Deep Navy */
+  margin-bottom: 2.5rem; 
+  color: var(--theme-primary); /* 제목 색상 */
   line-height: 1.2;
 }
 
-
-
 /* ============================================
-   ✨ Section Reveal Animation (Global)
+   ✨ Section Reveal Animation
    ============================================ */
-main.wedding-page section {
-  /* padding 등 기존 레이아웃만 적용됨 */
-}
-
 main.wedding-page section .section-inner {
   opacity: 0; 
   transform: translate3d(0, 24px, 0); 
