@@ -30,9 +30,9 @@ export function Account() {
         <h2 className="section-title">마음 전하실 곳</h2>
 
         <div className="account__desc">
-          <p className="keep-all">축하해 주시는 따뜻한 마음만으로도 충분히 감사드립니다.</p>
-          <p className="keep-all">혹여 직접 찾아뵙지 못해 아쉬워하시는 분들을 위해</p>
-          <p className="keep-all">조심스럽게 계좌번호를 안내드립니다.</p>
+          <p className="keep-all">참석이 어려우신 분들을 위해</p>
+          <p className="keep-all"계좌번호를 기재하였습니다.</p>
+          <p className="keep-all">너그러운 마음으로 양해 부탁드립니다.</p>
         </div>
 
         <div className="account-buttons">
