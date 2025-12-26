@@ -1,16 +1,17 @@
 /* ============================================
    Timeline Section
-   ✅ Layout: 사용자 원본 유지 (지그재그, 오버랩, 리프트 등)
-   🎨 Design: Deep Navy & Warm Sand Theme 적용
+   ✅ Layout: 원본 유지
+   🎨 Design: Navy + Sand Theme
+   🖼️ Shape: "Classic Circle Frame" (원형 유지)
    ============================================ */
 
 .w-timeline {
   background: transparent;
   position: relative;
-  padding: 4rem 0; /* 위아래 여백만 살짝 추가 */
+  padding: 4rem 0; 
 }
 
-/* ✅ 배치 변수: 원본 값 절대 유지 */
+/* ✅ 배치 변수 */
 :root {
   --photo: clamp(140px, 16vw, 205px);
   --line-col-w: 44px;
@@ -30,15 +31,13 @@
   gap: 0.6rem;
 }
 
-/* ✅ 아이템 구조: 원본 유지 */
+/* ✅ 아이템 구조 */
 .timeline-item {
   position: relative;
   z-index: 1;
-
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
   column-gap: var(--gutter);
-
   align-items: center;
 
   --photo-safe: min(
@@ -51,12 +50,9 @@
   transform: none;
 }
 
-.media,
-.caption-col {
-  min-width: 0;
-}
+.media, .caption-col { min-width: 0; }
 
-/* 사진 영역 */
+/* 📷 사진 영역 */
 .media {
   grid-row: 1;
   position: relative;
@@ -70,18 +66,22 @@
 .photo-wrap {
   width: 100%;
   height: 100%;
+  
+  /* ⭕️ 원형 유지: 우아하고 부드러운 느낌 */
   border-radius: 50%;
   overflow: hidden;
   background: #fff;
   
-  /* 🎨 디자인 수정: 폴라로이드 느낌의 흰색 테두리와 네이비톤 그림자 */
+  /* 🖼️ 프레임: 폴라로이드가 아닌 '매트 액자' 느낌의 흰색 테두리 */
   border: 4px solid #FFFFFF; 
-  box-shadow: 0 10px 20px rgba(27, 38, 59, 0.15); /* Navy Shadow */
+  
+  /* 그림자: 바닥에서 살짝 떠 있는 듯한 입체감 */
+  box-shadow: 0 10px 25px rgba(27, 38, 59, 0.15); 
   
   transition: transform 0.3s ease;
 }
 
-/* Hover 효과 (PC) */
+/* Hover 효과 */
 @media (hover: hover) {
   .photo-wrap:hover {
     transform: scale(1.02);
@@ -100,7 +100,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: rgba(27, 38, 59, 0.06); /* 🎨 스켈레톤도 네이비 톤으로 */
+  background: rgba(27, 38, 59, 0.06); 
   animation: pulse 1.2s ease-in-out infinite;
   pointer-events: none;
 }
@@ -142,37 +142,24 @@
   width: 14px;
   height: 14px;
   z-index: 3;
-
   position: absolute;
   top: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%);
   opacity: 0.95;
 
-  /* 🎨 색상: 전역 변수 사용 */
+  /* 🌿 Leaf Green */
   background-color: var(--theme-leaf-green);
   box-shadow: none;
 
   --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E");
-
   -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
   mask: var(--leaf-dot-mask) center / contain no-repeat;
 }
 
-/* 잎사귀 회전 로직: 원본 유지 */
-.timeline-item:nth-child(3n) .dot {
-  transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
-  opacity: 0.9;
-}
-.timeline-item:nth-child(3n + 1) .dot {
-  transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
-  opacity: 0.95;
-}
-.timeline-item:nth-child(3n + 2) .dot {
-  transform: translate(-50%, -50%) rotate(16deg) scale(1);
-  opacity: 0.85;
-}
+/* 🌿 잎사귀 방향: 사진 쪽으로 쏠림 */
+.timeline-item.left .dot { transform: translate(-50%, -50%) rotate(-15deg); }
+.timeline-item.right .dot { transform: translate(-50%, -50%) rotate(15deg); }
 
 /* 캡션 */
 .caption-col {
@@ -192,25 +179,17 @@
 
 .caption-col .title {
   margin: 0;
-  
-  /* 🎨 폰트 및 색상 적용: Navy & Myeongjo */
   font-family: "Noto Serif KR", serif;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--theme-primary); /* Navy Text */
+  color: var(--theme-primary); 
   letter-spacing: -0.02em;
-
   display: block;
   width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
   white-space: nowrap;
-  overflow: visible;
-  word-break: keep-all;
 }
 
-/* 텍스트 정렬 로직: 원본 유지 */
+/* 텍스트 정렬 */
 .timeline-item.left .caption-col .title > span {
   display: inline-block;
   white-space: nowrap;
@@ -230,7 +209,7 @@
   word-break: keep-all;
 }
 
-/* 좌/우 교차 로직: 원본 유지 */
+/* 좌/우 교차 배치 */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
 
@@ -239,11 +218,8 @@
     justify-self: end;
     margin-right: 0;
   }
-
   .caption-col {
     grid-column: 3;
-    justify-self: stretch;
-    width: 100%;
     margin-left: 0;
     text-align: left;
     align-items: flex-start;
@@ -258,35 +234,26 @@
     justify-self: start;
     margin-left: 0;
   }
-
   .caption-col {
     grid-column: 1;
-    justify-self: stretch;
-    width: 100%;
     margin-right: 0;
     text-align: right;
     align-items: flex-end;
   }
 }
 
-/* 겹침 보정 로직: 원본 유지 */
-.timeline-item + .timeline-item {
-  margin-top: var(--overlap);
-}
+/* 겹침 보정 */
+.timeline-item + .timeline-item { margin-top: var(--overlap); }
 
 .timeline-item.left + .timeline-item.right {
-  margin-top: calc(
-    var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2)
-  );
+  margin-top: calc(var(--overlap) - (var(--photo-safe) * var(--lift-ratio) * 2));
 }
 
 .timeline-item.right + .timeline-item.left {
-  margin-top: calc(
-    var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2)
-  );
+  margin-top: calc(var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2));
 }
 
-/* 모바일 대응: 원본 유지 */
+/* 모바일 */
 @media (max-width: 640px) {
   :root {
     --photo: clamp(108px, 40vw, 148px);
@@ -296,31 +263,19 @@
     --lift-ratio: 0.04;
     --center-line-width: 1px;
   }
-
-  .dot {
-    width: 12px;
-    height: 12px;
-  }
-
-  .caption-col .title {
-    font-size: 0.95rem;
-  }
+  .dot { width: 12px; height: 12px; }
+  .caption-col .title { font-size: 0.95rem; }
 }
 
-/* 순차적 등장 애니메이션: 원본 유지 */
+/* 등장 애니메이션 */
 .timeline-item.not-visible {
   opacity: 0;
   transform: translateY(20px);
 }
-
 .timeline-item {
   transition: opacity 2s ease-out, transform 2s ease-out;
 }
-
-.timeline-item.left {
-  transition-delay: 0.1s;
-}
-
+.timeline-item.left { transition-delay: 0.1s; }
 .timeline-item.is-visible {
   opacity: 1;
   transform: translateY(0);
