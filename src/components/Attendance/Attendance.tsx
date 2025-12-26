@@ -221,17 +221,7 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
         <p className="modal-subtitle">축하해 주시는 마음, 정성껏 준비하겠습니다.</p>
         
         <form id="write-form" className="attendance-form" onSubmit={onSubmit}>
-          {/* ✅ 성함: span-2 추가 (한 줄 꽉 채움) */}
-          <div className="field span-2">
-            <label className="label">성함</label>
-            <input placeholder="성함을 입력해 주세요" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          </div>
-          {/* ✅ 연락처: span-2 추가 (한 줄 꽉 채움) */}
-          <div className="field span-2">
-            <label className="label">연락처</label>
-            <input type="tel" placeholder="010-0000-0000" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
-          </div>
-          
+          {/* 1. 구분 (최상단) */}
           <div className="field span-2">
             <label className="label">구분</label>
             <div className="toggle-row">
@@ -239,10 +229,26 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
               <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
             </div>
           </div>
+
+          {/* 2. 성함 */}
+          <div className="field span-2">
+            <label className="label">성함</label>
+            <input placeholder="성함을 입력해 주세요" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          </div>
+
+          {/* 3. 연락처 */}
+          <div className="field span-2">
+            <label className="label">연락처</label>
+            <input type="tel" placeholder="010-0000-0000" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
+          </div>
+          
+          {/* 4. 참석 인원 */}
           <div className="field span-2">
             <label className="label">인원</label>
             <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
           </div>
+
+          {/* 5. 식사 여부 */}
           <div className="field span-2">
             <label className="label">식사 여부</label>
             <div className="toggle-row three-cols">
@@ -332,17 +338,7 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
         <p className="modal-subtitle">변경하실 내용을 입력해 주세요.</p>
         
         <form id="edit-form" className="attendance-form" onSubmit={onUpdate}>
-          {/* ✅ 성함: span-2 추가 */}
-          <div className="field span-2">
-            <label className="label">성함</label>
-            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          </div>
-          {/* ✅ 연락처: span-2 추가 */}
-          <div className="field span-2">
-            <label className="label">연락처</label>
-            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
-          </div>
-          
+          {/* 1. 구분 */}
           <div className="field span-2">
             <label className="label">구분</label>
             <div className="toggle-row">
@@ -350,10 +346,26 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
               <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
             </div>
           </div>
+
+          {/* 2. 성함 */}
+          <div className="field span-2">
+            <label className="label">성함</label>
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          </div>
+
+          {/* 3. 연락처 */}
+          <div className="field span-2">
+            <label className="label">연락처</label>
+            <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
+          </div>
+          
+          {/* 4. 인원 */}
           <div className="field span-2">
             <label className="label">인원</label>
             <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
           </div>
+
+          {/* 5. 식사 여부 */}
           <div className="field span-2">
             <label className="label">식사 여부</label>
             <div className="toggle-row three-cols">
