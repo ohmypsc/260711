@@ -42,149 +42,159 @@
     gap: 16px;
   }
 
-  /* 🎨 응답 카드: Warm Linen Theme */
-  .attendance-card {
-    /* 배경: 웜 리넨 적용 */
-    background: var(--section-bg-soft); 
-    border-radius: 12px;
-    
-    /* 테두리는 배경에 녹아들게 */
-    border: 1px solid rgba(27, 38, 59, 0.03);
-    box-shadow: none; /* 플랫한 종이 질감 */
-    
-    padding: 20px 16px;
+
+/* 🎨 응답 카드: Warm Linen Theme (Layout Correction) */
+.attendance-card {
+  background: var(--section-bg-soft); 
+  border-radius: 12px;
+  
+  /* 테두리는 배경에 녹아들게 */
+  border: 1px solid rgba(27, 38, 59, 0.03);
+  box-shadow: none;
+  
+  /* 카드 전체 레이아웃: 세로 정렬 */
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+
+  /* 1. 상단 영역 (배지 + 이름) */
+  .card-top {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    position: relative;
+    flex-direction: column; /* 세로로 쌓음 */
+    align-items: center;    /* 가운데 정렬 */
+    gap: 12px;              /* 배지와 이름 사이 간격 */
+    margin-bottom: 20px;    /* 칩과의 간격 확보 */
 
-    /* 상단: 배지 + 이름 */
-    .card-top {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-
-      /* 구분 배지: 너무 튀지 않는 파스텔톤 */
-      .side-badge {
-        font-size: 0.75rem;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-weight: 600;
-        font-family: "Pretendard", sans-serif;
-        
-        &.groom {
-          background: rgba(90, 150, 227, 0.1);
-          color: #4a86d3;
-        }
-        &.bride {
-          background: rgba(227, 90, 122, 0.1);
-          color: #d34a6a;
-        }
+    /* 구분 배지 */
+    .side-badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-family: "Pretendard", sans-serif;
+      
+      &.groom {
+        background: rgba(90, 150, 227, 0.1);
+        color: #4a86d3;
       }
-
-      .name-area {
-        display: flex;
-        align-items: baseline;
-        gap: 3px;
-        
-        .name {
-          font-family: "Noto Serif KR", serif;
-          font-size: 1.3rem;
-          font-weight: 700;
-          color: var(--text-main);
-        }
-        .suffix {
-          font-size: 0.9rem;
-          color: var(--text-light);
-        }
+      &.bride {
+        background: rgba(227, 90, 122, 0.1);
+        color: #d34a6a;
       }
     }
 
-    /* 정보 영역: 인원 / 식사여부 */
-    .card-content {
+    /* 이름 영역 */
+    .name-area {
       display: flex;
+      align-items: baseline;
       justify-content: center;
-      gap: 12px;
-      width: 100%;
-      margin-bottom: 16px;
-
-      .meta-pill {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        
-        background: #FFFFFF;
-        padding: 8px 14px;
-        border-radius: 8px;
-        border: 1px solid rgba(27, 38, 59, 0.04);
-        
-        font-size: 0.9rem;
+      gap: 4px;
+      
+      .name {
+        font-family: "Noto Serif KR", serif;
+        font-size: 1.35rem; /* 이름은 크고 명확하게 */
+        font-weight: 700;
         color: var(--text-main);
-        font-weight: 500;
-
-        i {
-          font-size: 0.8rem;
-          color: var(--theme-primary);
-          opacity: 0.6;
-        }
+      }
+      .suffix {
+        font-size: 0.95rem;
+        color: var(--text-light);
+        font-weight: 400;
       }
     }
+  }
 
-    /* 구분선 */
-    .divider {
-      width: 100%;
-      height: 1px;
-      background: rgba(27, 38, 59, 0.05);
-      margin-bottom: 16px;
-    }
+  /* 2. 정보 영역 (인원 / 식사여부) - 가로로 나란히 배치 */
+  .card-content {
+    display: flex;
+    flex-direction: row;    /* 가로 배치 */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;              /* 칩 사이 간격 */
+    width: 100%;
+    margin-bottom: 24px;    /* 구분선과의 간격 */
 
-    /* 하단 액션 버튼 */
-    .actions {
+    .meta-pill {
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
+      align-items: center;
+      gap: 6px;
+      
+      /* 흰색 칩 디자인 */
+      background: #FFFFFF;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(27, 38, 59, 0.04);
+      box-shadow: 0 2px 4px rgba(27, 38, 59, 0.03); /* 살짝 띄움 */
+      
+      font-size: 0.92rem;
+      color: var(--text-main);
+      font-weight: 500;
+      white-space: nowrap;
 
-      .action-btn {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        
-        /* 버튼 스타일: 투명 배경에 텍스트만 깔끔하게 */
-        background: transparent;
-        border: 1px solid rgba(27, 38, 59, 0.1);
-        padding: 10px;
-        border-radius: 8px;
-        
+      i {
         font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--text-light);
-        cursor: pointer;
-        transition: all 0.2s;
+        color: var(--theme-primary);
+        opacity: 0.6;
+      }
+    }
+  }
 
-        i { font-size: 0.8rem; }
+  /* 구분선 */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(27, 38, 59, 0.05);
+    margin-bottom: 16px;
+  }
 
-        /* 삭제 버튼은 붉은색 틴트 */
-        &.danger {
-          color: #d65a5a;
-          border-color: rgba(214, 90, 90, 0.2);
-          background: rgba(214, 90, 90, 0.02);
-        }
+  /* 하단 액션 버튼 (수정/삭제) */
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
 
-        &:active {
-          background: rgba(0,0,0,0.03);
-          transform: scale(0.98);
-        }
+    .action-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      
+      /* 투명 배경 스타일 */
+      background: transparent;
+      border: 1px solid rgba(27, 38, 59, 0.1);
+      padding: 11px;
+      border-radius: 8px;
+      
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s;
+
+      i { font-size: 0.85rem; }
+
+      /* 삭제 버튼 스타일 */
+      &.danger {
+        color: #d65a5a;
+        border-color: rgba(214, 90, 90, 0.2);
+        background: rgba(214, 90, 90, 0.02);
+      }
+
+      &:active {
+        background: rgba(0,0,0,0.03);
+        transform: scale(0.98);
       }
     }
   }
 }
+
+/* ... 아래쪽 코드는 그대로 유지 ... */
 
 /* 추가 찾기 버튼 영역 */
 .find-more-wrap {
