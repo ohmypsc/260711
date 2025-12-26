@@ -1,224 +1,159 @@
 /* ============================================
-   IntroCard (Fully Scoped + Safe Layering)
+   IntroCard (Light Warm Theme)
+   "화사한 7월의 샌드 & 네이비 포인트"
    ============================================ */
 
 .intro-wrap {
-  /* ✅ 인트로 전용 변수: 전역(:root) 오염 방지 */
-  --paper-bg: #fdfbf9;
-  --texture: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-  --ink: #1f1414;
-  --muted: #5a4443;
-  --accent: #d2a2a0;
-  --accent-mid: #e0b2a8;
-  --accent-light: #f5d2c8;
-  --border: #ead4d1;
-  --shadow: rgba(0, 0, 0, 0.08);
-  --petal-filter: none;
-
-  /* ✅ 인트로 화면을 앱 최상단 고정 */
+  /* ✨ 배경 변경: 어두운 네이비 -> 밝고 따뜻한 샌드 그라데이션 */
+  background: radial-gradient(circle at 50% 30%, #FDFBF9 0%, #F4F1EE 100%);
+  
   position: fixed;
   inset: 0;
   z-index: 9990;
-
-  /* ✅ 내부 z-index만으로 레이어 정리되게 */
   isolation: isolate;
-
-  background: radial-gradient(circle at center, #fcf9f7 0%, #f7f3f2 100%);
-  font-family: "Noto Serif KR", serif;
+  
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100dvh;
-  padding: 24px;
-  color: var(--ink);
+  padding: 20px;
   overflow: hidden;
-  transition: background 0.5s ease, color 0.5s ease;
 
-  /* 🎴 카드 (인트로 내부 스코프) */
+  /* 부드러운 전환 효과 */
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+
+  /* 🎴 초대장 카드 스타일 */
   .invite-card {
     position: relative;
-    background: var(--paper-bg) var(--texture);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    box-shadow: 0 12px 35px var(--shadow);
-    padding: 70px 52px;
-    width: 90%;
-    max-width: 440px;
+    
+    /* 카드 배경: 깨끗한 화이트로 변경하여 산뜻하게 */
+    background-color: #FFFFFF; 
+    
+    width: 100%;
+    max-width: 360px;
+    padding: 3.5rem 2rem;
+    
+    /* 테두리: 아주 연한 네이비로 고급스러움 한 스푼 */
+    border: 1px solid rgba(27, 38, 59, 0.08);
+    border-radius: 8px;
     text-align: center;
-    transition: transform 0.3s ease, background-color 0.5s ease;
-
-    z-index: 2;
-    pointer-events: auto;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 8px; left: 8px; right: 8px; bottom: 8px;
-      border: 1px solid #d8b1aa;
-      border-radius: 14px;
-      opacity: 0.6;
-    }
-
-    &:hover { transform: scale(1.02); }
+    
+    /* 그림자: 부드럽고 넓게 퍼지도록 */
+    box-shadow: 0 15px 35px rgba(27, 38, 59, 0.06);
+    
+    animation: slideUpFade 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 
-  /* ✨ 이름 (인트로 내부 스코프) */
+  /* ✨ 이름 영역 */
   .names {
-    font-family: "Nanum Myeongjo", serif;
-    font-size: 2.2rem;
+    font-family: "Noto Serif KR", serif;
+    font-size: 1.8rem;
     font-weight: 700;
-    letter-spacing: 1.6px;
-    margin-bottom: 16px;
+    
+    /* 글자색: Deep Navy (가독성 최우선) */
+    color: var(--theme-primary); 
+    margin-bottom: 1.2rem;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
 
-    background: linear-gradient(
-      120deg,
-      #c98f8a 0%,
-      #e9c2b8 25%,
-      #f6d9d0 50%,
-      #e1b5aa 75%,
-      #c98f8a 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 300% auto;
-
-    /* ✅ 전역 shimmer와 충돌 방지 */
-    animation: intro-shimmer 6s ease-in-out infinite;
+    /* 🌸 포인트: & 기호는 핑크색 */
+    .and {
+      font-family: serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--theme-point-pink); 
+      margin: 0.2rem 0;
+      font-style: italic;
+    }
   }
 
-  /* 💍 결혼합니다 (인트로 내부 스코프) */
+  /* 💍 서브타이틀 */
   .subtitle {
-    font-size: 1.2rem;
-    color: var(--accent);
-    margin-bottom: 38px;
-    letter-spacing: 1px;
+    font-size: 1rem;
+    /* 서브텍스트는 살짝 연한 네이비/그레이 */
+    color: var(--text-light); 
+    margin-bottom: 3rem;
+    letter-spacing: 0.15em;
+    
+    /* 위아래 살짝 장식선 느낌 (선택) */
+    position: relative;
+    display: inline-block;
   }
 
-  /* 📅 정보 (인트로 내부 스코프) */
+  /* 📅 날짜/장소 정보 */
   .info {
-    font-size: 1.4rem;
-    line-height: 2.6rem;
-    color: var(--muted);
-    margin-top: 12px;
-    word-break: keep-all;
-
-    strong {
-      color: var(--ink);
-      font-weight: 700;
+    margin-bottom: 3.5rem;
+    
+    .row {
+      font-family: "Noto Serif KR", serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--theme-primary);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      
+      &.date {
+        font-weight: 600;
+        /* 날짜 강조 */
+        color: var(--theme-primary);
+      }
+      &.place {
+        font-weight: 400;
+        color: var(--text-light);
+      }
     }
   }
 
-  .section { margin-bottom: 30px; }
-
-  /* 💌 하단 안내 (인트로 내부 스코프) */
-  .footer {
-    margin-top: 60px;
-    padding-top: 28px;
-    border-top: 1px solid var(--border);
-    font-size: 1.3rem;
-    color: var(--accent);
-    font-weight: 700;
-    cursor: pointer;
-    line-height: 1.8;
-    transition: all 0.3s ease;
-    white-space: normal;
-    text-align: center;
-
-    &:hover {
-      color: #b87d7d;
-      text-shadow: 0 0 10px rgba(214,160,160,0.4);
-    }
+  /* 🔘 버튼 영역 */
+  .action-area {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    /* 버튼 스타일은 이미 Navy 배경이므로, 
+       밝은 카드 위에서 아주 잘 보입니다. (완벽한 대비) */
   }
 
-  /* 🌸 꽃잎 캔버스: 카드 위 + 클릭 절대 방해 X */
+  /* 🌸 꽃잎 캔버스 */
   canvas.petal {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 3;
-    filter: var(--petal-filter);
+    z-index: 9999;
   }
 
-   &.exiting {
-    background: transparent;
-    opacity: 0;                 // ✅ 추가
-    transition: background 0.6s ease, opacity 0.6s ease;  // ✅ 수정
-
-    .invite-card {
-      opacity: 0;
-      transform: translateY(6px) scale(0.98);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      pointer-events: none;
-    }
-
+  /* 👋 퇴장 애니메이션 */
+  &.exiting {
     pointer-events: none;
-  }
-}
-
-/* ✅ 키프레임도 Intro 전용 이름으로 분리 */
-@keyframes intro-shimmer {
-  0% { background-position: 0% center; }
-  50% { background-position: 100% center; }
-  100% { background-position: 0% center; }
-}
-
-/* 📱 모바일 (인트로 내부만) */
-@media (max-width: 480px) {
-  .intro-wrap {
-    .invite-card { padding: 54px 28px; }
-    .names { font-size: 1.8rem; letter-spacing: 1.4px; }
-    .subtitle { font-size: 1rem; margin-bottom: 28px; }
-    .info { font-size: 1.15rem; line-height: 2.3rem; }
-    .footer { font-size: 1.1rem; margin-top: 40px; padding-top: 22px; }
-  }
-}
-
-/* 🌙 다크모드 */
-@media (prefers-color-scheme: dark) {
-  .intro-wrap {
-    --paper-bg: #272222;
-    --ink: #f6f5f4;
-    --muted: #cabbb8;
-    --accent: #dca8a0;
-    --accent-light: #f1c2b8;
-    --border: #3c2e2e;
-    --shadow: rgba(0, 0, 0, 0.8);
-
-    background: radial-gradient(circle at center, #1d1717 0%, #0e0b0b 100%);
-    color: var(--ink);
-
+    opacity: 0;
+    
     .invite-card {
-      background: var(--paper-bg);
-      background-image:
-        linear-gradient(rgba(39,34,34,0.97), rgba(39,34,34,0.97)),
-        var(--texture);
-      background-blend-mode: soft-light;
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 35px var(--shadow);
+      transform: translateY(-20px) scale(0.95);
+      transition: transform 0.8s ease;
     }
+  }
+}
 
-    .names {
-      background: linear-gradient(
-        120deg,
-        #f2c5bc 0%,
-        #d99d91 30%,
-        #f7d0c8 50%,
-        #d18a80 75%,
-        #f2c5bc 100%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 10px rgba(250,200,200,0.5);
-    }
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    .subtitle { color: var(--accent-light); }
-    .info { color: var(--muted); }
-
-    .footer {
-      color: var(--accent-light);
-      border-top: 1px solid var(--border);
-      text-shadow: 0 0 10px rgba(250,200,200,0.4);
-    }
+@media (max-width: 480px) {
+  .intro-wrap .invite-card {
+    padding: 3rem 1.5rem;
+    max-width: 90%;
   }
 }
