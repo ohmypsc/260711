@@ -11,22 +11,27 @@
 
 .calendar-headline {
   text-align: center;
-  font-family: "Noto Serif KR", serif; /* 명조체 */
+  font-family: "Noto Serif KR", serif;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  
+  /* 자간을 살짝 좁혀서 큰 글씨가 퍼져 보이지 않게 */
+  letter-spacing: -0.03em;
+  line-height: 1.15;
   white-space: nowrap;
   
-  font-size: clamp(1.4rem, 5vw, 1.8rem);
+  /* 💥 수정됨: 화면에 꽉 차도록 폰트 크기 대폭 확대 */
+  /* 모바일에서 약 7.5vw (화면 폭의 75% 이상 차지) */
+  font-size: clamp(2rem, 7.5vw, 3.2rem);
   
   margin-bottom: 3.5rem;
-  padding: 0 1rem;
+  /* 좌우 패딩을 최소화해서 글자가 꽉 차게 */
+  padding: 0 0.2rem;
 
-  /* ✨ Navy -> Pink -> Navy 은은한 그라데이션 흐름 */
+  /* Navy -> Pink -> Navy 흐름 */
   background: linear-gradient(
     120deg, 
     var(--theme-primary) 0%, 
-    #D68C90 50%, /* Muted Pink */
+    #D68C90 50%, 
     var(--theme-primary) 100%
   );
   
@@ -35,15 +40,15 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   
-  /* 애니메이션 속도 조절: 너무 빠르지 않게 우아하게 */
   animation: textFlow 8s linear infinite;
 }
 
 /* =========================================================
-   Topline (날짜 정보)
+   Container & Topline
    ========================================================= */
 .calendar-container {
   width: 100%;
+  padding: 4rem 0; /* 좌우 패딩 0 유지 */
   box-sizing: border-box;
 }
 
@@ -54,14 +59,13 @@
   font-family: "Noto Serif KR", serif;
   font-size: 1.1rem;
   font-weight: 500;
-  color: var(--theme-primary); /* Navy */
+  color: var(--theme-primary);
   letter-spacing: 0.05em;
 
   padding-bottom: 1.2rem;
   margin-bottom: 1.5rem;
   position: relative;
 
-  /* 하단 구분선: 연한 네이비 */
   &::after {
     content: "";
     position: absolute;
@@ -74,7 +78,7 @@
 }
 
 /* =========================================================
-   Weekdays (요일)
+   Weekdays
    ========================================================= */
 .calendar-weekdays {
   display: grid;
@@ -86,13 +90,12 @@
     text-align: center;
     font-size: 0.85rem;
     font-weight: 400;
-    color: var(--theme-primary); /* 기본 Navy */
+    color: var(--theme-primary);
     opacity: 0.7;
   }
 
-  /* 일요일(Red), 토요일(Blue)은 포인트 */
-  .weekday.sun { color: #D66D6D; } /* 톤 다운된 레드 */
-  .weekday.sat { color: #6D8BD6; } /* 톤 다운된 블루 */
+  .weekday.sun { color: #D66D6D; }
+  .weekday.sat { color: #6D8BD6; }
 }
 
 /* =========================================================
@@ -104,7 +107,7 @@
 
 .calendar-weeks {
   display: grid;
-  gap: 2px; /* 셀 간격 */
+  gap: 2px;
 }
 
 .calendar-week {
@@ -113,13 +116,11 @@
 }
 
 .calendar-cell {
-  height: 52px; /* 높이 조절 */
+  height: 52px;
   display: grid;
   place-items: center;
   font-size: 0.95rem;
-  color: var(--theme-primary); /* Navy */
-  
-  /* 숫자 폰트는 깔끔한 고딕 추천 (숫자 가독성) */
+  color: var(--theme-primary);
   font-family: "Pretendard", sans-serif; 
 }
 
@@ -135,7 +136,7 @@
   font-weight: 400;
 }
 
-/* ✨ D-Day: 로즈 핑크 배경 + 네이비 텍스트 */
+/* D-Day 포인트 */
 .calendar-cell.day.wedding .day-number {
   font-weight: 700;
   background-color: var(--theme-point-pink); 
@@ -148,10 +149,9 @@
    ========================================================= */
 .calendar-leaf-line {
   width: 100%;
-  max-width: 280px;
-  margin: 2.5rem auto 1.5rem;
+  /* 꽉 차게 */
+  margin: 2.5rem 0 1.5rem; 
   
-  /* Leaf Green 적용 */
   color: var(--theme-leaf-green);
   opacity: 0.8;
 
@@ -162,8 +162,6 @@
   }
 }
 
-/* ... 위쪽 코드는 동일 ... */
-
 /* =========================================================
    Countdown
    ========================================================= */
@@ -172,7 +170,7 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem; /* 줄 간격 */
+  gap: 0.8rem;
   
   color: var(--theme-primary);
   font-family: "Noto Serif KR", serif;
@@ -193,52 +191,43 @@
 
 .countdown-values {
   display: inline-flex;
-  align-items: baseline; /* 바닥선 기준 정렬 */
-  gap: 0.8rem; /* (150일) (12시간) 사이 간격 */
-  
-  /* 모바일에서 너무 넓어지면 줄바꿈 방지 */
+  align-items: baseline;
+  gap: 0.8rem;
   flex-wrap: nowrap; 
 }
 
-/* ✅ 수정된 부분: 숫자와 단위를 가로로 배치 */
+/* 숫자와 단위 가로 배치 */
 .unit-block {
   display: flex;
-  flex-direction: row; /* 가로 배치 (옆으로 붙이기) */
-  align-items: baseline; /* 글자 바닥선 맞춤 */
-  gap: 0.15rem; /* 숫자와 단위 사이 아주 좁은 간격 */
+  flex-direction: row; 
+  align-items: baseline; 
+  gap: 0.15rem; 
 }
 
-/* 숫자 디자인 */
 .num {
-  font-family: "Pretendard", sans-serif; /* 숫자는 고딕이 깔끔 */
-  font-size: 2.2rem; /* 크기 키움 */
+  font-family: "Pretendard", sans-serif;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--theme-primary);
   line-height: 1;
-  font-variant-numeric: tabular-nums; /* 숫자 폭 일정하게 */
-  
-  /* 네이비 그림자로 입체감 */
+  font-variant-numeric: tabular-nums;
   text-shadow: 2px 2px 0px rgba(27, 38, 59, 0.1); 
 }
 
-/* 단위 디자인 */
 .unit {
-  font-size: 0.95rem; /* 단위 크기 */
+  font-size: 0.95rem;
   color: var(--theme-primary);
   font-weight: 500;
   opacity: 0.8;
-  
-  /* 한글은 영문 숫자보다 시각적으로 조금 커서 살짝 줄임 */
   transform: scale(0.95); 
 }
 
 .countdown-status {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--theme-point-pink); /* D-Day는 핑크 포인트 */
+  color: var(--theme-point-pink);
 }
 
-/* 모바일 대응: 숫자가 너무 크면 줄바꿈이 일어날 수 있으니 조정 */
 @media (max-width: 400px) {
   .num { font-size: 1.6rem; }
   .unit { font-size: 0.85rem; }
