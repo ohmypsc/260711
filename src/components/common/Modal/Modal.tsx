@@ -6,24 +6,27 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Button } from "@/components/common/Button/Button";
+import { Button } from "./Button"; // 경로 맞춰주세요
 import "./Modal.scss";
 
 interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
+  
+  // 제목/부제목을 props로 받으면 디자인 통일성이 좋아집니다.
+  title?: string;
+  subtitle?: string;
+  
   anchorRect?: DOMRect | null;
-
-  /** ✅ 커스텀 footer (넘기면 기본 닫기 대신 이것을 렌더) */
   footer?: React.ReactNode;
-
-  /** ✅ footer 자체를 숨기고 싶을 때 */
   hideFooter?: boolean;
 }
 
 export function Modal({
   onClose,
   children,
+  title,
+  subtitle,
   anchorRect,
   footer,
   hideFooter = false,
@@ -32,42 +35,37 @@ export function Modal({
   const [closing, setClosing] = useState(false);
   const [shiftX, setShiftX] = useState(0);
 
+  // 포탈 타겟 생성
   const portalEl = useMemo(() => {
     if (typeof window === "undefined") return null;
-
     const existing = document.getElementById("modal-root");
     if (existing) return existing;
-
     const el = document.createElement("div");
     el.id = "modal-root";
     document.body.appendChild(el);
     return el;
   }, []);
 
+  // 앵커 위치 계산 (옵션)
   useLayoutEffect(() => {
     if (!anchorRect) return;
-
     const anchorCenterX = anchorRect.left + anchorRect.width / 2;
     const viewportCenterX = window.innerWidth / 2;
-
     let dx = anchorCenterX - viewportCenterX;
     dx = Math.max(-24, Math.min(24, dx));
-
     setShiftX(dx);
   }, [anchorRect]);
 
+  // 스크롤 잠금 & ESC 키 처리
   useEffect(() => {
     scrollYRef.current = window.scrollY;
-
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollYRef.current}px`;
     document.body.style.left = "0";
     document.body.style.right = "0";
     document.body.style.width = "100%";
-
     if (scrollbarWidth > 0) {
       document.body.style.paddingRight = `${scrollbarWidth}px`;
     }
@@ -84,17 +82,15 @@ export function Modal({
       document.body.style.right = "";
       document.body.style.width = "";
       document.body.style.paddingRight = "";
-
       window.scrollTo(0, scrollYRef.current);
       window.removeEventListener("keydown", onKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClose = () => {
     if (closing) return;
     setClosing(true);
-    setTimeout(() => onClose(), 180);
+    setTimeout(() => onClose(), 200); // 애니메이션 시간과 맞춤
   };
 
   if (!portalEl) return null;
@@ -111,8 +107,18 @@ export function Modal({
           role="dialog"
           aria-modal="true"
         >
+          {/* ✅ 헤더 영역 (제목이 있을 때만 렌더링) */}
+          {(title || subtitle) && (
+            <div className="modal-header">
+              {title && <h2 className="modal-title">{title}</h2>}
+              {subtitle && <span className="modal-subtitle">{subtitle}</span>}
+            </div>
+          )}
+
+          {/* 본문 */}
           <div className="modal-content">{children}</div>
 
+          {/* 푸터 */}
           {!hideFooter && (
             <div className="modal-footer">
               {footer ?? (
