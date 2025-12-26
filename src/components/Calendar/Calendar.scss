@@ -1,11 +1,21 @@
 /* =========================================================
-   Headline
+   📌 Calendar Component: Final Seamless Flow
+   ========================================================= */
+
+/* ✨ 끊김 없는 무한 흐름 애니메이션 (0% -> -200%) */
+@keyframes textFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: -200% 50%; }
+}
+
+/* =========================================================
+   Headline (수정됨: 멈춤 없는 은은한 흐름)
    ========================================================= */
 .calendar-headline {
   text-align: center;
   font-weight: 900;
-  letter-spacing: 0.06em;
-  line-height: 1.15;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
 
   white-space: nowrap;
   padding: 0 0.6rem;
@@ -13,31 +23,40 @@
 
   font-size: clamp(1.55rem, 5.6vw, 2.2rem);
 
-  /* ✅ 섹션처럼 “완전 분리”되는 간격 */
+  /* 섹션 간격 유지 */
   margin-bottom: clamp(3.2rem, 9vw, 4.6rem);
-
-  /* ✅ 간격이 더 “덩어리”로 느껴지게 살짝 패딩까지 */
   padding-bottom: 0.3rem;
 
+  /* ✨ [핵심] 단색 구간 없이 계속 변하는 그라데이션 */
+  /* Navy(0%) -> Pink(50%) -> Navy(100%) */
+  background: linear-gradient(
+    120deg, 
+    var(--theme-primary) 0%, 
+    var(--theme-point-pink) 50%, 
+    var(--theme-primary) 100%
+  );
+  
+  /* 배경 크기를 2배로 늘려 부드럽게 */
+  background-size: 200% auto;
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   color: var(--theme-primary);
 
-  text-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.95),
-    0  1px 0 rgba(0, 0, 0, 0.06),
-    0  6px 14px rgba(0, 0, 0, 0.12),
-    0  0px 10px rgba(233, 167, 175, 0.22);
+  /* 10초 동안 끊김 없이(linear) 무한 반복 */
+  animation: textFlow 10s linear infinite;
+  
+  text-shadow: none;
 }
 
 /* =========================================================
-   Container
+   Container & Topline
    ========================================================= */
 .calendar-container {
   width: 100%;
 }
 
-/* =========================================================
-   Topline
-   ========================================================= */
 .calendar-topline {
   width: 100%;
   text-align: center;
@@ -96,7 +115,7 @@
 }
 
 /* =========================================================
-   Calendar body
+   Calendar Body
    ========================================================= */
 .calendar-box {
   background: transparent;
@@ -132,7 +151,7 @@
   font-weight: 500;
   letter-spacing: 0.01rem;
 
-  /* ✨ D-Day 원형 배경을 위한 중앙 정렬 */
+  /* ✨ D-Day 원형 배경 정렬을 위한 Flex */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -141,7 +160,7 @@
   border-radius: 50%;
 }
 
-/* ✨ [수정] 하트 제거 -> 단정한 분홍색 원형 배경 */
+/* ✨ [수정] D-Day: 하트 제거 -> 로즈 핑크 원형 배경 */
 .calendar-cell.day.wedding .day-number {
   font-weight: 700;
   background-color: var(--theme-point-pink); /* 로즈 핑크 */
@@ -149,12 +168,12 @@
 }
 
 /* =========================================================
-   ✅ Leaf Divider (색상 수정됨)
+   Leaf Divider (7월의 녹색)
    ========================================================= */
 .calendar-leaf-line {
   width: 100%;
   margin: 0.9rem auto 0.6rem;
-  /* ✨ [수정] 7월의 녹색 나뭇잎 컬러 적용 */
+  /* 7월의 녹색 나뭇잎 */
   color: var(--theme-leaf-green);
   opacity: 0.9;
 
@@ -167,7 +186,7 @@
 }
 
 /* =========================================================
-   Countdown (TUNED)
+   Countdown
    ========================================================= */
 .countdown-wrap {
   margin-top: 2rem;
@@ -208,7 +227,7 @@
   padding: 0.04rem 0;
 }
 
-/* ✅ 숫자 (숨쉬는 애니메이션 제거됨) */
+/* 숫자: 숨쉬기 효과 제거됨 */
 .num {
   position: relative;
   font-size: clamp(2.05rem, 6.8vw, 2.75rem);
@@ -225,7 +244,7 @@
   transform-origin: center bottom;
 }
 
-/* ✅ 실키한 광택 (유지) */
+/* 실키한 광택 효과 (유지) */
 .num::after {
   content: "";
   position: absolute;
@@ -263,7 +282,7 @@
   opacity: 0.95;
 }
 
-/* ✅ 실키 하이라이트 미세 이동 */
+/* 광택 이동 애니메이션 */
 @keyframes silkDrift {
   0%, 100% {
     transform: translateY(0px);
