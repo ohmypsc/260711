@@ -1,12 +1,6 @@
-/* =========================================================
-   Attendance Section
-   Layout: Centered Card (Your Preference)
-   Theme: Warm Linen (#faf1e8) & Deep Navy
-   ========================================================= */
-
 .attendance {
   text-align: center;
-  padding: 1rem 0;
+  padding: 2rem 0rem;
   font-family: inherit;
 
   .keep-all {
@@ -15,27 +9,33 @@
   }
 
   .attendance__desc {
-    margin: 1.5rem 0 2.5rem;
-    line-height: 1.75;
-    font-size: 0.96rem;
+    margin: 1rem 0 2rem;
+    line-height: 1.7;
+    font-size: 0.95rem;
     color: var(--text-main);
-    opacity: 0.9;
+    opacity: 0.85;
   }
 
   .attendance-buttons {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.7rem;
     width: 100%;
   }
 }
 
-/* =========================================================
-   My Attendance List (Centered Card Style)
-   ========================================================= */
-
+/* ✅ '보내주신 참석 응답' 디자인 고도화 (중앙 정렬 카드) */
 .my-attendance {
-  margin-top: 3.5rem;
+  margin-top: 3rem;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+  }
 
   .attendance-list {
     display: flex;
@@ -43,198 +43,152 @@
     gap: 16px;
   }
 
-  /* 🎨 응답 카드 디자인 */
   .attendance-card {
-    /* 배경: 웜 리넨 적용 (#faf1e8) */
-    background: var(--section-bg-soft); 
-    border: 1px solid rgba(27, 38, 59, 0.03); /* 테두리는 아주 연하게 */
-    border-radius: 20px; /* 조금 더 부드러운 라운드 */
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
     padding: 24px 20px;
-    box-shadow: none; /* 플랫한 종이 질감 */
-    
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    position: relative;
+    transition: transform 0.1s ease;
 
-    /* 1. 상단: 배지 -> 이름 */
+    &:active {
+      transform: scale(0.98);
+    }
+
     .card-top {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
 
-      /* 구분 배지: 부드러운 파스텔톤 */
       .side-badge {
         font-size: 0.75rem;
         padding: 4px 12px;
         border-radius: 100px;
-        font-weight: 600;
-        font-family: "Pretendard", sans-serif;
-        margin-bottom: 12px; /* 이름과의 간격 */
+        font-weight: 700;
 
         &.groom {
-          background: rgba(90, 150, 227, 0.12); /* 연한 블루 */
+          background: #eef6ff;
           color: #5a96e3;
         }
         &.bride {
-          background: rgba(227, 90, 122, 0.12); /* 연한 핑크 */
+          background: #fff0f3;
           color: #e35a7a;
         }
       }
     }
 
-    /* 이름 + 정보 영역 */
     .card-content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      width: 100%;
+      gap: 12px;
+      margin-bottom: 20px;
 
-      /* 이름 */
       .name-row {
         display: flex;
         align-items: baseline;
         justify-content: center;
-        gap: 4px;
+        gap: 2px;
 
         .name {
-          font-family: "Noto Serif KR", serif;
-          font-size: 1.35rem;
-          font-weight: 700;
+          font-size: 1.2rem;
+          font-weight: 800;
           color: var(--text-main);
         }
         .suffix {
-          font-size: 0.95rem;
-          color: var(--text-light);
-          font-weight: 400;
+          font-size: 0.85rem;
+          color: var(--text-main);
+          opacity: 0.6;
         }
       }
 
-      /* 정보 아이콘 (인원/식사) */
       .meta-container {
         display: flex;
         justify-content: center;
-        gap: 12px;
-        width: 100%;
+        gap: 16px;
 
         .meta-pill {
           display: flex;
           align-items: center;
-          gap: 6px;
-          
-          /* 흰색 칩 디자인 (조약돌 느낌) */
-          background: #FFFFFF;
-          padding: 8px 14px;
-          border-radius: 8px;
-          border: 1px solid rgba(27, 38, 59, 0.04);
-          box-shadow: 0 2px 4px rgba(27, 38, 59, 0.03);
-          
-          font-size: 0.92rem;
+          gap: 8px; 
+          font-size: 0.9rem;
           font-weight: 500;
           color: var(--text-main); 
-          white-space: nowrap;
 
           i {
             font-size: 0.85rem;
-            color: var(--theme-primary); /* 아이콘은 네이비 */
-            opacity: 0.6;
+            width: 18px; 
+            display: inline-flex;
+            justify-content: flex-end; 
+            align-items: center;
+
+            /* 부모 카드 클래스에 따른 아이콘 색상 보정 */
+            .attendance-card:has(.side-badge.groom) & { color: rgba(90, 150, 227, 0.6); }
+            .attendance-card:has(.side-badge.bride) & { color: rgba(227, 90, 122, 0.6); }
           }
         }
       }
     }
 
-    /* 구분선 */
     .divider {
-      width: 40px; /* 짧은 구분선 스타일 유지 */
+      width: 40px;
       height: 1px;
-      background-color: rgba(27, 38, 59, 0.1);
-      margin-bottom: 20px;
+      background-color: #eee;
+      margin-bottom: 16px;
     }
 
-    /* 하단 버튼 (수정/삭제) */
     .actions {
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
 
       .action-btn {
         flex: 1;
-        max-width: 110px;
+        max-width: 100px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        
-        /* 투명 버튼 스타일 (웜 리넨 배경과 어울림) */
-        background: transparent;
-        border: 1px solid rgba(27, 38, 59, 0.15);
-        padding: 9px 12px;
-        border-radius: 8px;
-        
-        font-size: 0.85rem;
+        gap: 5px;
+        background: #f8f9fa;
+        border: 1px solid #eee;
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
         font-weight: 600;
-        color: var(--text-light);
+        color: #747d8c;
         cursor: pointer;
         font-family: inherit;
-        transition: all 0.2s;
 
-        i { font-size: 0.8rem; }
+        i { font-size: 0.75rem; }
 
-        /* 삭제 버튼: 붉은색 포인트 */
         &.danger {
-          color: #d65a5a;
-          border-color: rgba(214, 90, 90, 0.3);
-          background: rgba(214, 90, 90, 0.03);
+          color: #ff5e5e;
+          border-color: #ffeaea;
+          background: #fffafa;
         }
-        
         &:active {
-          background: rgba(0, 0, 0, 0.03);
-          transform: scale(0.96);
+          background: #e9ecef;
+          opacity: 0.7;
         }
       }
     }
   }
 }
 
-/* 추가 찾기 버튼 영역 */
-.find-more-wrap {
-  margin-top: 1.5rem;
-  text-align: center;
-  
-  .find-more-btn {
-    background: none;
-    border: none;
-    color: var(--text-light);
-    font-size: 0.85rem;
-    text-decoration: underline;
-    cursor: pointer;
-    padding: 10px;
-    opacity: 0.7;
-  }
-}
-
-
-/* =========================================================
-   Modal Forms & Inputs (고급화)
-   ========================================================= */
-
-.attendance-modal-content {
-  padding: 0 4px;
-}
-
+/* ✅ 폼/모달/카운터 스타일 */
 .attendance-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px 12px;
   text-align: left;
   font-family: inherit;
-  margin-top: 10px;
 
   .field {
     display: flex;
@@ -244,96 +198,70 @@
   }
 
   .label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: var(--theme-primary);
+    color: var(--text-main);
     margin-left: 2px;
   }
 
-  /* Input 스타일 */
   input {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 8px;
-    border: 1px solid rgba(27, 38, 59, 0.15);
-    background: #fff;
-    font-family: "Pretendard", sans-serif;
+    font-family: inherit;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     font-size: 0.95rem;
     color: var(--text-main);
-    transition: border-color 0.2s;
-
-    &:focus { 
-      border-color: var(--theme-primary); 
-      outline: none; 
-      box-shadow: 0 0 0 3px rgba(27, 38, 59, 0.05);
-    }
+    &:focus { border-color: var(--theme-primary); outline: none; }
   }
 }
 
-/* 카운터 스타일 */
 .counter-ui {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fcfcfc;
-  border: 1px solid rgba(27, 38, 59, 0.1);
-  border-radius: 8px;
+  background: #f8f8f8;
+  border-radius: 12px;
   padding: 4px;
-  height: 48px;
+  height: 46px;
 
   button {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border: none;
     background: #fff;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     cursor: pointer;
-    color: var(--theme-primary);
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    &:active { transform: scale(0.95); }
   }
 
   .count-value {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--text-main);
-    font-variant-numeric: tabular-nums;
   }
 }
 
-/* 토글 버튼 그룹 */
 .toggle-row {
   display: flex;
   gap: 8px;
-
-  &.three-cols {
-     .toggle-btn { padding: 12px 4px; font-size: 0.85rem; }
-  }
 
   .toggle-btn {
     flex: 1;
     font-family: inherit;
     padding: 12px;
-    border: 1px solid rgba(27, 38, 59, 0.1);
-    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     background: #fff;
     font-size: 0.9rem;
-    color: var(--text-light);
-    cursor: pointer;
+    color: var(--text-main);
     transition: all 0.2s ease;
 
     &.active {
       border-color: var(--theme-primary);
-      background: var(--theme-primary);
-      color: #fff;
-      font-weight: 600;
-      box-shadow: 0 4px 10px rgba(27, 38, 59, 0.15);
+      background: var(--section-bg-soft);
+      font-weight: 700;
+      color: var(--theme-primary);
     }
   }
 }
@@ -341,6 +269,6 @@
 .attendance-footer-row {
   display: flex;
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 20px;
   button { flex: 1; }
 }
