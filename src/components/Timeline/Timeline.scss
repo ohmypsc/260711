@@ -1,8 +1,16 @@
+/* ============================================
+   Timeline Section
+   ✅ Layout: 사용자 원본 유지 (지그재그, 오버랩, 리프트 등)
+   🎨 Design: Deep Navy & Warm Sand Theme 적용
+   ============================================ */
+
 .w-timeline {
   background: transparent;
   position: relative;
+  padding: 4rem 0; /* 위아래 여백만 살짝 추가 */
 }
 
+/* ✅ 배치 변수: 원본 값 절대 유지 */
 :root {
   --photo: clamp(140px, 16vw, 205px);
   --line-col-w: 44px;
@@ -22,15 +30,13 @@
   gap: 0.6rem;
 }
 
-/* ✅ 아이템: photo / line / caption */
+/* ✅ 아이템 구조: 원본 유지 */
 .timeline-item {
   position: relative;
   z-index: 1;
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--line-col-w) minmax(0, 1fr);
-
-  /* ✅ 중앙선 기준 좌/우 간격 “유일한” 기준 */
   column-gap: var(--gutter);
 
   align-items: center;
@@ -50,7 +56,7 @@
   min-width: 0;
 }
 
-/* 사진 */
+/* 사진 영역 */
 .media {
   grid-row: 1;
   position: relative;
@@ -67,13 +73,22 @@
   border-radius: 50%;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 10px 20px var(--shadow-color);
+  
+  /* 🎨 디자인 수정: 폴라로이드 느낌의 흰색 테두리와 네이비톤 그림자 */
+  border: 4px solid #FFFFFF; 
+  box-shadow: 0 10px 20px rgba(27, 38, 59, 0.15); /* Navy Shadow */
+  
+  transition: transform 0.3s ease;
 }
 
-/* =========================================
-   ✅ LazyImage UI (skeleton + fade-in)
-   ========================================= */
+/* Hover 효과 (PC) */
+@media (hover: hover) {
+  .photo-wrap:hover {
+    transform: scale(1.02);
+  }
+}
 
+/* LazyImage UI */
 .lazy-photo {
   position: relative;
   width: 100%;
@@ -85,7 +100,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.06);
+  background: rgba(27, 38, 59, 0.06); /* 🎨 스켈레톤도 네이비 톤으로 */
   animation: pulse 1.2s ease-in-out infinite;
   pointer-events: none;
 }
@@ -102,7 +117,6 @@
   object-fit: cover;
   display: block;
   border-radius: 50%;
-
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -119,7 +133,6 @@
   justify-content: center;
   align-items: center;
   z-index: 2;
-
   position: relative;
   transform: translateY(var(--offset));
 }
@@ -137,6 +150,7 @@
   transform: translate(-50%, -50%);
   opacity: 0.95;
 
+  /* 🎨 색상: 전역 변수 사용 */
   background-color: var(--theme-leaf-green);
   box-shadow: none;
 
@@ -146,6 +160,7 @@
   mask: var(--leaf-dot-mask) center / contain no-repeat;
 }
 
+/* 잎사귀 회전 로직: 원본 유지 */
 .timeline-item:nth-child(3n) .dot {
   transform: translate(-50%, -50%) rotate(10deg) scale(0.95);
   opacity: 0.9;
@@ -159,7 +174,7 @@
   opacity: 0.85;
 }
 
-/* ✅ 캡션 */
+/* 캡션 */
 .caption-col {
   grid-row: 1;
   z-index: 1;
@@ -175,12 +190,15 @@
   box-sizing: border-box;
 }
 
-/* ✅ AutoFitTitle가 폭을 제대로 읽도록 h3는 100% 유지 */
 .caption-col .title {
   margin: 0;
+  
+  /* 🎨 폰트 및 색상 적용: Navy & Myeongjo */
+  font-family: "Noto Serif KR", serif;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-main);
+  color: var(--theme-primary); /* Navy Text */
+  letter-spacing: -0.02em;
 
   display: block;
   width: 100%;
@@ -192,18 +210,18 @@
   word-break: keep-all;
 }
 
-/* ✅ 텍스트(span)를 중앙선 쪽에 정확히 붙여 “체감 거리” 좌우 통일 */
+/* 텍스트 정렬 로직: 원본 유지 */
 .timeline-item.left .caption-col .title > span {
   display: inline-block;
   white-space: nowrap;
   margin-left: 0;
-  margin-right: auto; /* 왼쪽: span이 왼쪽(=컬럼 시작, 중앙선 쪽) 기준 */
+  margin-right: auto;
 }
 
 .timeline-item.right .caption-col .title > span {
   display: inline-block;
   white-space: nowrap;
-  margin-left: auto;  /* 오른쪽: span이 오른쪽(=컬럼 끝, 중앙선 쪽) 기준 */
+  margin-left: auto;
   margin-right: 0;
 }
 
@@ -212,23 +230,20 @@
   word-break: keep-all;
 }
 
-/* 좌/우 교차 */
+/* 좌/우 교차 로직: 원본 유지 */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
 
   .media {
     grid-column: 1;
-    justify-self: end;   /* ✅ 중앙선 쪽으로 붙임 */
+    justify-self: end;
     margin-right: 0;
   }
 
   .caption-col {
     grid-column: 3;
-
-    /* ✅ 캡션 박스는 컬럼 폭(오토핏용) 유지, 정렬은 span이 담당 */
     justify-self: stretch;
     width: 100%;
-
     margin-left: 0;
     text-align: left;
     align-items: flex-start;
@@ -240,23 +255,21 @@
 
   .media {
     grid-column: 3;
-    justify-self: start; /* ✅ 중앙선 쪽으로 붙임 */
+    justify-self: start;
     margin-left: 0;
   }
 
   .caption-col {
     grid-column: 1;
-
     justify-self: stretch;
     width: 100%;
-
     margin-right: 0;
     text-align: right;
     align-items: flex-end;
   }
 }
 
-/* 겹침 보정 */
+/* 겹침 보정 로직: 원본 유지 */
 .timeline-item + .timeline-item {
   margin-top: var(--overlap);
 }
@@ -273,7 +286,7 @@
   );
 }
 
-/* 모바일 */
+/* 모바일 대응: 원본 유지 */
 @media (max-width: 640px) {
   :root {
     --photo: clamp(108px, 40vw, 148px);
@@ -294,7 +307,7 @@
   }
 }
 
-/* 순차적 등장 애니메이션 */
+/* 순차적 등장 애니메이션: 원본 유지 */
 .timeline-item.not-visible {
   opacity: 0;
   transform: translateY(20px);
