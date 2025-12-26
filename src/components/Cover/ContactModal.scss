@@ -1,7 +1,6 @@
 /* =========================================================
    Contact Modal
-   Layout: 100% Preserved (No changes to margin/padding/gap)
-   Style: Deep Navy & Warm Sand Theme
+   Concept: Warm Sand Layer (Tone-on-Tone)
    ========================================================= */
 
 .contact-modal-wrap {
@@ -10,37 +9,39 @@
   flex-direction: column;
 }
 
-/* 1) 제목 ↔ 부제목 */
+/* 1) 제목 ↔ 부제목 (간격 유지, 색상만 네이비로 통일) */
 .contact-modal-wrap .modal-title {
   margin-bottom: 2px;
-  /* ✨ 색상 추가: 네이비 */
   color: var(--theme-primary);
 }
 
-/* 2) 부제목 ↔ 섹션 */
+/* 2) 부제목 ↔ 섹션 (간격 유지) */
 .contact-subtitle {
   margin-top: 0;
   margin-bottom: 14px;
-  /* ✨ 색상 변경: 차분한 그레이 & 폰트 두께 조절 */
   color: var(--text-light);
   font-weight: 400;
 }
 
-/* 섹션 카드 */
+/* 🎨 [핵심] 섹션 카드: Warm Sand Layer 
+   - 배경을 웜 샌드(theme-accent)로 깔아서 톤온톤 매치
+   - 테두리는 아주 연하게 처리하여 부드럽게 감쌈
+*/
 .contact-section {
-  padding: 15px 8px; /* 기존 간격 유지 */
+  /* Layout (기존 유지) */
+  padding: 15px 10px; /* 좌우 여백 아주 살짝 여유 줌 */
   border-radius: 12px;
-  
-  /* ✨ 디자인 변경: 깨끗한 흰색 배경 + 미세한 네이비 테두리 + 부드러운 그림자 */
-  background-color: #FFFFFF;
-  border: 1px solid rgba(27, 38, 59, 0.05); 
-  box-shadow: 0 4px 12px rgba(27, 38, 59, 0.06);
-
   display: flex;
   flex-direction: column;
+
+  /* Style */
+  background-color: var(--theme-accent); /* #F4F1EE */
+  border: 1px solid rgba(27, 38, 59, 0.03); 
+  /* 그림자는 제거하거나 아주 약하게 (톤온톤은 플랫한 게 예쁨) */
+  box-shadow: none; 
 }
 
-/* 3) 섹션 ↔ 섹션 */
+/* 3) 섹션 ↔ 섹션 (간격 유지) */
 .contact-section + .contact-section {
   margin-top: 8px;
 }
@@ -51,10 +52,12 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
-  gap: 8px; /* 기존 간격 유지 */
-  padding: 0.65rem 0; /* 기존 간격 유지 */
   
-  /* ✨ 디자인 변경: 구분선을 아주 연하게 처리 */
+  /* Layout (기존 유지) */
+  gap: 8px;
+  padding: 0.7rem 0;
+  
+  /* 구분선: 배경이 베이지톤이므로, 선은 조금 더 진하게 */
   border-bottom: 1px solid rgba(27, 38, 59, 0.06);
   
   font-size: 1.1rem;
@@ -66,15 +69,15 @@
 
   /* 관계 (아버지/어머니) */
   .relation {
-    width: 110px; /* 기존 너비 유지 */
+    width: 110px;
     flex: 0 0 auto;
     text-align: center;
     
-    /* ✨ 디자인 변경: 네이비 색상 + 투명도 + 고딕체 */
-    color: var(--theme-primary);
-    opacity: 0.7; 
+    /* Style: 고딕체 + 네이비 + 투명도 */
     font-family: "Pretendard", sans-serif;
     font-weight: 500;
+    color: var(--theme-primary);
+    opacity: 0.65;
     
     font-size: 0.95rem;
     white-space: nowrap;
@@ -87,7 +90,7 @@
     flex: 1 1 auto;
     text-align: center;
     
-    /* ✨ 디자인 변경: 명조체(Serif) 적용하여 고급스럽게 */
+    /* Style: 명조체 + 진한 네이비 (강조) */
     font-family: "Noto Serif KR", serif;
     font-weight: 700;
     color: var(--text-main);
@@ -99,12 +102,14 @@
 
   .contact-actions {
     flex: 0 0 auto;
-    min-width: 96px; /* 기존 너비 유지 */
+    min-width: 96px;
     display: flex;
     justify-content: flex-end;
-    gap: 12px; /* 기존 간격 유지 */
+    gap: 12px;
 
-    /* 전화/문자 버튼 */
+    /* 🎨 [핵심] 버튼: White on Warm Sand
+       - 베이지 배경 위라서 '흰색 버튼'이 아주 고급스럽게 뜸
+    */
     .icon-link {
       width: 36px;
       height: 36px;
@@ -114,29 +119,28 @@
       text-decoration: none;
       line-height: 1;
 
-      /* ✨ 디자인 변경: 테두리 대신 그림자로 '버튼' 느낌 강조 */
-      background: #FFFFFF;
-      border: 1px solid rgba(27, 38, 59, 0.05); /* 아주 연한 테두리 */
-      box-shadow: 0 2px 5px rgba(27, 38, 59, 0.08); /* 쫀득한 그림자 */
+      /* Style */
+      background: #FFFFFF; 
+      border: 1px solid rgba(27, 38, 59, 0.05);
+      box-shadow: 0 2px 5px rgba(27, 38, 59, 0.06); /* 부드러운 그림자 */
       
-      /* 아이콘 색상: 네이비 */
       color: var(--theme-primary);
-      font-size: 1.15rem; /* 아이콘 크기 살짝 조정 */
+      font-size: 1.15rem;
 
       transition: all 0.2s ease;
 
-      /* 클릭 시 눌리는 효과 */
+      /* Active Effect (Tactile) */
       &:active {
         transform: scale(0.94);
-        background: #F5F5F5; /* 살짝 어두워짐 */
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* 내부 그림자 */
+        background: #FDFDFD;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
       }
-
+      
+      /* Hover Effect */
       @media (hover: hover) {
         &:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(27, 38, 59, 0.12);
-          border-color: var(--theme-primary);
+          box-shadow: 0 4px 8px rgba(27, 38, 59, 0.1);
         }
       }
     }
@@ -144,7 +148,7 @@
 }
 
 /* -------------------------------------
-   RESPONSIVE 모바일 UI (기존 코드 100% 유지)
+   RESPONSIVE (기존 코드 유지)
 ------------------------------------- */
 @media (max-width: 360px) {
   .contact-item {
