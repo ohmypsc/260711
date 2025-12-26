@@ -6,15 +6,15 @@ import kakaoMapLogo from "@/image/kakaomap.png";
 import naverMapLogo from "@/image/navermap.png";
 import tmapLogo from "@/image/tmap.png";
 
-// ✅ 장소 정보 설정
-const DEST_NAME = "유성컨벤션웨딩홀"; // 검색 정확도를 위해 '3층...' 제외하고 건물명만 추천
+// ✅ 장소 정보
+const DEST_NAME = "유성컨벤션웨딩홀"; 
 const DEST_LAT = 36.3562313;
 const DEST_LNG = 127.3514617;
 const ADDRESS_LINE = "대전 유성구 온천북로 77";
 
 const NAVER_MAP_KEY = import.meta.env.VITE_NAVER_MAP_CLIENT_ID || "";
 
-// 네이버 지도 SDK 로드 함수
+// 네이버 지도 SDK 로드
 function loadNaverMapSdk(keyId: string) {
   if (window.naver?.maps) return Promise.resolve();
   if ((window as any).__naverMapLoadingPromise) {
@@ -40,7 +40,7 @@ function loadNaverMapSdk(keyId: string) {
   return promise;
 }
 
-// 기기 환경 감지 함수
+// 기기 환경 감지
 function getDevice() {
   const ua = navigator.userAgent;
   if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
@@ -59,11 +59,8 @@ export const Location = () => {
   // 1. 지도 초기화
   useEffect(() => {
     if (!NAVER_MAP_KEY) return;
-
-    loadNaverMapSdk(NAVER_MAP_KEY)
-      .then(() => {
+    loadNaverMapSdk(NAVER_MAP_KEY).then(() => {
         if (!mapDomRef.current) return;
-
         const center = new window.naver.maps.LatLng(DEST_LAT, DEST_LNG);
         const map = new window.naver.maps.Map(mapDomRef.current, {
           center,
@@ -73,27 +70,18 @@ export const Location = () => {
           logoControl: false,
           mapDataControl: false,
           zoomControl: true,
-          zoomControlOptions: {
-            position: window.naver.maps.Position.TOP_RIGHT,
-          },
+          zoomControlOptions: { position: window.naver.maps.Position.TOP_RIGHT },
           draggable: false,
           scrollWheel: false,
           pinchZoom: false,
           disableDoubleTapZoom: true,
         });
-
-        new window.naver.maps.Marker({
-          position: center,
-          map,
-          title: DEST_NAME,
-        });
-
+        new window.naver.maps.Marker({ position: center, map, title: DEST_NAME });
         mapInstanceRef.current = map;
-      })
-      .catch(console.error);
+      }).catch(console.error);
   }, []);
 
-  // 2. 잠금/해제 상태 반영
+  // 2. 잠금 상태 처리
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
@@ -105,14 +93,10 @@ export const Location = () => {
     });
   }, [locked]);
 
-  // 잠금 메시지 핸들러
   const handleLockMessage = () => {
     setShowLockMessage(true);
     if (lockMessageTimeout.current) clearTimeout(lockMessageTimeout.current);
-    lockMessageTimeout.current = window.setTimeout(
-      () => setShowLockMessage(false),
-      1800
-    );
+    lockMessageTimeout.current = window.setTimeout(() => setShowLockMessage(false), 1800);
   };
 
   const toggleLock = () => {
@@ -121,24 +105,25 @@ export const Location = () => {
   };
 
   /* ============================================================
-     🚀 길찾기 로직 (앱 미설치 시 -> 모바일 웹으로 연결)
+     🚀 길찾기 로직 (자동차 모드 기본 설정)
      ============================================================ */
 
-  // 🟢 네이버 지도 연결
+  // 🟢 네이버 지도 (자동차 경로)
   const handleNaverMap = () => {
     const device = getDevice();
     const encodedName = encodeURIComponent(DEST_NAME);
     
-    // 모바일 웹 URL (앱 없을 때 이동할 곳)
+    // 모바일 웹 URL: showMap=true, pathType=0(추천) or 1(자동차)
+    // 네이버 모바일 웹은 파라미터가 유동적이지만, 기본적으로 앱이 없으면 길찾기 화면으로 보냅니다.
     const webUrl = `https://m.map.naver.com/route/index.nhn?name=${encodedName}&ex=${DEST_LNG}&ey=${DEST_LAT}&pathType=0&showMap=true`;
 
     if (device === "android") {
-      // Android Intent: 앱 없으면 자동으로 webUrl로 이동 (S.browser_fallback_url)
-      const intentUrl = `intent://route?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}&appname=wedding-invitation#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+      // ✅ 수정됨: nmap://route/car (자동차 경로)
+      const intentUrl = `intent://route/car?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}&appname=wedding-invitation#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
       window.location.href = intentUrl;
     } else if (device === "ios") {
-      // iOS: 앱 실행 시도 -> 실패 시 웹으로 이동
-      const appUrl = `nmap://route/public?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}`;
+      // ✅ 수정됨: nmap://route/car
+      const appUrl = `nmap://route/car?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}`;
       const start = Date.now();
       window.location.href = appUrl;
       
@@ -148,16 +133,14 @@ export const Location = () => {
         }
       }, 1500);
     } else {
-      // PC
-      window.open(`https://map.naver.com/v5/directions/-/transit/${DEST_LNG},${DEST_LAT},${encodedName}`, "_blank");
+      // PC: driving (자동차)
+      window.open(`https://map.naver.com/v5/directions/-/driving/${DEST_LNG},${DEST_LAT},${encodedName}`, "_blank");
     }
   };
 
-  // 🟡 카카오맵 연결
+  // 🟡 카카오맵 (위치 보기 -> 길찾기 버튼 유도)
   const handleKakaoMap = () => {
     const device = getDevice();
-    
-    // 모바일 웹 URL
     const webUrl = `https://map.kakao.com/link/to/${encodeURIComponent(DEST_NAME)},${DEST_LAT},${DEST_LNG}`;
 
     if (device === "android") {
@@ -178,11 +161,10 @@ export const Location = () => {
     }
   };
 
-  // 🔴 티맵 연결 (티맵은 웹 길찾기가 없어서 스토어로 보냄)
+  // 🔴 티맵 (앱 없으면 스토어 이동)
   const handleTMap = () => {
     const device = getDevice();
     const appUrl = `tmap://route?goalname=${encodeURIComponent(DEST_NAME)}&goalx=${DEST_LNG}&goaly=${DEST_LAT}`;
-    
     const storeUrl = device === "android" 
       ? "market://details?id=com.skt.tmap.ku" 
       : "https://apps.apple.com/app/id431589174";
@@ -192,7 +174,6 @@ export const Location = () => {
       return;
     }
 
-    // 안드로이드/iOS 모두 앱 실행 시도 후 스토어 이동
     const start = Date.now();
     window.location.href = appUrl;
     setTimeout(() => {
@@ -217,20 +198,14 @@ export const Location = () => {
 
       <div className="map-wrapper">
         {locked && (
-          <div
-            className="map-lock-overlay"
-            onTouchStart={handleLockMessage}
-            onMouseDown={handleLockMessage}
-          >
+          <div className="map-lock-overlay" onTouchStart={handleLockMessage} onMouseDown={handleLockMessage}>
             {showLockMessage && (
               <div className="lock-message">
                 <div className="lock-message-title">
                   <i className="fa-solid fa-lock" /> 지도 잠금 중
                 </div>
                 <div className="lock-message-sub">
-                  확대/축소하시려면
-                  <br />
-                  왼쪽 위 자물쇠를 눌러 주세요.
+                  확대/축소하시려면<br />왼쪽 위 자물쇠를 눌러 주세요.
                 </div>
               </div>
             )}
@@ -253,12 +228,10 @@ export const Location = () => {
           <img className="navi-logo naver" src={naverMapLogo} alt="" aria-hidden />
           <span>네이버지도</span>
         </button>
-
         <button onClick={handleKakaoMap} className="navi-button kakao">
           <img className="navi-logo kakao" src={kakaoMapLogo} alt="" aria-hidden />
           <span>카카오맵</span>
         </button>
-
         <button onClick={handleTMap} className="navi-button tmap">
           <img className="navi-logo tmap" src={tmapLogo} alt="" aria-hidden />
           <span>티맵</span>
@@ -269,7 +242,6 @@ export const Location = () => {
 };
 
 export {};
-
 declare global {
   interface Window {
     naver: any;
