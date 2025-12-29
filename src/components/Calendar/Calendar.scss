@@ -12,7 +12,6 @@
 /* ✅ 최상위 클래스 변경 (.calendar-container -> .calendar-wrapper) */
 .calendar-wrapper {
   width: 100%;
-  padding: 0; /* 🚨 중요: 부모(Section)가 패딩을 주므로 여기선 0으로 초기화 */
   box-sizing: border-box;
   text-align: center;
   font-family: "Noto Serif KR", serif;
