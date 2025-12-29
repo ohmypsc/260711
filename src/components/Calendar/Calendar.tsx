@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import "./Calendar.scss";
 
 /* =========================================================
-   WEDDING CONST (유지)
+   WEDDING CONST (✅ 날짜는 하드코딩)
    ========================================================= */
 const WEDDING = {
   year: 2026,
@@ -67,9 +67,11 @@ function CalendarLeafLine() {
    Calendar Component
    ========================================================= */
 export function Calendar() {
-  const groomName = "백승철";
-  const brideName = "오미영";
+  // ✅ 이름: 시크릿(환경변수)에서 불러옴 (없을 시 기본값 설정)
+  const groomName = import.meta.env.VITE_GROOM_NAME || "신랑";
+  const brideName = import.meta.env.VITE_BRIDE_NAME || "신부";
 
+  // ✅ 날짜: 상단에 하드코딩된 WEDDING 객체 사용
   const { year, month, day: weddingDay, hour, minute } = WEDDING;
 
   const weddingDate = useMemo(() => {
@@ -128,7 +130,7 @@ export function Calendar() {
   }, [year, month]);
 
   return (
-    // ✅ Wrapper 클래스로 변경
+    // ✅ Wrapper 클래스 사용 (스타일 충돌 방지)
     <div className="calendar-wrapper">
       
       {/* Headline */}
