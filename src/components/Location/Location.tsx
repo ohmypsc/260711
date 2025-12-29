@@ -113,16 +113,12 @@ export const Location = () => {
     const device = getDevice();
     const encodedName = encodeURIComponent(DEST_NAME);
     
-    // 모바일 웹 URL: showMap=true, pathType=0(추천) or 1(자동차)
-    // 네이버 모바일 웹은 파라미터가 유동적이지만, 기본적으로 앱이 없으면 길찾기 화면으로 보냅니다.
     const webUrl = `https://m.map.naver.com/route/index.nhn?name=${encodedName}&ex=${DEST_LNG}&ey=${DEST_LAT}&pathType=0&showMap=true`;
 
     if (device === "android") {
-      // ✅ 수정됨: nmap://route/car (자동차 경로)
       const intentUrl = `intent://route/car?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}&appname=wedding-invitation#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
       window.location.href = intentUrl;
     } else if (device === "ios") {
-      // ✅ 수정됨: nmap://route/car
       const appUrl = `nmap://route/car?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}`;
       const start = Date.now();
       window.location.href = appUrl;
@@ -133,7 +129,6 @@ export const Location = () => {
         }
       }, 1500);
     } else {
-      // PC: driving (자동차)
       window.open(`https://map.naver.com/v5/directions/-/driving/${DEST_LNG},${DEST_LAT},${encodedName}`, "_blank");
     }
   };
@@ -144,7 +139,7 @@ export const Location = () => {
     const webUrl = `https://map.kakao.com/link/to/${encodeURIComponent(DEST_NAME)},${DEST_LAT},${DEST_LNG}`;
 
     if (device === "android") {
-      const intentUrl = `intent://look?p=${DEST_LAT},${DEST_LNG}#Intent;scheme=kakaomap;package=net.daum.android.map;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+      const intentUrl = `intent://look?p=${DEST_LAT}&dlng=${DEST_LNG}#Intent;scheme=kakaomap;package=net.daum.android.map;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
       window.location.href = intentUrl;
     } else if (device === "ios") {
       const appUrl = `kakaomap://look?p=${DEST_LAT},${DEST_LNG}`;
@@ -182,7 +177,8 @@ export const Location = () => {
   };
 
   return (
-    <div className="location-container">
+    // ✅ 수정됨: .location-wrapper 사용
+    <div className="location-wrapper">
       <h2 className="section-title">오시는 길</h2>
 
       <div className="venue-info">
