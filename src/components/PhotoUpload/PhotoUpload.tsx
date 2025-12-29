@@ -101,7 +101,8 @@ export function PhotoUpload() {
   }, []);
 
   return (
-    <section className="photo-upload">
+    // ✅ 수정됨: section -> div wrapper (패딩 중복 방지)
+    <div className="photo-upload-wrapper">
       <h2 className="section-title">사진 업로드</h2>
       <p className="photo-upload__desc">
         하객분들이 직접 찍은 사진을 남겨주시면 감사하겠습니다.
@@ -195,7 +196,7 @@ export function PhotoUpload() {
         multiple
         style={{ display: "none" }}
       />
-    </section>
+    </div>
   );
 }
 
