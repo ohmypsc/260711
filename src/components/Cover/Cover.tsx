@@ -52,7 +52,7 @@ function LeafLine({ variant }: { variant: "top" | "bottom" }) {
             <path d="M166 18 C164 15, 159 15, 158 18 C159 21, 164 21, 166 18 Z" transform="translate(162 18) rotate(-16) scale(0.9) translate(-162 -18)" opacity="0.46" />
             <path d="M184 14 C182 11, 177 11, 176 14 C177 17, 182 17, 184 14 Z" transform="translate(180 14) rotate(-10) scale(0.88) translate(-180 -14)" opacity="0.44" />
             <path d="M202 19 C200 16, 194 16, 193 19 C194 22, 200 22, 202 19 Z" transform="translate(197.5 19) rotate(10) scale(1.02) translate(-197.5 -19)" opacity="0.56" />
-            <path d="M220 15 C218 12, 213 12, 212 15 C213 18, 218 18, 220 15 Z" transform="translate(216 15) rotate(-18) scale(0.8) translate(-216 -15)" opacity="0.36" />
+            <path d="M220 15 C218 12, 213 12, 212 15 C213 18, 218 18, 220 15 Z" transform="translate(218 15) rotate(-18) scale(0.8) translate(-218 -15)" opacity="0.36" />
             <path d="M238 20 C236 17, 231 17, 230 20 C231 23, 236 23, 238 20 Z" transform="translate(234 20) rotate(20) scale(0.96) translate(-234 -20)" opacity="0.5" />
             <path d="M256 16 C254 13, 249 13, 248 16 C249 19, 254 19, 256 16 Z" transform="translate(252 16) rotate(-6) scale(0.82) translate(-252 -16)" opacity="0.4" />
             <path d="M274 22 C272 19, 267 19, 266 22 C267 25, 272 25, 274 22 Z" transform="translate(270 22) rotate(14) scale(0.98) translate(-270 -22)" opacity="0.52" />
@@ -104,7 +104,8 @@ export function Cover() {
   }, [info]);
 
   return (
-    <section className="w-cover cover-with-invitation">
+    // ✅ 여기만 수정했습니다: section -> div, 클래스명 변경
+    <div className="cover-wrapper">
       {/* 1) 시 전문 전체 */}
       <div className="cover-poetry">
         <div className="poetry-block">
@@ -169,6 +170,6 @@ export function Cover() {
       </Button>
 
       {open && <ContactModal onClose={() => setOpen(false)} />}
-    </section>
+    </div>
   );
 }
