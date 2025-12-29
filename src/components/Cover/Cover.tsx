@@ -113,8 +113,6 @@ export function Cover() {
 
   return (
     <section className="w-cover cover-with-invitation">
-      {/* ✅ 이름 타이틀 제거 */}
-
       {/* 1) 시 전문 전체 */}
       <div className="cover-poetry">
         <div className="poetry-block">
@@ -138,11 +136,15 @@ export function Cover() {
 
       {/* 2) 초대글 전문 */}
       <div className="cover-message">
-        <p>오래된 거리처럼 익숙하지만,</p>
-        <p>여름비도 즐겁게 맞고,</p>
-        <p>시간의 흐름에 기대지 않고 서로에게 최선을 다하며,</p>
-        <p>어린 시절 순수한 마음으로 서로를 대하는 부부가 되고자 합니다.</p>
-        <p>이 시작을 함께해 주신다면 더없이 감사하겠습니다.</p>
+        <p>오래된 골목을 거닐듯 편안하고,</p>
+        <p>밤하늘 별들처럼 벅찬 설렘을 주는 사람을 만났습니다.</p>
+        <br />
+        <p>함께라면 여름의 궂은 비도 낭만이 되는 사람과</p>
+        <p>매 순간 거짓 없는 진심을 다하며 살겠습니다.</p>
+        <p>순수한 첫 마음 그대로 서로를 아끼겠습니다.</p>
+        <br />
+        <p>저희 두 사람의 앞날을</p>
+        <p>따뜻한 마음으로 축복해 주시면 감사하겠습니다.</p>
       </div>
 
       {/* 3) 가족관계 */}
