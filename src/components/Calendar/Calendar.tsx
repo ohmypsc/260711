@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import "./Calendar.scss";
 
 /* =========================================================
-   WEDDING CONST
+   WEDDING CONST (유지)
    ========================================================= */
 const WEDDING = {
   year: 2026,
@@ -33,12 +33,11 @@ function isSameKstDate(a: Date, b: Date) {
 }
 
 /* =========================================================
-   Leaf Divider Component
+   Leaf Divider Component (유지)
    ========================================================= */
 function CalendarLeafLine() {
   return (
     <div className="calendar-leaf-line">
-      {/* 잎사귀 SVG (기존 경로 유지) */}
       <svg viewBox="0 0 320 34" aria-hidden="true" preserveAspectRatio="none">
         <g fill="currentColor">
           <path d="M10 19 C8 16,3 16,2 19 C3 22,8 22,10 19 Z" transform="translate(6 19) rotate(-9) scale(0.92) translate(-6 -19)" opacity="0.45" />
@@ -68,7 +67,6 @@ function CalendarLeafLine() {
    Calendar Component
    ========================================================= */
 export function Calendar() {
-  // ✅ 이름 직접 할당 (외부 의존성 제거)
   const groomName = "백승철";
   const brideName = "오미영";
 
@@ -130,7 +128,9 @@ export function Calendar() {
   }, [year, month]);
 
   return (
-    <div className="calendar-container">
+    // ✅ Wrapper 클래스로 변경
+    <div className="calendar-wrapper">
+      
       {/* Headline */}
       <div className="calendar-headline">2026년 여름, 결혼합니다.</div>
 
@@ -186,7 +186,7 @@ export function Calendar() {
       {/* Countdown */}
       <div className="countdown-wrap">
         <div className="countdown-line1">
-          {groomName}과 {brideName}의 결혼식이
+          {groomName} <span className="amp">&</span> {brideName}
         </div>
 
         <div className="countdown-line2">
@@ -196,16 +196,19 @@ export function Calendar() {
                 <span className="num">{countdown.days}</span>
                 <span className="unit">일</span>
               </div>
+              <div className="colon">:</div>
               <div className="unit-block">
-                <span className="num">{countdown.hours}</span>
+                <span className="num">{pad(countdown.hours)}</span>
                 <span className="unit">시간</span>
               </div>
+              <div className="colon">:</div>
               <div className="unit-block">
-                <span className="num">{countdown.minutes}</span>
+                <span className="num">{pad(countdown.minutes)}</span>
                 <span className="unit">분</span>
               </div>
+              <div className="colon">:</div>
               <div className="unit-block">
-                <span className="num">{countdown.seconds}</span>
+                <span className="num">{pad(countdown.seconds)}</span>
                 <span className="unit">초</span>
               </div>
             </div>
@@ -221,9 +224,9 @@ export function Calendar() {
             </div>
           )}
         </div>
-
+        
         <div className="countdown-line3">
-          {countdown.mode === "future" ? "남았습니다." : "\u00A0"}
+          {countdown.mode === "future" ? "남았습니다" : ""}
         </div>
       </div>
     </div>
