@@ -1,4 +1,5 @@
-.account {
+/* ✅ TSX에서 변경한 클래스명(.account-wrapper)과 일치시킴 */
+.account-wrapper {
   text-align: center;
 
   .account__desc {
@@ -23,10 +24,6 @@
       grid-template-columns: 1fr;
     }
   }
-  
-  /* ✅ .account-btn 스타일 삭제함 
-     (전역 Button 컴포넌트 스타일을 그대로 따름) 
-  */
 }
 
 /* =========================================================
