@@ -9,234 +9,235 @@
   100% { background-position: -200% 50%; }
 }
 
-.calendar-headline {
-  /* 1. 기본 스타일 (여기서 중괄호 시작!) */
+/* ✅ 최상위 클래스 변경 (.calendar-container -> .calendar-wrapper) */
+.calendar-wrapper {
+  width: 100%;
+  padding: 0; /* 🚨 중요: 부모(Section)가 패딩을 주므로 여기선 0으로 초기화 */
+  box-sizing: border-box;
   text-align: center;
   font-family: "Noto Serif KR", serif;
-  font-weight: 700;
-  line-height: 1.2;
-  white-space: nowrap;
 
-  /* 데스크톱 기준 폰트 크기 */
-  letter-spacing: -0.04em; 
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  
-  margin-bottom: 3.5rem;
-  padding: 0 0.5rem;
-  width: 100%;
-  box-sizing: border-box;
-
-  /* Gradient Text Effect */
-  background: linear-gradient(
-    120deg, 
-    var(--theme-primary) 0%, 
-    #D68C90 50%, 
-    var(--theme-primary) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: textFlow 8s linear infinite;
-
-  /* 📱 2. 모바일 전용 스타일 (반드시 이 중괄호 안에 있어야 함!) */
-  @media (max-width: 600px) {
-    /* 화면 너비의 7.5%까지 강제로 키움 */
-    font-size: 7.5vw; 
-    
-    /* 양옆 여백을 없애서 공간 확보 (중요!) */
-    padding: 0; 
-  }
-
-} /* 👈 여기가 .calendar-headline이 끝나는 곳입니다 */
-
-
-/* =========================================================
-   Container & Topline
-   ========================================================= */
-.calendar-container {
-  width: 100%;
-  padding: 4rem 0; /* 좌우 패딩 0 (전역 설정 따름) */
-  box-sizing: border-box;
-}
-
-.calendar-topline {
-  width: 100%;
-  text-align: center;
-
-  font-family: "Noto Serif KR", serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--theme-primary);
-  letter-spacing: 0.05em;
-
-  padding-bottom: 1.2rem;
-  margin-bottom: 1.5rem;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 10%;
-    right: 10%;
-    bottom: 0;
-    height: 1px;
-    background: rgba(27, 38, 59, 0.15);
-  }
-}
-
-/* =========================================================
-   Weekdays
-   ========================================================= */
-.calendar-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  align-items: center;
-  margin-bottom: 0.5rem;
-
-  .weekday {
+  /* ----------------------------------------------------
+     Headline (그라데이션 텍스트 효과 유지)
+     ---------------------------------------------------- */
+  .calendar-headline {
     text-align: center;
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: var(--theme-primary);
-    opacity: 0.7;
-  }
+    font-family: "Noto Serif KR", serif;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
 
-  .weekday.sun { color: #D66D6D; }
-  .weekday.sat { color: #6D8BD6; }
-}
-
-/* =========================================================
-   Calendar Grid
-   ========================================================= */
-.calendar-box {
-  background: transparent;
-}
-
-.calendar-weeks {
-  display: grid;
-  gap: 2px;
-}
-
-.calendar-week {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-}
-
-.calendar-cell {
-  height: 52px;
-  display: grid;
-  place-items: center;
-  font-size: 0.95rem;
-  color: var(--theme-primary);
-  font-family: "Pretendard", sans-serif; 
-}
-
-.day-number {
-  position: relative;
-  z-index: 2;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-weight: 400;
-}
-
-/* D-Day 포인트 */
-.calendar-cell.day.wedding .day-number {
-  font-weight: 700;
-  background-color: var(--theme-point-pink); 
-  color: var(--theme-primary);
-  box-shadow: 0 4px 10px rgba(214, 140, 144, 0.4);
-}
-
-/* =========================================================
-   Leaf Divider
-   ========================================================= */
-.calendar-leaf-line {
-  width: 100%;
-  margin: 2.5rem 0 1.5rem; /* 좌우 margin auto 제거 */
-  
-  color: var(--theme-leaf-green);
-  opacity: 0.8;
-
-  svg {
+    /* 데스크톱 기준 폰트 크기 */
+    letter-spacing: -0.04em; 
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    
+    margin-bottom: 3.5rem;
+    padding: 0 0.5rem;
     width: 100%;
-    height: auto;
-    display: block;
+    box-sizing: border-box;
+
+    /* Gradient Text Effect */
+    background: linear-gradient(
+      120deg, 
+      var(--theme-primary) 0%, 
+      #D68C90 50%, 
+      var(--theme-primary) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textFlow 8s linear infinite;
+
+    /* 📱 모바일 전용 스타일 */
+    @media (max-width: 600px) {
+      font-size: 7.5vw; 
+      padding: 0; 
+    }
   }
-}
 
-/* =========================================================
-   Countdown
-   ========================================================= */
-.countdown-wrap {
-  margin-top: 1rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  
-  color: var(--theme-primary);
-  font-family: "Noto Serif KR", serif;
-}
+  /* ----------------------------------------------------
+     Topline (날짜 텍스트)
+     ---------------------------------------------------- */
+  .calendar-topline {
+    width: 100%;
+    text-align: center;
 
-.countdown-line1,
-.countdown-line3 {
-  font-size: 1.05rem;
-  opacity: 0.9;
-  font-weight: 500;
-}
+    font-family: "Noto Serif KR", serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--theme-primary);
+    letter-spacing: 0.05em;
 
-.countdown-line2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
 
-.countdown-values {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.8rem;
-  flex-wrap: nowrap; 
-}
+    &::after {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      bottom: 0;
+      height: 1px;
+      background: rgba(27, 38, 59, 0.15);
+    }
+  }
 
-/* 숫자와 단위 가로 배치 */
-.unit-block {
-  display: flex;
-  flex-direction: row; 
-  align-items: baseline; 
-  gap: 0.15rem; 
-}
+  /* ----------------------------------------------------
+     Weekdays (요일 헤더)
+     ---------------------------------------------------- */
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    align-items: center;
+    margin-bottom: 0.5rem;
 
-.num {
-  font-family: "Pretendard", sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--theme-primary);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 2px 2px 0px rgba(27, 38, 59, 0.1); 
-}
+    .weekday {
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--theme-primary);
+      opacity: 0.7;
 
-.unit {
-  font-size: 0.95rem;
-  color: var(--theme-primary);
-  font-weight: 500;
-  opacity: 0.8;
-  transform: scale(0.95); 
-}
+      &.sun { color: #D66D6D; }
+      &.sat { color: #6D8BD6; }
+    }
+  }
 
-.countdown-status {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--theme-point-pink);
-}
+  /* ----------------------------------------------------
+     Calendar Grid (날짜 그리드)
+     ---------------------------------------------------- */
+  .calendar-box {
+    background: transparent;
+    margin-bottom: 2rem;
+  }
 
-@media (max-width: 400px) {
-  .num { font-size: 1.6rem; }
-  .unit { font-size: 0.85rem; }
-  .countdown-values { gap: 0.5rem; }
+  .calendar-weeks {
+    display: grid;
+    gap: 2px;
+  }
+
+  .calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .calendar-cell {
+    height: 52px;
+    display: grid;
+    place-items: center;
+    font-size: 0.95rem;
+    color: var(--theme-primary);
+    font-family: "Pretendard", sans-serif; 
+
+    .day-number {
+      position: relative;
+      z-index: 2;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 400;
+    }
+
+    /* D-Day 포인트 */
+    &.day.wedding .day-number {
+      font-weight: 700;
+      background-color: var(--theme-point-pink); 
+      color: var(--theme-primary);
+      box-shadow: 0 4px 10px rgba(214, 140, 144, 0.4);
+    }
+  }
+
+  /* ----------------------------------------------------
+     Leaf Divider (나뭇잎)
+     ---------------------------------------------------- */
+  .calendar-leaf-line {
+    width: 100%;
+    margin: 2.5rem 0 1.5rem;
+    color: var(--theme-leaf-green);
+    opacity: 0.8;
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  /* ----------------------------------------------------
+     Countdown (카운트다운)
+     ---------------------------------------------------- */
+  .countdown-wrap {
+    margin-top: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    
+    color: var(--theme-primary);
+    font-family: "Noto Serif KR", serif;
+
+    .countdown-line1,
+    .countdown-line3 {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+    .countdown-line2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .countdown-values {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.8rem;
+      flex-wrap: nowrap; 
+
+      /* 숫자와 단위 가로 배치 */
+      .unit-block {
+        display: flex;
+        flex-direction: row; 
+        align-items: baseline; 
+        gap: 0.15rem; 
+      }
+
+      .num {
+        font-family: "Pretendard", sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--theme-primary);
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        text-shadow: 2px 2px 0px rgba(27, 38, 59, 0.1); 
+      }
+
+      .unit {
+        font-size: 0.95rem;
+        color: var(--theme-primary);
+        font-weight: 500;
+        opacity: 0.8;
+        transform: scale(0.95); 
+      }
+      
+      /* 모바일 대응 */
+      @media (max-width: 400px) {
+        gap: 0.5rem;
+        .num { font-size: 1.6rem; }
+        .unit { font-size: 0.85rem; }
+      }
+    }
+
+    .countdown-status {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--theme-point-pink);
+    }
+  }
 }
