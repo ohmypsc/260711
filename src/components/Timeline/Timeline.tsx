@@ -49,7 +49,7 @@ type TimelineItem = {
 };
 
 // ===============================================
-// 폰트 로딩 감지 Hook (유지)
+// 폰트 로딩 감지 Hook
 // ===============================================
 const useFontLoaded = () => {
   const [loaded, setLoaded] = useState(false);
@@ -60,7 +60,7 @@ const useFontLoaded = () => {
 };
 
 // ===============================================
-// 하이브리드 등장 애니메이션 Hook (유지)
+// 하이브리드 등장 애니메이션 Hook
 // ===============================================
 const useHybridTimelineAppear = (
   itemCount: number,
@@ -155,10 +155,7 @@ const useHybridTimelineAppear = (
 };
 
 // ===============================================
-// ✅ 캡션 타이틀 자동 축소 (모바일 안정 완성본)
-// - "h3"가 아니라 "텍스트 span" 폭으로 측정(모바일/Safari 안정)
-// - 컬럼 실제 내부 폭(clientWidth - padding) 기준
-// - 첫 페인트 전에 fit() 1회 즉시 실행
+// AutoFitTitle
 // ===============================================
 function AutoFitTitle({
   children,
@@ -212,7 +209,6 @@ function AutoFitTitle({
       }
     };
 
-    // 레이아웃 확정 후 측정(더블 rAF가 안정적)
     const run = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
@@ -248,7 +244,7 @@ function AutoFitTitle({
 
 
 /**
- * LazyImage (유지)
+ * LazyImage
  */
 function LazyImage({
   srcPromise,
@@ -340,7 +336,8 @@ export function Timeline() {
   const isFontLoaded = useFontLoaded();
 
   return (
-    <div className="w-timeline">
+    // ✅ 수정됨: .w-timeline -> .timeline-wrapper
+    <div className="timeline-wrapper">
       <ol className="timeline-list">
         {items.map((item, idx) => {
           const side = idx % 2 === 0 ? "left" : "right";
