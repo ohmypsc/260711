@@ -1,6 +1,6 @@
 /* =========================================================
    Location Component
-   Theme: Classic Paper Layer + Brand Gradients (Horizontal)
+   Theme: Flat & Clean (No Shadows)
    ========================================================= */
 
 /* ✅ 최상위 클래스 변경 (.location-container -> .location-wrapper) */
@@ -8,6 +8,7 @@
   width: 100%;
   position: relative;
   box-sizing: border-box;
+  padding: 0; /* 부모(Section) 패딩 위임 */
 }
 
 /* ===========================
@@ -51,12 +52,14 @@
   position: relative;
   margin: 0 auto 1.2rem;
   
+  /* ✅ 카드 둥글기 20px 통일 */
   border-radius: 20px; 
   overflow: hidden;
   background: #fff;
   border: 1px solid rgba(27, 38, 59, 0.2); 
   
-  box-shadow: 0 4px 12px rgba(27, 38, 59, 0.05);
+  /* 그림자 제거 (Flat) */
+  box-shadow: none;
 }
 
 .map-area {
@@ -87,7 +90,8 @@
   text-align: center;
   white-space: nowrap;
   
-  box-shadow: 4px 4px 0 0 rgba(0,0,0,0.1); 
+  /* 그림자 제거 */
+  box-shadow: none;
 
   .lock-message-title {
     font-weight: 700;
@@ -116,7 +120,7 @@
 
   width: 40px;
   height: 40px;
-  border-radius: 8px; 
+  border-radius: 8px; /* 작은 버튼은 8px */
   display: grid;
   place-items: center;
 
@@ -125,16 +129,16 @@
   color: var(--theme-primary);
   
   border: 1px solid rgba(27, 38, 59, 0.2);
-  box-shadow: 2.5px 2.5px 0 0 rgba(27, 38, 59, 0.15); 
   
+  /* 그림자 제거 및 트랜지션 단순화 */
+  box-shadow: none;
   cursor: pointer;
-  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              box-shadow 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.1s ease, background-color 0.2s ease;
 }
 
 .map-lock-button:active {
-  transform: translate(2.5px, 2.5px);
-  box-shadow: none;
+  /* 클릭 시 작아지는 효과 */
+  transform: scale(0.92);
 }
 
 .map-lock-button.unlocked {
@@ -162,18 +166,17 @@
   position: relative;
   width: 100%;
   
-  /* ✅ 가로 정렬 핵심: flex + center */
   display: inline-flex;
   flex-direction: row; 
-  align-items: center;       /* 수직 중앙 정렬 (로고-텍스트 높이 맞춤) */
-  justify-content: center;   /* 좌우 중앙 정렬 */
+  align-items: center;       
+  justify-content: center;   
   
-  gap: 0.3rem; /* 아이콘과 텍스트 사이 간격 좁힘 (밀착감) */
+  gap: 0.3rem; 
   
   padding: 0.95rem 0.2rem;
   
-  /* [2. 형태: Classic Paper Style] */
-  border-radius: 6px; 
+  /* ✅ 수정됨: 6px -> 12px (버튼 통일) */
+  border-radius: 12px; 
   border: 1.5px solid transparent; 
   
   background:
@@ -181,36 +184,35 @@
     var(--navi-tint);
 
   /* [3. 텍스트 스타일: 깔끔한 고딕(Pretendard) 적용] */
-  font-family: "Pretendard", sans-serif; /* 명조체 제거 -> 고딕 적용 */
+  font-family: "Pretendard", sans-serif; 
   font-size: 0.84rem;
-  font-weight: 700; /* 고딕은 두꺼워야 버튼에서 예쁨 */
-  line-height: 1;   /* 높이 오차 제거 */
+  font-weight: 700; 
+  line-height: 1;   
   white-space: nowrap;
   
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 
-  /* [4. ✨ 하드 쉐도우 (종이 질감)] */
-  box-shadow: 3.5px 3.5px 0 0 rgba(27, 38, 59, 0.15); 
+  /* ✅ 그림자 제거 (Flat Style) */
+  box-shadow: none; 
   
   /* [5. 움직임] */
-  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              box-shadow 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.1s ease, opacity 0.2s ease;
 }
 
-/* Active: 딸깍 */
+/* Active: 작아짐 + 투명도 */
 .navi-button:active {
-  transform: translate(3.5px, 3.5px);
-  box-shadow: none;
+  transform: scale(0.96);
+  opacity: 0.8;
 }
 
 /* 로고 이미지 */
 .navi-button .navi-logo {
-  width: 18px; /* 텍스트 크기와 비슷하게 맞춤 */
+  width: 18px; 
   height: 18px;
   object-fit: contain;
-  display: block; /* inline-block 대신 block으로 하여 flex 정렬 따름 */
+  display: block; 
   
   /* 미세 조정: 폰트 베이스라인에 맞춰 아주 살짝 내림 */
   transform: translateY(0.5px); 
@@ -221,12 +223,10 @@
   display: block;
   position: relative;
   z-index: 2;
-  
-  /* 폰트 렌더링 깔끔하게 */
   -webkit-font-smoothing: antialiased;
 }
 
-/* [6. Gradient Border Logic] */
+/* [6. Gradient Border Logic] - 이건 디자인 포인트라 유지 */
 .navi-button::before {
   content: "";
   position: absolute;
@@ -258,7 +258,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  /* 고딕체에서 텍스트 그라데이션이 더 잘 보이도록 자간 조정 */
   letter-spacing: -0.02em; 
 }
 
@@ -295,7 +294,6 @@
     padding: 0.9rem 0.2rem;
     gap: 0.25rem;
   }
-  /* 모바일에서 로고/폰트 비율 유지 */
   .navi-button .navi-logo {
     width: 17px;
     height: 17px;
