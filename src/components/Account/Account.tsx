@@ -20,38 +20,41 @@ export function Account() {
 
   const copyToClipboard = (account: string) => {
     const numericAccount = account.replace(/[^0-9]/g, "");
-    navigator.clipboard.writeText(numericAccount);
-    alert("📌 계좌번호가 복사되었습니다.");
+    navigator.clipboard.writeText(numericAccount).then(() => {
+        alert("📌 계좌번호가 복사되었습니다.");
+    }).catch(() => {
+        // 혹시 모바일 보안정책상 실패할 경우 대비
+        alert("복사에 실패했습니다. 직접 입력해주세요.");
+    });
   };
 
   return (
-    <section className="account">
-      <div className="section-inner">
-        <h2 className="section-title">마음 전하실 곳</h2>
+    // 🚨 중요: index.tsx에서 이미 section-inner를 감싸주므로 여기서는 제거합니다.
+    <div className="account-wrapper">
+      <h2 className="section-title">마음 전하실 곳</h2>
 
-        <div className="account__desc">
-          <p className="keep-all">참석이 어려우신 분들을 위해</p>
-          <p className="keep-all">계좌번호를 기재하였습니다.</p>
-          <p className="keep-all">너그러운 마음으로 양해 부탁드립니다.</p>
-        </div>
+      <div className="account__desc">
+        <p className="keep-all">참석이 어려우신 분들을 위해</p>
+        <p className="keep-all">계좌번호를 기재하였습니다.</p>
+        <p className="keep-all">너그러운 마음으로 양해 부탁드립니다.</p>
+      </div>
 
-        <div className="account-buttons">
-          <Button
-            variant="basic"
-            className="account-btn"
-            onClick={() => setOpenModal("groom")}
-          >
-            신랑 측 계좌번호
-          </Button>
+      <div className="account-buttons">
+        <Button
+          variant="basic"
+          className="account-btn"
+          onClick={() => setOpenModal("groom")}
+        >
+          신랑 측 계좌번호
+        </Button>
 
-          <Button
-            variant="basic"
-            className="account-btn"
-            onClick={() => setOpenModal("bride")}
-          >
-            신부 측 계좌번호
-          </Button>
-        </div>
+        <Button
+          variant="basic"
+          className="account-btn"
+          onClick={() => setOpenModal("bride")}
+        >
+          신부 측 계좌번호
+        </Button>
       </div>
 
       {openModal && (
@@ -90,6 +93,6 @@ export function Account() {
           </div>
         </Modal>
       )}
-    </section>
+    </div>
   );
 }
