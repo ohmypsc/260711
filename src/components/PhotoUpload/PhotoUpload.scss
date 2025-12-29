@@ -1,6 +1,9 @@
-.photo-upload {
+/* ✅ 최상위 클래스 변경 (.photo-upload -> .photo-upload-wrapper) */
+.photo-upload-wrapper {
   text-align: center;
   margin-top: 8px;
+  /* 🚨 중요: 부모(section)가 패딩을 주므로 0으로 설정 */
+  padding: 0;
 
   .photo-upload__desc {
     margin: 12px 0 18px;
