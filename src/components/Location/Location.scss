@@ -3,10 +3,12 @@
    Theme: Classic Paper Layer + Brand Gradients (Horizontal)
    ========================================================= */
 
-.location-container {
+/* ✅ 최상위 클래스 변경 (.location-container -> .location-wrapper) */
+.location-wrapper {
   width: 100%;
   position: relative;
   box-sizing: border-box;
+  padding: 0; /* 🚨 중요: 부모(Section)가 패딩을 주므로 0으로 설정 */
 }
 
 /* ===========================
@@ -165,8 +167,8 @@
   /* ✅ 가로 정렬 핵심: flex + center */
   display: inline-flex;
   flex-direction: row; 
-  align-items: center;      /* 수직 중앙 정렬 (로고-텍스트 높이 맞춤) */
-  justify-content: center;  /* 좌우 중앙 정렬 */
+  align-items: center;       /* 수직 중앙 정렬 (로고-텍스트 높이 맞춤) */
+  justify-content: center;   /* 좌우 중앙 정렬 */
   
   gap: 0.3rem; /* 아이콘과 텍스트 사이 간격 좁힘 (밀착감) */
   
@@ -192,7 +194,7 @@
   -webkit-tap-highlight-color: transparent;
 
   /* [4. ✨ 하드 쉐도우 (종이 질감)] */
-  box-shadow: 3.5px 3.5px 0 0 rgba(27, 38, 59, 0.15);
+  box-shadow: 3.5px 3.5px 0 0 rgba(27, 38, 59, 0.15); 
   
   /* [5. 움직임] */
   transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), 
