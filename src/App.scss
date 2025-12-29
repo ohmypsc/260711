@@ -87,18 +87,3 @@ section {
   color: var(--theme-primary); /* 제목 색상 */
   line-height: 1.2;
 }
-
-/* ============================================
-   ✨ Section Reveal Animation
-   ============================================ */
-main.wedding-page section .section-inner {
-  opacity: 0; 
-  transform: translate3d(0, 24px, 0); 
-  transition: opacity 800ms ease, transform 900ms ease; 
-}
-
-main.wedding-page section.lazy-active .section-inner {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  will-change: opacity, transform; 
-}
