@@ -51,8 +51,7 @@
   position: relative;
   margin: 0 auto 1.2rem;
   
-  /* 지도 박스: 버튼과 통일감 있게 6px 라운드 */
-  border-radius: 6px; 
+  border-radius: 20px; 
   overflow: hidden;
   background: #fff;
   border: 1px solid rgba(27, 38, 59, 0.2); 
@@ -82,7 +81,7 @@
   background: rgba(27, 38, 59, 0.95); 
   color: #fff;
   padding: 1rem 1.2rem;
-  border-radius: 6px;
+  border-radius: 12px;
   font-size: 0.92rem;
   line-height: 1.5;
   text-align: center;
@@ -117,7 +116,7 @@
 
   width: 40px;
   height: 40px;
-  border-radius: 4px; 
+  border-radius: 8px; 
   display: grid;
   place-items: center;
 
