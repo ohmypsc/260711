@@ -1,159 +1,159 @@
-/* ============================================
-   Cover (Clean / Global tone + Invitation merged)
-   - 이름 타이틀 제거
-   - 시 전문 + 초대글 + 가족관계 + CTA 통합
-   - ✅ 모든 스타일을 .w-cover 스코프에 가둬 전역 누수 방지
-   ============================================ */
+/* =========================================================
+   Cover Section
+   Theme: Warm Linen & Deep Navy (Poetry Book Style)
+   ========================================================= */
 
 .w-cover {
   text-align: center;
   max-width: var(--section-max-width);
   margin: 0 auto;
+  padding: 1.5rem 0 3rem; /* 상하 여백 추가 */
 
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 2.5rem; /* 섹션 간 간격 넓힘 (시원하게) */
+
+  font-family: "Noto Serif KR", serif; /* 전체 명조체 적용 */
 
   /* -------------------------
-     시 전문(전문 전체)
+     1. 시 전문 (Poetry)
+     - 이탤릭체 + 명조 조합으로 서정적 느낌 강조
   -------------------------- */
   .cover-poetry {
-    display: grid;
-    gap: 0.9rem;
-    margin-top: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* 연(Stanza) 사이 간격 */
+    margin-top: 1rem;
 
     .poetry-block {
-      display: grid;
-      gap: 0.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem; /* 행(Line) 사이 간격 */
     }
 
     p {
       margin: 0;
-      font-style: italic;
-      font-weight: 300;
-      font-size: 1rem;
-      line-height: 1.65;
-      letter-spacing: 0.015rem;
-      color: var(--text-main);
-      opacity: 0.95;
+      font-size: 1.05rem;
+      font-weight: 400; /* 명조체는 너무 얇으면 안 보임 */
+      line-height: 1.75;
+      letter-spacing: -0.01em;
+      color: var(--theme-primary); /* Deep Navy */
+      opacity: 0.9;
       text-align: center;
-
+      
+      /* 모바일 가독성 */
       word-break: keep-all;
       overflow-wrap: break-word;
-      line-break: loose;
     }
 
     .poet {
-      margin-top: 0.6rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--theme-primary);
+      opacity: 0.6;
+      text-align: center; /* 중앙 정렬이 더 안정감 있음 */
       font-style: normal;
-      font-weight: 400;
-      opacity: 0.75;
-      font-size: 0.86rem;
-      color: var(--text-light);
-      text-align: right;
-      letter-spacing: 0.01rem;
     }
   }
 
   /* -------------------------
-     초대글(본문)
+     2. 초대글 (Invitation Message)
+     - 시보다 조금 더 단단한 느낌
   -------------------------- */
   .cover-message {
-    display: grid;
-    gap: 0.22rem;
-    font-size: 1.04rem;
-    font-weight: 400;
-    line-height: 1.7;
-    letter-spacing: 0.02rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    font-size: 1rem;
+    line-height: 1.8;
     color: var(--text-main);
-    opacity: 1;
+    opacity: 0.85;
     text-align: center;
-
     word-break: keep-all;
-    overflow-wrap: break-word;
-    line-break: loose;
 
-    p {
-      margin: 0;
-    }
+    p { margin: 0; }
   }
 
   /* -------------------------
-     부모님/가족관계 박스
+     3. 가족 관계 (Family)
+     - 장식 라인과 어우러지는 클래식한 배치
   -------------------------- */
   .family-section {
-    margin: 0.75rem 0 1.05rem;
-    padding: 0.55rem 0;
-
-    font-size: 1.05rem;
-    line-height: 1.72rem;
-
+    margin: 0.5rem 0;
+    padding: 0;
+    
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.8rem;
+    align-items: center;
 
     .name {
-      display: block;
-    }
-
-    .parent-names {
+      font-size: 1.1rem;
+      line-height: 1.6;
       color: var(--text-main);
     }
 
+    /* 혼주 성함 */
+    .parent-names {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    /* 관계 (아들/딸) */
     .relation-name--adjust {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 2.6em;
+      display: inline-block;
+      margin: 0 4px;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      font-family: "Pretendard", sans-serif; /* 관계만 고딕으로 작게 */
+    }
+    
+    /* 신랑/신부 이름 강조 */
+    .groom-bride-name {
+      font-weight: 700;
+      color: var(--theme-primary);
     }
   }
 
   /* -------------------------
-     장식 라인(LeafLine)
+     4. 장식 라인 (LeafLine)
+     - 초록색 대신 네이비 톤으로 변경하여 테마 통일
   -------------------------- */
   .parent-line {
     width: 100%;
-    margin: 0.2rem auto;
-
-    color: var(--theme-leaf-green);
-    opacity: 0.9;
+    max-width: 280px; /* 라인 길이 제한 */
+    margin: 0 auto;
+    
+    /* ✨ 색상 변경: Leaf Green -> Soft Navy */
+    color: var(--theme-primary); 
+    opacity: 0.25; /* 은은하게 배경처럼 */
 
     svg {
       width: 100%;
       height: auto;
       display: block;
-      filter: none;
     }
 
-    &.top {
-      margin-bottom: 0.35rem;
-    }
-
-    &.bottom {
-      margin-top: 0.35rem;
-    }
+    &.top { margin-bottom: 0.5rem; }
+    &.bottom { margin-top: 0.5rem; }
   }
 
   /* -------------------------
-     Mobile
+     Mobile Responsive
   -------------------------- */
   @media (max-width: 420px) {
-    gap: 1.1rem;
+    gap: 2rem;
+    padding-bottom: 2rem;
 
     .cover-poetry p {
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-size: 1rem;
+      line-height: 1.7;
     }
 
     .cover-message {
-      font-size: 1rem;
-      line-height: 1.65;
-    }
-
-    .family-section {
-      margin: 0.65rem 0 0.95rem;
-      padding: 0.5rem 0;
-      gap: 0.3rem;
+      font-size: 0.95rem;
+      padding: 0 10px;
     }
   }
 }
