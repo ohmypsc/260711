@@ -1,6 +1,7 @@
 /* ============================================
-   📌 Button Style: Classic Paper Layer
-   Option 1(Color) + Option 5(Effect)
+   📌 Button Style: Flat & Minimal
+   - 그림자 코드 완전 삭제
+   - Radius: 12px 통일
    ============================================ */
 
 button.w-btn {
@@ -11,94 +12,75 @@ button.w-btn {
   align-items: center;
   justify-content: center;
   
-  font-family: inherit; /* Noto Serif KR 상속 */
+  font-family: inherit;
   line-height: 1;
   border: none;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 
-  /* 2. 움직임 설정 (쫀득한 종이 느낌) */
-  /* transform과 shadow가 동시에 변해야 자연스러움 */
-  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              box-shadow 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* 2. 움직임 설정 (그림자 관련 transition 삭제함) */
+  transition: opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease;
 }
 
 /* ------------------------------------------------------
-   👑 1. BASIC (The Special One)
-   메인 입장 버튼: 네이비 배경 + 샌드 텍스트 + 깊이감 있는 그림자
+   👑 1. BASIC (메인 입장 버튼)
 ------------------------------------------------------ */
 button.w-btn.basic {
-  background-color: var(--theme-primary);       /* #1B263B (Navy) */
-  color: var(--theme-primary-light);            /* #D9CEC1 (Sand) */
+  background-color: var(--theme-primary);       /* #1B263B */
+  color: var(--theme-primary-light);            /* #D9CEC1 */
   
-  /* 형태: 명조체와 어울리는 적당한 둥글기 */
-  border-radius: 6px; 
-  padding: 1.25rem 1.5rem; /* 넉넉한 터치 영역 */
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
   
   font-size: clamp(1.0rem, 2.6vw, 1.15rem);
   font-weight: 600;
-  letter-spacing: 0.1em; /* 자간을 넓혀 우아하게 */
-
-  /* ✨ 핵심 효과: 3.5px 하드 쉐도우 (은은한 네이비 그림자) */
-  box-shadow: 3.5px 3.5px 0 0 rgba(27, 38, 59, 0.25); 
+  letter-spacing: 0.1em;
+  
+  /* box-shadow 코드 삭제됨 */
 }
-
-/* PC 호버 대응 (선택사항) */
-@media (hover: hover) {
-  button.w-btn.basic:hover {
-    transform: translate(-1px, -1px); /* 살짝 떠오름 */
-    box-shadow: 4.5px 4.5px 0 0 rgba(27, 38, 59, 0.2);
-  }
-}
-
-/* Active: 누르면 그림자 위치만큼 이동하며 "딸깍" 붙음 */
-button.w-btn.basic:active {
-  transform: translate(3.5px, 3.5px);
-  box-shadow: none; 
-  opacity: 1; /* 투명도 변화 없이 물리적 이동만 강조 */
-}
-
 
 /* ------------------------------------------------------
-   👯 2. TWINS (Submit & Close)
-   모달 내부 버튼: 컴팩트한 사이즈 + 얕은 깊이감
+   👯 2. TWINS (모달 내부 버튼)
 ------------------------------------------------------ */
 button.w-btn.submit,
 button.w-btn.close {
-  border-radius: 4px; /* 조금 더 단정하게 */
+  border-radius: 12px;
   padding: 0.95rem 1.1rem;
   
   font-size: clamp(0.9rem, 2.4vw, 1.0rem);
   font-weight: 500;
   letter-spacing: 0.03em;
   
-  /* Twins는 조금 더 얇은 두께감 (2.5px) */
-  box-shadow: 2.5px 2.5px 0 0 rgba(27, 38, 59, 0.15);
+  /* box-shadow 코드 삭제됨 */
 }
 
-/* [Submit]: 기능 강조 (네이비 + 흰색) */
+/* [Submit] */
 button.w-btn.submit {
   background-color: var(--theme-primary);
   color: #FFFFFF;
 }
 
-/* [Close]: 취소/닫기 (베이지 + 회색) */
+/* [Close] */
 button.w-btn.close {
-  background-color: var(--theme-accent);  /* #F4F1EE */
-  color: var(--text-light);               /* #6E7278 */
-  
-  /* 닫기 버튼은 그림자를 더 연하게 */
-  box-shadow: 2.5px 2.5px 0 0 rgba(27, 38, 59, 0.08);
+  background-color: var(--theme-accent);
+  color: var(--text-light);
 }
 
-/* Twins Active */
-button.w-btn.submit:active,
-button.w-btn.close:active {
-  transform: translate(2.5px, 2.5px);
-  box-shadow: none;
+/* ------------------------------------------------------
+   ✨ Interaction (클릭 효과)
+------------------------------------------------------ */
+button.w-btn:active {
+  transform: scale(0.98); /* 클릭 시 살짝 작아짐 */
+  opacity: 0.85;          /* 살짝 연해짐 */
 }
 
+/* PC 호버 */
+@media (hover: hover) {
+  button.w-btn:hover {
+    opacity: 0.9;
+  }
+}
 
 /* ------------------------------------------------------
    🚫 Disabled State
@@ -107,7 +89,6 @@ button.w-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   transform: none !important;
-  box-shadow: none !important;
   
   background-color: #E6E8EB;
   color: #999;
