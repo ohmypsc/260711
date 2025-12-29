@@ -83,7 +83,8 @@ export function Attendance() {
   };
 
   return (
-    <section className="attendance">
+    // ✅ 수정됨: section 태그 제거 -> div wrapper로 변경
+    <div className="attendance-wrapper">
       <h2 className="section-title">참석 여부 전달</h2>
 
       <p className="attendance__desc keep-all">
@@ -145,10 +146,11 @@ export function Attendance() {
       {typeof openModal === "object" && openModal?.type === "delete" && (
         <DeleteAttendanceModal row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone} onClose={() => setOpenModal(null)} onSuccess={(id) => { setMyRows(prev => prev.filter(r => r.id !== id)); removeId(id); }} />
       )}
-    </section>
+    </div>
   );
 }
 
+// ... (나머지 Modal 컴포넌트들은 기능이 완벽하므로 그대로 두시면 됩니다!)
 function Counter({ value, onChange, min = 1 }: { value: number; onChange: (v: number) => void; min?: number }) {
   return (
     <div className="counter-ui">
@@ -186,7 +188,6 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
       <div className="attendance-modal-content">
         <h2 className="modal-title">참석 의사 전달</h2>
         <form id="write-form" className="attendance-form" onSubmit={onSubmit}>
-          {/* 1. 구분 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">구분</label>
             <div className="toggle-row">
@@ -194,26 +195,18 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
               <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
             </div>
           </div>
-
-          {/* 2. 성함 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">성함</label>
             <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </div>
-
-          {/* 3. 연락처 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">연락처</label>
             <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
           </div>
-
-          {/* 4. 참석 인원 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">참석 인원</label>
             <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
           </div>
-
-          {/* 5. 식사 여부 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">식사 여부</label>
             <div className="toggle-row">
@@ -299,7 +292,6 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
       <div className="attendance-modal-content">
         <h2 className="modal-title">내 응답 수정</h2>
         <form id="edit-form" className="attendance-form" onSubmit={onUpdate}>
-          {/* 1. 구분 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">구분</label>
             <div className="toggle-row">
@@ -307,26 +299,18 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
               <button type="button" className={`toggle-btn ${form.side === "bride" ? "active" : ""}`} onClick={() => setForm({ ...form, side: "bride" })}>신부 측</button>
             </div>
           </div>
-
-          {/* 2. 성함 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">성함</label>
             <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </div>
-
-          {/* 3. 연락처 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">연락처</label>
             <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: formatPhone(normalizePhone(e.target.value)) })} />
           </div>
-
-          {/* 4. 참석 인원 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">참석 인원</label>
             <Counter value={form.count} onChange={v => setForm({ ...form, count: v })} />
           </div>
-
-          {/* 5. 식사 여부 (한 줄 차지) */}
           <div className="field span-2">
             <label className="label">식사 여부</label>
             <div className="toggle-row">
