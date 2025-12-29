@@ -1,6 +1,7 @@
-.guestbook {
+/* ✅ 최상위 클래스 변경 (.guestbook -> .guestbook-wrapper) */
+.guestbook-wrapper {
   text-align: center;
-  padding: 2.5rem 0; 
+  padding: 0; /* 🚨 중요: 부모(Section)가 패딩을 주므로 여기선 0으로 초기화 */
   font-family: inherit;
 
   .guestbook__desc {
