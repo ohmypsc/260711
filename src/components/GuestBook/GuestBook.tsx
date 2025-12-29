@@ -72,13 +72,13 @@ export function GuestBook() {
   const pages = useMemo(() => Array.from({ length: totalPages }, (_, i) => i), [totalPages]);
 
   return (
-    <section className="guestbook">
+    // ✅ 수정됨: section -> div wrapper (패딩 중복 방지)
+    <div className="guestbook-wrapper">
       <h2 className="section-title">방명록</h2>
       <p className="guestbook__desc">
         신랑, 신부에게<br />축하의 마음을 전해주세요.
       </p>
 
-      {/* 버튼 영역도 중앙 정렬을 위해 padding 유지 가능하나, 전체 흐름상 가로폭 최대로 설정 */}
       <div className="guestbook__actions top">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
           방명록 작성하기
@@ -156,7 +156,7 @@ export function GuestBook() {
           onSuccess={() => loadPage(currentPage)}
         />
       )}
-    </section>
+    </div>
   );
 }
 
@@ -190,9 +190,9 @@ function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSu
             e.preventDefault();
             setLoading(true);
             try {
-              const name = inputRef.current.name.value.trim();
-              const content = inputRef.current.content.value.trim();
-              const password = inputRef.current.password.value;
+              const name = inputRef.current?.name.value.trim();
+              const content = inputRef.current?.content.value.trim();
+              const password = inputRef.current?.password.value;
               if (!name || !content || !password) {
                 alert("모든 항목을 입력해 주세요.");
                 setLoading(false);
@@ -210,15 +210,15 @@ function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSu
         >
           <div className="field">
             <label className="label">성함</label>
-            <input disabled={loading} type="text" autoComplete="off" ref={(ref) => (inputRef.current.name = ref as HTMLInputElement)} />
+            <input disabled={loading} type="text" autoComplete="off" ref={(ref) => (inputRef.current!.name = ref as HTMLInputElement)} />
           </div>
           <div className="field">
             <label className="label">메시지</label>
-            <textarea disabled={loading} ref={(ref) => (inputRef.current.content = ref as HTMLTextAreaElement)} />
+            <textarea disabled={loading} ref={(ref) => (inputRef.current!.content = ref as HTMLTextAreaElement)} />
           </div>
           <div className="field">
             <label className="label">비밀번호</label>
-            <input disabled={loading} type="password" ref={(ref) => (inputRef.current.password = ref as HTMLInputElement)} />
+            <input disabled={loading} type="password" ref={(ref) => (inputRef.current!.password = ref as HTMLInputElement)} />
           </div>
         </form>
       </div>
@@ -261,15 +261,21 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; 
                 setLoading(false);
                 return;
               }
+              // 1. 해당 글의 비밀번호 가져오기
               const { data, error } = await supabase.from("guestbook").select("password").eq("id", postId).single();
               if (error || !data) throw new Error();
-              if (data.password !== password) {
+              
+              // 2. 비밀번호 비교 (간단한 클라이언트 사이드 체크)
+              if (String(data.password) !== String(password)) {
                 alert("비밀번호가 일치하지 않습니다.");
                 setLoading(false);
                 return;
               }
+
+              // 3. 삭제 요청
               const { error: deleteError } = await supabase.from("guestbook").delete().eq("id", postId);
               if (deleteError) throw deleteError;
+
               alert("삭제되었습니다.");
               onClose();
               onSuccess();
@@ -278,7 +284,11 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; 
             } finally { setLoading(false); }
           }}
         >
-          <input ref={inputRef} disabled={loading} type="password" />
+          {/* ✅ 디자인 통일을 위해 .field 클래스로 감쌌습니다 */}
+          <div className="field">
+            <label className="label">비밀번호</label>
+            <input ref={inputRef} disabled={loading} type="password" placeholder="비밀번호 입력" />
+          </div>
         </form>
       </div>
     </Modal>
