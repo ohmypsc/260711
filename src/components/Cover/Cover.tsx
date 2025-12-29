@@ -136,7 +136,53 @@ export function Cover() {
 
       {/* 2) 초대글 전문 */}
       <div className="cover-message">
-        <p>오래된 골목을 거닐듯 편안하고,</p>
+        <p>오래된 거리를      </svg>
+    </div>
+  );
+}
+
+export function Cover() {
+  const [open, setOpen] = useState(false);
+  const info = useContactInfo();
+
+  const names = useMemo(() => {
+    const getName = (id: string) => info.find((c) => c.id === id)?.name ?? "";
+    return {
+      groom: getName("groom"),
+      bride: getName("bride"),
+      groomFather: getName("groom-father"),
+      groomMother: getName("groom-mother"),
+      brideFather: getName("bride-father"),
+      brideMother: getName("bride-mother"),
+    };
+  }, [info]);
+
+  return (
+    <section className="w-cover cover-with-invitation">
+      {/* 1) 시 전문 전체 */}
+      <div className="cover-poetry">
+        <div className="poetry-block">
+          <p>나는 오래된 거리처럼 너를 사랑하고</p>
+          <p>별들은 벌들처럼 웅성거리고</p>
+        </div>
+
+        <div className="poetry-block">
+          <p>여름에는 작은 은색 드럼을 치는 것처럼</p>
+          <p>네 손바닥을 두드리는 비를 줄게</p>
+          <p>과거에게 그랬듯 미래에게도 아첨하지 않을게</p>
+        </div>
+
+        <div className="poetry-block">
+          <p>어린 시절 순결한 비누 거품 속에서 우리가 했던 맹세들을 찾아</p>
+          <p>너의 팔에 모두 적어줄게</p>
+        </div>
+
+        <p className="poet">진은영, &lt;청혼&gt; 중</p>
+      </div>
+
+      {/* 2) 초대글 전문 */}
+      <div className="cover-message">
+        <p>오래된 거리를 거닐듯 편안하고,</p>
         <p>밤하늘 별들처럼 벅찬 설렘을 주는 사람을 만났습니다.</p>
         <br />
         <p>함께라면 여름의 궂은 비도 낭만이 되는 사람과</p>
