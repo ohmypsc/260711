@@ -30,7 +30,7 @@ button.w-btn.basic {
   background-color: var(--theme-primary);       /* #1B263B */
   color: var(--theme-primary-light);            /* #D9CEC1 */
   
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.25rem 1.5rem;
   
   font-size: clamp(1.0rem, 2.6vw, 1.15rem);
@@ -45,7 +45,7 @@ button.w-btn.basic {
 ------------------------------------------------------ */
 button.w-btn.submit,
 button.w-btn.close {
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 0.95rem 1.1rem;
   
   font-size: clamp(0.9rem, 2.4vw, 1.0rem);
