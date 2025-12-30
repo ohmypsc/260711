@@ -55,7 +55,7 @@
 
   background: var(--theme-bg);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 6px;
 
   padding: 16px 14px;
 
@@ -146,7 +146,7 @@
 @media (max-width: 360px) {
   .modal-container {
     padding: 14px 12px;
-    border-radius: 14px;
+    border-radius: 6px;
     gap: 8px;
   }
 
