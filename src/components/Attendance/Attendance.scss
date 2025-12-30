@@ -44,9 +44,9 @@
   }
 
   .attendance-card {
-    background: #ffffff;
+    background: var(--primary-light);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 6px;
     padding: 24px 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -159,7 +159,7 @@
         background: #f8f9fa;
         border: 1px solid #eee;
         padding: 8px 12px;
-        border-radius: 12px;
+        border-radius: 4px;
         font-size: 0.8rem;
         font-weight: 600;
         color: #747d8c;
@@ -208,7 +208,7 @@
     font-family: inherit;
     padding: 12px;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 6px;
     font-size: 0.95rem;
     color: var(--text-main);
     &:focus { border-color: var(--theme-primary); outline: none; }
@@ -220,7 +220,7 @@
   align-items: center;
   justify-content: space-between;
   background: #f8f8f8;
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 4px;
   height: 46px;
 
@@ -229,7 +229,7 @@
     height: 38px;
     border: none;
     background: #fff;
-    border-radius: 10px;
+    border-radius: 4px;
     font-size: 1.2rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     cursor: pointer;
