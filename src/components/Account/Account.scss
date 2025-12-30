@@ -40,7 +40,7 @@
 .account-card {
   background: var(--theme-accent); 
   border: 1px solid var(--border-color);
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -54,7 +54,7 @@
     .chip {
       font-size: 0.72rem;
       padding: 3px 8px;
-      border-radius: 8px;
+      border-radius: 4px;
       background: rgba(27, 38, 59, 0.08);
       color: var(--theme-primary); 
       font-weight: 700;
@@ -107,7 +107,7 @@
 /* 복사 버튼 (화이트 버튼 스타일) */
 .copy-btn {
   padding: 8px 16px;
-  border-radius: 12px;
+  border-radius: 4px;
   
   font-size: 0.85rem;
   font-weight: 600;
