@@ -27,7 +27,7 @@
 
 .guestbook-empty {
   padding: 3.5rem 2rem;
-  border-radius: 12px;
+  border-radius: 6px;
   font-size: 0.95rem;
   color: var(--text-light);
   background: var(--theme-accent);
@@ -38,7 +38,7 @@
 .guestbook-item {
   background: #ffffff;
   border: 1px solid var(--border-color); 
-  border-radius: 12px; 
+  border-radius: 6px; 
   padding: 35px 20px 25px; 
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); 
   position: relative;
