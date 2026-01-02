@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom"; // ✅ Portal 추가
 import "./GuestBook.scss";
 
 import { Button } from "@/components/common/Button/Button";
@@ -16,6 +17,15 @@ type Post = {
 
 type ModalType = null | "write" | { type: "delete"; postId: number };
 
+// ✅ 토스트 타입 정의
+type ToastState = {
+  msg: string;
+  type: "success" | "error";
+} | null;
+
+// ✅ 핸들러 타입 정의
+type ToastHandler = (msg: string, type: "success" | "error") => void;
+
 const formatDate = (unixSeconds: number) => {
   const d = new Date(unixSeconds * 1000);
   const yyyy = d.getFullYear();
@@ -29,6 +39,22 @@ export function GuestBook() {
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [openModal, setOpenModal] = useState<ModalType>(null);
+
+  // ✅ [1] 토스트 상태 추가
+  const [toast, setToast] = useState<ToastState>(null);
+
+  // ✅ [2] 토스트 자동 닫힘 (2초)
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  // ✅ [3] 자식에게 내려줄 토스트 핸들러
+  const handleToast: ToastHandler = (msg, type) => {
+    setToast({ msg, type });
+  };
 
   const totalPages = Math.ceil(totalCount / POSTS_PER_PAGE);
 
@@ -72,7 +98,6 @@ export function GuestBook() {
   const pages = useMemo(() => Array.from({ length: totalPages }, (_, i) => i), [totalPages]);
 
   return (
-    // ✅ 수정됨: section -> div wrapper (패딩 중복 방지)
     <div className="guestbook-wrapper">
       <h2 className="section-title">방명록</h2>
       <p className="guestbook__desc">
@@ -145,8 +170,9 @@ export function GuestBook() {
         </div>
       )}
 
+      {/* ✅ 모달에 onToast 전달 */}
       {openModal === "write" && (
-        <WriteGuestBookModal onClose={() => setOpenModal(null)} onSuccess={() => loadPage(0)} />
+        <WriteGuestBookModal onClose={() => setOpenModal(null)} onSuccess={() => loadPage(0)} onToast={handleToast} />
       )}
 
       {openModal && typeof openModal === "object" && openModal.type === "delete" && (
@@ -154,16 +180,26 @@ export function GuestBook() {
           postId={openModal.postId}
           onClose={() => setOpenModal(null)}
           onSuccess={() => loadPage(currentPage)}
+          onToast={handleToast}
         />
+      )}
+
+      {/* ✅ [4] Portal로 토스트 렌더링 */}
+      {toast && createPortal(
+        <div className="custom-toast">
+          <i className={toast.type === "success" ? "fa-solid fa-check" : "fa-solid fa-circle-exclamation"}></i>
+          {toast.msg}
+        </div>,
+        document.body
       )}
     </div>
   );
 }
 
 /* ------------------------------------------------------------------
-   Write Modal
+   Write Modal (alert -> onToast)
 ------------------------------------------------------------------ */
-function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void; }) {
+function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
   const inputRef = useRef({}) as React.RefObject<{
     name: HTMLInputElement;
     content: HTMLTextAreaElement;
@@ -194,17 +230,18 @@ function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSu
               const content = inputRef.current?.content.value.trim();
               const password = inputRef.current?.password.value;
               if (!name || !content || !password) {
-                alert("모든 항목을 입력해 주세요.");
+                onToast("모든 항목을 입력해 주세요.", "error"); // ✅ Toast 사용
                 setLoading(false);
                 return;
               }
               const { error } = await supabase.from("guestbook").insert([{ name, content, password }]);
               if (error) throw error;
-              alert("방명록이 등록되었습니다.");
+              
+              onToast("방명록이 등록되었습니다", "success"); // ✅ Toast 사용
               onClose();
               onSuccess();
             } catch (err) {
-              alert("방명록 작성에 실패했습니다.");
+              onToast("등록에 실패했습니다.", "error"); // ✅ Toast 사용
             } finally { setLoading(false); }
           }}
         >
@@ -227,9 +264,9 @@ function WriteGuestBookModal({ onClose, onSuccess }: { onClose: () => void; onSu
 }
 
 /* ------------------------------------------------------------------
-   Delete Modal
+   Delete Modal (alert -> onToast)
 ------------------------------------------------------------------ */
-function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; onClose: () => void; onSuccess: () => void; }) {
+function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId: number; onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
 
@@ -257,7 +294,7 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; 
             try {
               const password = inputRef.current?.value ?? "";
               if (!password.trim()) {
-                alert("비밀번호를 입력해 주세요.");
+                onToast("비밀번호를 입력해 주세요.", "error"); // ✅ Toast 사용
                 setLoading(false);
                 return;
               }
@@ -265,9 +302,9 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; 
               const { data, error } = await supabase.from("guestbook").select("password").eq("id", postId).single();
               if (error || !data) throw new Error();
               
-              // 2. 비밀번호 비교 (간단한 클라이언트 사이드 체크)
+              // 2. 비밀번호 비교
               if (String(data.password) !== String(password)) {
-                alert("비밀번호가 일치하지 않습니다.");
+                onToast("비밀번호가 일치하지 않습니다.", "error"); // ✅ Toast 사용
                 setLoading(false);
                 return;
               }
@@ -276,15 +313,14 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess }: { postId: number; 
               const { error: deleteError } = await supabase.from("guestbook").delete().eq("id", postId);
               if (deleteError) throw deleteError;
 
-              alert("삭제되었습니다.");
+              onToast("삭제되었습니다", "success"); // ✅ Toast 사용
               onClose();
               onSuccess();
             } catch (err) {
-              alert("삭제 처리 중 오류가 발생했습니다.");
+              onToast("삭제 중 오류가 발생했습니다.", "error"); // ✅ Toast 사용
             } finally { setLoading(false); }
           }}
         >
-          {/* ✅ 디자인 통일을 위해 .field 클래스로 감쌌습니다 */}
           <div className="field">
             <label className="label">비밀번호</label>
             <input ref={inputRef} disabled={loading} type="password" placeholder="비밀번호 입력" />
