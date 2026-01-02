@@ -1,5 +1,5 @@
 import "./Account.scss";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react"; // ✅ useEffect 추가
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useContactInfo } from "@/ContactInfoProvider";
@@ -10,7 +10,20 @@ export function Account() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
   const contactInfo = useContactInfo();
 
-  // 데이터 로직: 모달 타입(신랑/신부)에 따른 필터링
+  // ✅ [1] 토스트 메시지 상태 추가
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  // ✅ [2] 2초 뒤에 자동으로 사라지는 타이머 설정
+  useEffect(() => {
+    if (toastMsg) {
+      const timer = setTimeout(() => {
+        setToastMsg(null);
+      }, 2000); // 2초 유지
+      return () => clearTimeout(timer);
+    }
+  }, [toastMsg]);
+
+  // 데이터 필터링
   const filtered = useMemo(
     () => contactInfo.filter((item) => item.type === openModal),
     [contactInfo, openModal]
@@ -18,18 +31,19 @@ export function Account() {
 
   const modalTitle = openModal === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
+  // ✅ [3] 복사 기능 수정 (alert -> setToastMsg)
   const copyToClipboard = (account: string) => {
     const numericAccount = account.replace(/[^0-9]/g, "");
-    navigator.clipboard.writeText(numericAccount).then(() => {
-        alert("📌 계좌번호가 복사되었습니다.");
-    }).catch(() => {
-        // 혹시 모바일 보안정책상 실패할 경우 대비
-        alert("복사에 실패했습니다. 직접 입력해주세요.");
-    });
+    navigator.clipboard.writeText(numericAccount)
+      .then(() => {
+        setToastMsg("계좌번호가 복사되었습니다");
+      })
+      .catch(() => {
+        setToastMsg("복사에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
   return (
-    // 🚨 중요: index.tsx에서 이미 section-inner를 감싸주므로 여기서는 제거합니다.
     <div className="account-wrapper">
       <h2 className="section-title">마음 전하실 곳</h2>
 
@@ -57,9 +71,9 @@ export function Account() {
         </Button>
       </div>
 
+      {/* 모달 */}
       {openModal && (
         <Modal onClose={() => setOpenModal(null)}>
-          {/* 전역 .modal-title 사용 */}
           <h2 className="modal-title">{modalTitle}</h2>
 
           <div className="account-list">
@@ -92,6 +106,14 @@ export function Account() {
             )}
           </div>
         </Modal>
+      )}
+
+      {/* ✅ [4] 토스트 메시지 UI (전역 app.scss의 .custom-toast 사용) */}
+      {toastMsg && (
+        <div className="custom-toast">
+          <i className="fa-solid fa-check"></i>
+          {toastMsg}
+        </div>
       )}
     </div>
   );
