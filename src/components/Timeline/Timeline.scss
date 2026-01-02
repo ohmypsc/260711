@@ -60,15 +60,9 @@
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  background: #f0f0f0; /* 로딩 전 배경색 */
   
   /* 🎨 디자인 수정: 테두리 삭제 & 그림자만 은은하게 */
   border: none; 
-  
-  /* 그림자: 너무 진하지 않게, 네이비 톤을 살짝 섞어 깊이감만 줌 */
-  box-shadow: 0 10px 30px rgba(27, 38, 59, 0.18); 
-  
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover 효과 */
@@ -141,7 +135,7 @@
   opacity: 0.95;
 
   /* 🌿 Leaf Green */
-  background-color: var(--theme-leaf-green);
+  background-color: var(--theme-primary);
   box-shadow: none;
 
   --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E");
