@@ -6,7 +6,8 @@ import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
 
-const POSTS_PER_PAGE = 5;
+// ✅ 2열 배치이므로 짝수(6개)로 설정하여 보드를 꽉 채웁니다.
+const POSTS_PER_PAGE = 6;
 
 type Post = {
   id: number;
@@ -21,7 +22,6 @@ type ToastHandler = (msg: string, type: "success" | "error") => void;
 
 const formatDate = (unixSeconds: number) => {
   const d = new Date(unixSeconds * 1000);
-  // YYYY.MM.DD 형식으로 깔끔하게 통일
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
 };
 
@@ -54,9 +54,8 @@ export function GuestBook() {
 
       if (error) throw error;
 
-      // ✅ [수정 1] 삭제 등으로 인해 현재 페이지 데이터가 없으면(빈 페이지) 이전 페이지로 이동
       if (page > 0 && data && data.length === 0) {
-        setCurrentPage(page - 1); // useEffect가 다시 loadPage를 트리거함
+        setCurrentPage(page - 1);
         return;
       }
 
@@ -75,10 +74,8 @@ export function GuestBook() {
     }
   };
 
-  // currentPage가 변경될 때마다 데이터 로드
   useEffect(() => { loadPage(currentPage); }, [currentPage]);
 
-  // 실시간 구독
   useEffect(() => {
     const sub = supabase
       .channel("guestbook-realtime")
@@ -103,6 +100,7 @@ export function GuestBook() {
         </Button>
       </div>
 
+      {/* 📋 포스트잇 게시판 보드 */}
       <div className="guestbook-list">
         {posts.length === 0 && (
           <div className="guestbook-empty">첫 번째 편지를 보내주세요 🕊️</div>
@@ -110,6 +108,7 @@ export function GuestBook() {
 
         {posts.map((post) => (
           <article key={post.id} className="guestbook-item">
+            {/* ✕ 삭제 버튼 (아이콘 변경) */}
             <button
               className="item-delete-btn"
               onClick={(e) => {
@@ -119,7 +118,7 @@ export function GuestBook() {
               type="button"
               aria-label="delete"
             >
-              <i className="fa-solid fa-trash-can"></i>
+              <i className="fa-solid fa-xmark"></i>
             </button>
             
             <div className="guestbook-item__head">
@@ -129,15 +128,14 @@ export function GuestBook() {
               </div>
             </div>
             
-            <div className="divider">
-              <i className="fa-solid fa-heart"></i>
-            </div>
+            {/* 📌 하트 구분선은 포스트잇 컨셉을 위해 제거함 */}
             
             <div className="guestbook-item__content">{post.content}</div>
           </article>
         ))}
       </div>
 
+      {/* 🔢 페이지네이션 */}
       {totalPages > 1 && (
         <div className="pagination">
           <button 
@@ -195,7 +193,6 @@ export function GuestBook() {
   );
 }
 
-// ✅ [수정 2] FormData 사용으로 코드가 훨씬 깔끔해짐 (useRef 제거)
 function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
   const [loading, setLoading] = useState(false);
 
@@ -240,15 +237,15 @@ function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => v
         <form id="guestbook-write-form" className="guestbook-form" onSubmit={handleSubmit}>
           <div className="field">
             <label className="label">성함</label>
-            <input name="name" disabled={loading} type="text" autoComplete="off" />
+            <input name="name" disabled={loading} type="text" autoComplete="off" placeholder="성함을 입력해주세요" />
           </div>
           <div className="field">
             <label className="label">메시지</label>
-            <textarea name="content" disabled={loading} />
+            <textarea name="content" disabled={loading} placeholder="축하 메시지를 남겨주세요" />
           </div>
           <div className="field">
             <label className="label">비밀번호</label>
-            <input name="password" disabled={loading} type="password" autoComplete="new-password" />
+            <input name="password" disabled={loading} type="password" autoComplete="new-password" placeholder="비밀번호" />
           </div>
         </form>
       </div>
@@ -256,7 +253,6 @@ function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => v
   );
 }
 
-// ✅ [수정 3] DeleteModal 역시 FormData 사용으로 일관성 유지
 function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId: number; onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
   const [loading, setLoading] = useState(false);
 
@@ -271,22 +267,19 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId:
 
     setLoading(true);
     try {
-      // 1. 해당 글의 비밀번호 확인
       const { data, error } = await supabase.from("guestbook").select("password").eq("id", postId).single();
       if (error || !data) throw new Error();
       
-      // 2. 비밀번호 비교
       if (String(data.password) !== String(inputPassword)) {
         setLoading(false);
         return onToast("비밀번호가 일치하지 않습니다", "error");
       }
 
-      // 3. 삭제 진행
       const { error: deleteError } = await supabase.from("guestbook").delete().eq("id", postId);
       if (deleteError) throw deleteError;
 
       onToast("삭제되었습니다", "success");
-      onSuccess(); // loadPage 호출 -> 만약 빈 페이지가 되면 loadPage 내부 로직이 이전 페이지로 보냄
+      onSuccess();
       onClose();
     } catch (err) {
       onToast("삭제 중 오류가 발생했습니다", "error");
