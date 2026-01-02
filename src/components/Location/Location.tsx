@@ -6,7 +6,7 @@ import kakaoMapLogo from "@/image/kakaomap.png";
 import naverMapLogo from "@/image/navermap.png";
 import tmapLogo from "@/image/tmap.png";
 
-// ✅ 장소 정보 (유지)
+// ✅ 장소 정보
 const DEST_NAME = "유성컨벤션웨딩홀"; 
 const DEST_LAT = 36.3562313;
 const DEST_LNG = 127.3514617;
@@ -105,15 +105,15 @@ export const Location = () => {
   };
 
   /* ============================================================
-     🚀 길찾기 로직 (자동차 모드 기본 설정)
+     🚀 길찾기 로직 (수정 완료: 모든 앱 길찾기 모드로 직행)
      ============================================================ */
 
-  // 🟢 네이버 지도 (URL 방식 개선: 도착지 고정 + 현위치 출발)
+  // 🟢 네이버 지도 (내비게이션 모드)
   const handleNaverMap = () => {
     const device = getDevice();
     const encodedName = encodeURIComponent(DEST_NAME);
     
-    // ✅ 핵심 수정: 도착지(Goal)만 명확히 지정하고 출발지는 비워서 '현위치' 유도
+    // Web: 길찾기 화면 (menu=route)
     const webUrl = `https://map.naver.com/index.nhn?elng=${DEST_LNG}&elat=${DEST_LAT}&etext=${encodedName}&menu=route`;
 
     if (device === "android") {
@@ -130,21 +130,24 @@ export const Location = () => {
         }
       }, 1500);
     } else {
-      // PC/Web: 바로 명확한 웹 URL로 오픈
       window.open(webUrl, "_blank");
     }
   };
 
-  // 🟡 카카오맵 (위치 보기 -> 길찾기 버튼 유도)
+  // 🟡 카카오맵 (수정됨: 장소보기(look) -> 길찾기(route))
   const handleKakaoMap = () => {
     const device = getDevice();
+    
+    // Web: 길찾기 링크
     const webUrl = `https://map.kakao.com/link/to/${encodeURIComponent(DEST_NAME)},${DEST_LAT},${DEST_LNG}`;
 
     if (device === "android") {
-      const intentUrl = `intent://look?p=${DEST_LAT}&dlng=${DEST_LNG}#Intent;scheme=kakaomap;package=net.daum.android.map;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+      // ✅ route 스킴 사용 (ep: 도착점)
+      const intentUrl = `intent://route?ep=${DEST_LAT},${DEST_LNG}&by=CAR#Intent;scheme=kakaomap;package=net.daum.android.map;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
       window.location.href = intentUrl;
     } else if (device === "ios") {
-      const appUrl = `kakaomap://look?p=${DEST_LAT},${DEST_LNG}`;
+      // ✅ route 스킴 사용
+      const appUrl = `kakaomap://route?ep=${DEST_LAT},${DEST_LNG}&by=CAR`;
       const start = Date.now();
       window.location.href = appUrl;
 
@@ -158,7 +161,7 @@ export const Location = () => {
     }
   };
 
-  // 🔴 티맵 (앱 없으면 스토어 이동)
+  // 🔴 티맵 (내비게이션 모드)
   const handleTMap = () => {
     const device = getDevice();
     const appUrl = `tmap://route?goalname=${encodeURIComponent(DEST_NAME)}&goalx=${DEST_LNG}&goaly=${DEST_LAT}`;
