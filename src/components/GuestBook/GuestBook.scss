@@ -1,4 +1,4 @@
-/* 📌 최종 완성본: 반응형 Masonry & 극파스텔 & 어절 줄바꿈 */
+/* 📌 GuestBook.scss: 반응형 Masonry & ID 기반 디자인 고정 & 모달 통합 스타일 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -15,13 +15,12 @@
   }
 }
 
-/* 📌 포스트잇 게시판 보드 (반응형 레이아웃) */
+/* 📌 1. 포스트잇 게시판 보드 (반응형 레이아웃) */
 .guestbook-list {
-  /* ✅ 모바일 기본: 1열 배치로 가독성과 포스트잇 비율 확보 */
+  /* 모바일 기본: 1열 배치로 가독성과 예쁜 비율 확보 */
   display: flex;
   flex-direction: column;
   gap: 20px;
-  
   width: 100%;
   padding: 40px 18px;
   background-color: var(--theme-accent); 
@@ -29,7 +28,7 @@
   min-height: 400px;
   box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 
-  /* ✅ PC/태블릿(600px 이상): 2열 Masonry로 전환 */
+  /* PC/태블릿(600px 이상): 2열 Masonry로 전환 */
   @media (min-width: 600px) {
     display: block; 
     column-count: 2;
@@ -43,35 +42,22 @@
   }
 }
 
-/* 🕊️ 빈 보드 상태 디자인 */
+/* 🕊️ 빈 보드 상태 */
 .guestbook-empty {
+  grid-column: span 2;
   padding: 6rem 1rem;
   color: var(--text-light);
   font-size: 0.95rem;
   opacity: 0.6;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-
-  &::before {
-    content: "\f0e0";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 2rem;
-    color: var(--theme-primary-light);
-    margin-bottom: 5px;
-  }
 }
 
-/* 📌 포스트잇 아이템 (가변 높이 및 극파스텔) */
+/* 📌 2. 포스트잇 아이템 (데이터 속성 기반 디자인 고정) */
 .guestbook-item {
-  break-inside: avoid;     /* PC 2열일 때 잘림 방지 */
-  display: flex;           /* 모바일 1열 대응 */
+  break-inside: avoid;     /* PC 2열일 때 아이템 잘림 방지 */
+  display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 25px;     /* 아이템 간 세로 간격 */
-  
+  margin-bottom: 25px;     
   position: relative;
   padding: 35px 20px 25px;
   height: auto;
@@ -85,21 +71,20 @@
     top: -10px; left: 50%;
     transform: translateX(-50%);
     width: 45px; height: 18px;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(1px);
     z-index: 2;
   }
 
-  /* 🎨 [색상] 아주아주 연한 극파스텔 6종 (화이트 제외) */
-  /* 회전 각도는 모바일 1열에서 너무 어지럽지 않게 2~3도 내외로 조절 */
-  &:nth-child(6n + 1) { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
-  &:nth-child(6n + 2) { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
-  &:nth-child(6n + 3) { background-color: #F6FBF7; transform: rotate(-1.2deg) translateX(3px) !important; }
-  &:nth-child(6n + 4) { background-color: #F4F9FF; transform: rotate(2.2deg) translateY(4px) !important; }
-  &:nth-child(6n + 5) { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-5px) !important; }
-  &:nth-child(6n)     { background-color: #FFF8F0; transform: rotate(1.2deg) translateX(-3px) !important; }
+  /* ✅ 핵심: data-style 속성에 따라 색상과 각도를 고정 (포스트잇 이사 방지) */
+  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
+  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
+  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1.2deg) translateX(3px) !important; }
+  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(2.2deg) translateY(4px) !important; }
+  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-5px) !important; }
+  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(1.2deg) translateX(-3px) !important; }
 
-  /* ✕ 삭제 버튼 */
+  /* ✕ 삭제 버튼 (레드 제거 및 저채도 유지) */
   .item-delete-btn {
     position: absolute;
     top: 12px; right: 12px;
@@ -115,6 +100,7 @@
     &:active { opacity: 0.8; color: var(--text-main); transform: scale(1.1); }
   }
 
+  /* 헤더 (이름 & 날짜 중앙 정렬) */
   &__head {
     margin-bottom: 15px;
     text-align: center; 
@@ -133,7 +119,7 @@
     }
   }
 
-  /* 📌 본문 (가운데 정렬 + 어절 단위 줄바꿈) */
+  /* 본문 (중앙 정렬 + 어절 단위 줄바꿈) */
   &__content {
     flex: 1;
     font-size: 0.95rem;
@@ -146,15 +132,88 @@
     white-space: pre-wrap;     
   }
 
-  /* 터치 시 피드백 */
+  /* 터치 피드백 */
   &:active {
     transform: scale(1.02) rotate(0deg) !important;
     z-index: 100;
-    box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.08);
   }
 }
 
-/* 🔢 페이지네이션 */
+/* 📌 3. 모달 & 폼 스타일 (정갈한 네이비 톤) */
+.guestbook-modal-content {
+  .modal-title { 
+    font-size: 1.25rem; 
+    text-align: center;
+    font-weight: 800;
+    color: var(--theme-primary);
+    margin-bottom: 20px;
+  }
+  .modal-subtitle {
+    text-align: center;
+    margin: -10px 0 20px;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    opacity: 0.8;
+  }
+}
+
+.guestbook-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+
+  .field { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+  }
+
+  .label { 
+    font-size: 0.85rem; 
+    font-weight: 700; 
+    color: var(--theme-primary); 
+  }
+
+  input, textarea {
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: var(--section-bg-soft);
+    font-family: inherit;
+    color: var(--text-main);
+
+    &:focus { 
+      border-color: var(--theme-primary); 
+      outline: none; 
+      background: #fff; 
+    }
+    &::placeholder {
+      color: var(--text-light);
+      opacity: 0.5;
+    }
+  }
+
+  textarea { 
+    height: 10rem; 
+    resize: none; 
+    line-height: 1.6;
+  }
+}
+
+.guestbook-footer-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  button { 
+    flex: 1; 
+    height: 48px; 
+    font-weight: 700;
+  }
+}
+
+/* 🔢 4. 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -170,8 +229,10 @@
     border-radius: 4px; 
     font-size: 0.8rem;
     color: var(--text-light);
+    cursor: pointer;
+
     &:active { background: var(--theme-accent); }
-    &:disabled { opacity: 0.3; }
+    &:disabled { opacity: 0.3; cursor: default; }
   }
 
   .page-num.current {
@@ -180,4 +241,22 @@
     border-color: var(--theme-primary);
     font-weight: 700;
   }
+}
+
+/* 🍞 커스텀 토스트 알림 */
+.custom-toast {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(27, 38, 59, 0.9);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
