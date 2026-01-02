@@ -89,33 +89,35 @@ section {
 }
 
 /* =========================================================
-   Global Toast Message (Classic Bookmark Style)
+   Global Toast Message (White Card Pop-up)
+   - 모달의 어두운 배경 위에서도 잘 보이도록 '화이트' 테마 적용
+   - 위치: 화면 중앙보다 살짝 위 (Center-Top)
    ========================================================= */
 
 .custom-toast {
-  /* 📍 위치: 상단 (상태바 아래쯤) */
+  /* 📍 위치: 화면 정중앙에서 살짝 위 */
   position: fixed;
-  top: 60px;
+  top: 40%; 
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 99999;
+  transform: translate(-50%, -50%);
+  z-index: 100000; /* 모달(z-index: 9999)보다 확실히 위에 */
   
-  /* 🎨 배경: 전역 메인 네이비 (단색으로 깔끔하게) */
-  background: var(--theme-primary);
+  /* 🎨 배경: 깨끗한 화이트 (어두운 모달 위에서 가독성 최강) */
+  background: #FFFFFF;
   
-  /* ✒️ 글자색: 쌩하얀색 대신 '전역 배경색(미색)' 사용 -> 눈이 훨씬 편안함 */
-  color: var(--bg-color); 
+  /* ✒️ 글자색: 진한 네이비 (전역 테마) */
+  color: var(--theme-primary); 
   
-  /* 🔲 모양: 둥근 알약(X) -> 각진 '네임택/책갈피' 느낌 (O) */
-  padding: 12px 24px;
-  border-radius: 4px; /* 아주 살짝만 둥글게 */
+  /* 🔲 테두리: 네이비 라인을 둘러서 또렷하게 */
+  border: 1px solid var(--theme-primary);
   
-  /* 포인트 라인: 하단에 핑크색(또는 그린) 줄을 그어 세련미 추가 */
-  border-bottom: 2px solid var(--theme-point-pink);
+  /* 모양: 단정한 직사각형 카드 */
+  padding: 16px 28px;
+  border-radius: 8px; 
   
-  /* 폰트: 시스템 폰트(X) -> 감성적인 '고운바탕체' (O) */
+  /* 폰트: 감성적인 고운바탕체 유지 */
   font-family: "Gowun Batang", serif;
-  font-size: 1rem;
+  font-size: 1.05rem; /* 중앙에 뜨니까 조금 키움 */
   font-weight: 600;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -124,32 +126,34 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   
-  /* 그림자: 종이가 살짝 떠 있는 듯한 느낌 */
-  box-shadow: 0 8px 20px rgba(27, 38, 59, 0.25);
+  /* ☁️ 그림자: 공중에 붕 떠 있는 듯한 강한 그림자 */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   
   pointer-events: none;
 
-  /* 🎬 애니메이션: 위에서 툭 떨어지는 느낌 (Swing) */
-  animation: toastSwingDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  /* 🎬 애니메이션: 살짝 아래에서 위로 떠오르며 등장 (Pop Up) */
+  animation: toastPopUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 
-  /* 아이콘: 전역 포인트 핑크 활용 */
+  /* 아이콘: 핑크 포인트 */
   i {
     color: var(--theme-point-pink);
-    font-size: 1rem;
-    margin-top: -2px; /* 폰트 높이 보정 */
+    font-size: 1.1rem;
+    margin-top: -2px;
   }
 }
 
-/* 🎬 등장 애니메이션 (그네처럼 툭!) */
-@keyframes toastSwingDown {
+/* 🎬 등장 애니메이션 (Pop Up) */
+@keyframes toastPopUp {
   0% {
     opacity: 0;
-    transform: translate(-50%, -40px) rotateX(-20deg);
+    /* 살짝 아래, 조금 작게 시작 */
+    transform: translate(-50%, -40%) scale(0.9);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, 0) rotateX(0);
+    /* 원래 위치, 원래 크기 */
+    transform: translate(-50%, -50%) scale(1);
   }
 }
