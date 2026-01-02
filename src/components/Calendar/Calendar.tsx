@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import "./Calendar.scss";
 
 /* =========================================================
-   WEDDING CONST (✅ 날짜는 하드코딩)
+   WEDDING CONST
    ========================================================= */
 const WEDDING = {
   year: 2026,
@@ -33,7 +33,7 @@ function isSameKstDate(a: Date, b: Date) {
 }
 
 /* =========================================================
-   Leaf Divider Component (유지)
+   Leaf Divider Component
    ========================================================= */
 function CalendarLeafLine() {
   return (
@@ -67,11 +67,9 @@ function CalendarLeafLine() {
    Calendar Component
    ========================================================= */
 export function Calendar() {
-  // ✅ 이름: 시크릿(환경변수)에서 불러옴 (없을 시 기본값 설정)
   const groomName = import.meta.env.VITE_GROOM_NAME || "신랑";
   const brideName = import.meta.env.VITE_BRIDE_NAME || "신부";
 
-  // ✅ 날짜: 상단에 하드코딩된 WEDDING 객체 사용
   const { year, month, day: weddingDay, hour, minute } = WEDDING;
 
   const weddingDate = useMemo(() => {
@@ -130,7 +128,6 @@ export function Calendar() {
   }, [year, month]);
 
   return (
-    // ✅ Wrapper 클래스 사용 (스타일 충돌 방지)
     <div className="calendar-wrapper">
       
       {/* Headline */}
@@ -187,28 +184,31 @@ export function Calendar() {
 
       {/* Countdown */}
       <div className="countdown-wrap">
+        {/* ✨ [수정] 문구 변경: ~과 ~의 결혼식이 */}
         <div className="countdown-line1">
-          {groomName} <span className="amp">&</span> {brideName}
+          <span className="highlight-name">{groomName}</span>과{" "}
+          <span className="highlight-name">{brideName}</span>의 결혼식이
         </div>
 
         <div className="countdown-line2">
           {countdown.mode === "future" && (
             <div className="countdown-values">
+              {/* ✨ [수정] 콜론 제거 */}
               <div className="unit-block">
                 <span className="num">{countdown.days}</span>
                 <span className="unit">일</span>
               </div>
-              <div className="colon">:</div>
+              
               <div className="unit-block">
                 <span className="num">{pad(countdown.hours)}</span>
                 <span className="unit">시간</span>
               </div>
-              <div className="colon">:</div>
+              
               <div className="unit-block">
                 <span className="num">{pad(countdown.minutes)}</span>
                 <span className="unit">분</span>
               </div>
-              <div className="colon">:</div>
+              
               <div className="unit-block">
                 <span className="num">{pad(countdown.seconds)}</span>
                 <span className="unit">초</span>
