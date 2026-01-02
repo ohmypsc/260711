@@ -6,7 +6,6 @@ import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
 
-// ✅ 2열 배치이므로 짝수(6개)로 설정하여 보드를 꽉 채웁니다.
 const POSTS_PER_PAGE = 6;
 
 type Post = {
@@ -49,6 +48,7 @@ export function GuestBook() {
       const { data, count, error } = await supabase
         .from("guestbook")
         .select("id, name, content, created_at", { count: "exact" })
+        /* ✅ 최신 글이 위에 오도록 정렬 (사용자 피드백 중심) */
         .order("created_at", { ascending: false })
         .range(offset, offset + POSTS_PER_PAGE - 1);
 
@@ -100,42 +100,47 @@ export function GuestBook() {
         </Button>
       </div>
 
-      {/* 📋 포스트잇 게시판 보드 */}
-      <div className="guestbook-list">
-        {posts.length === 0 && (
+      {/* ✅ [수정 1] 리스트 상태에 따라 'is-empty' 클래스 추가 (Masonry 대응) */}
+      <div className={`guestbook-list ${posts.length === 0 ? 'is-empty' : ''}`}>
+        {posts.length === 0 ? (
           <div className="guestbook-empty">첫 번째 편지를 보내주세요 🕊️</div>
-        )}
+        ) : (
+          posts.map((post) => {
+            /* ✅ [수정 2] 고유 ID를 활용해 스타일 인덱스 부여 (디자인 고정) */
+            const styleIndex = post.id % 6;
 
-        {posts.map((post) => (
-          <article key={post.id} className="guestbook-item">
-            {/* ✕ 삭제 버튼 (아이콘 변경) */}
-            <button
-              className="item-delete-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenModal({ type: "delete", postId: post.id });
-              }}
-              type="button"
-              aria-label="delete"
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-            
-            <div className="guestbook-item__head">
-              <span className="name">{post.name}</span>
-              <div className="date">
-                <span>{formatDate(post.timestamp)}</span>
-              </div>
-            </div>
-            
-            {/* 📌 하트 구분선은 포스트잇 컨셉을 위해 제거함 */}
-            
-            <div className="guestbook-item__content">{post.content}</div>
-          </article>
-        ))}
+            return (
+              <article 
+                key={post.id} 
+                className="guestbook-item"
+                data-style={styleIndex} // SCSS에서 이 값을 읽어 색상/각도를 결정함
+              >
+                <button
+                  className="item-delete-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenModal({ type: "delete", postId: post.id });
+                  }}
+                  type="button"
+                  aria-label="delete"
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+                
+                <div className="guestbook-item__head">
+                  <span className="name">{post.name}</span>
+                  <div className="date">
+                    <span>{formatDate(post.timestamp)}</span>
+                  </div>
+                </div>
+                
+                <div className="guestbook-item__content">{post.content}</div>
+              </article>
+            );
+          })
+        )}
       </div>
 
-      {/* 🔢 페이지네이션 */}
       {totalPages > 1 && (
         <div className="pagination">
           <button 
@@ -193,6 +198,7 @@ export function GuestBook() {
   );
 }
 
+/* 📋 Modal 컴포넌트들 (Write/Delete)은 이전과 동일하게 유지 */
 function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
   const [loading, setLoading] = useState(false);
 
@@ -211,7 +217,6 @@ function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => v
     try {
       const { error } = await supabase.from("guestbook").insert([{ name, content, password }]);
       if (error) throw error;
-      
       onToast("방명록이 등록되었습니다", "success");
       onSuccess();
       onClose();
@@ -261,20 +266,16 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId:
     const formData = new FormData(e.currentTarget);
     const inputPassword = (formData.get("password") as string).trim();
 
-    if (!inputPassword) {
-      return onToast("비밀번호를 입력해 주세요", "error");
-    }
+    if (!inputPassword) return onToast("비밀번호를 입력해 주세요", "error");
 
     setLoading(true);
     try {
       const { data, error } = await supabase.from("guestbook").select("password").eq("id", postId).single();
       if (error || !data) throw new Error();
-      
       if (String(data.password) !== String(inputPassword)) {
         setLoading(false);
         return onToast("비밀번호가 일치하지 않습니다", "error");
       }
-
       const { error: deleteError } = await supabase.from("guestbook").delete().eq("id", postId);
       if (deleteError) throw deleteError;
 
