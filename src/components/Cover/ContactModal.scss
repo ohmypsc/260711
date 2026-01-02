@@ -51,7 +51,7 @@
     border-bottom: none;
   }
 
-  /* 1. 관계 (회색) */
+ /* 1. 관계 (회색) */
   .relation {
     width: 110px;
     flex: 0 0 auto;
@@ -65,6 +65,14 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    /* ✅ [수정] 수직 정렬 보정 
+       고운바탕체가 다른 폰트보다 살짝 떠 보여서 
+       위쪽 여백을 줘서 강제로 2px 내립니다. 
+       (눈으로 보고 1px~3px 사이에서 조절하세요)
+    */
+    padding-top: 2px; 
+    line-height: 1.2; /* 줄 높이도 살짝 조여서 정렬 오차 줄임 */
   }
 
   /* 2. 이름 (네이비) */
