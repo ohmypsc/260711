@@ -1,27 +1,33 @@
 import "./Account.scss";
-import { useMemo, useState, useEffect } from "react"; // ✅ useEffect 추가
+import { useMemo, useState, useEffect } from "react";
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useContactInfo } from "@/ContactInfoProvider";
 
 type ModalType = null | "groom" | "bride";
 
+// ✅ 토스트 메시지 타입 정의 (성공/실패 구분)
+type ToastState = {
+  msg: string;
+  type: "success" | "error";
+} | null;
+
 export function Account() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
   const contactInfo = useContactInfo();
 
-  // ✅ [1] 토스트 메시지 상태 추가
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
+  // ✅ [1] 토스트 상태를 객체로 관리 ({ 메시지, 타입 })
+  const [toast, setToast] = useState<ToastState>(null);
 
-  // ✅ [2] 2초 뒤에 자동으로 사라지는 타이머 설정
+  // ✅ [2] 자동 사라짐 타이머
   useEffect(() => {
-    if (toastMsg) {
+    if (toast) {
       const timer = setTimeout(() => {
-        setToastMsg(null);
-      }, 2000); // 2초 유지
+        setToast(null);
+      }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [toastMsg]);
+  }, [toast]);
 
   // 데이터 필터링
   const filtered = useMemo(
@@ -31,15 +37,17 @@ export function Account() {
 
   const modalTitle = openModal === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
-  // ✅ [3] 복사 기능 수정 (alert -> setToastMsg)
+  // ✅ [3] 복사 로직 (성공/실패에 따라 아이콘 타입 설정)
   const copyToClipboard = (account: string) => {
     const numericAccount = account.replace(/[^0-9]/g, "");
     navigator.clipboard.writeText(numericAccount)
       .then(() => {
-        setToastMsg("계좌번호가 복사되었습니다");
+        // 성공 시: success 타입
+        setToast({ msg: "계좌번호가 복사되었습니다", type: "success" });
       })
       .catch(() => {
-        setToastMsg("복사에 실패했습니다. 다시 시도해주세요.");
+        // 실패 시: error 타입
+        setToast({ msg: "복사에 실패했습니다. 직접 입력해주세요.", type: "error" });
       });
   };
 
@@ -108,11 +116,12 @@ export function Account() {
         </Modal>
       )}
 
-      {/* ✅ [4] 토스트 메시지 UI (전역 app.scss의 .custom-toast 사용) */}
-      {toastMsg && (
+      {/* ✅ [4] 토스트 메시지 UI (타입에 따라 아이콘 변경) */}
+      {toast && (
         <div className="custom-toast">
-          <i className="fa-solid fa-check"></i>
-          {toastMsg}
+          {/* 성공하면 체크, 실패하면 느낌표 아이콘 */}
+          <i className={toast.type === "success" ? "fa-solid fa-check" : "fa-solid fa-circle-exclamation"}></i>
+          {toast.msg}
         </div>
       )}
     </div>
