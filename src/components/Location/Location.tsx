@@ -6,7 +6,7 @@ import kakaoMapLogo from "@/image/kakaomap.png";
 import naverMapLogo from "@/image/navermap.png";
 import tmapLogo from "@/image/tmap.png";
 
-// ✅ 장소 정보
+// ✅ 장소 정보 (유지)
 const DEST_NAME = "유성컨벤션웨딩홀"; 
 const DEST_LAT = 36.3562313;
 const DEST_LNG = 127.3514617;
@@ -108,12 +108,13 @@ export const Location = () => {
      🚀 길찾기 로직 (자동차 모드 기본 설정)
      ============================================================ */
 
-  // 🟢 네이버 지도 (자동차 경로)
+  // 🟢 네이버 지도 (URL 방식 개선: 도착지 고정 + 현위치 출발)
   const handleNaverMap = () => {
     const device = getDevice();
     const encodedName = encodeURIComponent(DEST_NAME);
     
-    const webUrl = `https://m.map.naver.com/route/index.nhn?name=${encodedName}&ex=${DEST_LNG}&ey=${DEST_LAT}&pathType=0&showMap=true`;
+    // ✅ 핵심 수정: 도착지(Goal)만 명확히 지정하고 출발지는 비워서 '현위치' 유도
+    const webUrl = `https://map.naver.com/index.nhn?elng=${DEST_LNG}&elat=${DEST_LAT}&etext=${encodedName}&menu=route`;
 
     if (device === "android") {
       const intentUrl = `intent://route/car?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}&appname=wedding-invitation#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
@@ -129,7 +130,8 @@ export const Location = () => {
         }
       }, 1500);
     } else {
-      window.open(`https://map.naver.com/v5/directions/-/driving/${DEST_LNG},${DEST_LAT},${encodedName}`, "_blank");
+      // PC/Web: 바로 명확한 웹 URL로 오픈
+      window.open(webUrl, "_blank");
     }
   };
 
@@ -177,7 +179,6 @@ export const Location = () => {
   };
 
   return (
-    // ✅ 수정됨: .location-wrapper 사용
     <div className="location-wrapper">
       <h2 className="section-title">오시는 길</h2>
 
