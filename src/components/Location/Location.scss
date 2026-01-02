@@ -1,10 +1,11 @@
 /* =========================================================
    Location Component
    Theme: Flat & Clean (No Shadows)
-   ✅ Update: Double Background Technique for Sharp Borders
+   ✅ Radius: 6px Unified
+   ✅ Navi Button: Double Background (White Inner + Gradient Border)
    ========================================================= */
 
-/* ✅ 최상위 클래스 (.location-wrapper) */
+/* ✅ 최상위 클래스 변경 (.location-container -> .location-wrapper) */
 .location-wrapper {
   width: 100%;
   position: relative;
@@ -52,7 +53,10 @@
 .map-wrapper {
   position: relative;
   margin: 0 auto 1.2rem;
+  
+  /* ✅ Radius: 6px (통일) */
   border-radius: 6px; 
+  
   overflow: hidden;
   background: #fff;
   border: 1px solid rgba(27, 38, 59, 0.2); 
@@ -80,13 +84,16 @@
   background: rgba(27, 38, 59, 0.95); 
   color: #fff;
   padding: 1rem 1.2rem;
+  
+  /* ✅ Radius: 6px (통일) */
   border-radius: 6px;
+  
   font-size: 0.92rem;
   line-height: 1.5;
   text-align: center;
   white-space: nowrap;
   
-  /* 그림자 제거 */
+  /* 그림자 제거 (Flat) */
   box-shadow: none;
 
   .lock-message-title {
@@ -116,7 +123,10 @@
 
   width: 40px;
   height: 40px;
+  
+  /* ✅ Radius: 4px (작은 버튼) */
   border-radius: 4px; 
+  
   display: grid;
   place-items: center;
 
@@ -133,6 +143,7 @@
 }
 
 .map-lock-button:active {
+  /* 클릭 시 작아지는 효과 */
   transform: scale(0.92);
 }
 
@@ -145,7 +156,7 @@
 
 /* =========================================================
    🧭 Navigation Buttons (Layout: Horizontal Row + Clean Font)
-   ✅ 이중 배경 기법 적용: 테두리가 아주 선명하고 일정함 (2px)
+   ✅ 이중 배경 기법: 테두리 2px 고정 + 안쪽 흰색(#fff)
    ========================================================= */
 
 .navi-buttons-wrapper {
@@ -167,26 +178,26 @@
   
   gap: 0.3rem; 
   
-  /* 테두리 공간(2px)만큼 padding을 살짝 줄임 */
+  /* 테두리(2px) 공간 고려하여 패딩 미세 조정 */
   padding: 0.85rem 0.2rem;
   
+  /* ✅ Radius: 6px (통일) */
   border-radius: 6px; 
   
-  /* ✅ 핵심 1: 물리적인 투명 테두리 2px 생성 (굵기 고정) */
+  /* [2. 테두리 & 배경 핵심 로직] */
+  /* 물리적인 2px 투명 테두리 생성 (공간 확보) */
   border: 2px solid transparent; 
   
-  /* ✅ 핵심 2: 배경 3겹 쌓기 (순서: 위 -> 아래)
-     1. 틴트 색상 (내용물 배경)
-     2. 흰색 배경 (내용물 배경)
-     3. 그라데이션 (테두리 영역까지 채움)
+  /* 배경 2겹 쌓기 (순서 중요: 위 -> 아래) 
+     1. 안쪽: 순수한 흰색 (#fff) -> padding-box 기준
+     2. 바깥쪽: 그라데이션 (var) -> border-box 기준
   */
-  background-image:
-    linear-gradient(var(--navi-tint), var(--navi-tint)), 
-    linear-gradient(#fff, #fff),
+  background-image: 
+    linear-gradient(#fff, #fff), 
     var(--border-grad);
   
   background-origin: border-box;
-  background-clip: padding-box, padding-box, border-box;
+  background-clip: padding-box, border-box;
 
   /* [3. 텍스트 스타일] */
   font-family: "Pretendard", sans-serif; 
@@ -206,7 +217,7 @@
   transition: transform 0.1s ease, opacity 0.2s ease;
 }
 
-/* Active */
+/* Active: 작아짐 + 투명도 */
 .navi-button:active {
   transform: scale(0.96);
   opacity: 0.8;
@@ -218,6 +229,8 @@
   height: 18px;
   object-fit: contain;
   display: block; 
+  
+  /* 미세 조정: 폰트 베이스라인에 맞춰 아주 살짝 내림 */
   transform: translateY(0.5px); 
 }
 
@@ -229,10 +242,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* 🚨 기존의 .navi-button::before 코드는 삭제되었습니다.
-   background 속성으로 통합되어 더 이상 필요하지 않습니다.
-*/
-
 
 /* ---------------------------
    🎨 Brand Styling (Gradient)
@@ -240,7 +249,6 @@
 
 /* NAVER */
 .navi-button.naver {
-  --navi-tint: rgba(3, 199, 90, 0.04);
   --border-grad: linear-gradient(180deg, #017FF9 0%, #00D926 100%);
 }
 .navi-button.naver span {
@@ -253,7 +261,6 @@
 
 /* KAKAO */
 .navi-button.kakao {
-  --navi-tint: rgba(254, 229, 0, 0.08);
   --border-grad: linear-gradient(180deg, #FFE76A 0%, #FEC900 100%);
 }
 .navi-button.kakao span {
@@ -266,7 +273,6 @@
 
 /* TMAP */
 .navi-button.tmap {
-  --navi-tint: rgba(0, 128, 255, 0.04);
   --border-grad: linear-gradient(180deg, #C642D4 0%, #0B7BF1 100%);
 }
 .navi-button.tmap span {
