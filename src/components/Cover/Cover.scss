@@ -43,7 +43,7 @@
       line-height: 1.8;
       
       color: var(--text-main);
-      opacity: 0.85; /* 너무 진하지 않게 */
+      opacity: 0.95; /* 너무 진하지 않게 */
       text-align: center;
 
       word-break: keep-all;
@@ -55,7 +55,6 @@
       font-family: "Gowun Batang", serif;
       font-size: 0.9rem;
       color: var(--text-light);
-      opacity: 0.7;
       text-align: center;
     }
   }
@@ -68,9 +67,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    
-    /* 폰트 지정 삭제 -> 전역(Noto Serif KR) 자동 적용 */
-    /* font-family: ... (삭제됨) */
     
     font-size: 1.02rem; /* 명조체는 살짝 큼직해야 예쁨 */
     font-weight: 400;
