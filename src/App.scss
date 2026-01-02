@@ -89,40 +89,35 @@ section {
 }
 
 /* =========================================================
-   Global Toast Message (Modern Ticket Style)
-   - 화이트 배경의 깔끔함 + 핑크색 포인트 띠로 모달과 확실히 구분
+   Global Toast Message (White Card Pop-up)
+   - 모달의 어두운 배경 위에서도 잘 보이도록 '화이트' 테마 적용
+   - 위치: 화면 중앙보다 살짝 위 (Center-Top)
    ========================================================= */
 
 .custom-toast {
-  /* 📍 위치: 상단 중앙 (모달보다 무조건 위에 뜸) */
+  /* 📍 위치: 화면 정중앙에서 살짝 위 */
   position: fixed;
-  top: 60px;
+  top: 40%; 
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 100001;
+  transform: translate(-50%, -50%);
+  z-index: 100000; /* 모달(z-index: 9999)보다 확실히 위에 */
   
-  /* 🎨 배경: 깨끗한 화이트 */
+  /* 🎨 배경: 깨끗한 화이트 (어두운 모달 위에서 가독성 최강) */
   background: #FFFFFF;
   
-  /* ✒️ 글자색: 전역 네이비 (가독성 최고) */
-  color: var(--theme-primary);
+  /* ✒️ 글자색: 진한 네이비 (전역 테마) */
+  color: var(--theme-primary); 
   
-  /* 🔲 모양: 왼쪽 띠가 있는 티켓 스타일 */
-  padding: 14px 28px;
-  padding-left: 24px; /* 왼쪽 띠 공간 확보 */
-  border-radius: 6px; /* 살짝 둥글게 */
+  /* 🔲 테두리: 네이비 라인을 둘러서 또렷하게 */
+  border: 1px solid var(--theme-primary);
   
-  /* ✨ [핵심] 왼쪽 띠: 핑크색 포인트로 "알림"임을 강조 */
-  border-left: 6px solid var(--theme-point-pink);
+  /* 모양: 단정한 직사각형 카드 */
+  padding: 16px 28px;
+  border-radius: 8px; 
   
-  /* 테두리: 나머지는 아주 얇은 네이비로 깔끔하게 마감 */
-  border-right: 1px solid rgba(27, 38, 59, 0.1);
-  border-top: 1px solid rgba(27, 38, 59, 0.1);
-  border-bottom: 1px solid rgba(27, 38, 59, 0.1);
-  
-  /* 폰트: 감성적인 고운바탕체 */
+  /* 폰트: 감성적인 고운바탕체 유지 */
   font-family: "Gowun Batang", serif;
-  font-size: 1.05rem;
+  font-size: 1.05rem; /* 중앙에 뜨니까 조금 키움 */
   font-weight: 600;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -133,32 +128,32 @@ section {
   justify-content: center;
   gap: 12px;
   
-  /* ☁️ 그림자: 선명하고 진하게 (배경과 분리) */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 
-              0 4px 10px rgba(27, 38, 59, 0.1);
+  /* ☁️ 그림자: 공중에 붕 떠 있는 듯한 강한 그림자 */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   
   pointer-events: none;
 
-  /* 🎬 애니메이션: 위에서 툭 떨어짐 (Elastic) */
-  animation: toastSlideDown 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+  /* 🎬 애니메이션: 살짝 아래에서 위로 떠오르며 등장 (Pop Up) */
+  animation: toastPopUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 
-  /* 아이콘 */
+  /* 아이콘: 핑크 포인트 */
   i {
-    /* 아이콘 색상도 핑크로 통일 */
     color: var(--theme-point-pink);
     font-size: 1.1rem;
     margin-top: -2px;
   }
 }
 
-/* 🎬 등장 애니메이션 (살짝 튕기며 등장) */
-@keyframes toastSlideDown {
+/* 🎬 등장 애니메이션 (Pop Up) */
+@keyframes toastPopUp {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50px);
+    /* 살짝 아래, 조금 작게 시작 */
+    transform: translate(-50%, -40%) scale(0.9);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, 0);
+    /* 원래 위치, 원래 크기 */
+    transform: translate(-50%, -50%) scale(1);
   }
 }
