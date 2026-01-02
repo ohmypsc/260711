@@ -1,9 +1,16 @@
+/* ============================================
+   Gallery Timeline Styles (Final Minimalist)
+   - Layout: Zigzag Grid with Mathematical Rhythm
+   - Style: Flat Design (No border, No shadow, No hover)
+   - Detail: Greenery Leaf Dots
+   ============================================ */
+
 .timeline-wrapper {
   background: transparent;
   position: relative;
 }
 
-/* ✅ 배치 변수 */
+/* ✅ 배치 변수 (반응형 수학) */
 :root {
   --photo: clamp(140px, 16vw, 205px);
   --line-col-w: 44px;
@@ -13,7 +20,7 @@
   --center-line-width: 2px;
 }
 
-/* 리스트 */
+/* 리스트 컨테이너 */
 .timeline-list {
   list-style: none;
   padding: 0;
@@ -23,7 +30,7 @@
   gap: 0.6rem;
 }
 
-/* ✅ 아이템 구조 */
+/* ✅ 아이템 구조 (Grid System) */
 .timeline-item {
   position: relative;
   z-index: 1;
@@ -32,6 +39,7 @@
   column-gap: var(--gutter);
   align-items: center;
 
+  /* 사진이 화면을 넘치지 않게 안전폭 계산 */
   --photo-safe: min(
     var(--photo),
     calc(50vw - (var(--line-col-w) / 2) - var(--gutter))
@@ -61,18 +69,16 @@
   border-radius: 50%;
   overflow: hidden;
   
-  /* 🎨 디자인 수정: 테두리 삭제 & 그림자만 은은하게 */
-  border: none; 
+  /* ✅ [수정] 테두리 삭제 */
+  border: none;
+  
+  /* ✅ [수정] 그림자 삭제 (완전 평면) */
+  box-shadow: none;
+  
+  /* hover transition도 불필요하므로 삭제 */
 }
 
-/* Hover 효과 */
-@media (hover: hover) {
-  .photo-wrap:hover {
-    transform: scale(1.02);
-    /* 호버 시 그림자가 조금 더 퍼짐 */
-    box-shadow: 0 15px 40px rgba(27, 38, 59, 0.25);
-  }
-}
+/* ✅ [수정] 불필요한 호버 효과 블록 전체 삭제됨 */
 
 /* LazyImage UI */
 .lazy-photo {
@@ -86,7 +92,8 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: rgba(27, 38, 59, 0.06); 
+  /* 그림자가 없으므로 스켈레톤도 아주 연하게 */
+  background: rgba(27, 38, 59, 0.04); 
   animation: pulse 1.2s ease-in-out infinite;
   pointer-events: none;
 }
@@ -104,14 +111,15 @@
   display: block;
   border-radius: 50%;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  /* 부드러운 페이드인만 유지 */
+  transition: opacity 0.5s ease; 
 }
 
 .lazy-photo.is-loaded img {
   opacity: 1;
 }
 
-/* 라인 컬럼 */
+/* 라인 컬럼 (중앙) */
 .line-col {
   grid-column: 2;
   height: 100%;
@@ -123,7 +131,7 @@
   transform: translateY(var(--offset));
 }
 
-/* 잎 마디(dot) */
+/* 🌿 잎사귀 마디 (Leaf Dot) */
 .dot {
   width: 14px;
   height: 14px;
@@ -134,20 +142,21 @@
   transform: translate(-50%, -50%);
   opacity: 0.95;
 
-  /* 🌿 Leaf Green */
+  /* 색상: 테마의 그린 컬러 */
   background-color: var(--theme-primary);
   box-shadow: none;
 
+  /* SVG 마스크로 나뭇잎 모양 구현 */
   --leaf-dot-mask: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M10%202%20C7%204%2C4%207%2C4%2010%20C4%2014%2C7%2018%2C10%2018%20C13%2018%2C16%2014%2C16%2010%20C16%207%2C13%204%2C10%202%20Z%27%20fill%3D%27black%27/%3E%3C/svg%3E");
   -webkit-mask: var(--leaf-dot-mask) center / contain no-repeat;
   mask: var(--leaf-dot-mask) center / contain no-repeat;
 }
 
-/* 잎사귀 방향 */
+/* 잎사귀 방향 회전 (자연스러움) */
 .timeline-item.left .dot { transform: translate(-50%, -50%) rotate(-15deg); }
 .timeline-item.right .dot { transform: translate(-50%, -50%) rotate(15deg); }
 
-/* 캡션 */
+/* 📝 캡션 (날짜/설명) */
 .caption-col {
   grid-row: 1;
   z-index: 1;
@@ -165,8 +174,9 @@
 
 .caption-col .title {
   margin: 0;
-  font-family: "Noto Serif KR", serif;
-  font-size: 1rem;
+  /* 🖋️ 고운바탕체로 감성 더하기 */
+  font-family: "Gowun Batang", serif;
+  font-size: 1.0rem;
   font-weight: 600;
   color: var(--theme-primary); 
   letter-spacing: -0.02em;
@@ -195,7 +205,7 @@
   word-break: keep-all;
 }
 
-/* 좌/우 교차 */
+/* 🔄 좌/우 교차 배치 로직 (Zigzag) */
 .timeline-item.left {
   --offset: calc(var(--photo-safe) * var(--lift-ratio) * -1);
 
@@ -228,7 +238,7 @@
   }
 }
 
-/* 겹침 보정 */
+/* ↕️ 겹침 보정 (Rhythm) */
 .timeline-item + .timeline-item { margin-top: var(--overlap); }
 
 .timeline-item.left + .timeline-item.right {
@@ -239,7 +249,7 @@
   margin-top: calc(var(--overlap) + (var(--photo-safe) * var(--lift-ratio) * 2));
 }
 
-/* 모바일 */
+/* 📱 Mobile Responsive */
 @media (max-width: 640px) {
   :root {
     --photo: clamp(108px, 40vw, 148px);
@@ -249,19 +259,26 @@
     --lift-ratio: 0.04;
     --center-line-width: 1px;
   }
+  
   .dot { width: 12px; height: 12px; }
-  .caption-col .title { font-size: 0.95rem; }
+  
+  /* 모바일에서 폰트 조금 키움 (가독성) */
+  .caption-col .title { font-size: 1.0rem; }
 }
 
-/* 등장 애니메이션 */
+/* ✨ 스크롤 등장 애니메이션 (Fade Up) */
 .timeline-item.not-visible {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(30px);
 }
+
 .timeline-item {
-  transition: opacity 2s ease-out, transform 2s ease-out;
+  /* 천천히 우아하게 올라오도록 */
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .timeline-item.left { transition-delay: 0.1s; }
+
 .timeline-item.is-visible {
   opacity: 1;
   transform: translateY(0);
