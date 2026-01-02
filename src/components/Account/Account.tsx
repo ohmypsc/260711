@@ -1,12 +1,13 @@
 import "./Account.scss";
 import { useMemo, useState, useEffect } from "react";
+import { createPortal } from "react-dom"; // ✅ [중요] Portal 가져오기
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useContactInfo } from "@/ContactInfoProvider";
 
 type ModalType = null | "groom" | "bride";
 
-// ✅ 토스트 메시지 타입 정의 (성공/실패 구분)
+// 토스트 메시지 타입
 type ToastState = {
   msg: string;
   type: "success" | "error";
@@ -16,10 +17,10 @@ export function Account() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
   const contactInfo = useContactInfo();
 
-  // ✅ [1] 토스트 상태를 객체로 관리 ({ 메시지, 타입 })
+  // 토스트 상태
   const [toast, setToast] = useState<ToastState>(null);
 
-  // ✅ [2] 자동 사라짐 타이머
+  // 토스트 타이머
   useEffect(() => {
     if (toast) {
       const timer = setTimeout(() => {
@@ -37,16 +38,14 @@ export function Account() {
 
   const modalTitle = openModal === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
-  // ✅ [3] 복사 로직 (성공/실패에 따라 아이콘 타입 설정)
+  // 복사 로직
   const copyToClipboard = (account: string) => {
     const numericAccount = account.replace(/[^0-9]/g, "");
     navigator.clipboard.writeText(numericAccount)
       .then(() => {
-        // 성공 시: success 타입
         setToast({ msg: "계좌번호가 복사되었습니다", type: "success" });
       })
       .catch(() => {
-        // 실패 시: error 타입
         setToast({ msg: "복사에 실패했습니다. 직접 입력해주세요.", type: "error" });
       });
   };
@@ -116,13 +115,14 @@ export function Account() {
         </Modal>
       )}
 
-      {/* ✅ [4] 토스트 메시지 UI (타입에 따라 아이콘 변경) */}
-      {toast && (
+      {/* ✅ [핵심 수정] createPortal을 사용해 body 태그 바로 아래로 렌더링 */}
+      {/* 이렇게 하면 모달의 검은 배경(Overlay)보다 무조건 위에 뜹니다 */}
+      {toast && createPortal(
         <div className="custom-toast">
-          {/* 성공하면 체크, 실패하면 느낌표 아이콘 */}
           <i className={toast.type === "success" ? "fa-solid fa-check" : "fa-solid fa-circle-exclamation"}></i>
           {toast.msg}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
