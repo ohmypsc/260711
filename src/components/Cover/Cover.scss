@@ -1,8 +1,7 @@
 /* ============================================
-   Cover Section Styles (Final)
-   - Fonts: Loaded via index.html (No @import needed)
-   - Poetry: Noto Serif KR (Light/Emotional)
-   - Message: Pretendard (Clean/Readable)
+   Cover Section Styles (Final: Handwritten Poetry)
+   - Poetry: Gowun Batang (손글씨 감성)
+   - Message: Global Font (Noto Serif KR - 격식)
    ============================================ */
 
 .cover-wrapper {
@@ -15,37 +14,36 @@
   gap: 1.25rem;
 
   /* -------------------------
-     ✅ 1. 시 전문 (Poetry) - "감성 & 여운"
-     - 명조체, 얇은 굵기(300), 넓은 자간
+     ✅ 1. 시 전문 (Poetry) - "손글씨 감성"
+     - 고운바탕체 적용으로 서정적인 느낌 극대화
   -------------------------- */
   .cover-poetry {
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;      /* 연(Stanza) 사이 간격 */
+    gap: 1.1rem;
     margin-top: 0.8rem;
     margin-bottom: 0.8rem;
 
     .poetry-block {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;    /* 행(Line) 사이 간격 */
+      gap: 0.4rem;
     }
 
     p {
       margin: 0;
-      /* 🖋️ 시는 '명조체'로 감성적으로 */
-      font-family: "Noto Serif KR", serif;
+      /* 🖋️ 시는 '고운바탕'으로 손글씨 느낌 */
+      font-family: "Gowun Batang", serif;
       
-      /* ✨ 핵심: 얇은 폰트로 여리여리한 느낌 */
-      font-weight: 300; 
-      font-size: 0.96rem; 
+      font-weight: 400; 
+      font-size: 1.05rem; /* 손글씨는 살짝 커야 잘 보임 */
       
-      /* 천천히 읽히도록 자간과 행간을 넓힘 */
-      letter-spacing: 0.05em; 
-      line-height: 1.85;
+      /* 자연스러운 흐름 */
+      letter-spacing: -0.02em; 
+      line-height: 1.8;
       
       color: var(--text-main);
-      opacity: 0.9;
+      opacity: 0.85; /* 너무 진하지 않게 */
       text-align: center;
 
       word-break: keep-all;
@@ -54,10 +52,8 @@
 
     .poet {
       margin-top: 1.0rem;
-      font-style: normal;
-      font-family: "Noto Serif KR", serif; /* 시인 이름도 명조 */
-      font-size: 0.82rem;
-      font-weight: 400;
+      font-family: "Gowun Batang", serif;
+      font-size: 0.9rem;
       color: var(--text-light);
       opacity: 0.7;
       text-align: center;
@@ -65,22 +61,21 @@
   }
 
   /* -------------------------
-     ✅ 2. 초대글 (Message) - "명확 & 정중"
-     - 프리텐다드(고딕), 적당한 굵기, 좁은 자간
+     ✅ 2. 초대글 (Message) - "전역 스타일 상속"
+     - 별도의 폰트 지정 없이 App.scss의 Noto Serif KR을 따름
   -------------------------- */
   .cover-message {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
     
-    /* 📖 정보 전달은 '프리텐다드'로 읽기 편하게 */
-    font-family: "Pretendard", sans-serif;
+    /* 폰트 지정 삭제 -> 전역(Noto Serif KR) 자동 적용 */
+    /* font-family: ... (삭제됨) */
     
-    font-size: 1.0rem;
+    font-size: 1.02rem; /* 명조체는 살짝 큼직해야 예쁨 */
     font-weight: 400;
-    line-height: 1.8;
+    line-height: 1.85;
     
-    /* 고딕은 자간을 살짝 좁혀야 단단해 보임 */
     letter-spacing: -0.01em; 
     
     color: var(--text-main);
@@ -88,7 +83,6 @@
     word-break: keep-all;
     overflow-wrap: break-word;
     
-    /* 문단 사이 공백(<br/> 등) 여백 처리 */
     br {
       content: "";
       display: block;
@@ -101,7 +95,7 @@
   }
 
   /* -------------------------
-     ✅ 3. 가족관계 (Names)
+     3. 가족관계 (Names)
   -------------------------- */
   .family-section {
     margin: 0.75rem 0 1.05rem;
@@ -109,21 +103,19 @@
 
     font-size: 1.05rem;
     line-height: 1.72rem;
-
     display: flex;
     flex-direction: column;
-    gap: 0.5rem; /* 이름 사이 간격 살짝 늘림 */
+    gap: 0.5rem;
     
-    /* 가족 이름은 명조체로 격식 있게 */
-    font-family: "Noto Serif KR", serif; 
-
+    /* 가족 이름도 전역(명조) 따름 */
+    
     .name {
       display: block;
     }
 
     .parent-names {
       color: var(--text-main);
-      font-weight: 400; /* 부모님은 기본 굵기 */
+      font-weight: 400;
     }
 
     .relation-name--adjust {
@@ -137,7 +129,6 @@
       margin: 0 2px;
     }
     
-    /* 신랑/신부 이름은 조금 더 진하게 강조 */
     .parent-names + .relation-name--adjust + span {
        font-weight: 600; 
     }
@@ -176,13 +167,13 @@
     gap: 1.1rem;
 
     .cover-poetry p {
-      font-size: 0.94rem; /* 모바일에서 시가 너무 크지 않게 */
-      line-height: 1.8;
+      font-size: 1.0rem; /* 손글씨라 조금 더 커도 됨 */
+      line-height: 1.75;
     }
 
     .cover-message {
-      font-size: 0.98rem;
-      line-height: 1.75;
+      font-size: 1.0rem;
+      line-height: 1.8;
     }
 
     .family-section {
