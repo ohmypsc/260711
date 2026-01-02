@@ -1,4 +1,4 @@
-/* 📌 다채로운 파스텔 톤 & 불규칙 회전 포스트잇 보드 */
+/* 📌 화이트 제외 극파스텔 6종 & 어절 단위 줄바꿈 적용 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -10,11 +10,12 @@
     margin: 1rem 0 2.5rem;
     line-height: 1.7;
     color: var(--text-main);
-    font-size: 1rem;
+    font-size: 0.95rem;
+    opacity: 0.8;
   }
 }
 
-/* 📌 포스트잇 보드 */
+/* 📌 포스트잇 게시판 보드 */
 .guestbook-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr); 
@@ -28,7 +29,7 @@
   box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 }
 
-/* 📌 포스트잇 아이템 (6종 불규칙 로직) */
+/* 📌 포스트잇 아이템 (화이트 제외 극파스텔 6종) */
 .guestbook-item {
   position: relative;
   display: flex;
@@ -36,10 +37,9 @@
   padding: 30px 16px 20px;
   height: auto;
   min-height: 140px;
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   
-  /* 마스킹 테이프 */
   &::before {
     content: "";
     position: absolute;
@@ -51,36 +51,32 @@
     z-index: 2;
   }
 
-  /* 🎨 [핵심] 다채로운 파스텔 색상 & 불규칙한 회전 로직 */
-  /* 좌우 위치에 상관없이 섞이도록 각도 수치를 비대칭으로 조정했습니다. */
-
+  /* 🎨 [색상 수정] 화이트 제외, 아주 연한 파스텔 6종 팔레트 */
   &:nth-child(6n + 1) { 
-    background-color: #FDF4C5; /* 연노랑 */
+    background-color: #FEF9E7; /* 연노랑 */
     transform: rotate(-3.2deg) translateY(10px) !important; 
   }
   &:nth-child(6n + 2) { 
-    background-color: #F5E8EA; /* 연분홍 */
+    background-color: #FDF2F4; /* 연핑크 */
     transform: rotate(1.5deg) translateY(-5px) !important; 
   }
   &:nth-child(6n + 3) { 
-    background-color: #EBF2ED; /* 연초록 */
+    background-color: #F2F9F4; /* 연민트 */
     transform: rotate(-1.2deg) translateX(4px) !important; 
   }
   &:nth-child(6n + 4) { 
-    background-color: #E8F1FD; /* 연파랑 */
+    background-color: #F0F7FF; /* 연파랑 */
     transform: rotate(2.8deg) translateY(8px) !important; 
   }
   &:nth-child(6n + 5) { 
-    background-color: #F3E5F5; /* 연보라 */
+    background-color: #F8F4FF; /* 연라벤더 */
     transform: rotate(-2.5deg) translateY(-10px) !important; 
   }
   &:nth-child(6n) { 
-    background-color: #FFFFFF; /* 화이트 */
-    border: 1px solid var(--border-color);
+    background-color: #FFF3E0; /* 연살구(Apricot) - 화이트 대신 추가 */
     transform: rotate(0.8deg) translateX(-5px) !important; 
   }
 
-  /* ✕ 삭제 버튼 (빨간색 제거 및 투명도 조정) */
   .item-delete-btn {
     position: absolute;
     top: 8px; right: 8px;
@@ -94,14 +90,9 @@
     cursor: pointer;
     z-index: 10;
 
-    &:active {
-      opacity: 0.8;
-      color: var(--text-main);
-      transform: scale(1.1);
-    }
+    &:active { opacity: 0.8; color: var(--text-main); transform: scale(1.1); }
   }
 
-  /* 이름 & 날짜 (중앙 정렬) */
   &__head {
     margin-bottom: 12px;
     text-align: center; 
@@ -120,7 +111,7 @@
     }
   }
 
-  /* 본문 (중앙 정렬 + 가변 높이) */
+  /* 📌 어절 단위 줄바꿈 유지 */
   &__content {
     flex: 1;
     font-size: 0.95rem;
@@ -128,19 +119,19 @@
     color: var(--text-main);
     font-family: "Gowun Batang", serif;
     text-align: center;
-    word-break: break-all;
-    white-space: pre-wrap;
+    word-break: keep-all;     
+    overflow-wrap: break-word; 
+    white-space: pre-wrap;    
   }
 
-  /* 터치 시 효과 */
   &:active {
     transform: scale(1.05) rotate(0deg) !important;
     z-index: 100;
-    box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.1);
   }
 }
 
-/* 🔢 페이지네이션 */
+/* 🔢 페이지네이션 (디자인 조화) */
 .pagination {
   display: flex;
   justify-content: center;
@@ -150,7 +141,7 @@
   .page-num, .page-nav {
     display: flex;
     align-items: center; justify-content: center;
-    min-width: 32px; height: 32px;
+    min-width: 34px; height: 34px;
     background: var(--theme-bg);
     border: 1px solid var(--border-color);
     border-radius: 4px; 
