@@ -1,4 +1,4 @@
-/* 📌 화이트 제외 극파스텔 6종 & 어절 단위 줄바꿈 적용 */
+/* 📌 극파스텔 톤 & Masonry 레이아웃 & 어절 단위 줄바꿈 완성본 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -15,86 +15,97 @@
   }
 }
 
-/* 📌 포스트잇 게시판 보드 */
+/* 📌 포스트잇 게시판 보드 (자유 높이 배치를 위한 column 설정) */
 .guestbook-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 25px 15px; 
-  align-items: start;
+  column-count: 2;         /* 2열 배치 */
+  column-gap: 15px;        /* 열 사이 간격 */
   width: 100%;
-  padding: 50px 15px;
+  padding: 40px 15px;
   background-color: var(--theme-accent); 
   border-radius: 12px;
   min-height: 400px;
   box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
+
+  /* 빈 공간일 때 중앙 정렬을 위해 flex로 전환 */
+  &.is-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
-/* 📌 포스트잇 아이템 (화이트 제외 극파스텔 6종) */
-.guestbook-item {
-  position: relative;
+/* 🕊️ 빈 보드 상태 디자인 */
+.guestbook-empty {
+  padding: 6rem 1rem;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  opacity: 0.6;
   display: flex;
   flex-direction: column;
-  padding: 30px 16px 20px;
+  align-items: center;
+  gap: 12px;
+
+  &::before {
+    content: "\f0e0";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--theme-primary-light);
+  }
+}
+
+/* 📌 포스트잇 아이템 (가변 높이 및 극파스텔 색상) */
+.guestbook-item {
+  break-inside: avoid;     /* 열 사이에서 포스트잇이 잘리지 않게 함 */
+  display: inline-flex;    /* 가변 높이 대응 */
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 25px;     /* 포스트잇 상하 간격 */
+  
+  position: relative;
+  padding: 32px 16px 22px;
   height: auto;
-  min-height: 140px;
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   
+  /* 마스킹 테이프 */
   &::before {
     content: "";
     position: absolute;
     top: -10px; left: 50%;
     transform: translateX(-50%);
     width: 45px; height: 18px;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(1px);
     z-index: 2;
   }
 
-  /* 🎨 [색상 수정] 화이트 제외, 아주 연한 파스텔 6종 팔레트 */
-  &:nth-child(6n + 1) { 
-    background-color: #FEF9E7; /* 연노랑 */
-    transform: rotate(-3.2deg) translateY(10px) !important; 
-  }
-  &:nth-child(6n + 2) { 
-    background-color: #FDF2F4; /* 연핑크 */
-    transform: rotate(1.5deg) translateY(-5px) !important; 
-  }
-  &:nth-child(6n + 3) { 
-    background-color: #F2F9F4; /* 연민트 */
-    transform: rotate(-1.2deg) translateX(4px) !important; 
-  }
-  &:nth-child(6n + 4) { 
-    background-color: #F0F7FF; /* 연파랑 */
-    transform: rotate(2.8deg) translateY(8px) !important; 
-  }
-  &:nth-child(6n + 5) { 
-    background-color: #F8F4FF; /* 연라벤더 */
-    transform: rotate(-2.5deg) translateY(-10px) !important; 
-  }
-  &:nth-child(6n) { 
-    background-color: #FFF3E0; /* 연살구(Apricot) - 화이트 대신 추가 */
-    transform: rotate(0.8deg) translateX(-5px) !important; 
-  }
+  /* 🎨 [색상] 아주아주 연한 극파스텔 6종 팔레트 */
+  &:nth-child(6n + 1) { background-color: #FFFDF2; transform: rotate(-2.8deg) translateY(5px) !important; }
+  &:nth-child(6n + 2) { background-color: #FFF5F7; transform: rotate(2.2deg) translateY(-3px) !important; }
+  &:nth-child(6n + 3) { background-color: #F6FBF7; transform: rotate(-1.5deg) translateX(3px) !important; }
+  &:nth-child(6n + 4) { background-color: #F4F9FF; transform: rotate(3.5deg) translateY(6px) !important; }
+  &:nth-child(6n + 5) { background-color: #F9F7FF; transform: rotate(-2.2deg) translateY(-5px) !important; }
+  &:nth-child(6n)     { background-color: #FFF8F0; transform: rotate(1.5deg) translateX(-3px) !important; }
 
+  /* ✕ 삭제 버튼 */
   .item-delete-btn {
     position: absolute;
-    top: 8px; right: 8px;
+    top: 10px; right: 10px;
     width: 24px; height: 24px;
     display: flex;
     align-items: center; justify-content: center;
     background: transparent;
     border: none;
     color: var(--text-light); 
-    opacity: 0.2;
+    opacity: 0.15;
     cursor: pointer;
     z-index: 10;
-
     &:active { opacity: 0.8; color: var(--text-main); transform: scale(1.1); }
   }
 
   &__head {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     text-align: center; 
     .name {
       display: block;
@@ -106,32 +117,33 @@
       display: block;
       font-size: 0.75rem;
       color: var(--text-light);
-      margin-top: 2px;
-      opacity: 0.7;
+      margin-top: 3px;
+      opacity: 0.6;
     }
   }
 
-  /* 📌 어절 단위 줄바꿈 유지 */
+  /* 📌 본문 (가운데 정렬 + 어절 단위 줄바꿈) */
   &__content {
     flex: 1;
     font-size: 0.95rem;
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--text-main);
     font-family: "Gowun Batang", serif;
     text-align: center;
-    word-break: keep-all;     
+    word-break: keep-all;      /* 어절 단위 줄바꿈 */
     overflow-wrap: break-word; 
-    white-space: pre-wrap;    
+    white-space: pre-wrap;     /* 엔터 인식 */
   }
 
+  /* 터치 시 효과 */
   &:active {
     transform: scale(1.05) rotate(0deg) !important;
     z-index: 100;
-    box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.08);
   }
 }
 
-/* 🔢 페이지네이션 (디자인 조화) */
+/* 🔢 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -147,7 +159,6 @@
     border-radius: 4px; 
     font-size: 0.8rem;
     color: var(--text-light);
-
     &:active { background: var(--theme-accent); }
     &:disabled { opacity: 0.3; }
   }
@@ -158,48 +169,4 @@
     border-color: var(--theme-primary);
     font-weight: 700;
   }
-}
-
-/* 📋 Modal & Form Style (정갈한 스타일 유지) */
-.guestbook-modal-content {
-  .modal-title { 
-    font-size: 1.2rem; 
-    text-align: center;
-    font-weight: 800;
-    color: var(--text-main);
-    margin-bottom: 20px;
-  }
-}
-
-.guestbook-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-align: left;
-  
-  .field { display: flex; flex-direction: column; gap: 8px; }
-  .label { font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
-
-  input, textarea {
-    padding: 14px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    background: var(--section-bg-soft);
-    font-family: inherit;
-    
-    &:focus {
-      border-color: var(--theme-primary);
-      background: var(--theme-bg);
-      outline: none;
-    }
-  }
-  textarea { height: 8rem; resize: none; }
-}
-
-.guestbook-footer-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-  button { flex: 1; }
 }
