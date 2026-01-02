@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { BgEffect } from "@/components/common/BgEffect/BgEffect";
-import { FadeIn } from "@/components/common/FadeIn/FadeIn"; // ✅ Import 추가
-
+import { FadeIn } from "@/components/common/FadeIn/FadeIn";
 import { Cover } from "@/components/Cover/Cover";
 import { Timeline } from "@/components/Timeline/Timeline";
 import { Calendar } from "@/components/Calendar/Calendar";
@@ -9,7 +8,6 @@ import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook";
-import { PhotoUpload } from "@/components/PhotoUpload/PhotoUpload";
 
 export default function MainWeddingPage() {
   useEffect(() => {
@@ -112,15 +110,6 @@ export default function MainWeddingPage() {
           <FadeIn>
             <div className="section-inner">
               <GuestBook />
-            </div>
-          </FadeIn>
-        </section>
-
-        {/* 8. 사진 업로드 (선택 사항) */}
-        <section id="photoupload">
-          <FadeIn>
-            <div className="section-inner">
-              <PhotoUpload />
             </div>
           </FadeIn>
         </section>
