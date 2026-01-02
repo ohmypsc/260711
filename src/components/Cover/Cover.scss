@@ -1,3 +1,10 @@
+/* ============================================
+   Cover Section Styles (Final)
+   - Fonts: Loaded via index.html (No @import needed)
+   - Poetry: Noto Serif KR (Light/Emotional)
+   - Message: Pretendard (Clean/Readable)
+   ============================================ */
+
 .cover-wrapper {
   text-align: center;
   max-width: var(--section-max-width);
@@ -8,34 +15,37 @@
   gap: 1.25rem;
 
   /* -------------------------
-     ✅ 1. 시 전문 (Poetry) - 디자인 수정
-     - 이탤릭 제거, 명조체 적용, 시인 이름 가운데 정렬
+     ✅ 1. 시 전문 (Poetry) - "감성 & 여운"
+     - 명조체, 얇은 굵기(300), 넓은 자간
   -------------------------- */
   .cover-poetry {
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;      /* 연(Stanza) 사이 간격 시원하게 */
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: 1.1rem;      /* 연(Stanza) 사이 간격 */
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
 
     .poetry-block {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;   /* 행(Line) 사이 간격 */
+      gap: 0.4rem;    /* 행(Line) 사이 간격 */
     }
 
     p {
       margin: 0;
-      /* ✨ 모바일 가독성: 이탤릭 제거 + 명조 계열 */
-      font-style: normal; 
-      font-family: "Noto Serif KR", "Batang", serif; 
-      font-weight: 400;
-      font-size: 0.98rem; /* 본문보다 살짝 작게 */
-      line-height: 1.75;
-      letter-spacing: -0.01em;
+      /* 🖋️ 시는 '명조체'로 감성적으로 */
+      font-family: "Noto Serif KR", serif;
+      
+      /* ✨ 핵심: 얇은 폰트로 여리여리한 느낌 */
+      font-weight: 300; 
+      font-size: 0.96rem; 
+      
+      /* 천천히 읽히도록 자간과 행간을 넓힘 */
+      letter-spacing: 0.05em; 
+      line-height: 1.85;
       
       color: var(--text-main);
-      opacity: 0.85;      /* 너무 진하지 않게 */
+      opacity: 0.9;
       text-align: center;
 
       word-break: keep-all;
@@ -43,37 +53,42 @@
     }
 
     .poet {
-      margin-top: 0.8rem;
+      margin-top: 1.0rem;
       font-style: normal;
-      font-size: 0.88rem;
+      font-family: "Noto Serif KR", serif; /* 시인 이름도 명조 */
+      font-size: 0.82rem;
+      font-weight: 400;
       color: var(--text-light);
       opacity: 0.7;
-      text-align: center; /* ✅ 요청하신 가운데 정렬 */
+      text-align: center;
     }
   }
 
   /* -------------------------
-     ✅ 2. 초대글 (Message) - 디자인 수정
-     - 행간 확대, 자간 조정, 가독성 강화
+     ✅ 2. 초대글 (Message) - "명확 & 정중"
+     - 프리텐다드(고딕), 적당한 굵기, 좁은 자간
   -------------------------- */
   .cover-message {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;  /* 줄 사이 간격 확보 */
+    gap: 0.4rem;
     
-    font-size: 1.05rem;
+    /* 📖 정보 전달은 '프리텐다드'로 읽기 편하게 */
+    font-family: "Pretendard", sans-serif;
+    
+    font-size: 1.0rem;
     font-weight: 400;
-    line-height: 1.85; /* 줄 간격 넓혀서 읽기 편하게 */
-    letter-spacing: -0.02em; /* 자간 살짝 좁혀서 텍스트 덩어리감 형성 */
+    line-height: 1.8;
+    
+    /* 고딕은 자간을 살짝 좁혀야 단단해 보임 */
+    letter-spacing: -0.01em; 
     
     color: var(--text-main);
-    opacity: 1;
     text-align: center;
-
     word-break: keep-all;
     overflow-wrap: break-word;
     
-    /* 문단 사이 공백(<br/> 등)이 있을 경우 여백 처리 */
+    /* 문단 사이 공백(<br/> 등) 여백 처리 */
     br {
       content: "";
       display: block;
@@ -86,7 +101,7 @@
   }
 
   /* -------------------------
-     부모님/가족관계 박스 (기존 유지)
+     ✅ 3. 가족관계 (Names)
   -------------------------- */
   .family-section {
     margin: 0.75rem 0 1.05rem;
@@ -97,7 +112,10 @@
 
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.5rem; /* 이름 사이 간격 살짝 늘림 */
+    
+    /* 가족 이름은 명조체로 격식 있게 */
+    font-family: "Noto Serif KR", serif; 
 
     .name {
       display: block;
@@ -105,6 +123,7 @@
 
     .parent-names {
       color: var(--text-main);
+      font-weight: 400; /* 부모님은 기본 굵기 */
     }
 
     .relation-name--adjust {
@@ -112,11 +131,20 @@
       justify-content: center;
       align-items: center;
       min-width: 2.6em;
+      
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin: 0 2px;
+    }
+    
+    /* 신랑/신부 이름은 조금 더 진하게 강조 */
+    .parent-names + .relation-name--adjust + span {
+       font-weight: 600; 
     }
   }
 
   /* -------------------------
-     장식 라인(LeafLine) (기존 유지)
+     장식 라인(LeafLine)
   -------------------------- */
   .parent-line {
     width: 100%;
@@ -142,26 +170,25 @@
   }
 
   /* -------------------------
-     Mobile (기존 유지)
+     Mobile Responsive
   -------------------------- */
   @media (max-width: 420px) {
     gap: 1.1rem;
 
-    /* 모바일에서 시 폰트 사이즈 미세 조정 */
     .cover-poetry p {
-      font-size: 0.96rem;
-      line-height: 1.7;
+      font-size: 0.94rem; /* 모바일에서 시가 너무 크지 않게 */
+      line-height: 1.8;
     }
 
     .cover-message {
-      font-size: 1.02rem;
-      line-height: 1.8;
+      font-size: 0.98rem;
+      line-height: 1.75;
     }
 
     .family-section {
       margin: 0.65rem 0 0.95rem;
       padding: 0.5rem 0;
-      gap: 0.3rem;
+      gap: 0.4rem;
     }
   }
 }
