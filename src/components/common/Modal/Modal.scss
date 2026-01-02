@@ -1,36 +1,49 @@
 /* ============================================
-   Modal Global Styles (Theme Optimized)
+   Modal Global Styles (Mobile-first / Elegant)
+   ✅ Mobile backdrop-filter 톤 차이 해결 버전
+   - 오버레이 "색"과 "블러" 분리
+   - 100vh + 100dvh 이중 안전장치
    ============================================ */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  width: 100vw; height: 100vh;
-  width: 100dvw; height: 100dvh;
 
-  /* 🎨 1. Theme Color Overlay (Deep Navy Tint) */
-  /* #1B263B의 40% 농도 -> 훨씬 고급스러움 */
-  background: rgba(27, 38, 59, 0.4);
+  /* ✅ dvh 흔들림 대비: vh + dvh 같이 */
+  width: 100vw;
+  height: 100vh;
+  width: 100dvw;
+  height: 100dvh;
+
+  /* ✅ 어둠 톤은 항상 고정 (샘플링 영향 X) */
+  background: rgba(20, 20, 24, 0.34);
 
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 10000;
   padding: 12px;
+
   animation: overlayFadeIn 0.2s ease forwards;
+
   overflow-x: hidden;
+
+  /* pseudo 레이어를 위한 stacking */
   isolation: isolate;
 }
 
-/* Blur Layer (유지 - 아주 훌륭함) */
+/* ✅ blur/saturate는 별도 레이어에서만 */
 .modal-overlay::before {
   content: "";
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(8px); /* 블러를 살짝 줄여 내용 집중도 향상 */
-  -webkit-backdrop-filter: blur(8px);
+
+  backdrop-filter: blur(9px) saturate(115%);
+  -webkit-backdrop-filter: blur(9px) saturate(115%);
+
   pointer-events: none;
-  z-index: -1;
+  z-index: -1; /* overlay 배경 뒤에 깔리도록 */
 }
 
 /* ============================================
@@ -38,28 +51,25 @@
    ============================================ */
 .modal-container {
   width: 100%;
-  max-width: 340px; /* 모바일 초대장이므로 420px보다 조금 더 컴팩트하게 추천 */
+  max-width: 420px;
 
   background: var(--theme-bg);
-  
-  /* 테두리도 너무 진하지 않게 */
   border: 1px solid var(--border-color);
-  
-  /* 🎨 버튼과 동일한 6px 둥글기 유지 (Good) */
-  border-radius: 6px; 
+  border-radius: 6px;
 
-  padding: 24px 20px; /* 내부 여백을 늘려 숨통을 틔움 */
+  padding: 16px 14px;
 
-  /* 그림자를 조금 더 부드럽게 퍼지도록 수정 */
-  box-shadow: 
-    0 10px 25px -5px rgba(27, 38, 59, 0.15),
-    0 8px 10px -6px rgba(27, 38, 59, 0.1);
+  box-shadow:
+    0 12px 34px var(--shadow-color),
+    0 1px 4px rgba(0, 0, 0, 0.05);
 
   animation: modalShow 0.24s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
   transform-origin: center;
+
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+
   margin: 0 auto;
 }
 
@@ -68,28 +78,28 @@
 }
 
 /* ============================================
-   Title System
+   ✅ Title System (표준: 제목/부제목만)
    ============================================ */
+
 .modal-title {
   text-align: center;
-  font-size: 1.25rem; /* 모바일에서 1.35는 조금 클 수 있어 조정 */
-  font-weight: 700;
-  color: var(--theme-primary); /* 제목은 네이비로 강조 */
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 0.3rem; 
   letter-spacing: 0.02em;
 
-  padding-bottom: 12px;
+  padding-bottom: 8px;
   margin-bottom: 4px;
-  
-  /* 🧵 2. 메인 버튼과 통일감을 주는 '스티치(점선)' 라인 */
-  border-bottom: 1px dashed var(--border-color); 
+  border-bottom: 1px solid var(--border-color);
 }
 
 .modal-subtitle {
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-light);
-  line-height: 1.5;
-  margin-top: 4px;
+  margin-top: -4px;
+  letter-spacing: 0.01em;
 }
 
 /* ============================================
@@ -97,34 +107,23 @@
    ============================================ */
 .modal-content {
   width: 100%;
-  /* 내용이 길어질 경우를 대비한 스크롤 처리 */
-  max-height: 60vh;
-  overflow-y: auto;
 }
 
 .null-text {
   color: var(--text-light);
   font-size: 0.9rem;
   font-style: italic;
-  text-align: center;
 }
 
 /* ============================================
-   ✅ Footer (Buttons Layout)
+   Footer
    ============================================ */
 .modal-footer {
-  margin-top: 16px;
-  
-  /* 👯 3. 쌍둥이 버튼을 위한 Flex Layout */
-  display: flex;
-  gap: 8px; /* 버튼 사이 간격 */
-  width: 100%;
+  margin-top: 12px;
 }
 
-/* 만약 버튼을 세로로 쌓고 싶다면 flex-direction: column; 사용 */
-
 /* ============================================
-   Animations & Media Queries (기존 유지)
+   Animations
    ============================================ */
 @keyframes overlayFadeIn {
   from { opacity: 0; }
@@ -141,8 +140,30 @@
   100% { opacity: 0; transform: translateY(8px) scale(0.97); }
 }
 
+/* ============================================
+   Responsive (Small phones)
+   ============================================ */
 @media (max-width: 360px) {
   .modal-container {
-    padding: 20px 16px;
+    padding: 14px 12px;
+    border-radius: 6px;
+    gap: 8px;
   }
+
+  .modal-title {
+    font-size: 1.25rem;
+  }
+
+  .modal-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+/* ✅ 모달 위치 보정용 wrapper */
+.modal-positioner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  will-change: transform;
 }
