@@ -1,6 +1,5 @@
 /* =========================================================
-   Contact Modal
-   Concept: Warm Sand Layer (Tone-on-Tone)
+   Contact Modal: User Original Layout + Color Theme Only
    ========================================================= */
 
 .contact-modal-wrap {
@@ -9,13 +8,13 @@
   flex-direction: column;
 }
 
-/* 1) 제목 ↔ 부제목 (간격 유지, 색상만 네이비로 통일) */
+/* 1) 제목 색상만 네이비로 변경 */
 .contact-modal-wrap .modal-title {
   margin-bottom: 2px;
   color: var(--theme-primary);
 }
 
-/* 2) 부제목 ↔ 섹션 (간격 유지) */
+/* 2) 부제목 색상 유지 (회색) */
 .contact-subtitle {
   margin-top: 0;
   margin-bottom: 14px;
@@ -23,25 +22,20 @@
   font-weight: 400;
 }
 
-/* 🎨 [핵심] 섹션 카드: Warm Sand Layer 
-   - 배경을 웜 샌드(theme-accent)로 깔아서 톤온톤 매치
-   - 테두리는 아주 연하게 처리하여 부드럽게 감쌈
-*/
+/* 🎨 섹션: 배경을 'Warm Sand'로 변경 */
 .contact-section {
-  /* Layout (기존 유지) */
-  padding: 15px 10px; /* 좌우 여백 아주 살짝 여유 줌 */
+  /* Layout (원본 유지) */
+  padding: 15px 10px;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
 
-  /* Style */
-  background-color: var(--section-bg-soft); 
-  border: 1px solid rgba(27, 38, 59, 0.03); 
-  /* 그림자는 제거하거나 아주 약하게 (톤온톤은 플랫한 게 예쁨) */
-  box-shadow: none; 
+  /* Color Change */
+  background-color: var(--section-bg-soft); /* 배경색 변경 */
+  border: 1px solid rgba(27, 38, 59, 0.05); /* 테두리 미세 조정 */
+  box-shadow: none;
 }
 
-/* 3) 섹션 ↔ 섹션 (간격 유지) */
 .contact-section + .contact-section {
   margin-top: 8px;
 }
@@ -53,11 +47,9 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   
-  /* Layout (기존 유지) */
+  /* Layout (원본 유지) */
   gap: 8px;
   padding: 0.7rem 0;
-  
-  /* 구분선: 배경이 베이지톤이므로, 선은 조금 더 진하게 */
   border-bottom: 1px solid rgba(27, 38, 59, 0.06);
   
   font-size: 1.1rem;
@@ -67,49 +59,50 @@
     border-bottom: none;
   }
 
-  /* 관계 (아버지/어머니) */
+  /* 3) 관계: 색상을 회색(조연)으로 변경 */
   .relation {
+    /* Layout (원본 유지) */
     width: 110px;
     flex: 0 0 auto;
     text-align: center;
-    
-    /* Style: 고딕체 + 네이비 + 투명도 */
     font-family: "Pretendard", sans-serif;
     font-weight: 500;
-    color: var(--theme-primary);
-    opacity: 0.65;
     
     font-size: 0.95rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
+    /* Color Change: 네이비 -> 회색 */
+    color: var(--text-light); 
+    opacity: 1; /* 투명도 제거 (색상 자체로 조절) */
   }
 
-  /* 이름 */
+  /* 4) 이름: 색상을 네이비(주인공)로 변경 */
   .name {
+    /* Layout (원본 유지) */
     flex: 1 1 auto;
     text-align: center;
-    
-    /* Style: 명조체 + 진한 네이비 (강조) */
     font-family: "Noto Serif KR", serif;
     font-weight: 700;
-    color: var(--text-main);
     
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    /* Color Change: 검정 -> 네이비 */
+    color: var(--theme-primary); 
   }
 
   .contact-actions {
+    /* Layout (원본 유지) */
     flex: 0 0 auto;
     min-width: 96px;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
 
-    /* 🎨 [핵심] 버튼: White on Warm Sand
-       - 베이지 배경 위라서 '흰색 버튼'이 아주 고급스럽게 뜸
-    */
+    /* 5) 버튼: 테두리를 샌드색으로 변경 */
     .icon-link {
       width: 36px;
       height: 36px;
@@ -119,24 +112,25 @@
       text-decoration: none;
       line-height: 1;
 
-      /* Style */
-      background: #FFFFFF; 
-      border: 1px solid rgba(27, 38, 59, 0.05);
-      box-shadow: 0 2px 5px rgba(27, 38, 59, 0.06); /* 부드러운 그림자 */
+      background: #FFFFFF;
+      
+      /* Color Change: 테두리 샌드색 */
+      border: 1px solid var(--theme-primary-light); 
+      
+      /* 그림자 미세 조정 */
+      box-shadow: 0 2px 5px rgba(27, 38, 59, 0.06);
       
       color: var(--theme-primary);
       font-size: 1.15rem;
 
       transition: all 0.2s ease;
 
-      /* Active Effect (Tactile) */
       &:active {
         transform: scale(0.94);
-        background: #FDFDFD;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        /* 눌렀을 때 아주 연한 샌드색 */
+        background: var(--theme-accent); 
       }
       
-      /* Hover Effect */
       @media (hover: hover) {
         &:hover {
           transform: translateY(-2px);
@@ -147,9 +141,7 @@
   }
 }
 
-/* -------------------------------------
-   RESPONSIVE (기존 코드 유지)
-------------------------------------- */
+/* 📱 Responsive (원본 유지) */
 @media (max-width: 360px) {
   .contact-item {
     gap: 5px;
