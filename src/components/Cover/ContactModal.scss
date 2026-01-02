@@ -1,39 +1,27 @@
 /* =========================================================
-   Contact Modal: User Original Layout + Color Theme Only
+   Contact Modal
+   - 타이틀/서브타이틀: Global Modal.scss 스타일 자동 상속
+   - 여기서는 오직 연락처 리스트(Section/Item) 디자인만 정의
    ========================================================= */
 
 .contact-modal-wrap {
   width: 100%;
   display: flex;
   flex-direction: column;
+  /* 부제목과 섹션 사이의 간격만 여기서 잡아줌 */
+  gap: 16px; 
 }
 
-/* 1) 제목 색상만 네이비로 변경 */
-.contact-modal-wrap .modal-title {
-  margin-bottom: 2px;
-  color: var(--theme-primary);
-}
-
-/* 2) 부제목 색상 유지 (회색) */
-.contact-subtitle {
-  margin-top: 0;
-  margin-bottom: 14px;
-  color: var(--text-light);
-  font-weight: 400;
-}
-
-/* 🎨 섹션: 배경을 'Warm Sand'로 변경 */
+/* 🎨 섹션: 웜 샌드 배경 */
 .contact-section {
-  /* Layout (원본 유지) */
   padding: 15px 10px;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
 
-  /* Color Change */
-  background-color: var(--section-bg-soft); /* 배경색 변경 */
-  border: 1px solid rgba(27, 38, 59, 0.05); /* 테두리 미세 조정 */
-  box-shadow: none;
+  /* 배경색 변경 (Warm Sand) */
+  background-color: var(--section-bg-soft);
+  border: 1px solid rgba(27, 38, 59, 0.05);
 }
 
 .contact-section + .contact-section {
@@ -47,62 +35,65 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   
-  /* Layout (원본 유지) */
-  gap: 8px;
   padding: 0.7rem 0;
   border-bottom: 1px solid rgba(27, 38, 59, 0.06);
+
+  /* 레이아웃 깨짐 방지 */
+  width: 100%;
+  box-sizing: border-box; 
   
-  font-size: 1.1rem;
+  /* 기본 글자색 */
   color: var(--text-main);
+  font-size: 1.1rem;
 
   &:last-child {
     border-bottom: none;
   }
 
-  /* 3) 관계: 색상을 회색(조연)으로 변경 */
+  /* 1. 관계 (회색) */
   .relation {
-    /* Layout (원본 유지) */
-    width: 110px;
+    width: 110px; /* 원본 너비 유지 */
     flex: 0 0 auto;
     text-align: center;
+    
     font-family: "Pretendard", sans-serif;
     font-weight: 500;
-    
     font-size: 0.95rem;
+    
+    /* 색상: 조연(회색) */
+    color: var(--text-light); 
+    
+    /* 줄바꿈 방지 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
-    /* Color Change: 네이비 -> 회색 */
-    color: var(--text-light); 
-    opacity: 1; /* 투명도 제거 (색상 자체로 조절) */
   }
 
-  /* 4) 이름: 색상을 네이비(주인공)로 변경 */
+  /* 2. 이름 (네이비) */
   .name {
-    /* Layout (원본 유지) */
     flex: 1 1 auto;
     text-align: center;
+    
     font-family: "Noto Serif KR", serif;
     font-weight: 700;
     
+    /* 색상: 주인공(네이비) */
+    color: var(--theme-primary); 
+    
+    min-width: 0; /* Flex 깨짐 방지 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
-    /* Color Change: 검정 -> 네이비 */
-    color: var(--theme-primary); 
   }
 
+  /* 3. 버튼 그룹 (샌드 테두리) */
   .contact-actions {
-    /* Layout (원본 유지) */
     flex: 0 0 auto;
     min-width: 96px;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
 
-    /* 5) 버튼: 테두리를 샌드색으로 변경 */
     .icon-link {
       width: 36px;
       height: 36px;
@@ -113,11 +104,8 @@
       line-height: 1;
 
       background: #FFFFFF;
-      
-      /* Color Change: 테두리 샌드색 */
+      /* 테두리: 샌드색 */
       border: 1px solid var(--theme-primary-light); 
-      
-      /* 그림자 미세 조정 */
       box-shadow: 0 2px 5px rgba(27, 38, 59, 0.06);
       
       color: var(--theme-primary);
@@ -127,8 +115,7 @@
 
       &:active {
         transform: scale(0.94);
-        /* 눌렀을 때 아주 연한 샌드색 */
-        background: var(--theme-accent); 
+        background: var(--theme-accent);
       }
       
       @media (hover: hover) {
@@ -141,7 +128,7 @@
   }
 }
 
-/* 📱 Responsive (원본 유지) */
+/* 📱 Responsive */
 @media (max-width: 360px) {
   .contact-item {
     gap: 5px;
@@ -162,9 +149,5 @@
       height: 34px;
       font-size: 1.15rem;
     }
-  }
-
-  .contact-subtitle {
-    margin-bottom: 12px;
   }
 }
