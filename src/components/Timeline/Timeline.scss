@@ -8,7 +8,7 @@
   --photo: clamp(140px, 16vw, 205px);
   --line-col-w: 44px;
   --gutter: clamp(14px, 2vw, 26px);
-  --overlap: 0;
+  --overlap: 1rem;
   --lift-ratio: 0.06;
   --center-line-width: 2px;
 }
@@ -251,7 +251,7 @@
     --photo: clamp(108px, 40vw, 148px);
     --line-col-w: 32px;
     --gutter: clamp(10px, 3vw, 16px);
-    --overlap: 0;
+    --overlap: 1rem;
     --lift-ratio: 0.04;
     --center-line-width: 1px;
   }
