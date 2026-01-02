@@ -89,35 +89,36 @@ section {
 }
 
 /* =========================================================
-   Global Toast Message (White Card Pop-up)
-   - 모달의 어두운 배경 위에서도 잘 보이도록 '화이트' 테마 적용
-   - 위치: 화면 중앙보다 살짝 위 (Center-Top)
+   Global Toast Message (Classic Name Tag Style)
+   - createPortal 덕분에 모달 위에서도 선명하게 보임
    ========================================================= */
 
 .custom-toast {
-  /* 📍 위치: 화면 정중앙에서 살짝 위 */
+  /* 📍 위치: 상단 */
   position: fixed;
-  top: 40%; 
+  top: 60px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100000; /* 모달(z-index: 9999)보다 확실히 위에 */
+  transform: translateX(-50%);
   
-  /* 🎨 배경: 깨끗한 화이트 (어두운 모달 위에서 가독성 최강) */
-  background: #FFFFFF;
+  /* 모달(z-index: 9999)보다 훨씬 높게 설정 */
+  z-index: 100001; 
   
-  /* ✒️ 글자색: 진한 네이비 (전역 테마) */
-  color: var(--theme-primary); 
+  /* 🎨 배경: 전역 메인 네이비 (단색) */
+  background: var(--theme-primary);
   
-  /* 🔲 테두리: 네이비 라인을 둘러서 또렷하게 */
-  border: 1px solid var(--theme-primary);
+  /* ✒️ 글자색: 눈이 편안한 미색(Ivory) */
+  color: var(--bg-color); 
   
-  /* 모양: 단정한 직사각형 카드 */
-  padding: 16px 28px;
-  border-radius: 8px; 
+  /* 🔲 모양: 각진 네임택/책갈피 느낌 */
+  padding: 12px 26px;
+  border-radius: 4px; 
   
-  /* 폰트: 감성적인 고운바탕체 유지 */
+  /* ✨ 포인트 라인: 하단에 핑크색 줄 */
+  border-bottom: 3px solid var(--theme-point-pink);
+  
+  /* 폰트: 감성적인 고운바탕체 */
   font-family: "Gowun Batang", serif;
-  font-size: 1.05rem; /* 중앙에 뜨니까 조금 키움 */
+  font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -126,34 +127,38 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   
-  /* ☁️ 그림자: 공중에 붕 떠 있는 듯한 강한 그림자 */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  /* 그림자: 입체감 */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   
   pointer-events: none;
 
-  /* 🎬 애니메이션: 살짝 아래에서 위로 떠오르며 등장 (Pop Up) */
-  animation: toastPopUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  /* 🎬 애니메이션: 그네처럼 툭 떨어짐 (Swing) */
+  animation: toastSwingDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 
-  /* 아이콘: 핑크 포인트 */
+  /* 아이콘 스타일 */
   i {
+    /* 아이콘 색상도 핑크 포인트와 통일 */
     color: var(--theme-point-pink);
     font-size: 1.1rem;
     margin-top: -2px;
+    
+    /* 체크 아이콘일 때 미세 조정 */
+    &.fa-check {
+      font-size: 1rem;
+    }
   }
 }
 
-/* 🎬 등장 애니메이션 (Pop Up) */
-@keyframes toastPopUp {
+/* 🎬 등장 애니메이션 */
+@keyframes toastSwingDown {
   0% {
     opacity: 0;
-    /* 살짝 아래, 조금 작게 시작 */
-    transform: translate(-50%, -40%) scale(0.9);
+    transform: translate(-50%, -40px) rotateX(-30deg);
   }
   100% {
     opacity: 1;
-    /* 원래 위치, 원래 크기 */
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, 0) rotateX(0);
   }
 }
