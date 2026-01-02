@@ -146,3 +146,54 @@
   font-size: 0.9rem;
   text-align: center;
 }
+
+/* =========================================================
+   Custom Toast Message (Alert 대체)
+   ========================================================= */
+
+.custom-toast {
+  position: fixed;
+  bottom: 80px; /* 화면 하단에서 적당히 띄움 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000; /* 모달보다 위에 떠야 함 */
+  
+  /* 디자인: 짙은 네이비 배경 + 흰색 글씨 */
+  background: rgba(27, 38, 59, 0.95);
+  color: #FFFFFF;
+  
+  padding: 12px 24px;
+  border-radius: 50px; /* 둥근 알약 모양 */
+  
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  
+  /* 그림자로 입체감 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  pointer-events: none; /* 클릭 방해 안 하게 */
+
+  /* 애니메이션: 스르륵 올라오기 */
+  animation: toastFadeUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+
+  i {
+    color: #4CAF50; /* 체크 아이콘은 산뜻한 그린 */
+    font-size: 1rem;
+  }
+}
+
+/* 등장 애니메이션 */
+@keyframes toastFadeUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
