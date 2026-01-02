@@ -1,4 +1,4 @@
-/* 📌 극파스텔 톤 & Masonry 레이아웃 & 어절 단위 줄바꿈 완성본 */
+/* 📌 최종 완성본: 반응형 Masonry & 극파스텔 & 어절 줄바꿈 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -15,18 +15,27 @@
   }
 }
 
-/* 📌 포스트잇 게시판 보드 (자유 높이 배치를 위한 column 설정) */
+/* 📌 포스트잇 게시판 보드 (반응형 레이아웃) */
 .guestbook-list {
-  column-count: 2;         /* 2열 배치 */
-  column-gap: 15px;        /* 열 사이 간격 */
+  /* ✅ 모바일 기본: 1열 배치로 가독성과 포스트잇 비율 확보 */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
   width: 100%;
-  padding: 40px 15px;
+  padding: 40px 18px;
   background-color: var(--theme-accent); 
   border-radius: 12px;
   min-height: 400px;
   box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 
-  /* 빈 공간일 때 중앙 정렬을 위해 flex로 전환 */
+  /* ✅ PC/태블릿(600px 이상): 2열 Masonry로 전환 */
+  @media (min-width: 600px) {
+    display: block; 
+    column-count: 2;
+    column-gap: 15px;
+  }
+
   &.is-empty {
     display: flex;
     justify-content: center;
@@ -51,19 +60,20 @@
     font-weight: 900;
     font-size: 2rem;
     color: var(--theme-primary-light);
+    margin-bottom: 5px;
   }
 }
 
-/* 📌 포스트잇 아이템 (가변 높이 및 극파스텔 색상) */
+/* 📌 포스트잇 아이템 (가변 높이 및 극파스텔) */
 .guestbook-item {
-  break-inside: avoid;     /* 열 사이에서 포스트잇이 잘리지 않게 함 */
-  display: inline-flex;    /* 가변 높이 대응 */
+  break-inside: avoid;     /* PC 2열일 때 잘림 방지 */
+  display: flex;           /* 모바일 1열 대응 */
   flex-direction: column;
   width: 100%;
-  margin-bottom: 25px;     /* 포스트잇 상하 간격 */
+  margin-bottom: 25px;     /* 아이템 간 세로 간격 */
   
   position: relative;
-  padding: 32px 16px 22px;
+  padding: 35px 20px 25px;
   height: auto;
   box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
@@ -75,23 +85,24 @@
     top: -10px; left: 50%;
     transform: translateX(-50%);
     width: 45px; height: 18px;
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(1px);
     z-index: 2;
   }
 
-  /* 🎨 [색상] 아주아주 연한 극파스텔 6종 팔레트 */
-  &:nth-child(6n + 1) { background-color: #FFFDF2; transform: rotate(-2.8deg) translateY(5px) !important; }
-  &:nth-child(6n + 2) { background-color: #FFF5F7; transform: rotate(2.2deg) translateY(-3px) !important; }
-  &:nth-child(6n + 3) { background-color: #F6FBF7; transform: rotate(-1.5deg) translateX(3px) !important; }
-  &:nth-child(6n + 4) { background-color: #F4F9FF; transform: rotate(3.5deg) translateY(6px) !important; }
-  &:nth-child(6n + 5) { background-color: #F9F7FF; transform: rotate(-2.2deg) translateY(-5px) !important; }
-  &:nth-child(6n)     { background-color: #FFF8F0; transform: rotate(1.5deg) translateX(-3px) !important; }
+  /* 🎨 [색상] 아주아주 연한 극파스텔 6종 (화이트 제외) */
+  /* 회전 각도는 모바일 1열에서 너무 어지럽지 않게 2~3도 내외로 조절 */
+  &:nth-child(6n + 1) { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
+  &:nth-child(6n + 2) { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
+  &:nth-child(6n + 3) { background-color: #F6FBF7; transform: rotate(-1.2deg) translateX(3px) !important; }
+  &:nth-child(6n + 4) { background-color: #F4F9FF; transform: rotate(2.2deg) translateY(4px) !important; }
+  &:nth-child(6n + 5) { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-5px) !important; }
+  &:nth-child(6n)     { background-color: #FFF8F0; transform: rotate(1.2deg) translateX(-3px) !important; }
 
   /* ✕ 삭제 버튼 */
   .item-delete-btn {
     position: absolute;
-    top: 10px; right: 10px;
+    top: 12px; right: 12px;
     width: 24px; height: 24px;
     display: flex;
     align-items: center; justify-content: center;
@@ -109,7 +120,7 @@
     text-align: center; 
     .name {
       display: block;
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 800;
       color: var(--theme-primary);
     }
@@ -117,7 +128,7 @@
       display: block;
       font-size: 0.75rem;
       color: var(--text-light);
-      margin-top: 3px;
+      margin-top: 4px;
       opacity: 0.6;
     }
   }
@@ -130,14 +141,14 @@
     color: var(--text-main);
     font-family: "Gowun Batang", serif;
     text-align: center;
-    word-break: keep-all;      /* 어절 단위 줄바꿈 */
+    word-break: keep-all;      
     overflow-wrap: break-word; 
-    white-space: pre-wrap;     /* 엔터 인식 */
+    white-space: pre-wrap;     
   }
 
-  /* 터치 시 효과 */
+  /* 터치 시 피드백 */
   &:active {
-    transform: scale(1.05) rotate(0deg) !important;
+    transform: scale(1.02) rotate(0deg) !important;
     z-index: 100;
     box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.08);
   }
