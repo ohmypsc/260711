@@ -1,4 +1,4 @@
-/* 📌 테마 맞춤형: 차분하고 고급스러운 포스트잇 보드 */
+/* 📌 다채로운 파스텔 톤 & 불규칙 회전 포스트잇 보드 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -10,133 +10,133 @@
     margin: 1rem 0 2.5rem;
     line-height: 1.7;
     color: var(--text-main);
-    font-size: 0.95rem;
-    opacity: 0.8;
+    font-size: 1rem;
   }
 }
 
-/* 📌 포스트잇 보드 (배경을 조금 더 연하게 조정) */
+/* 📌 포스트잇 보드 */
 .guestbook-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr); 
-  gap: 22px 14px; 
+  gap: 25px 15px; 
   align-items: start;
   width: 100%;
-  padding: 45px 15px;
-  background-color: var(--theme-accent); /* 샌드 베이지 톤 */
+  padding: 50px 15px;
+  background-color: var(--theme-accent); 
   border-radius: 12px;
   min-height: 400px;
   box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 }
 
-/* 📌 포스트잇 아이템 (절제된 각도 + 테마 컬러 6종) */
+/* 📌 포스트잇 아이템 (6종 불규칙 로직) */
 .guestbook-item {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 28px 16px 18px;
+  padding: 30px 16px 20px;
   height: auto;
   min-height: 140px;
-  box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
   
-  /* 마스킹 테이프 (채도를 낮춰 더 투명하게) */
+  /* 마스킹 테이프 */
   &::before {
     content: "";
     position: absolute;
-    top: -9px; left: 50%;
+    top: -10px; left: 50%;
     transform: translateX(-50%);
-    width: 42px; height: 16px;
+    width: 45px; height: 18px;
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(1px);
     z-index: 2;
   }
 
-  /* 🎨 [수정] 테마 맞춤 6가지 컬러 & 절제된 회전 (-3도 ~ 3도 사이) */
+  /* 🎨 [핵심] 다채로운 파스텔 색상 & 불규칙한 회전 로직 */
+  /* 좌우 위치에 상관없이 섞이도록 각도 수치를 비대칭으로 조정했습니다. */
+
   &:nth-child(6n + 1) { 
-    background-color: #F7F1E9; /* Warm Sand (테마 메인) */
-    transform: rotate(-2.2deg) translateY(8px) !important; 
+    background-color: #FDF4C5; /* 연노랑 */
+    transform: rotate(-3.2deg) translateY(10px) !important; 
   }
   &:nth-child(6n + 2) { 
-    background-color: #F9F7F5; /* Section BG Soft */
-    transform: rotate(1.8deg) translateY(-4px) !important; 
+    background-color: #F5E8EA; /* 연분홍 */
+    transform: rotate(1.5deg) translateY(-5px) !important; 
   }
   &:nth-child(6n + 3) { 
-    background-color: #EBE7E2; /* Deep Sand */
-    transform: rotate(-1.5deg) translateX(4px) !important; 
+    background-color: #EBF2ED; /* 연초록 */
+    transform: rotate(-1.2deg) translateX(4px) !important; 
   }
   &:nth-child(6n + 4) { 
-    background-color: #FFFFFF; /* Pure White */
-    border: 1px solid var(--border-color);
-    transform: rotate(2.5deg) translateY(6px) !important; 
+    background-color: #E8F1FD; /* 연파랑 */
+    transform: rotate(2.8deg) translateY(8px) !important; 
   }
   &:nth-child(6n + 5) { 
-    background-color: #F2EBE3; /* Primary Light 보정 */
-    transform: rotate(-2.8deg) translateY(-6px) !important; 
+    background-color: #F3E5F5; /* 연보라 */
+    transform: rotate(-2.5deg) translateY(-10px) !important; 
   }
   &:nth-child(6n) { 
-    background-color: #FDFBF9; /* Theme BG */
+    background-color: #FFFFFF; /* 화이트 */
     border: 1px solid var(--border-color);
-    transform: rotate(1.2deg) translateX(-3px) !important; 
+    transform: rotate(0.8deg) translateX(-5px) !important; 
   }
 
-  /* ✕ 삭제 버튼 */
+  /* ✕ 삭제 버튼 (빨간색 제거 및 투명도 조정) */
   .item-delete-btn {
     position: absolute;
-    top: 7px; right: 7px;
-    width: 22px; height: 22px;
+    top: 8px; right: 8px;
+    width: 24px; height: 24px;
     display: flex;
     align-items: center; justify-content: center;
     background: transparent;
     border: none;
-    color: var(--theme-primary); 
-    opacity: 0.15;
+    color: var(--text-light); 
+    opacity: 0.2;
     cursor: pointer;
     z-index: 10;
 
     &:active {
       opacity: 0.8;
+      color: var(--text-main);
       transform: scale(1.1);
     }
   }
 
   /* 이름 & 날짜 (중앙 정렬) */
   &__head {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     text-align: center; 
     .name {
       display: block;
-      font-size: 0.9rem;
-      font-weight: 700;
+      font-size: 0.95rem;
+      font-weight: 800;
       color: var(--theme-primary);
     }
     .date {
       display: block;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: var(--text-light);
       margin-top: 2px;
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 
-  /* 본문 (중앙 정렬 + 고운바탕) */
+  /* 본문 (중앙 정렬 + 가변 높이) */
   &__content {
     flex: 1;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     line-height: 1.6;
     color: var(--text-main);
     font-family: "Gowun Batang", serif;
     text-align: center;
     word-break: break-all;
     white-space: pre-wrap;
-    opacity: 0.9;
   }
 
-  /* 터치 시 피드백 */
+  /* 터치 시 효과 */
   &:active {
-    transform: scale(1.04) rotate(0deg) !important;
-    z-index: 50;
-    box-shadow: 8px 10px 20px rgba(0, 0, 0, 0.08);
+    transform: scale(1.05) rotate(0deg) !important;
+    z-index: 100;
+    box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -145,7 +145,7 @@
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 3rem;
+  margin-top: 3.5rem;
 
   .page-num, .page-nav {
     display: flex;
@@ -165,20 +165,11 @@
     background: var(--theme-primary);
     color: var(--theme-bg);
     border-color: var(--theme-primary);
+    font-weight: 700;
   }
 }
 
-/* 🕊️ 빈 보드 상태 */
-.guestbook-empty {
-  grid-column: span 2;
-  padding: 5rem 1rem;
-  color: var(--text-light);
-  opacity: 0.5;
-}
-
-/* =========================================================
-   📋 Modal & Form Style (정갈한 원본 스타일 유지)
-   ========================================================= */
+/* 📋 Modal & Form Style (정갈한 스타일 유지) */
 .guestbook-modal-content {
   .modal-title { 
     font-size: 1.2rem; 
