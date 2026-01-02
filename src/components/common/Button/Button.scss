@@ -1,85 +1,111 @@
 /* ============================================
-   📌 Button Style: Flat & Minimal
-   - 그림자 코드 완전 삭제
-   - Radius: 12px 통일
+   📌 Final Button Component
+   1. Basic: Tailored Stitch (핸드메이드 감성)
+   2. Twins: Day & Night Flat (깔끔한 기능성)
    ============================================ */
 
 button.w-btn {
-  /* 1. 기본 초기화 & 레이아웃 */
+  /* [공통 레이아웃] */
   position: relative;
   width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   
+  /* [폰트 및 리셋] */
   font-family: inherit;
   line-height: 1;
-  border: none;
+  border: none; /* 브라우저 기본 테두리 제거 */
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 
-  /* 2. 움직임 설정 (그림자 관련 transition 삭제함) */
-  transition: opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease;
+  /* [애니메이션] */
+  transition: opacity 0.1s ease, transform 0.1s ease;
 }
 
 /* ------------------------------------------------------
-   👑 1. BASIC (메인 입장 버튼)
+   🧵 1. BASIC (메인 입장 버튼)
+   - 컨셉: "Tailored Stitch" (테일러드 스티치)
+   - 네이비 배경에 샌드색 점선 스티치를 넣어 고급스러운 가죽 공예 느낌
 ------------------------------------------------------ */
 button.w-btn.basic {
-  background-color: var(--theme-primary);       /* #1B263B */
-  color: var(--theme-primary-light);            /* #D9CEC1 */
+  background-color: var(--theme-primary);        /* Navy BG */
+  color: var(--theme-primary-light);             /* Sand Text */
   
-  border-radius: 6px;
+  border-radius: 6px; /* 단정한 사각형 */
   padding: 1.25rem 1.5rem;
   
   font-size: clamp(1.0rem, 2.6vw, 1.15rem);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em; /* 고급스러움을 위해 자간 확보 */
   
-  /* box-shadow 코드 삭제됨 */
+  /* 내부 스티치 위치를 잡기 위해 필수 */
+  position: relative; 
+}
+
+/* 🌟 [Stitch Detail] 안쪽에 점선 그리기 */
+button.w-btn.basic::after {
+  content: "";
+  position: absolute;
+  
+  /* 테두리에서 5px 안쪽으로 들어옴 */
+  top: 5px; left: 5px; right: 5px; bottom: 5px;
+  
+  /* 핵심: 실선(solid) 대신 점선(dashed) 사용 */
+  border: 1px dashed var(--theme-primary-light); 
+  border-radius: 4px; /* 버튼보다 살짝 작게 */
+  
+  opacity: 0.6; /* 너무 튀지 않게 은은하게 */
+  pointer-events: none; /* 클릭 방지 */
 }
 
 /* ------------------------------------------------------
    👯 2. TWINS (모달 내부 버튼)
+   - 컨셉: "Day & Night Flat" (군더더기 없는 깔끔함)
+   - 스티치 장식을 빼서 메인 버튼과 위계를 나눔
+   - 색상 반전(Invert)으로 세트 느낌 강조
 ------------------------------------------------------ */
 button.w-btn.submit,
 button.w-btn.close {
   border-radius: 6px;
-  padding: 0.95rem 1.1rem;
+  padding: 1.0rem 1.1rem;
   
   font-size: clamp(0.9rem, 2.4vw, 1.0rem);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.03em;
-  
-  /* box-shadow 코드 삭제됨 */
 }
 
-/* [Submit] */
+/* [Submit] : Night Style (진중한 확정) */
 button.w-btn.submit {
-  background-color: var(--theme-primary);
-  color: #FFFFFF;
+  background-color: var(--theme-primary);        /* Navy BG */
+  color: var(--theme-primary-light);             /* Sand Text */
 }
 
-/* [Close] */
+/* [Close] : Day Style (가벼운 취소) */
 button.w-btn.close {
-  background-color: var(--theme-accent);
-  color: var(--text-light);
+  background-color: var(--theme-primary-light);  /* Sand BG */
+  color: var(--theme-primary);                   /* Navy Text */
 }
 
 /* ------------------------------------------------------
-   ✨ Interaction (클릭 효과)
+   👆 Touch Interaction (Active)
+   - 모바일 터치 시 눌리는 물리적 피드백
 ------------------------------------------------------ */
+
 button.w-btn:active {
-  transform: scale(0.98); /* 클릭 시 살짝 작아짐 */
-  opacity: 0.85;          /* 살짝 연해짐 */
+  transform: scale(0.97); /* 살짝 작아짐 */
 }
 
-/* PC 호버 */
-@media (hover: hover) {
-  button.w-btn:hover {
-    opacity: 0.9;
-  }
+/* Basic: 스티치와 함께 전체적으로 연해짐 */
+button.w-btn.basic:active {
+  opacity: 0.9;
+}
+
+/* Twins: 색상 덩어리이므로 투명도로 반응 */
+button.w-btn.submit:active,
+button.w-btn.close:active {
+  opacity: 0.85;
 }
 
 /* ------------------------------------------------------
@@ -90,6 +116,13 @@ button.w-btn:disabled {
   cursor: not-allowed;
   transform: none !important;
   
-  background-color: #E6E8EB;
-  color: #999;
+  /* 전역 변수 활용 */
+  background-color: var(--border-color); /* 회색 */
+  color: var(--text-light);              /* 짙은 회색 */
+  
+  /* 비활성 상태에서는 스티치 숨김 (선택 사항) */
+}
+
+button.w-btn.basic:disabled::after {
+  display: none;
 }
