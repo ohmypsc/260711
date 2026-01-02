@@ -99,7 +99,7 @@ export function GuestBook() {
 
       <div className="guestbook__actions top">
         <Button variant="basic" onClick={() => setOpenModal("write")}>
-          방명록 작성하기
+          방명록 남기기
         </Button>
       </div>
 
