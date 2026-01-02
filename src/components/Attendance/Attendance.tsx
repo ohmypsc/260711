@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom"; // ✅ Portal 추가
 import "./Attendance.scss";
 
 import { Button } from "@/components/common/Button/Button";
@@ -24,6 +25,15 @@ type ModalType =
   | "find"
   | { type: "edit"; row: AttendanceRow; authName: string; authPhone: string }
   | { type: "delete"; row: AttendanceRow; authName: string; authPhone: string };
+
+// ✅ 토스트 타입 정의
+type ToastState = {
+  msg: string;
+  type: "success" | "error";
+} | null;
+
+// ✅ 모달들이 공통으로 받을 Toast 함수 타입
+type ToastHandler = (msg: string, type: "success" | "error") => void;
 
 const STORAGE_KEY = "attendance_ids";
 
@@ -64,6 +74,22 @@ export function Attendance() {
   const [myRows, setMyRows] = useState<AttendanceRow[]>([]);
   const { getIds, addId, removeId } = useAttendanceIds();
 
+  // ✅ [1] 토스트 상태 추가
+  const [toast, setToast] = useState<ToastState>(null);
+
+  // ✅ [2] 토스트 자동 닫힘 (2초)
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  // ✅ [3] 하위 모달에 전달할 토스트 핸들러
+  const handleToast: ToastHandler = (msg, type) => {
+    setToast({ msg, type });
+  };
+
   const loadMyRows = async () => {
     const ids = getIds();
     if (ids.length === 0) return;
@@ -83,7 +109,6 @@ export function Attendance() {
   };
 
   return (
-    // ✅ 수정됨: section 태그 제거 -> div wrapper로 변경
     <div className="attendance-wrapper">
       <h2 className="section-title">참석 여부 전달</h2>
 
@@ -138,19 +163,28 @@ export function Attendance() {
         </div>
       )}
 
-      {openModal === "write" && <WriteAttendanceModal onClose={() => setOpenModal(null)} onSuccess={handleWriteSuccess} />}
-      {openModal === "find" && <FindAttendanceModal onClose={() => setOpenModal(null)} onFound={handleWriteSuccess} />}
+      {/* ✅ 모달들에 onToast 전달 */}
+      {openModal === "write" && <WriteAttendanceModal onClose={() => setOpenModal(null)} onSuccess={handleWriteSuccess} onToast={handleToast} />}
+      {openModal === "find" && <FindAttendanceModal onClose={() => setOpenModal(null)} onFound={handleWriteSuccess} onToast={handleToast} />}
       {typeof openModal === "object" && openModal?.type === "edit" && (
-        <EditAttendanceModal row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone} onClose={() => setOpenModal(null)} onSuccess={(updated) => setMyRows(prev => prev.map(r => r.id === updated.id ? updated : r))} />
+        <EditAttendanceModal row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone} onClose={() => setOpenModal(null)} onSuccess={(updated) => setMyRows(prev => prev.map(r => r.id === updated.id ? updated : r))} onToast={handleToast} />
       )}
       {typeof openModal === "object" && openModal?.type === "delete" && (
-        <DeleteAttendanceModal row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone} onClose={() => setOpenModal(null)} onSuccess={(id) => { setMyRows(prev => prev.filter(r => r.id !== id)); removeId(id); }} />
+        <DeleteAttendanceModal row={openModal.row} authName={openModal.authName} authPhone={openModal.authPhone} onClose={() => setOpenModal(null)} onSuccess={(id) => { setMyRows(prev => prev.filter(r => r.id !== id)); removeId(id); }} onToast={handleToast} />
+      )}
+
+      {/* ✅ [4] Portal로 토스트 렌더링 */}
+      {toast && createPortal(
+        <div className="custom-toast">
+          <i className={toast.type === "success" ? "fa-solid fa-check" : "fa-solid fa-circle-exclamation"}></i>
+          {toast.msg}
+        </div>,
+        document.body
       )}
     </div>
   );
 }
 
-// ... (나머지 Modal 컴포넌트들은 기능이 완벽하므로 그대로 두시면 됩니다!)
 function Counter({ value, onChange, min = 1 }: { value: number; onChange: (v: number) => void; min?: number }) {
   return (
     <div className="counter-ui">
@@ -161,21 +195,23 @@ function Counter({ value, onChange, min = 1 }: { value: number; onChange: (v: nu
   );
 }
 
-function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
+// ✅ 각 모달에서 alert 대신 onToast 사용
+function WriteAttendanceModal({ onClose, onSuccess, onToast }: { onClose: () => void; onSuccess: (row: AttendanceRow) => void; onToast: ToastHandler }) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", side: "" as Side | "", meal: "" as Meal | "", count: 1 });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.phone || !form.side || !form.meal) return alert("모든 항목을 입력해 주세요.");
+    if (!form.name || !form.phone || !form.side || !form.meal) return onToast("모든 항목을 입력해 주세요.", "error");
     setLoading(true);
     try {
       const { data, error } = await supabase.from("attendance").insert([{ ...form, phone: normalizePhone(form.phone) }]).select("*").single();
       if (error) throw error;
-      alert("참석 소식 감사합니다. 정성껏 준비하겠습니다.");
+      
+      onToast("저장되었습니다", "success");
       onSuccess(data as AttendanceRow);
       onClose();
-    } catch (err) { alert("등록에 실패했습니다."); } finally { setLoading(false); }
+    } catch (err) { onToast("등록에 실패했습니다.", "error"); } finally { setLoading(false); }
   };
 
   return (
@@ -185,6 +221,7 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
         <Button variant="close" onClick={onClose}>닫기</Button>
       </div>
     }>
+      {/* ... 기존 JSX 그대로 ... */}
       <div className="attendance-modal-content">
         <h2 className="modal-title">참석 의사 전달</h2>
         <form id="write-form" className="attendance-form" onSubmit={onSubmit}>
@@ -221,24 +258,25 @@ function WriteAttendanceModal({ onClose, onSuccess }: { onClose: () => void; onS
   );
 }
 
-function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFound: (row: AttendanceRow) => void }) {
+function FindAttendanceModal({ onClose, onFound, onToast }: { onClose: () => void; onFound: (row: AttendanceRow) => void; onToast: ToastHandler }) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
 
   const onFind = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone) return alert("모든 항목을 입력해 주세요.");
+    if (!name || !phone) return onToast("모든 항목을 입력해 주세요.", "error");
     setLoading(true);
     try {
       const normPhone = normalizePhone(phone);
       const { data, error } = await supabase.from("attendance").select("*").eq("name", name.trim()).or(`phone.eq.${phone},phone.eq.${normPhone}`).maybeSingle();
       if (error) throw error;
-      if (!data) return alert("일치하는 응답을 찾을 수 없습니다.");
-      alert("응답을 확인했습니다.");
+      if (!data) return onToast("일치하는 응답을 찾을 수 없습니다.", "error");
+      
+      onToast("응답을 확인했습니다", "success");
       onFound(data as AttendanceRow);
       onClose();
-    } catch (err) { alert("찾기에 실패했습니다."); } finally { setLoading(false); }
+    } catch (err) { onToast("찾기에 실패했습니다.", "error"); } finally { setLoading(false); }
   };
 
   return (
@@ -248,6 +286,7 @@ function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFoun
         <Button variant="close" onClick={onClose}>닫기</Button>
       </div>
     }>
+      {/* ... 기존 JSX 그대로 ... */}
       <div className="attendance-modal-content">
         <h2 className="modal-title">내 응답 찾기</h2>
         <form id="find-form" className="attendance-form" onSubmit={onFind}>
@@ -265,21 +304,22 @@ function FindAttendanceModal({ onClose, onFound }: { onClose: () => void; onFoun
   );
 }
 
-function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (row: AttendanceRow) => void }) {
+function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess, onToast }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (row: AttendanceRow) => void; onToast: ToastHandler }) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ ...row, phone: formatPhone(row.phone) });
 
   const onUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.phone || !form.side || !form.meal) return alert("모든 항목을 입력해 주세요.");
+    if (!form.name || !form.phone || !form.side || !form.meal) return onToast("모든 항목을 입력해 주세요.", "error");
     setLoading(true);
     try {
       const { data, error } = await supabase.from("attendance").update({ ...form, phone: normalizePhone(form.phone) }).eq("id", row.id).select("*").single();
       if (error) throw error;
-      alert("수정되었습니다.");
+      
+      onToast("수정되었습니다", "success");
       onSuccess(data as AttendanceRow);
       onClose();
-    } catch (err) { alert("수정에 실패했습니다."); } finally { setLoading(false); }
+    } catch (err) { onToast("수정에 실패했습니다.", "error"); } finally { setLoading(false); }
   };
 
   return (
@@ -289,6 +329,7 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
         <Button variant="close" onClick={onClose}>닫기</Button>
       </div>
     }>
+      {/* ... 기존 JSX 그대로 ... */}
       <div className="attendance-modal-content">
         <h2 className="modal-title">내 응답 수정</h2>
         <form id="edit-form" className="attendance-form" onSubmit={onUpdate}>
@@ -325,17 +366,18 @@ function EditAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: {
   );
 }
 
-function DeleteAttendanceModal({ row, authName, authPhone, onClose, onSuccess }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (id: number) => void }) {
+function DeleteAttendanceModal({ row, authName, authPhone, onClose, onSuccess, onToast }: { row: AttendanceRow; authName: string; authPhone: string; onClose: () => void; onSuccess: (id: number) => void; onToast: ToastHandler }) {
   const [loading, setLoading] = useState(false);
   const onDelete = async () => {
     setLoading(true);
     try {
       const { error } = await supabase.from("attendance").delete().eq("id", row.id);
       if (error) throw error;
-      alert("삭제되었습니다.");
+      
+      onToast("삭제되었습니다", "success");
       onSuccess(row.id);
       onClose();
-    } catch (err) { alert("삭제에 실패했습니다."); } finally { setLoading(false); }
+    } catch (err) { onToast("삭제에 실패했습니다.", "error"); } finally { setLoading(false); }
   };
 
   return (
