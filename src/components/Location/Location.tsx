@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom"; // ✅ Portal 추가
 import "./Location.scss";
 
 // ✅ 로고 이미지 Import
@@ -14,7 +15,7 @@ const ADDRESS_LINE = "대전 유성구 온천북로 77";
 
 const NAVER_MAP_KEY = import.meta.env.VITE_NAVER_MAP_CLIENT_ID || "";
 
-// 네이버 지도 SDK 로드
+// ... (네이버 맵 로드 함수 loadNaverMapSdk 그대로 유지) ...
 function loadNaverMapSdk(keyId: string) {
   if (window.naver?.maps) return Promise.resolve();
   if ((window as any).__naverMapLoadingPromise) {
@@ -40,13 +41,19 @@ function loadNaverMapSdk(keyId: string) {
   return promise;
 }
 
-// 기기 환경 감지
+// ... (기기 감지 함수 getDevice 그대로 유지) ...
 function getDevice() {
   const ua = navigator.userAgent;
   if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
   if (/Android/i.test(ua)) return "android";
   return "other";
 }
+
+// ✅ 토스트 타입 정의
+type ToastState = {
+  msg: string;
+  type: "success" | "error";
+} | null;
 
 export const Location = () => {
   const mapDomRef = useRef<HTMLDivElement>(null);
@@ -56,7 +63,18 @@ export const Location = () => {
   const [showLockMessage, setShowLockMessage] = useState(false);
   const lockMessageTimeout = useRef<number | null>(null);
 
-  // 1. 지도 초기화
+  // ✅ [1] 토스트 상태 추가
+  const [toast, setToast] = useState<ToastState>(null);
+
+  // ✅ [2] 토스트 타이머
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  // 1. 지도 초기화 (그대로 유지)
   useEffect(() => {
     if (!NAVER_MAP_KEY) return;
     loadNaverMapSdk(NAVER_MAP_KEY).then(() => {
@@ -81,7 +99,7 @@ export const Location = () => {
       }).catch(console.error);
   }, []);
 
-  // 2. 잠금 상태 처리
+  // 2. 잠금 상태 처리 (그대로 유지)
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
@@ -105,15 +123,13 @@ export const Location = () => {
   };
 
   /* ============================================================
-     🚀 길찾기 로직 (수정 완료: 모든 앱 길찾기 모드로 직행)
+      🚀 길찾기 로직
      ============================================================ */
 
-  // 🟢 네이버 지도 (내비게이션 모드)
+  // 🟢 네이버 지도 (그대로 유지)
   const handleNaverMap = () => {
     const device = getDevice();
     const encodedName = encodeURIComponent(DEST_NAME);
-    
-    // Web: 길찾기 화면 (menu=route)
     const webUrl = `https://map.naver.com/index.nhn?elng=${DEST_LNG}&elat=${DEST_LAT}&etext=${encodedName}&menu=route`;
 
     if (device === "android") {
@@ -123,45 +139,35 @@ export const Location = () => {
       const appUrl = `nmap://route/car?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodedName}`;
       const start = Date.now();
       window.location.href = appUrl;
-      
       setTimeout(() => {
-        if (Date.now() - start < 2500) {
-            window.location.href = webUrl;
-        }
+        if (Date.now() - start < 2500) window.location.href = webUrl;
       }, 1500);
     } else {
       window.open(webUrl, "_blank");
     }
   };
 
-  // 🟡 카카오맵 (수정됨: 장소보기(look) -> 길찾기(route))
+  // 🟡 카카오맵 (그대로 유지)
   const handleKakaoMap = () => {
     const device = getDevice();
-    
-    // Web: 길찾기 링크
     const webUrl = `https://map.kakao.com/link/to/${encodeURIComponent(DEST_NAME)},${DEST_LAT},${DEST_LNG}`;
 
     if (device === "android") {
-      // ✅ route 스킴 사용 (ep: 도착점)
       const intentUrl = `intent://route?ep=${DEST_LAT},${DEST_LNG}&by=CAR#Intent;scheme=kakaomap;package=net.daum.android.map;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
       window.location.href = intentUrl;
     } else if (device === "ios") {
-      // ✅ route 스킴 사용
       const appUrl = `kakaomap://route?ep=${DEST_LAT},${DEST_LNG}&by=CAR`;
       const start = Date.now();
       window.location.href = appUrl;
-
       setTimeout(() => {
-        if (Date.now() - start < 2500) {
-          window.location.href = webUrl;
-        }
+        if (Date.now() - start < 2500) window.location.href = webUrl;
       }, 1500);
     } else {
       window.open(webUrl, "_blank");
     }
   };
 
-  // 🔴 티맵 (내비게이션 모드)
+  // 🔴 티맵 (alert -> toast 로 변경)
   const handleTMap = () => {
     const device = getDevice();
     const appUrl = `tmap://route?goalname=${encodeURIComponent(DEST_NAME)}&goalx=${DEST_LNG}&goaly=${DEST_LAT}`;
@@ -170,7 +176,9 @@ export const Location = () => {
       : "https://apps.apple.com/app/id431589174";
 
     if (device === "other") {
-      alert("모바일에서 이용 가능합니다.");
+      // ❌ 기존: alert("모바일에서 이용 가능합니다.");
+      // ✅ 변경: 예쁜 토스트 메시지 출력
+      setToast({ msg: "티맵은 모바일에서만 가능합니다", type: "error" });
       return;
     }
 
@@ -199,6 +207,9 @@ export const Location = () => {
       <div className="map-wrapper">
         {locked && (
           <div className="map-lock-overlay" onTouchStart={handleLockMessage} onMouseDown={handleLockMessage}>
+            {/* 참고: 이 잠금 메시지(lock-message)는 토스트로 바꾸지 않는 게 좋습니다.
+                지도 바로 위에 뜨는 게 UX상 더 자연스럽기 때문입니다.
+            */}
             {showLockMessage && (
               <div className="lock-message">
                 <div className="lock-message-title">
@@ -237,15 +248,15 @@ export const Location = () => {
           <span>티맵</span>
         </button>
       </div>
+
+      {/* ✅ [3] 토스트 메시지 UI 렌더링 (Portal 사용) */}
+      {toast && createPortal(
+        <div className="custom-toast">
+          <i className={toast.type === "success" ? "fa-solid fa-check" : "fa-solid fa-circle-exclamation"}></i>
+          {toast.msg}
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
-
-export {};
-declare global {
-  interface Window {
-    naver: any;
-    __naverMapLoadingPromise?: Promise<void>;
-    __naverMapInitCallback?: () => void;
-  }
-}
