@@ -1,17 +1,32 @@
-/* ✅ 최상위 클래스 변경 (.guestbook -> .guestbook-wrapper) */
+/* 폰트는 전역(App.scss)에서 이미 import되었으므로 생략 */
+
 .guestbook-wrapper {
   text-align: center;
   font-family: inherit;
+
+  /* 등장 애니메이션 */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 하트 두근거림 애니메이션 */
+  @keyframes heartBeat {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.15); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.15); }
+    70% { transform: scale(1); }
+  }
 
   .guestbook__desc {
     margin: 1rem 0 3rem;
     line-height: 1.7;
     color: var(--text-main);
     font-size: 0.95rem;
-    opacity: 0.8;
+    opacity: 0.85;
   }
 
-  /* ✅ 상단 작성하기 버튼 영역 */
   .guestbook__actions.top {
     margin-bottom: 2.5rem;
     width: 100%;
@@ -21,26 +36,21 @@
 .guestbook-list {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* 카드 사이의 간격 */
+  gap: 24px;
   width: 100%;
 }
 
-.guestbook-empty {
-  padding: 3.5rem 2rem;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  color: var(--text-light);
-  background: var(--theme-accent);
-  border: 1px dashed var(--border-color);
-}
-
-/* ✉️ 감성 편지 카드 스타일 (전역 여백 안쪽 정렬) */
+/* ✉️ 방명록 카드 */
 .guestbook-item {
-  background: #ffffff;
-  border: 1px solid var(--border-color); 
-  border-radius: 6px; 
-  padding: 35px 20px 25px; 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); 
+  /* ✅ 배경: 전역 테마 배경색 사용 */
+  background-color: var(--theme-bg); 
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 35px 20px 25px;
+  
+  /* ✅ 그림자: 전역 그림자 변수 사용 */
+  box-shadow: 0 4px 15px var(--shadow-color);
+  
   position: relative;
   display: flex;
   flex-direction: column;
@@ -48,39 +58,45 @@
   text-align: center;
   width: 100%;
 
-  /* 카드 내부 미세 스티치 효과 */
+  animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  /* 카드 내부 스티치 효과 */
   &::after {
     content: "";
     position: absolute;
     top: 8px; left: 8px; right: 8px; bottom: 8px;
-    border: 1px dashed rgba(233, 167, 175, 0.2);
+    /* ✅ 샌드 색상(primary-light) 활용 */
+    border: 1px dashed var(--theme-primary-light); 
+    opacity: 0.5;
     border-radius: 8px;
     pointer-events: none;
   }
 
-  /* 우측 상단 삭제 버튼 */
+  /* 🗑️ 삭제 버튼 */
   .item-delete-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 30px;
-    height: 30px;
+    top: 12px; right: 12px;
+    width: 30px; height: 30px;
     display: flex;
-    align-items: center;      
-    justify-content: center;
-    background: #fff0f0;
-    border: 1px solid #eee;
+    align-items: center; justify-content: center;
+    
+    /* ✅ 배경: 테마 배경색 */
+    background: var(--theme-bg);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
-    color: var(--theme-primary);
+    
+    /* ✅ 아이콘: 라이트 텍스트 색상 */
+    color: var(--text-light);
     font-size: 0.75rem;
     cursor: pointer;
     z-index: 5;
     transition: all 0.2s ease;
 
     &:hover, &:active {
-      background: #fff0f0;
-      color: var(--theme-primary);
-      border-color: var(--theme-primary-light);
+      /* ✅ 호버 시: 에러 컬러 혹은 프라이머리 컬러로 강조 */
+      background: var(--theme-error); /* 삭제니까 붉은색 계열 추천 */
+      color: var(--theme-bg); /* 아이콘은 배경색(흰색 계열)으로 반전 */
+      border-color: var(--theme-error);
     }
   }
 
@@ -94,7 +110,7 @@
       font-size: 1.15rem;
       font-weight: 800;
       color: var(--text-main);
-      font-family: "Noto Serif KR", serif;
+      font-family: inherit;
     }
 
     .date {
@@ -109,7 +125,7 @@
     width: 100%;
     height: 1px;
     background: none;
-    border-top: 1px solid #f5f5f5;
+    border-top: 1px solid var(--border-color);
     margin: 20px 0;
     position: relative;
     display: flex;
@@ -118,12 +134,14 @@
 
     i {
       position: absolute;
-      background: #fff;
+      /* ✅ 배경: 카드 배경과 동일하게 */
+      background: var(--theme-bg); 
       padding: 0 12px;
-      color: var(--theme-primary-light);
-      font-size: 0.8rem;
+      /* ✅ 포인트: 핑크 변수 사용 */
+      color: var(--theme-point-pink);
+      font-size: 0.9rem;
       z-index: 1;
-      filter: drop-shadow(0 0 2px rgba(233, 167, 175, 0.2));
+      animation: heartBeat 1.5s infinite;
     }
   }
 
@@ -131,18 +149,52 @@
     width: 100%;
     color: var(--text-main);
     font-size: 1rem;
-    line-height: 1.8;
+    
+    line-height: 2rem;
     white-space: pre-wrap;
     word-break: break-all;
-    overflow-wrap: break-word;
-    font-family: "Noto Serif KR", serif;
-    text-align: center;
-    background-image: linear-gradient(transparent 95%, #f9f9f9 95%);
-    background-size: 100% 1.8em;
+    
+    /* 줄 노트 라인 색상: 테두리 색상 변수 활용 */
+    background-image: linear-gradient(transparent 96%, var(--border-color) 96%); 
+    background-size: 100% 2rem;
+    background-position: 0 1.1rem;
+
+    /* ✅ 폰트: 고운바탕 (전역 설정 따름) */
+    font-family: "Gowun Batang", serif;
+    padding: 0 10px;
   }
 }
 
-/* 💎 Pagination (맑은 유리구슬 스타일) */
+/* 🕊️ 빈 공간 (Empty State) */
+.guestbook-empty {
+  padding: 4rem 2rem;
+  border-radius: 6px;
+  text-align: center;
+  
+  /* ✅ 배경: Accent 색상 (F4F1EE) 활용하여 부드럽게 */
+  background: var(--theme-accent); 
+  border: 1px dashed var(--border-color);
+  color: var(--text-light);
+  
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fadeSlideUp 0.5s ease;
+
+  &::before {
+    content: "\f0e0"; /* fa-envelope */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 2rem;
+    /* ✅ 아이콘: 샌드 색상(primary-light)으로 은은하게 */
+    color: var(--theme-primary-light); 
+    margin-bottom: 8px;
+  }
+}
+
+/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -157,62 +209,59 @@
     min-width: 38px;
     height: 38px;
     
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    /* ✅ 배경: 기본 배경색 */
+    background: var(--theme-bg);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
     
     font-family: inherit;
     font-size: 0.85rem;
     color: var(--text-light);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 
     &:active {
       transform: scale(0.9);
-      background: rgba(255, 255, 255, 0.6);
+      background: var(--theme-accent);
     }
     
     i {
       font-size: 0.75rem;
       color: var(--text-light);
-      opacity: 0.8;
+    }
+    
+    &:disabled {
+       opacity: 0.3;
+       cursor: not-allowed;
     }
   }
 
   .page-num.current {
-    background: rgba(233, 167, 175, 0.6); 
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.5);
+    /* ✅ 활성 상태: 네이비(Primary) 배경 + 밝은 텍스트(Bg) */
+    background: var(--theme-primary);
+    color: var(--theme-bg); 
+    border-color: var(--theme-primary);
     font-weight: 700;
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 6px 15px rgba(233, 167, 175, 0.25);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .page-nav {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-
-    &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.5);
-      border-color: rgba(255, 255, 255, 0.8);
-    }
   }
 }
 
-/* -------------------------------------
-   📋 Modal & Form Style
-------------------------------------- */
+/* 모달 및 폼 스타일 */
 .guestbook-modal-content {
   font-family: inherit;
+  
   .modal-title { 
     font-size: 1.3rem; 
     margin-bottom: 1.5rem; 
     text-align: center;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--theme-primary); /* 제목은 네이비 */
+  }
+  
+  .modal-subtitle {
+     text-align: center; 
+     margin: 10px 0 20px; 
+     color: var(--text-main); 
+     opacity: 0.8;
   }
 }
 
@@ -242,19 +291,21 @@
     border-radius: 6px;
     font-size: 0.95rem;
     color: var(--text-main);
-    background: #fafafa;
+    
+    /* ✅ 배경: 섹션 소프트 배경 (F9F7F5) */
+    background: var(--section-bg-soft); 
     transition: all 0.2s ease;
     
     &:focus {
-      border-color: var(--theme-primary);
+      border-color: var(--theme-primary); /* 포커스 시 네이비 */
       outline: none;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
+      /* ✅ 포커스 시 배경: 밝은 배경 (FDFBF9) */
+      background: var(--theme-bg); 
     }
     
-    &:disabled {
-      opacity: 0.6;
-      background: #eee;
+    &::placeholder {
+        color: var(--text-light);
+        opacity: 0.5;
     }
   }
 
@@ -269,8 +320,5 @@
   display: flex;
   gap: 10px;
   margin-top: 10px;
-  
-  button {
-    flex: 1;
-  }
+  button { flex: 1; }
 }
