@@ -230,7 +230,7 @@ function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => v
               const content = inputRef.current?.content.value.trim();
               const password = inputRef.current?.password.value;
               if (!name || !content || !password) {
-                onToast("모든 항목을 입력해 주세요.", "error"); // ✅ Toast 사용
+                onToast("모든 항목을 입력해 주세요", "error"); // ✅ Toast 사용
                 setLoading(false);
                 return;
               }
@@ -241,7 +241,7 @@ function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => v
               onClose();
               onSuccess();
             } catch (err) {
-              onToast("등록에 실패했습니다.", "error"); // ✅ Toast 사용
+              onToast("등록에 실패했습니다", "error"); // ✅ Toast 사용
             } finally { setLoading(false); }
           }}
         >
@@ -294,7 +294,7 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId:
             try {
               const password = inputRef.current?.value ?? "";
               if (!password.trim()) {
-                onToast("비밀번호를 입력해 주세요.", "error"); // ✅ Toast 사용
+                onToast("비밀번호를 입력해 주세요", "error"); // ✅ Toast 사용
                 setLoading(false);
                 return;
               }
@@ -304,7 +304,7 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId:
               
               // 2. 비밀번호 비교
               if (String(data.password) !== String(password)) {
-                onToast("비밀번호가 일치하지 않습니다.", "error"); // ✅ Toast 사용
+                onToast("비밀번호가 일치하지 않습니다", "error"); // ✅ Toast 사용
                 setLoading(false);
                 return;
               }
@@ -317,7 +317,7 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId:
               onClose();
               onSuccess();
             } catch (err) {
-              onToast("삭제 중 오류가 발생했습니다.", "error"); // ✅ Toast 사용
+              onToast("삭제 중 오류가 발생했습니다", "error"); // ✅ Toast 사용
             } finally { setLoading(false); }
           }}
         >
