@@ -1,8 +1,7 @@
-/* 📌 GuestBook.scss: 반응형 Masonry & ID 기반 디자인 고정 & 모달 통합 스타일 */
+/* 📌 GuestBook.scss: 전역 스타일 간섭 제거 및 포스트잇 최적화 */
 
 .guestbook-wrapper {
   text-align: center;
-  font-family: inherit;
   max-width: var(--section-max-width);
   margin: 0 auto;
 
@@ -15,9 +14,8 @@
   }
 }
 
-/* 📌 1. 포스트잇 게시판 보드 (반응형 레이아웃) */
+/* 📌 1. 포스트잇 리스트 (반응형 레이아웃) */
 .guestbook-list {
-  /* 모바일 기본: 1열 배치로 가독성과 예쁜 비율 확보 */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -28,7 +26,7 @@
   min-height: 400px;
   box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 
-  /* PC/태블릿(600px 이상): 2열 Masonry로 전환 */
+  /* ✅ 태블릿/PC 이상에서만 Masonry 적용 */
   @media (min-width: 600px) {
     display: block; 
     column-count: 2;
@@ -44,7 +42,6 @@
 
 /* 🕊️ 빈 보드 상태 */
 .guestbook-empty {
-  grid-column: span 2;
   padding: 6rem 1rem;
   color: var(--text-light);
   font-size: 0.95rem;
@@ -53,7 +50,7 @@
 
 /* 📌 2. 포스트잇 아이템 (데이터 속성 기반 디자인 고정) */
 .guestbook-item {
-  break-inside: avoid;     /* PC 2열일 때 아이템 잘림 방지 */
+  break-inside: avoid;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -64,7 +61,6 @@
   box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   
-  /* 마스킹 테이프 */
   &::before {
     content: "";
     position: absolute;
@@ -76,7 +72,7 @@
     z-index: 2;
   }
 
-  /* ✅ 핵심: data-style 속성에 따라 색상과 각도를 고정 (포스트잇 이사 방지) */
+  /* ✅ ID 기반 색상 및 각도 고정 */
   &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
   &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
   &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1.2deg) translateX(3px) !important; }
@@ -84,7 +80,6 @@
   &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-5px) !important; }
   &[data-style="5"] { background-color: #FFF8F0; transform: rotate(1.2deg) translateX(-3px) !important; }
 
-  /* ✕ 삭제 버튼 (레드 제거 및 저채도 유지) */
   .item-delete-btn {
     position: absolute;
     top: 12px; right: 12px;
@@ -100,26 +95,13 @@
     &:active { opacity: 0.8; color: var(--text-main); transform: scale(1.1); }
   }
 
-  /* 헤더 (이름 & 날짜 중앙 정렬) */
   &__head {
     margin-bottom: 15px;
     text-align: center; 
-    .name {
-      display: block;
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--theme-primary);
-    }
-    .date {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-light);
-      margin-top: 4px;
-      opacity: 0.6;
-    }
+    .name { display: block; font-size: 1rem; font-weight: 800; color: var(--theme-primary); }
+    .date { display: block; font-size: 0.75rem; color: var(--text-light); margin-top: 4px; opacity: 0.6; }
   }
 
-  /* 본문 (중앙 정렬 + 어절 단위 줄바꿈) */
   &__content {
     flex: 1;
     font-size: 0.95rem;
@@ -132,14 +114,13 @@
     white-space: pre-wrap;     
   }
 
-  /* 터치 피드백 */
   &:active {
     transform: scale(1.02) rotate(0deg) !important;
     z-index: 100;
   }
 }
 
-/* 📌 3. 모달 & 폼 스타일 (정갈한 네이비 톤) */
+/* 📌 3. 모달 & 폼 스타일 */
 .guestbook-modal-content {
   .modal-title { 
     font-size: 1.25rem; 
@@ -148,13 +129,6 @@
     color: var(--theme-primary);
     margin-bottom: 20px;
   }
-  .modal-subtitle {
-    text-align: center;
-    margin: -10px 0 20px;
-    font-size: 0.9rem;
-    color: var(--text-main);
-    opacity: 0.8;
-  }
 }
 
 .guestbook-form {
@@ -162,19 +136,8 @@
   flex-direction: column;
   gap: 15px;
   text-align: left;
-
-  .field { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-  }
-
-  .label { 
-    font-size: 0.85rem; 
-    font-weight: 700; 
-    color: var(--theme-primary); 
-  }
-
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .label { font-size: 0.85rem; font-weight: 700; color: var(--theme-primary); }
   input, textarea {
     padding: 14px;
     border: 1px solid var(--border-color);
@@ -182,81 +145,25 @@
     font-size: 0.95rem;
     background: var(--section-bg-soft);
     font-family: inherit;
-    color: var(--text-main);
-
-    &:focus { 
-      border-color: var(--theme-primary); 
-      outline: none; 
-      background: #fff; 
-    }
-    &::placeholder {
-      color: var(--text-light);
-      opacity: 0.5;
-    }
+    &:focus { border-color: var(--theme-primary); outline: none; background: #fff; }
   }
-
-  textarea { 
-    height: 10rem; 
-    resize: none; 
-    line-height: 1.6;
-  }
+  textarea { height: 10rem; resize: none; }
 }
 
 .guestbook-footer-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  button { 
-    flex: 1; 
-    height: 48px; 
-    font-weight: 700;
-  }
+  display: flex; gap: 10px; margin-top: 20px;
+  button { flex: 1; height: 48px; font-weight: 700; }
 }
 
 /* 🔢 4. 페이지네이션 */
 .pagination {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 3.5rem;
-
-  .page-num, .page-nav {
-    display: flex;
-    align-items: center; justify-content: center;
-    min-width: 34px; height: 34px;
-    background: var(--theme-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 4px; 
-    font-size: 0.8rem;
-    color: var(--text-light);
-    cursor: pointer;
-
-    &:active { background: var(--theme-accent); }
-    &:disabled { opacity: 0.3; cursor: default; }
-  }
-
-  .page-num.current {
-    background: var(--theme-primary);
-    color: var(--theme-bg);
-    border-color: var(--theme-primary);
-    font-weight: 700;
+  display: flex; justify-content: center; gap: 8px; margin-top: 3.5rem;
+  .page-num {
+    min-width: 34px; height: 34px; border-radius: 4px;
+    border: 1px solid var(--border-color); color: var(--text-light);
+    &.current { background: var(--theme-primary); color: #fff; border-color: var(--theme-primary); font-weight: 700; }
   }
 }
 
-/* 🍞 커스텀 토스트 알림 */
-.custom-toast {
-  position: fixed;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(27, 38, 59, 0.9);
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
+/* ❌ 여기서 .custom-toast 스타일을 아예 제거했습니다. 
+   이제 전역에 설정하신 화이트 카드 팝업 스타일이 그대로 적용됩니다. */
