@@ -89,32 +89,36 @@ section {
 }
 
 /* =========================================================
-   Global Toast Message (Classic Name Tag Style)
-   - createPortal 덕분에 모달 위에서도 선명하게 보임
+   Global Toast Message (Modern Ticket Style)
+   - 화이트 배경의 깔끔함 + 핑크색 포인트 띠로 모달과 확실히 구분
    ========================================================= */
 
 .custom-toast {
-  /* 📍 위치: 상단 */
+  /* 📍 위치: 상단 중앙 (모달보다 무조건 위에 뜸) */
   position: fixed;
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 100001;
   
-  /* 모달(z-index: 9999)보다 훨씬 높게 설정 */
-  z-index: 100001; 
+  /* 🎨 배경: 깨끗한 화이트 */
+  background: #FFFFFF;
   
-  /* 🎨 배경: 전역 메인 네이비 (단색) */
-  background: var(--theme-primary);
+  /* ✒️ 글자색: 전역 네이비 (가독성 최고) */
+  color: var(--theme-primary);
   
-  /* ✒️ 글자색: 눈이 편안한 미색(Ivory) */
-  color: var(--bg-color); 
+  /* 🔲 모양: 왼쪽 띠가 있는 티켓 스타일 */
+  padding: 14px 28px;
+  padding-left: 24px; /* 왼쪽 띠 공간 확보 */
+  border-radius: 6px; /* 살짝 둥글게 */
   
-  /* 🔲 모양: 각진 네임택/책갈피 느낌 */
-  padding: 12px 26px;
-  border-radius: 4px; 
+  /* ✨ [핵심] 왼쪽 띠: 핑크색 포인트로 "알림"임을 강조 */
+  border-left: 6px solid var(--theme-point-pink);
   
-  /* ✨ 포인트 라인: 하단에 핑크색 줄 */
-  border-bottom: 3px solid var(--theme-point-pink);
+  /* 테두리: 나머지는 아주 얇은 네이비로 깔끔하게 마감 */
+  border-right: 1px solid rgba(27, 38, 59, 0.1);
+  border-top: 1px solid rgba(27, 38, 59, 0.1);
+  border-bottom: 1px solid rgba(27, 38, 59, 0.1);
   
   /* 폰트: 감성적인 고운바탕체 */
   font-family: "Gowun Batang", serif;
@@ -127,38 +131,34 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   
-  /* 그림자: 입체감 */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  /* ☁️ 그림자: 선명하고 진하게 (배경과 분리) */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 
+              0 4px 10px rgba(27, 38, 59, 0.1);
   
   pointer-events: none;
 
-  /* 🎬 애니메이션: 그네처럼 툭 떨어짐 (Swing) */
-  animation: toastSwingDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  /* 🎬 애니메이션: 위에서 툭 떨어짐 (Elastic) */
+  animation: toastSlideDown 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 
-  /* 아이콘 스타일 */
+  /* 아이콘 */
   i {
-    /* 아이콘 색상도 핑크 포인트와 통일 */
+    /* 아이콘 색상도 핑크로 통일 */
     color: var(--theme-point-pink);
     font-size: 1.1rem;
     margin-top: -2px;
-    
-    /* 체크 아이콘일 때 미세 조정 */
-    &.fa-check {
-      font-size: 1rem;
-    }
   }
 }
 
-/* 🎬 등장 애니메이션 */
-@keyframes toastSwingDown {
+/* 🎬 등장 애니메이션 (살짝 튕기며 등장) */
+@keyframes toastSlideDown {
   0% {
     opacity: 0;
-    transform: translate(-50%, -40px) rotateX(-30deg);
+    transform: translate(-50%, -50px);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, 0) rotateX(0);
+    transform: translate(-50%, 0);
   }
 }
