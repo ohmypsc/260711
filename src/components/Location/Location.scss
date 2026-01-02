@@ -171,7 +171,7 @@
   padding: 0.95rem 0.2rem;
   
   border-radius: 6px; 
-  border: 1.5px solid transparent; 
+  border: 2px solid transparent; 
   
   background:
     linear-gradient(#fff 0 0) padding-box, 
@@ -226,7 +226,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: 2px;
   pointer-events: none;
   z-index: 1;
   background: var(--border-grad);
