@@ -1,4 +1,4 @@
-/* 📌 GuestBook.scss: 모바일 2열 감성 사수 & 모달 폼 전체 포함 */
+/* 📌 GuestBook.scss: 모바일 2열 유지 & 요청하신 폼 스타일 적용 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -9,15 +9,14 @@
     margin: 1rem 0 2.5rem;
     line-height: 1.7;
     color: var(--text-main);
-    font-size: 0.95rem;
-    opacity: 0.8;
+    font-size: 1rem;
   }
 }
 
 /* 📌 1. 포스트잇 리스트 (전체 2열 Masonry) */
 .guestbook-list {
   column-count: 2;         
-  column-gap: 12px;        /* 간격 최적화 */
+  column-gap: 12px;        
   width: 100%;
   padding: 30px 12px;
   background-color: var(--theme-accent); 
@@ -30,15 +29,6 @@
     justify-content: center;
     align-items: center;
   }
-}
-
-/* 🕊️ 빈 보드 상태 */
-.guestbook-empty {
-  grid-column: span 2;
-  padding: 6rem 1rem;
-  color: var(--text-light);
-  font-size: 0.9rem;
-  opacity: 0.6;
 }
 
 /* 📌 2. 포스트잇 아이템 (디자인 고정 & 모바일 2열 최적화) */
@@ -54,7 +44,6 @@
   box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   
-  /* 마스킹 테이프 */
   &::before {
     content: "";
     position: absolute;
@@ -66,7 +55,7 @@
     z-index: 2;
   }
 
-  /* ✅ ID 기반 스타일 고정 (포스트잇 이사 방지) */
+  /* ✅ ID 기반 스타일 고정 (이사 방지) */
   &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.5deg) translateY(3px) !important; }
   &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.2deg) translateY(-2px) !important; }
   &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1deg) translateX(2px) !important; }
@@ -108,85 +97,64 @@
   &:active { transform: scale(1.02) rotate(0deg) !important; z-index: 100; }
 }
 
-/* 📌 3. 모달 & 폼 스타일 (작성/삭제 전체 포함) */
-.guestbook-modal-content {
-  .modal-title { 
-    font-size: 1.2rem; 
-    text-align: center; 
-    font-weight: 800; 
-    color: var(--theme-primary); 
-    margin-bottom: 1.5rem; 
-  }
-  .modal-subtitle { 
-    text-align: center; 
-    margin: -10px 0 20px; 
-    font-size: 0.85rem; 
-    color: var(--text-main); 
-    opacity: 0.8; 
-  }
-}
-
-/* ✅ 폼 필드 스타일 (누락된 부분 복구) */
+/* 📌 3. 폼 스타일 (주신 원본 스타일 완벽 복구) */
 .guestbook-form {
-  display: flex; 
-  flex-direction: column; 
-  gap: 15px; 
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   text-align: left;
 
-  .field { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 6px; 
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
-  .label { 
-    font-size: 0.85rem; 
-    font-weight: 700; 
-    color: var(--theme-primary); 
-    padding-left: 2px;
-  }
-  
-  input, textarea {
-    padding: 12px 14px; 
-    border: 1px solid var(--border-color); 
-    border-radius: 8px;
-    font-size: 0.9rem; 
-    background: var(--section-bg-soft); 
-    font-family: inherit;
+  .label {
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--text-main);
+    margin-left: 2px;
+  }
+
+  input, textarea {
+    font-family: inherit;
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background: #fafafa;
     transition: all 0.2s ease;
     
-    &:focus { 
-      border-color: var(--theme-primary); 
-      outline: none; 
-      background: #fff; 
-      box-shadow: 0 0 0 3px rgba(27, 38, 59, 0.05);
+    &:focus {
+      border-color: var(--theme-primary);
+      outline: none;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
     }
-
-    &::placeholder {
-      color: var(--text-light);
-      opacity: 0.5;
+    
+    &:disabled {
+      opacity: 0.6;
+      background: #eee;
     }
   }
 
-  textarea { 
-    height: 8.5rem; 
-    resize: none; 
+  textarea {
+    height: 9rem;
+    resize: none;
     line-height: 1.6;
   }
 }
 
-.guestbook-footer-row { 
-  display: flex; 
-  gap: 10px; 
-  margin-top: 20px; 
-  button { 
-    flex: 1; 
-    height: 46px; 
-    font-weight: 700; 
-    font-size: 0.9rem;
-    cursor: pointer;
-  } 
+.guestbook-footer-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  
+  button {
+    flex: 1;
+  }
 }
 
 /* 🔢 4. 페이지네이션 */
