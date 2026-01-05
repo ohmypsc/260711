@@ -81,11 +81,6 @@ button.w-btn.close {
   font-weight: 700;
 }
 
-/* 👆 Interaction States */
-button.w-btn:active {
-  transform: translateY(2px);
-}
-
 button.w-btn.submit:active,
 button.w-btn.close:active {
   filter: brightness(0.8);
