@@ -1,4 +1,4 @@
-/* 📌 GuestBook.scss: 모바일/데스크톱 색상 완벽 출력 버전 */
+/* 📌 GuestBook.scss: 모바일 1열(포스트잇만) + 원본 폼 스타일 완벽 통합 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -13,58 +13,64 @@
   }
 }
 
-/* 📌 1. 포스트잇 리스트 (보드 배경 제거) */
+/* 📌 1. 포스트잇 리스트 (반응형 레이아웃) */
 .guestbook-list {
+  /* ✅ 모바일: 1열 배치로 글자 크기와 포스트잇 비율 확보 */
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 40px 0; /* 배경이 없으므로 상하 여백만 */
-  background: transparent; /* ✅ 보드 배경 제거 */
+  padding: 40px 18px;
+  background-color: var(--theme-bg); 
+  border-radius: 12px;
   min-height: 400px;
+  box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 
+  /* ✅ 태블릿/PC(600px 이상): 다시 2열 Masonry로 감성 사수 */
   @media (min-width: 600px) {
     display: block; 
     column-count: 2;
-    column-gap: 20px;
+    column-gap: 15px;
+  }
+
+  &.is-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
-/* 📌 2. 포스트잇 아이템 (데스크톱 투명화 방지) */
+/* 📌 2. 포스트잇 아이템 (디자인 고정 & 모바일 가독성 최적화) */
 .guestbook-item {
-  /* ✅ 데스크톱 column 버그 해결 핵심 속성들 */
-  display: inline-block; 
-  width: 100%;
   break-inside: avoid;
-  isolation: isolate; /* 독립된 레이어로 분리하여 배경색 강제 노출 */
-  
+  display: flex; /* 1열일 때 자연스럽게 꽉 참 */
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 25px;     
   position: relative;
-  margin-bottom: 25px;      
-  padding: 35px 20px 25px; 
+  padding: 35px 20px 25px; /* 여백 다시 넉넉하게 */
   height: auto;
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
-  border-radius: 2px;
-
-  /* ✅ 테이프: 선명하게 노출 */
+  
   &::before {
     content: "";
     position: absolute;
     top: -10px; left: 50%;
     transform: translateX(-50%);
-    width: 48px; height: 18px;
-    background: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    z-index: 10;
+    width: 45px; height: 18px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(1px);
+    z-index: 2;
   }
 
-  /* ✅ 개별 배경색 (데이터 스타일) */
-  &[data-style="0"] { background-color: #FFFDF2 !important; transform: rotate(-1.8deg) translateY(5px); }
-  &[data-style="1"] { background-color: #FFF5F7 !important; transform: rotate(1.5deg) translateY(-3px); }
-  &[data-style="2"] { background-color: #F6FBF7 !important; transform: rotate(-1.2deg) translateX(3px); }
-  &[data-style="3"] { background-color: #F4F9FF !important; transform: rotate(2.2deg) translateY(4px); }
-  &[data-style="4"] { background-color: #F9F7FF !important; transform: rotate(-1.5deg) translateY(-5px); }
-  &[data-style="5"] { background-color: #FFF8F0 !important; transform: rotate(1.2deg) translateX(-3px); }
+  /* ✅ ID 기반 스타일 고정 (이사 방지) */
+  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
+  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
+  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1.2deg) translateX(3px) !important; }
+  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(2.2deg) translateY(4px) !important; }
+  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-5px) !important; }
+  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(1.2deg) translateX(-3px) !important; }
 
   .item-delete-btn {
     position: absolute;
@@ -74,6 +80,8 @@
     color: var(--text-light); 
     opacity: 0.2;
     cursor: pointer;
+    i { font-size: 0.85rem; }
+    &:active { opacity: 0.8; color: var(--text-main); }
   }
 
   &__head {
@@ -84,8 +92,8 @@
   }
 
   &__content {
-    display: block; 
-    font-size: 0.95rem;
+    flex: 1;
+    font-size: 0.95rem; /* ✅ 다시 시원시원하게 키운 폰트 */
     line-height: 1.7;
     color: var(--text-main);
     font-family: "Gowun Batang", serif;
@@ -94,9 +102,11 @@
     overflow-wrap: break-word; 
     white-space: pre-wrap;     
   }
+
+  &:active { transform: scale(1.02) rotate(0deg) !important; z-index: 100; }
 }
 
-/* 📌 3. 폼 스타일 (원본 유지) */
+/* 📌 3. 폼 스타일 (원본 그대로 복구) */
 .guestbook-form {
   display: flex;
   flex-direction: column;
@@ -109,137 +119,11 @@
     gap: 8px;
   }
 
-  input, textarea {
-    font-family: inherit;
-    padding: 14px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 0.95rem;
+  .label {
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--text-main);
-    background: #fafafa;
-    
-    &:focus {
-      border-color: var(--theme-primary);
-      outline: none;
-      background: #fff;
-    }
-  }
-
-  textarea {
-    height: 9rem;
-    resize: none;
-  }
-}
-
-/* 📌 GuestBook.scss: 모바일/데스크톱 색상 완벽 출력 버전 */
-
-.guestbook-wrapper {
-  text-align: center;
-  max-width: var(--section-max-width);
-  margin: 0 auto;
-
-  .guestbook__desc {
-    margin: 1.2rem 0 2.2rem;
-    line-height: 1.8;
-    color: var(--text-main);
-    font-size: 1rem;
-  }
-}
-
-/* 📌 1. 포스트잇 리스트 (보드 배경 제거) */
-.guestbook-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  padding: 40px 10px; /* 배경이 없으므로 상하 여백만 */
-  background: transparent; /* ✅ 보드 배경 제거 */
-  min-height: 400px;
-
-  @media (min-width: 600px) {
-    display: block; 
-    column-count: 2;
-    column-gap: 20px;
-  }
-}
-
-/* 📌 2. 포스트잇 아이템 (데스크톱 투명화 방지) */
-.guestbook-item {
-  /* ✅ 데스크톱 column 버그 해결 핵심 속성들 */
-  display: inline-block; 
-  width: 100%;
-  break-inside: avoid;
-  isolation: isolate; /* 독립된 레이어로 분리하여 배경색 강제 노출 */
-  
-  position: relative;
-  margin-bottom: 25px;      
-  padding: 35px 20px 25px; 
-  height: auto;
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border-radius: 2px;
-
-  /* ✅ 테이프: 선명하게 노출 */
-  &::before {
-    content: "";
-    position: absolute;
-    top: -10px; left: 50%;
-    transform: translateX(-50%);
-    width: 48px; height: 18px;
-    background: rgba(255, 255, 255, 0.9); /* 선명하게 */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    z-index: 10;
-  }
-
-  /* ✅ 개별 배경색 (데이터 스타일) */
-  &[data-style="0"] { background-color: #FFFDF2 !important; transform: rotate(-1.8deg) translateY(5px); }
-  &[data-style="1"] { background-color: #FFF5F7 !important; transform: rotate(1.5deg) translateY(-3px); }
-  &[data-style="2"] { background-color: #F6FBF7 !important; transform: rotate(-1.2deg) translateX(3px); }
-  &[data-style="3"] { background-color: #F4F9FF !important; transform: rotate(2.2deg) translateY(4px); }
-  &[data-style="4"] { background-color: #F9F7FF !important; transform: rotate(-1.5deg) translateY(-5px); }
-  &[data-style="5"] { background-color: #FFF8F0 !important; transform: rotate(1.2deg) translateX(-3px); }
-
-  .item-delete-btn {
-    position: absolute;
-    top: 12px; right: 12px;
-    background: transparent;
-    border: none;
-    color: var(--text-light); 
-    opacity: 0.2;
-    cursor: pointer;
-  }
-
-  &__head {
-    margin-bottom: 15px;
-    text-align: center; 
-    .name { display: block; font-size: 1rem; font-weight: 800; color: var(--theme-primary); }
-    .date { display: block; font-size: 0.75rem; color: var(--text-light); margin-top: 4px; opacity: 0.6; }
-  }
-
-  &__content {
-    display: block; 
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: var(--text-main);
-    font-family: "Gowun Batang", serif;
-    text-align: center;
-    word-break: keep-all;      
-    overflow-wrap: break-word; 
-    white-space: pre-wrap;     
-  }
-}
-
-/* 📌 3. 폼 스타일 (원본 유지) */
-.guestbook-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-align: left;
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    margin-left: 2px;
   }
 
   input, textarea {
@@ -250,44 +134,52 @@
     font-size: 0.95rem;
     color: var(--text-main);
     background: #fafafa;
+    transition: all 0.2s ease;
     
     &:focus {
       border-color: var(--theme-primary);
       outline: none;
       background: #fff;
+      box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      background: #eee;
     }
   }
 
   textarea {
     height: 9rem;
     resize: none;
+    line-height: 1.6;
   }
 }
 
-/* 🔢 4. 페이지네이션 (테두리/배경 삭제) */
+.guestbook-footer-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  button { flex: 1; }
+}
+
+/* 🔢 4. 페이지네이션 */
 .pagination {
   display: flex; 
   justify-content: center; 
-  gap: 12px; 
+  gap: 8px; 
   margin-top: 3.5rem;
-
   .page-num {
     min-width: 34px; 
     height: 34px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem; 
-    border: none;       /* 테두리 삭제 */
-    background: none;   /* 배경 삭제 */
+    font-size: 0.8rem; 
+    border: 1px solid var(--border-color);
+    background: #fff;
+    border-radius: 4px;
     color: var(--text-light);
-    cursor: pointer;
-
-    &.current { 
-      background: none; 
-      color: var(--theme-primary); 
-      border-bottom: 2px solid var(--theme-primary); /* 언더라인 강조 */
-      font-weight: 800; 
-    }
+    &.current { background: var(--theme-primary); color: #fff; border-color: var(--theme-primary); font-weight: 700; }
   }
 }
