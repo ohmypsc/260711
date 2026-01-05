@@ -69,21 +69,16 @@ button.w-btn.close {
 
 button.w-btn.submit {
   border: 1.5px solid var(--theme-primary);
-  background-color: color-mix(in srgb, var(--theme-primary), transparent 98%);
+  background-color: color-mix(in srgb, var(--theme-primary), transparent 85%);
   color: var(--theme-primary);
   font-weight: 700;
 }
 
 button.w-btn.close {
   border: 1.5px solid var(--theme-primary-light);
-  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 98%);
+  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 85%);
   color: var(--theme-primary-light);
   font-weight: 700;
-  filter: brightness(0.8);
-}
-
-button.w-btn:active{
-  filter: brightness(0.8);
 }
 
 /* 🚫 Disabled State */
