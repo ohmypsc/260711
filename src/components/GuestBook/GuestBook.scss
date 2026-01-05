@@ -1,4 +1,4 @@
-/* 📌 GuestBook.scss: 보드 제거 + 정갈한 배치 (필수 로직 보존형) */
+/* 📌 GuestBook.scss: 모바일 1열(포스트잇만) + 원본 폼 스타일 완벽 통합 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -13,17 +13,24 @@
   }
 }
 
-/* 📌 1. 포스트잇 리스트 (보드 배경만 제거) */
+/* 📌 1. 포스트잇 리스트 (반응형 레이아웃) */
 .guestbook-list {
+  /* ✅ 모바일: 1열 배치로 글자 크기와 포스트잇 비율 확보 */
   display: flex;
+  flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 20px 0;
+  padding: 40px 18px;
+  background-color: var(--theme-accent); 
+  border-radius: 12px;
+  min-height: 400px;
+  box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 
+  /* ✅ 태블릿/PC(600px 이상): 다시 2열 Masonry로 감성 사수 */
   @media (min-width: 600px) {
     display: block; 
     column-count: 2;
-    column-gap: 20px;
+    column-gap: 15px;
   }
 
   &.is-empty {
@@ -33,81 +40,92 @@
   }
 }
 
-/* 📌 2. 포스트잇 아이템 (필수 로직: 이사 방지 & 등장 애니메이션) */
+/* 📌 2. 포스트잇 아이템 (디자인 고정 & 모바일 가독성 최적화) */
 .guestbook-item {
   break-inside: avoid;
-  display: flex;
+  display: flex; /* 1열일 때 자연스럽게 꽉 참 */
   flex-direction: column;
   width: 100%;
   margin-bottom: 25px;     
   position: relative;
-  padding: 35px 20px 25px; 
+  padding: 35px 20px 25px; /* 여백 다시 넉넉하게 */
   height: auto;
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); /* ✅ 종이 느낌을 위한 최소한의 그림자 */
-  
-  &::before { display: none; } /* ✅ 장식 제거 유지 */
-
-  /* ✅ 필수 애니메이션: 누락 방지 */
-  @keyframes postItPop {
-    from { opacity: 0; transform: scale(0.8) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
+  &::before {
+    content: "";
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    width: 45px; height: 18px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(1px);
+    z-index: 2;
   }
-  animation: postItPop 0.4s ease-out forwards;
 
-  /* ✅ 필수 로직: 데이터 기반 각도 고정 (이사 방지) */
-  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.2deg) !important; }
-  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) !important; }
-  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-0.8deg) !important; }
-  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(1.2deg) !important; }
-  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) !important; }
-  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(0.8deg) !important; }
+  /* ✅ ID 기반 스타일 고정 (이사 방지) */
+  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
+  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
+  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1.2deg) translateX(3px) !important; }
+  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(2.2deg) translateY(4px) !important; }
+  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-5px) !important; }
+  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(1.2deg) translateX(-3px) !important; }
 
   .item-delete-btn {
     position: absolute;
     top: 12px; right: 12px;
     background: transparent;
     border: none;
-    color: var(--theme-primary); 
+    color: var(--text-light); 
     opacity: 0.2;
     cursor: pointer;
-    &:active { opacity: 0.8; }
+    i { font-size: 0.85rem; }
+    &:active { opacity: 0.8; color: var(--text-main); }
   }
 
   &__head {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     text-align: center; 
-    .name { display: block; font-weight: 800; color: var(--theme-primary); }
-    .date { font-size: 0.75rem; color: var(--text-light); opacity: 0.6; }
+    .name { display: block; font-size: 1rem; font-weight: 800; color: var(--theme-primary); }
+    .date { display: block; font-size: 0.75rem; color: var(--text-light); margin-top: 4px; opacity: 0.6; }
   }
 
   &__content {
     flex: 1;
-    font-size: 0.95rem; 
+    font-size: 0.95rem; /* ✅ 다시 시원시원하게 키운 폰트 */
     line-height: 1.7;
+    color: var(--text-main);
     font-family: "Gowun Batang", serif;
     text-align: center;
     word-break: keep-all;      
+    overflow-wrap: break-word; 
     white-space: pre-wrap;     
   }
 
-  &:active { 
-    transform: scale(1.02) rotate(0deg) !important; 
-    z-index: 100;
-  }
+  &:active { transform: scale(1.02) rotate(0deg) !important; z-index: 100; }
 }
 
-/* 📌 3. 폼 스타일 & 페이지네이션 (필수 UI 로직) */
+/* 📌 3. 폼 스타일 (원본 그대로 복구) */
 .guestbook-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
   text-align: left;
-  .field { display: flex; flex-direction: column; gap: 8px; }
-  .label { font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-left: 2px; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-left: 2px;
+  }
+
   input, textarea {
     font-family: inherit;
     padding: 14px;
@@ -117,48 +135,51 @@
     color: var(--text-main);
     background: #fafafa;
     transition: all 0.2s ease;
-    &:focus { border-color: var(--theme-primary); outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1); }
+    
+    &:focus {
+      border-color: var(--theme-primary);
+      outline: none;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      background: #eee;
+    }
   }
-  textarea { height: 9rem; resize: none; line-height: 1.6; }
+
+  textarea {
+    height: 9rem;
+    resize: none;
+    line-height: 1.6;
+  }
 }
 
-.guestbook-footer-row { display: flex; gap: 10px; margin-top: 10px; button { flex: 1; } }
+.guestbook-footer-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  button { flex: 1; }
+}
 
+/* 🔢 4. 페이지네이션 */
 .pagination {
   display: flex; 
   justify-content: center; 
-  align-items: center;
-  gap: 16px;
-  margin-top: 4rem;
-
-  .page-num, .page-nav {
-    position: relative;
-    padding: 4px 6px;
-    font-size: 0.95rem; 
+  gap: 8px; 
+  margin-top: 3.5rem;
+  .page-num {
+    min-width: 34px; 
+    height: 34px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem; 
+    border: 1px solid var(--border-color);
+    background: #fff;
+    border-radius: 4px;
     color: var(--text-light);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    &:disabled { opacity: 0.2; cursor: default; }
-    &:hover:not(:disabled):not(.current) { color: var(--theme-primary); }
+    &.current { background: var(--theme-primary); color: #fff; border-color: var(--theme-primary); font-weight: 700; }
   }
-
-  .page-num.current { 
-    color: var(--theme-primary); 
-    font-weight: 700;
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 2px;
-      background-color: var(--theme-primary);
-      animation: underlineIn 0.3s ease-out forwards;
-    }
-  }
-}
-
-@keyframes underlineIn {
-  from { width: 0; left: 50%; }
-  to { width: 100%; left: 0; }
 }
