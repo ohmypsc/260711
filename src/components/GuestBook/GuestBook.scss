@@ -21,7 +21,7 @@
   width: 100%;
   padding: 80px 20px; /* 배경이 없으므로 상하 여백만 남김 */
   background-color: transparent; /* ✅ 배경 보드 제거 */
-  min-height: 400px;
+  min-height: auto;
 
   @media (min-width: 600px) {
     display: block; 
@@ -165,7 +165,6 @@
   display: flex; 
   justify-content: center; 
   gap: 8px; 
-  margin-top: 3.5rem;
   .page-num {
     min-width: 34px; 
     height: 34px; 
