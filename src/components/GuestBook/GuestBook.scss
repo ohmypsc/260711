@@ -1,4 +1,4 @@
-/* 📌 GuestBook.scss: 장식 제거 & 정갈한 포스트잇 스타일 */
+/* 📌 GuestBook.scss: 랜덤 회전 감성 & 미니멀 밑줄 페이지네이션 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -13,7 +13,7 @@
   }
 }
 
-/* 📌 1. 포스트잇 리스트 (반응형: 모바일 1열 / PC 2열) */
+/* 📌 1. 포스트잇 리스트 (반응형 레이아웃) */
 .guestbook-list {
   display: flex;
   flex-direction: column;
@@ -38,7 +38,7 @@
   }
 }
 
-/* 📌 2. 포스트잇 아이템 (장식 제거 & 그림자 디테일 강화) */
+/* 📌 2. 포스트잇 아이템 (랜덤 회전 배치) */
 .guestbook-item {
   break-inside: avoid;
   display: flex;
@@ -46,43 +46,34 @@
   width: 100%;
   margin-bottom: 25px;     
   position: relative;
-  
-  /* ✅ 테이프/압정이 없는 대신 패딩을 균형 있게 조정 */
-  padding: 30px 20px 25px; 
+  padding: 35px 20px 25px; 
   height: auto;
-  
-  /* ✅ 종이 느낌을 살리는 부드러운 그림자 */
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.05);
-  border-radius: 4px; /* 살짝 굴려야 종이 질감이 납니다 */
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   
-  /* ❌ 테이프/압정(::before) 완전 제거 */
-  &::before {
-    display: none;
-  }
+  &::before { display: none; } /* 장식 제거 */
 
-  /* ✅ ID 기반 색상 & 각도 고정 (감성은 유지) */
-  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.2deg) translateY(5px) !important; }
-  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1deg) translateY(-3px) !important; }
-  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-0.8deg) translateX(3px) !important; }
-  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(1.5deg) translateY(4px) !important; }
-  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.2deg) translateY(-5px) !important; }
-  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(0.8deg) translateX(-3px) !important; }
+  /* ✅ 랜덤한 방향과 높낮이 변화 */
+  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-2.2deg) translateY(5px) !important; }
+  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.8deg) translateY(-3px) !important; }
+  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1.5deg) translateX(4px) !important; }
+  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(2.5deg) translateY(6px) !important; }
+  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-2.5deg) translateY(-5px) !important; }
+  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(1.5deg) translateX(-4px) !important; }
 
   .item-delete-btn {
     position: absolute;
-    top: 10px; right: 10px;
+    top: 12px; right: 12px;
     background: transparent;
     border: none;
     color: var(--text-light); 
     opacity: 0.2;
     cursor: pointer;
-    i { font-size: 0.85rem; }
     &:active { opacity: 0.8; color: var(--text-main); }
   }
 
   &__head {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     text-align: center; 
     .name { display: block; font-size: 1rem; font-weight: 800; color: var(--theme-primary); }
     .date { display: block; font-size: 0.75rem; color: var(--text-light); margin-top: 4px; opacity: 0.6; }
@@ -103,30 +94,17 @@
   &:active { 
     transform: scale(1.02) rotate(0deg) !important; 
     z-index: 100;
-    box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.08);
   }
 }
 
-/* 📌 3. 폼 스타일 (원본 유지) */
+/* 📌 3. 폼 스타일 (원본 복구) */
 .guestbook-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
   text-align: left;
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-left: 2px;
-  }
-
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .label { font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-left: 2px; }
   input, textarea {
     font-family: inherit;
     padding: 14px;
@@ -136,93 +114,59 @@
     color: var(--text-main);
     background: #fafafa;
     transition: all 0.2s ease;
-    
-    &:focus {
-      border-color: var(--theme-primary);
-      outline: none;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
-    }
-    
-    &:disabled {
-      opacity: 0.6;
-      background: #eee;
-    }
+    &:focus { border-color: var(--theme-primary); outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1); }
   }
-
-  textarea {
-    height: 9rem;
-    resize: none;
-    line-height: 1.6;
-  }
+  textarea { height: 9rem; resize: none; }
 }
 
 .guestbook-footer-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  display: flex; gap: 10px; margin-top: 10px;
   button { flex: 1; }
 }
 
-/* 🔢 4. 페이지네이션 */
-/* 🔢 4. 세련된 원형 페이지네이션 */
+/* 🔢 4. 미니멀 밑줄 페이지네이션 */
 .pagination {
   display: flex; 
   justify-content: center; 
   align-items: center;
-  gap: 12px;           /* 간격을 조금 더 넓게 */
-  margin-top: 4rem;    /* 보드와 확실히 분리 */
+  gap: 20px;            /* 밑줄 스타일은 간격이 조금 넓어야 예쁩니다 */
+  margin-top: 4rem;
 
   .page-num {
-    /* 🎨 기본 모양: 테두리 없이 깔끔하게 */
-    min-width: 38px; 
-    height: 38px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    font-size: 0.9rem; 
-    font-family: inherit;
+    position: relative;
+    padding: 4px 2px;
+    font-size: 0.95rem; 
     color: var(--text-light);
     background: transparent;
     border: none;
-    border-radius: 50%; /* 완전한 원형 */
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: color 0.3s ease;
 
-    /* 마우스 올렸을 때나 터치 시 연한 배경 */
-    &:hover {
-      background: var(--theme-accent);
+    /* ✅ 현재 페이지: 글자색 네이비 + 하단 밑줄 */
+    &.current { 
+      color: var(--theme-primary); 
+      font-weight: 700;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--theme-primary);
+        /* 부드럽게 선이 생기는 효과 */
+        animation: underlineIn 0.3s ease-out forwards;
+      }
+    }
+
+    &:hover:not(.current) {
       color: var(--theme-primary);
     }
-
-    /* ✅ 현재 페이지: 네이비 원형 포인트 */
-    &.current { 
-      background: var(--theme-primary); 
-      color: #fff; 
-      font-weight: 700;
-      box-shadow: 0 4px 10px rgba(27, 38, 59, 0.2);
-      transform: translateY(-2px); /* 살짝 떠오르는 효과 */
-    }
   }
+}
 
-  /* ◀ ▶ 화살표 네비게이션이 있다면 */
-  .page-nav {
-    background: transparent;
-    border: none;
-    color: var(--theme-primary);
-    font-size: 0.8rem;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-
-    &:hover:not(:disabled) {
-      opacity: 1;
-    }
-
-    &:disabled {
-      cursor: default;
-      opacity: 0.1;
-    }
-  }
+@keyframes underlineIn {
+  from { width: 0; left: 50%; }
+  to { width: 100%; left: 0; }
 }
