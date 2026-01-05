@@ -1,4 +1,4 @@
-/* 📌 GuestBook.scss: 모바일 1열 + 데스크톱 Masonry + 색상 버그 수정 완벽판 */
+/* 📌 GuestBook.scss: 모바일/데스크톱 색상 완벽 출력 버전 */
 
 .guestbook-wrapper {
   text-align: center;
@@ -13,59 +13,52 @@
   }
 }
 
-/* 📌 1. 포스트잇 리스트 (배경 보드 제거) */
+/* 📌 1. 포스트잇 리스트 (보드 배경 제거) */
 .guestbook-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 20px 0; /* 배경이 없으므로 상하 여백만 유지 */
-  background-color: transparent; /* ✅ 보드 배경 제거 */
+  padding: 40px 0; /* 배경이 없으므로 상하 여백만 */
+  background: transparent; /* ✅ 보드 배경 제거 */
   min-height: 400px;
 
-  /* 데스크톱: 2열 Masonry */
   @media (min-width: 600px) {
     display: block; 
     column-count: 2;
-    column-gap: 15px;
-  }
-
-  &.is-empty {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    column-gap: 20px;
   }
 }
 
-/* 📌 2. 포스트잇 아이템 (데스크톱 색상 유실 방지 및 테이프 강화) */
+/* 📌 2. 포스트잇 아이템 (데스크톱 투명화 방지) */
 .guestbook-item {
-  /* ✅ 중요: 데스크톱 column-count 모드에서 배경색이 안 보이는 현상 방지 */
+  /* ✅ 데스크톱 column 버그 해결 핵심 속성들 */
   display: inline-block; 
   width: 100%;
-  break-inside: avoid; /* 아이템이 중간에 끊기지 않게 함 */
+  break-inside: avoid;
+  isolation: isolate; /* 독립된 레이어로 분리하여 배경색 강제 노출 */
   
-  margin-bottom: 25px;      
   position: relative;
+  margin-bottom: 25px;      
   padding: 35px 20px 25px; 
   height: auto;
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
-  border-radius: 4px;
+  border-radius: 2px;
 
-  /* ✅ 테이프: 더 진하게 수정 */
+  /* ✅ 테이프: 선명하게 노출 */
   &::before {
     content: "";
     position: absolute;
     top: -10px; left: 50%;
     transform: translateX(-50%);
     width: 48px; height: 18px;
-    background: rgba(255, 255, 255, 0.85); /* 불투명도 대폭 상승 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 입체감 추가 */
-    backdrop-filter: blur(1px);
-    z-index: 2;
+    background: rgba(255, 255, 255, 0.9); /* 선명하게 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    z-index: 10;
   }
 
-  /* ✅ 개별 색상: !important를 추가하여 데스크톱 렌더링 우선순위 확보 */
+  /* ✅ 개별 배경색 (데이터 스타일) */
   &[data-style="0"] { background-color: #FFFDF2 !important; transform: rotate(-1.8deg) translateY(5px); }
   &[data-style="1"] { background-color: #FFF5F7 !important; transform: rotate(1.5deg) translateY(-3px); }
   &[data-style="2"] { background-color: #F6FBF7 !important; transform: rotate(-1.2deg) translateX(3px); }
@@ -81,8 +74,6 @@
     color: var(--text-light); 
     opacity: 0.2;
     cursor: pointer;
-    i { font-size: 0.85rem; }
-    &:active { opacity: 0.8; color: var(--text-main); }
   }
 
   &__head {
@@ -93,7 +84,7 @@
   }
 
   &__content {
-    display: block; /* 내부 레이아웃 안정화 */
+    display: block; 
     font-size: 0.95rem;
     line-height: 1.7;
     color: var(--text-main);
@@ -103,8 +94,6 @@
     overflow-wrap: break-word; 
     white-space: pre-wrap;     
   }
-
-  &:active { transform: scale(1.02) rotate(0deg) !important; z-index: 100; }
 }
 
 /* 📌 3. 폼 스타일 (원본 유지) */
@@ -120,13 +109,6 @@
     gap: 8px;
   }
 
-  .label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-left: 2px;
-  }
-
   input, textarea {
     font-family: inherit;
     padding: 14px;
@@ -135,36 +117,21 @@
     font-size: 0.95rem;
     color: var(--text-main);
     background: #fafafa;
-    transition: all 0.2s ease;
     
     &:focus {
       border-color: var(--theme-primary);
       outline: none;
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
-    }
-    
-    &:disabled {
-      opacity: 0.6;
-      background: #eee;
     }
   }
 
   textarea {
     height: 9rem;
     resize: none;
-    line-height: 1.6;
   }
 }
 
-.guestbook-footer-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  button { flex: 1; }
-}
-
-/* 🔢 4. 페이지네이션 (테두리 및 배경 삭제) */
+/* 🔢 4. 페이지네이션 (테두리/배경 삭제) */
 .pagination {
   display: flex; 
   justify-content: center; 
@@ -178,20 +145,16 @@
     align-items: center;
     justify-content: center;
     font-size: 0.9rem; 
-    border: none;       /* ✅ 테두리 삭제 */
-    background: none;   /* ✅ 배경 삭제 */
+    border: none;       /* 테두리 삭제 */
+    background: none;   /* 배경 삭제 */
     color: var(--text-light);
     cursor: pointer;
 
     &.current { 
       background: none; 
       color: var(--theme-primary); 
-      border-bottom: 2px solid var(--theme-primary); /* ✅ 언더라인으로 강조 */
-      font-weight: 700; 
-    }
-    
-    &:hover:not(.current) {
-      color: var(--text-main);
+      border-bottom: 2px solid var(--theme-primary); /* 언더라인 강조 */
+      font-weight: 800; 
     }
   }
 }
