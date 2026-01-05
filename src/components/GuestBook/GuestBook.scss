@@ -1,129 +1,63 @@
-/* 📌 GuestBook.scss: 보드 제거 + 정갈한 배치 + 미니멀 디자인 */
-
 .guestbook-wrapper {
-  text-align: center;
-  max-width: var(--section-max-width);
-  margin: 0 auto;
-
-  .guestbook__desc {
-    margin: 1.2rem 0 2.2rem;
-    line-height: 1.8;
-    color: var(--text-main);
-    font-size: 1rem;
-  }
+  text-align: center; max-width: var(--section-max-width); margin: 0 auto;
+  .guestbook__desc { margin: 1.2rem 0 2.2rem; line-height: 1.8; color: var(--text-main); font-size: 1rem; }
 }
 
-/* 📌 1. 포스트잇 리스트 (보드 배경 완전 제거) */
 .guestbook-list {
-  display: flex;
-  flex-direction: column;
-  gap: 25px; 
-  width: 100%;
-  padding: 20px 0; /* 보드가 없으므로 좌우 패딩 제거 */
-  background-color: transparent; /* ✅ 배경 제거 */
-  min-height: 300px;
-
-  /* ✅ 태블릿/PC(600px 이상) 2열 Masonry */
-  @media (min-width: 600px) {
-    display: block; 
-    column-count: 2;
-    column-gap: 20px;
-  }
-
-  &.is-empty {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--text-light);
-    opacity: 0.6;
-  }
+  display: flex; flex-direction: column; gap: 20px; width: 100%; padding: 40px 18px;
+  background-color: var(--theme-accent); border-radius: 12px; min-height: 400px;
+  @media (min-width: 600px) { display: block; column-count: 2; column-gap: 15px; }
+  &.is-empty { display: flex; justify-content: center; align-items: center; }
 }
 
-/* 📌 2. 포스트잇 아이템 (적당한 각도 유지) */
 .guestbook-item {
-  break-inside: avoid;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-bottom: 25px;     
-  position: relative;
-  padding: 30px 20px 25px; 
-  height: auto;
+  break-inside: avoid; display: flex; flex-direction: column; width: 100%; margin-bottom: 25px;
+  position: relative; padding: 35px 20px 25px; height: auto; transition: all 0.3s ease;
+  box-shadow: 2px 3px 8px var(--shadow-color);
   
-  /* ✅ 보드가 없으므로 그림자를 살짝 더 부드럽게 강조해서 입체감 부여 */
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); 
-  transition: all 0.3s ease;
+  &::before { display: none; }
+  @keyframes postItPop { from { opacity: 0; transform: scale(0.8) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  animation: postItPop 0.4s ease-out forwards;
 
-  &::before { display: none; } /* 장식 없음 */
+  /* 🎨 자유분방한 각도와 위치 (이사 방지) */
+  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-2.8deg) translateY(6px) translateX(-2px) !important; }
+  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(3.2deg) translateY(-5px) translateX(3px) !important; }
+  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1.2deg) translateY(8px) translateX(5px) !important; }
+  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(2.5deg) translateY(-2px) translateX(-4px) !important; }
+  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-3.5deg) translateY(-7px) translateX(2px) !important; }
+  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(1.8deg) translateY(4px) translateX(-6px) !important; }
 
-  /* ✅ 적당히 어우러지는 각도 (이사 방지) */
-  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.2deg) !important; }
-  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) !important; }
-  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-0.8deg) !important; }
-  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(1.2deg) !important; }
-  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) !important; }
-  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(0.8deg) !important; }
-
-  .item-delete-btn {
-    position: absolute;
-    top: 10px; right: 10px;
-    background: transparent;
-    border: none;
-    color: var(--theme-primary); 
-    opacity: 0.2;
-    cursor: pointer;
-    &:hover { opacity: 0.8; }
-  }
-
-  &__head {
-    margin-bottom: 12px;
-    text-align: center; 
-    .name { display: block; font-size: 1rem; font-weight: 800; color: var(--theme-primary); }
-    .date { display: block; font-size: 0.75rem; color: var(--text-light); margin-top: 4px; opacity: 0.6; }
-  }
-
-  &__content {
-    flex: 1;
-    font-size: 0.95rem; 
-    line-height: 1.7;
-    color: var(--text-main);
-    font-family: "Gowun Batang", serif;
-    text-align: center;
-    word-break: keep-all;      
-    white-space: pre-wrap;     
-  }
-
-  &:active { 
-    transform: scale(1.02) rotate(0deg) !important; 
-    z-index: 100;
-  }
+  .item-delete-btn { position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--theme-primary); opacity: 0.2; cursor: pointer; &:active { opacity: 0.8; } }
+  &__head { margin-bottom: 12px; text-align: center; .name { display: block; font-weight: 800; color: var(--theme-primary); } .date { font-size: 0.75rem; color: var(--text-light); opacity: 0.6; } }
+  &__content { flex: 1; font-size: 0.95rem; line-height: 1.7; font-family: "Gowun Batang", serif; text-align: center; word-break: keep-all; white-space: pre-wrap; }
+  &:active { transform: scale(1.02) rotate(0deg) !important; z-index: 100; }
 }
 
-/* 📌 3. 폼 스타일 (미니멀 정돈) */
 .guestbook-form {
-  display: flex; flex-direction: column; gap: 15px; text-align: left;
-  margin-top: 2rem;
+  display: flex; flex-direction: column; gap: 12px; text-align: left;
   .field { display: flex; flex-direction: column; gap: 8px; }
-  .label { font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
+  .label { font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-left: 2px; }
   input, textarea {
     font-family: inherit; padding: 14px; border: 1px solid var(--border-color); border-radius: 6px;
-    background: #fafafa; font-size: 0.95rem;
-    &:focus { border-color: var(--theme-primary); outline: none; background: #fff; }
+    font-size: 0.95rem; color: var(--text-main); background: #fafafa; transition: all 0.2s ease;
+    &:focus { border-color: var(--theme-primary); outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1); }
   }
-  textarea { height: 9rem; resize: none; }
+  textarea { height: 9rem; resize: none; line-height: 1.6; }
 }
 
-/* 🔢 4. 미니멀 밑줄 페이지네이션 */
+.guestbook-footer-row { display: flex; gap: 10px; margin-top: 10px; button { flex: 1; } }
+
 .pagination {
-  display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 4rem;
+  display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 4rem;
   .page-num, .page-nav {
-    position: relative; padding: 4px 6px; color: var(--text-light); background: transparent; border: none; cursor: pointer;
-    &:disabled { opacity: 0.2; }
+    position: relative; padding: 4px 6px; font-size: 0.95rem; color: var(--text-light);
+    background: transparent; border: none; cursor: pointer; transition: all 0.3s ease;
+    &:disabled { opacity: 0.2; cursor: default; }
+    &:hover:not(:disabled):not(.current) { color: var(--theme-primary); }
   }
-  .page-num.current { 
+  .page-num.current {
     color: var(--theme-primary); font-weight: 700;
-    &::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--theme-primary); }
+    &::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--theme-primary); animation: underlineIn 0.3s ease-out forwards; }
   }
 }
+@keyframes underlineIn { from { width: 0; left: 50%; } to { width: 100%; left: 0; } }
