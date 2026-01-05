@@ -1,33 +1,35 @@
-/* =========================================================
-   Contact Modal: Final Minimal Version
-   - Background: Warm Sand (#F9F7F5)
-   - Typography: Relation(Global Inherit) / Name(Navy)
-   - Icons: Transparent Background (Floating Style)
-   ========================================================= */
+/* 📌 ContactModal.scss: 데스크톱 화면 넘침 방지 압축 버전 */
 
 .contact-modal-wrap {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px; 
+  gap: 12px; /* 전체 간격 축소 */
+
+  .modal-title {
+    margin-bottom: 0;
+    font-size: 1.4rem;
+  }
+  
+  .modal-subtitle {
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
 }
 
-/* 🎨 섹션: 웜 샌드 배경 */
+/* 🎨 섹션: 여백 최소화 */
 .contact-section {
-  padding: 15px 10px;
+  padding: 10px 10px; /* 상하 패딩 축소 */
   border-radius: 6px;
   display: flex;
   flex-direction: column;
-
-  /* 따뜻한 베이지 색상 적용 */
   background-color: var(--section-bg-soft);
-  
-  /* 테두리는 아주 연하게 */
   border: 1px solid rgba(27, 38, 59, 0.05);
 }
 
 .contact-section + .contact-section {
-  margin-top: 8px;
+  margin-top: 5px; /* 섹션 간 간격 축소 */
 }
 
 /* 리스트 아이템 */
@@ -35,124 +37,86 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: nowrap;
-  
-  padding: 0.7rem 0;
+  padding: 0.5rem 0; /* 아이템 간격 압축 */
   border-bottom: 1px solid rgba(27, 38, 59, 0.06);
-
-  /* 레이아웃 깨짐 방지 */
   width: 100%;
   box-sizing: border-box; 
-  
   color: var(--text-main);
-  font-size: 1.1rem;
 
   &:last-child {
     border-bottom: none;
   }
 
-  /* 1. 관계 (회색) */
   .relation {
-    width: 110px;
+    width: 90px;
     flex: 0 0 auto;
     text-align: center;    
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--text-light); 
-    
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  /* 2. 이름 (네이비) */
   .name {
     flex: 1 1 auto;
     text-align: center;
-    
     font-family: "Noto Serif KR", serif;
     font-weight: 700;
     color: var(--theme-primary); 
-    
-    min-width: 0; 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 1.05rem;
   }
 
-  /* 3. 버튼 그룹 (배경 없음, 아이콘만) */
   .contact-actions {
     flex: 0 0 auto;
-    min-width: 96px;
+    min-width: 80px;
     display: flex;
     justify-content: flex-end;
-    gap: 8px; /* 간격 살짝 좁힘 */
+    gap: 6px;
 
     .icon-link {
-      /* 터치 영역(36px)은 유지하되 눈에는 안 보임 */
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       display: grid;
       place-items: center;
-      border-radius: 50%; /* 눌렀을 때 원형 효과 위해 유지 */
-      text-decoration: none;
-      line-height: 1;
-
-      /* ✅ 배경 투명 */
       background: transparent;
-      
-      /* ✅ 테두리/그림자 제거 */
       border: none;
-      box-shadow: none;
-      
       color: var(--theme-primary);
-      
-      /* ✅ 아이콘 크기 키움 */
-      font-size: 1.25rem; 
-
+      font-size: 1.1rem; /* 아이콘 크기 소폭 조정 */
       transition: all 0.2s ease;
-
-      /* 모바일 파란 박스 제거 */
       -webkit-tap-highlight-color: transparent;
-      outline: none;
 
-      /* 클릭 시 효과 */
       &:active {
-        transform: scale(0.85);
-        background-color: rgba(27, 38, 59, 0.05); /* 미세한 터치 피드백 */
-      }
-      
-      @media (hover: hover) {
-        &:hover {
-          transform: translateY(-2px);
-          color: var(--text-main); 
-        }
+        transform: scale(0.9);
       }
     }
   }
 }
 
-/* 📱 Responsive */
-@media (max-width: 360px) {
-  .contact-item {
-    gap: 5px;
-    font-size: 1rem;
-  }
-
-  .contact-item .relation {
-    width: 80px;
-    font-size: 0.9rem;
-  }
-
-  .contact-item .contact-actions {
-    min-width: 84px;
+/* 🖥️ 데스크톱 전용 압축 (스크롤 방지 핵심) */
+@media (min-width: 600px) {
+  .contact-modal-wrap {
     gap: 8px;
+  }
+
+  .contact-section {
+    padding: 8px 10px;
+  }
+
+  .contact-item {
+    padding: 0.35rem 0;
     
-    /* 작은 화면에서는 아이콘 크기 조금 줄임 */
-    .icon-link {
-      width: 34px;
-      height: 34px;
-      font-size: 1.15rem;
+    .name { font-size: 1rem; }
+    .relation { font-size: 0.85rem; }
+    
+    .contact-actions .icon-link {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
     }
   }
+}
+
+/* 📱 초소형 모바일 대응 */
+@media (max-width: 360px) {
+  .contact-item .relation { width: 70px; }
+  .contact-item .contact-actions { min-width: 70px; }
 }
