@@ -101,6 +101,7 @@ export function GuestBook() {
         ) : (
           posts.map((post) => (
             <article key={post.id} className="guestbook-item" data-style={post.id % 6}>
+              {/* 삭제 버튼은 폼 요소가 아니므로 그대로 유지하거나 SCSS에서 !important 처리 필요 */}
               <button
                 className="item-delete-btn"
                 onClick={(e) => {
@@ -122,19 +123,30 @@ export function GuestBook() {
         )}
       </div>
 
+      {/* ✅ 페이지네이션: 브라우저 기본 스타일 방지를 위해 button을 span으로 수정 */}
       {totalPages > 1 && (
         <div className="pagination">
-          <button className="page-nav" disabled={currentPage === 0} onClick={() => setCurrentPage(p => p - 1)} type="button">
+          <span 
+            className={`page-nav ${currentPage === 0 ? "disabled" : ""}`} 
+            onClick={() => currentPage !== 0 && setCurrentPage(p => p - 1)}
+          >
             <i className="fa-solid fa-chevron-left"></i>
-          </button>
+          </span>
           {pages.map((page) => (
-            <button key={page} className={`page-num ${page === currentPage ? "current" : ""}`} onClick={() => setCurrentPage(page)} type="button">
+            <span 
+              key={page} 
+              className={`page-num ${page === currentPage ? "current" : ""}`} 
+              onClick={() => setCurrentPage(page)}
+            >
               {page + 1}
-            </button>
+            </span>
           ))}
-          <button className="page-nav" disabled={currentPage === totalPages - 1} onClick={() => setCurrentPage(p => p + 1)} type="button">
+          <span 
+            className={`page-nav ${currentPage === totalPages - 1 ? "disabled" : ""}`} 
+            onClick={() => currentPage !== totalPages - 1 && setCurrentPage(p => p + 1)}
+          >
             <i className="fa-solid fa-chevron-right"></i>
-          </button>
+          </span>
         </div>
       )}
 
