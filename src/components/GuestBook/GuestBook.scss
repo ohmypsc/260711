@@ -41,8 +41,6 @@
 }
 
 /* 📌 2. 포스트잇 아이템 (디자인 고정 & 모바일 가독성 최적화) */
-/* 📌 GuestBook.scss: 네이비 테이프 & 샌드 카드 통합 버전 */
-
 .guestbook-item {
   break-inside: avoid;
   display: flex;
@@ -52,65 +50,72 @@
   position: relative;
   padding: 35px 20px 25px;
   height: auto;
-  
-  /* 🎨 배경을 청첩장 서브 컬러(Warm Sand)로 통일 */
-  background-color: var(--theme-primary-light); 
   box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   
-  /* 📌 마스킹 테이프 (네이비 컬러로 변경하여 가시성 확보) */
+  /* 📌 마스킹 테이프: 가시성 대폭 강화 */
   &::before {
     content: "";
     position: absolute;
-    top: -10px; left: 50%;
+    top: -12px; /* 살짝 더 위로 올려서 존재감 강조 */
+    left: 50%;
     transform: translateX(-50%);
-    width: 50px; height: 20px;
-    /* ✅ 네이비색 테이프 + 약간의 투명도로 마스킹 테이프 질감 표현 */
-    background: rgba(27, 38, 59, 0.6); 
+    width: 50px; /* 가로로 조금 더 길게 */
+    height: 20px;
+    
+    /* ✅ 핵심: 화이트 대신 테마의 Warm Sand 컬러를 사용하여 대비를 줌 */
+    background: var(--theme-primary-light); 
+    
+    /* 실제 테이프처럼 약간 비치게 처리 */
+    opacity: 0.85; 
     backdrop-filter: blur(1px);
     z-index: 2;
-    /* 테이프 끝이 살짝 뜯긴 듯한 느낌을 주려면 아래 속성 추가 */
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    
+    /* 양 끝이 살짝 거친 느낌을 주는 디테일 (선택사항) */
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
   }
 
-  /* ✅ ID별 회전 각도만 다르게 주어 생동감 유지 (색상은 통일) */
-  &[data-style="0"] { transform: rotate(-1.5deg) translateY(5px) !important; }
-  &[data-style="1"] { transform: rotate(1.2deg) translateY(-3px) !important; }
-  &[data-style="2"] { transform: rotate(-1deg) translateX(3px) !important; }
-  &[data-style="3"] { transform: rotate(2deg) translateY(4px) !important; }
-  &[data-style="4"] { transform: rotate(-1.5deg) translateY(-5px) !important; }
-  &[data-style="5"] { transform: rotate(1.2deg) translateX(-3px) !important; }
+  /* ✅ ID 기반 색상 (기존 유지) */
+  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
+  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
+  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-1.2deg) translateX(3px) !important; }
+  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(2.2deg) translateY(4px) !important; }
+  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-5px) !important; }
+  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(1.2deg) translateX(-3px) !important; }
 
-  /* 나머지 내부 요소 스타일은 동일 */
+  /* 나머지 (아이콘, 헤드, 본문) 스타일은 기존과 동일하게 유지... */
   .item-delete-btn {
     position: absolute;
     top: 12px; right: 12px;
     background: transparent;
     border: none;
-    color: var(--theme-primary); /* 네이비 배경에 맞춰 대비 조절 */
-    opacity: 0.3;
+    color: var(--text-light); 
+    opacity: 0.2;
     cursor: pointer;
-    &:active { opacity: 1; }
+    i { font-size: 0.85rem; }
+    &:active { opacity: 0.8; color: var(--text-main); }
   }
 
   &__head {
     margin-bottom: 15px;
     text-align: center; 
     .name { display: block; font-size: 1rem; font-weight: 800; color: var(--theme-primary); }
-    .date { display: block; font-size: 0.75rem; color: var(--theme-primary); opacity: 0.5; margin-top: 4px; }
+    .date { display: block; font-size: 0.75rem; color: var(--text-light); margin-top: 4px; opacity: 0.6; }
   }
 
   &__content {
     flex: 1;
     font-size: 0.95rem;
     line-height: 1.7;
-    color: var(--theme-primary); /* 글자색도 네이비로 통일하여 고급스럽게 */
+    color: var(--text-main);
     font-family: "Gowun Batang", serif;
     text-align: center;
     word-break: keep-all;      
     overflow-wrap: break-word; 
     white-space: pre-wrap;     
   }
+
+  &:active { transform: scale(1.02) rotate(0deg) !important; z-index: 100; }
 }
 
 /* 📌 3. 폼 스타일 (원본 그대로 복구) */
