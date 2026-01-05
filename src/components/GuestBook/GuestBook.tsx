@@ -1,202 +1,207 @@
-/* 📌 전역 변수 기반 포스트잇 보드 디자인 */
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
+import "./GuestBook.scss";
 
-.guestbook-wrapper {
-  text-align: center;
-  font-family: inherit;
+import { Button } from "@/components/common/Button/Button";
+import { Modal } from "@/components/common/Modal/Modal";
+import { supabase } from "@/supabaseClient";
 
-  .guestbook__desc {
-    margin: 1rem 0 2.5rem;
-    line-height: 1.7;
-    color: var(--text-main);
-    font-size: 0.95rem;
-    opacity: 0.85;
-  }
+const POSTS_PER_PAGE = 6;
+
+type Post = {
+  id: number;
+  timestamp: number;
+  name: string;
+  content: string;
+};
+
+type ModalType = null | "write" | { type: "delete"; postId: number };
+type ToastState = { msg: string; type: "success" | "error" } | null;
+type ToastHandler = (msg: string, type: "success" | "error") => void;
+
+const formatDate = (unixSeconds: number) => {
+  const d = new Date(unixSeconds * 1000);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+};
+
+export function GuestBook() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [openModal, setOpenModal] = useState<ModalType>(null);
+  const [toast, setToast] = useState<ToastState>(null);
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  const handleToast: ToastHandler = (msg, type) => setToast({ msg, type });
+
+  const totalPages = Math.ceil(totalCount / POSTS_PER_PAGE);
+
+  const loadPage = async (page = 0) => {
+    const offset = page * POSTS_PER_PAGE;
+    try {
+      const { data, count, error } = await supabase
+        .from("guestbook")
+        .select("id, name, content, created_at", { count: "exact" })
+        .order("created_at", { ascending: false })
+        .range(offset, offset + POSTS_PER_PAGE - 1);
+
+      if (error) throw error;
+
+      if (page > 0 && data && data.length === 0) {
+        setCurrentPage(page - 1);
+        return;
+      }
+
+      const formatted = (data ?? []).map((item) => ({
+        id: item.id,
+        name: item.name,
+        content: item.content,
+        timestamp: Math.floor(new Date(item.created_at).getTime() / 1000),
+      }));
+
+      setPosts(formatted);
+      setTotalCount(count || 0);
+      setCurrentPage(page);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => { loadPage(currentPage); }, [currentPage]);
+
+  useEffect(() => {
+    const sub = supabase
+      .channel("guestbook-realtime")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "guestbook" }, () => loadPage(currentPage))
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "guestbook" }, () => loadPage(currentPage))
+      .subscribe();
+    return () => { supabase.removeChannel(sub); };
+  }, [currentPage]);
+
+  const pages = useMemo(() => Array.from({ length: totalPages }, (_, i) => i), [totalPages]);
+
+  return (
+    <div className="guestbook-wrapper">
+      <h2 className="section-title">방명록</h2>
+      <p className="guestbook__desc">신랑, 신부에게<br />축하의 마음을 전해주세요.</p>
+
+      <div className="guestbook__actions top">
+        <Button variant="basic" onClick={() => setOpenModal("write")}>방명록 남기기</Button>
+      </div>
+
+      <div className={`guestbook-list ${posts.length === 0 ? 'is-empty' : ''}`}>
+        {posts.length === 0 ? (
+          <div className="guestbook-empty">첫 번째 편지를 보내주세요 🕊️</div>
+        ) : (
+          posts.map((post) => (
+            <article key={post.id} className="guestbook-item" data-style={post.id % 6}>
+              <button
+                className="item-delete-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenModal({ type: "delete", postId: post.id });
+                }}
+                type="button"
+                aria-label="delete"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+              <div className="guestbook-item__head">
+                <span className="name">{post.name}</span>
+                <div className="date"><span>{formatDate(post.timestamp)}</span></div>
+              </div>
+              <div className="guestbook-item__content">{post.content}</div>
+            </article>
+          ))
+        )}
+      </div>
+
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button className="page-nav" disabled={currentPage === 0} onClick={() => setCurrentPage(p => p - 1)} type="button">
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+          {pages.map((page) => (
+            <button key={page} className={`page-num ${page === currentPage ? "current" : ""}`} onClick={() => setCurrentPage(page)} type="button">
+              {page + 1}
+            </button>
+          ))}
+          <button className="page-nav" disabled={currentPage === totalPages - 1} onClick={() => setCurrentPage(p => p + 1)} type="button">
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      )}
+
+      {openModal === "write" && <WriteGuestBookModal onClose={() => setOpenModal(null)} onSuccess={() => loadPage(0)} onToast={handleToast} />}
+      {openModal && typeof openModal === "object" && openModal.type === "delete" && (
+        <DeleteGuestBookModal postId={openModal.postId} onClose={() => setOpenModal(null)} onSuccess={() => loadPage(currentPage)} onToast={handleToast} />
+      )}
+      {toast && createPortal(<div className="custom-toast"><i className={toast.type === "success" ? "fa-solid fa-check" : "fa-solid fa-circle-exclamation"}></i>{toast.msg}</div>, document.body)}
+    </div>
+  );
 }
 
-/* 📌 포스트잇이 붙을 메인 보드 */
-.guestbook-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2열 배치 */
-  gap: 12px;
-  width: 100%;
-  padding: 20px 12px;
-  background-color: var(--section-bg-soft); /* 보드 배경색 */
-  border-radius: 12px;
-  min-height: 300px;
+function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = (formData.get("name") as string).trim();
+    const content = (formData.get("content") as string).trim();
+    const password = (formData.get("password") as string).trim();
+    if (!name || !content || !password) return onToast("모든 항목을 입력해 주세요", "error");
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("guestbook").insert([{ name, content, password }]);
+      if (error) throw error;
+      onToast("방명록이 등록되었습니다", "success");
+      onSuccess(); onClose();
+    } catch { onToast("등록에 실패했습니다", "error"); } finally { setLoading(false); }
+  };
+  return (
+    <Modal onClose={onClose} footer={<div className="guestbook-footer-row"><Button variant="submit" type="submit" form="write-form" disabled={loading}>저장하기</Button><Button variant="close" onClick={onClose}>닫기</Button></div>}>
+      <div className="guestbook-modal-content">
+        <h2 className="modal-title">방명록 작성</h2>
+        <form id="write-form" className="guestbook-form" onSubmit={handleSubmit}>
+          <div className="field"><label className="label">성함</label><input name="name" disabled={loading} type="text" autoComplete="off" /></div>
+          <div className="field"><label className="label">메시지</label><textarea name="content" disabled={loading} /></div>
+          <div className="field"><label className="label">비밀번호</label><input name="password" disabled={loading} type="password" autoComplete="new-password" /></div>
+        </form>
+      </div>
+    </Modal>
+  );
 }
 
-/* 📌 포스트잇 공통 스타일 */
-.guestbook-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 22px 14px 14px;
-  min-height: 160px;
-  box-shadow: 2px 3px 8px var(--shadow-color);
-  transition: transform 0.2s ease;
-
-  /* 등장 애니메이션 */
-  @keyframes postItPop {
-    from { opacity: 0; transform: scale(0.8) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
-  animation: postItPop 0.4s ease-out forwards;
-
-  /* 📌 상단 마스킹 테이프 효과 */
-  &::before {
-    content: "";
-    position: absolute;
-    top: -6px; left: 50%;
-    transform: translateX(-50%);
-    width: 35px; height: 12px;
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(1px);
-    z-index: 2;
-  }
-
-  /* 🎨 랜덤 색상 & 회전 배치 (전역 변수 활용) */
-  &:nth-child(4n + 1) { 
-    background-color: var(--theme-primary-light); /* 샌드 */
-    transform: rotate(-2deg); 
-  }
-  &:nth-child(4n + 2) { 
-    background-color: var(--theme-point-pink); /* 핑크 (투명도 조절 권장 시 opacity 추가 가능) */
-    transform: rotate(2deg); 
-    // 핑크가 너무 진할 경우를 대비해 살짝 부드럽게
-    background-color: #EBD3D6; // 전역 핑크의 파스텔톤 버전 (변수 조합)
-  }
-  &:nth-child(4n + 3) { 
-    background-color: var(--theme-accent); /* 웜 그레이/베이지 */
-    transform: rotate(-1.5deg); 
-  }
-  &:nth-child(4n) { 
-    background-color: var(--theme-bg); /* 화이트/아이보리 */
-    border: 1px solid var(--border-color);
-    transform: rotate(1.5deg); 
-  }
-
-  /* 🗑️ 삭제 버튼 (터치 최적화) */
-  .item-delete-btn {
-    position: absolute;
-    top: 5px; right: 5px;
-    width: 24px; height: 24px;
-    display: flex;
-    align-items: center; justify-content: center;
-    background: transparent;
-    border: none;
-    color: var(--theme-primary);
-    opacity: 0.3;
-    font-size: 0.75rem;
-
-    &:active {
-      opacity: 1;
-      color: var(--theme-error);
-    }
-  }
-
-  &__head {
-    margin-bottom: 8px;
-    .name {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: var(--theme-primary);
-    }
-    .date {
-      font-size: 0.7rem;
-      color: var(--text-light);
-      opacity: 0.7;
-    }
-  }
-
-  /* 📌 포스트잇 본문 */
-  &__content {
-    flex: 1;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--text-main);
-    font-family: "Gowun Batang", serif; /* 고운바탕 적용 */
-    text-align: left;
-    word-break: break-all;
-    
-    /* 텍스트가 너무 길어지면 말줄임 (선택 사항) */
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* 터치 시 살짝 들리는 느낌 */
-  &:active {
-    transform: scale(1.02) rotate(0deg);
-    z-index: 10;
-  }
-}
-
-/* 🕊️ 빈 공간 */
-.guestbook-empty {
-  grid-column: span 2;
-  padding: 4rem 1rem;
-  color: var(--text-light);
-  font-size: 0.9rem;
-  opacity: 0.6;
-}
-
-/* 🔢 페이지네이션 (보드 아래 깔끔하게 배치) */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 2.5rem;
-
-  .page-num, .page-nav {
-    display: flex;
-    align-items: center; justify-content: center;
-    min-width: 32px; height: 32px;
-    background: var(--theme-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: var(--text-light);
-
-    &:active {
-      background: var(--theme-accent);
-    }
-    &:disabled { opacity: 0.3; }
-  }
-
-  .page-num.current {
-    background: var(--theme-primary);
-    color: var(--theme-bg);
-    border-color: var(--theme-primary);
-  }
-}
-
-/* 폼 스타일 (입력창 포커스 효과) */
-.guestbook-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  input, textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    background: var(--theme-bg);
-    font-family: inherit;
-    
-    &:focus {
-      border-color: var(--theme-primary);
-      outline: none;
-      background: var(--theme-accent);
-    }
-  }
-
-  textarea {
-    height: 8rem;
-    resize: none;
-  }
+function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId: number; onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const password = (new FormData(e.currentTarget).get("password") as string).trim();
+    if (!password) return onToast("비밀번호를 입력해 주세요", "error");
+    setLoading(true);
+    try {
+      const { data } = await supabase.from("guestbook").select("password").eq("id", postId).single();
+      if (data?.password !== password) { setLoading(false); return onToast("비밀번호 불일치", "error"); }
+      await supabase.from("guestbook").delete().eq("id", postId);
+      onToast("삭제되었습니다", "success");
+      onSuccess(); onClose();
+    } catch { onToast("오류 발생", "error"); setLoading(false); }
+  };
+  return (
+    <Modal onClose={onClose} footer={<div className="guestbook-footer-row"><Button variant="submit" type="submit" form="del-form" disabled={loading}>삭제하기</Button><Button variant="close" onClick={onClose}>취소</Button></div>}>
+      <div className="guestbook-modal-content">
+        <h2 className="modal-title">방명록 삭제</h2>
+        <p className="modal-subtitle" style={{ textAlign: 'center', margin: '10px 0 20px', color: 'var(--text-main)', opacity: 0.8 }}>삭제를 위해 비밀번호를 입력해주세요.</p>
+        <form id="del-form" className="guestbook-form" onSubmit={handleSubmit}>
+          <div className="field"><label className="label">비밀번호</label><input name="password" disabled={loading} type="password" /></div>
+        </form>
+      </div>
+    </Modal>
+  );
 }
