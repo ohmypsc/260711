@@ -88,8 +88,7 @@ button.w-btn:active {
 
 button.w-btn.submit:active,
 button.w-btn.close:active {
-  filter: brightness(0.95);
-  background-color: rgba(0, 0, 0, 0.08); /* 클릭 시 피드백 강화 */
+  filter: brightness(0.8);
 }
 
 /* 🚫 Disabled State */
