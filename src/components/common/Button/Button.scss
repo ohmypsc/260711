@@ -24,96 +24,95 @@ button.w-btn {
   transition: all 0.2s ease;
 }
 
-/* ------------------------------------------------------
-   🧵 1. BASIC (메인 버튼: 입장/작성하기)
-   - 네이비 배경 유지 + 안쪽에 얇고 정교한 실선 프레임
------------------------------------------------------- */
+/* ============================================
+   ✅ FINAL BUTTON DESIGN: Clean + Framed
+   - 메인 버튼: 고급스러운 프레임 마감
+   - 트윈 버튼: 위계 조절 및 프레임형 쌍둥이 스타일
+   ============================================ */
+
+button.w-btn {
+  position: relative;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s ease;
+}
+
+/* 🧵 1. BASIC (메인 입장 버튼) */
 button.w-btn.basic {
   background-color: var(--theme-primary);
   color: var(--theme-primary-light);
-
   border-radius: 6px;
   padding: 1.25rem 1.5rem;
-
   font-size: clamp(1.0rem, 2.6vw, 1.15rem);
   font-weight: 600;
   letter-spacing: 0.15em;
-
   position: relative;
+
+  /* 내부 얇은 실선 프레임 */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    opacity: 0.9;
+    pointer-events: none;
+  }
 }
 
-/* ✅ 고급스러운 얇은 내부 프레임 */
-button.w-btn.basic::after {
-  content: "";
-  position: absolute;
-  top: 6px; left: 6px; right: 6px; bottom: 6px;
-
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-/* ------------------------------------------------------
-   👯 2. TWINS (모달 내부 버튼: 저장/닫기)
-   - 배경색을 걷어내고 프레임 위주로 가볍게 설계
------------------------------------------------------- */
+/* 👯 2. TWINS (모달 내부 버튼 - 프레임형으로 변경) */
 button.w-btn.submit,
 button.w-btn.close {
   border-radius: 6px;
   padding: 1.0rem 1.1rem;
-
   font-size: clamp(0.9rem, 2.4vw, 1.0rem);
   font-weight: 600;
   letter-spacing: 0.03em;
-
-  background: transparent;
-  /* 기본 보더 설정 */
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: transparent; /* ✅ 배경색 제거 */
+  border: 1px solid rgba(0, 0, 0, 0.18); /* ✅ 기본 프레임 */
 }
 
-/* [Submit]: 저장하기 (조금 더 명확한 대비) */
+/* [Submit]: 저장/삭제 (네이비 프레임) */
 button.w-btn.submit {
   color: var(--theme-primary);
   border-color: var(--theme-primary);
-  background-color: rgba(27, 38, 59, 0.05); /* 아주 옅은 네이비 톤 */
+  background-color: rgba(27, 38, 59, 0.06); /* 아주 연한 네이비 톤 */
 }
 
-/* [Close]: 닫기/취소 (더 부드러운 톤) */
+/* [Close]: 닫기/취소 (샌드/그레이 프레임) */
 button.w-btn.close {
   color: var(--text-main);
   border-color: var(--border-color);
-  background-color: rgba(0, 0, 0, 0.02); /* 극도로 옅은 톤 */
+  background-color: rgba(0, 0, 0, 0.03); /* 아주 연한 무채색 톤 */
 }
 
-/* ------------------------------------------------------
-   👆 Interaction States
------------------------------------------------------- */
-
-/* 눌렀을 때의 반응 (공통) */
+/* 👆 Interaction States */
 button.w-btn:active {
-  transform: translateY(1px) scale(0.99);
+  transform: translateY(2px);
 }
 
-/* 프레임형 버튼만의 액티브 피드백 */
 button.w-btn.submit:active,
 button.w-btn.close:active {
-  background-color: rgba(0, 0, 0, 0.08);
+  filter: brightness(0.95);
+  background-color: rgba(0, 0, 0, 0.08); /* 클릭 시 피드백 강화 */
 }
 
-/* ------------------------------------------------------
-   🚫 Disabled State
------------------------------------------------------- */
+/* 🚫 Disabled State */
 button.w-btn:disabled {
   opacity: 0.42;
   cursor: not-allowed;
   transform: none !important;
-  
   background-color: var(--border-color) !important;
   color: var(--text-light) !important;
   border: none !important;
 }
 
-button.w-btn.basic:disabled::after {
-  display: none;
-}
+button.w-btn.basic:disabled::after { display: none; }
