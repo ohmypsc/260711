@@ -16,11 +16,9 @@
 /* 📌 1. 포스트잇 리스트 (보드 배경만 제거) */
 .guestbook-list {
   display: flex;
-  flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 20px 0; /* ✅ 보드 배경이 없으므로 상하 여백만 유지 */
-  background-color: transparent; /* ✅ 회색 보드 삭제 */
+  padding: 20px 0;
 
   @media (min-width: 600px) {
     display: block; 
