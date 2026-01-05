@@ -69,7 +69,7 @@ button.w-btn.close {
 
 button.w-btn.submit {
   border: 1.5px solid var(--theme-primary);
-  background-color: color-mix(in srgb, var(--theme-primary), transparent 90%);
+  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 90%);
   color: var(--theme-primary);
   font-weight: 700;
 }
