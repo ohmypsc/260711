@@ -165,29 +165,64 @@
 }
 
 /* 🔢 4. 페이지네이션 */
+/* 🔢 4. 세련된 원형 페이지네이션 */
 .pagination {
   display: flex; 
   justify-content: center; 
-  gap: 8px; 
-  margin-top: 3.5rem;
+  align-items: center;
+  gap: 12px;           /* 간격을 조금 더 넓게 */
+  margin-top: 4rem;    /* 보드와 확실히 분리 */
+
   .page-num {
-    min-width: 34px; 
-    height: 34px; 
+    /* 🎨 기본 모양: 테두리 없이 깔끔하게 */
+    min-width: 38px; 
+    height: 38px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem; 
-    border: 1px solid var(--border-color);
-    background: #fff;
-    border-radius: 4px;
+    
+    font-size: 0.9rem; 
+    font-family: inherit;
     color: var(--text-light);
-    &.current { background: var(--theme-primary); color: #fff; border-color: var(--theme-primary); font-weight: 700; }
-  }
-}
+    background: transparent;
+    border: none;
+    border-radius: 50%; /* 완전한 원형 */
+    cursor: pointer;
+    transition: all 0.3s ease;
 
-/* ⚠️ 토스트 꼬임 방지 */
-.custom-toast {
-  display: flex !important;
-  flex-direction: row !important;
-  white-space: nowrap !important;
+    /* 마우스 올렸을 때나 터치 시 연한 배경 */
+    &:hover {
+      background: var(--theme-accent);
+      color: var(--theme-primary);
+    }
+
+    /* ✅ 현재 페이지: 네이비 원형 포인트 */
+    &.current { 
+      background: var(--theme-primary); 
+      color: #fff; 
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(27, 38, 59, 0.2);
+      transform: translateY(-2px); /* 살짝 떠오르는 효과 */
+    }
+  }
+
+  /* ◀ ▶ 화살표 네비게이션이 있다면 */
+  .page-nav {
+    background: transparent;
+    border: none;
+    color: var(--theme-primary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+
+    &:hover:not(:disabled) {
+      opacity: 1;
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.1;
+    }
+  }
 }
