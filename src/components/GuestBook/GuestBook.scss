@@ -1,4 +1,4 @@
-/* 📌 GuestBook.scss: 미니멀 (보드 제거 + 정갈한 배치) */
+/* 📌 GuestBook.scss: 보드 제거 + 정갈한 배치 (필수 로직 보존형) */
 
 .guestbook-wrapper {
   text-align: center;
@@ -13,15 +13,14 @@
   }
 }
 
-/* 📌 1. 포스트잇 리스트 (배경 보드 완전 제거) */
+/* 📌 1. 포스트잇 리스트 (보드 배경만 제거) */
 .guestbook-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 20px 0; /* ✅ 보드가 없으므로 내부 패딩 최소화 */
-  background-color: transparent; /* ✅ 회색 보드 배경 삭제 */
-  min-height: 300px;
+  padding: 20px 0; /* ✅ 보드 배경이 없으므로 상하 여백만 유지 */
+  background-color: transparent; /* ✅ 회색 보드 삭제 */
 
   @media (min-width: 600px) {
     display: block; 
@@ -36,7 +35,7 @@
   }
 }
 
-/* 📌 2. 포스트잇 아이템 (이사 방지 + 적당한 각도) */
+/* 📌 2. 포스트잇 아이템 (필수 로직: 이사 방지 & 등장 애니메이션) */
 .guestbook-item {
   break-inside: avoid;
   display: flex;
@@ -48,26 +47,26 @@
   height: auto;
   transition: all 0.3s ease;
   
-  /* ✅ 보드가 없으므로 종이 질감을 위해 배경색과 부드러운 그림자 부여 */
   background-color: #fff;
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); /* ✅ 종이 느낌을 위한 최소한의 그림자 */
   
-  &::before { display: none; }
+  &::before { display: none; } /* ✅ 장식 제거 유지 */
 
+  /* ✅ 필수 애니메이션: 누락 방지 */
   @keyframes postItPop {
     from { opacity: 0; transform: scale(0.8) translateY(10px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
   }
   animation: postItPop 0.4s ease-out forwards;
 
-  /* 🎨 적당히 어우러지는 각도 (이사 방지 유지) */
-  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.2deg) translateY(2px) !important; }
-  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-2px) !important; }
-  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-0.8deg) translateX(3px) !important; }
-  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(1.2deg) translateY(2px) !important; }
-  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) translateY(-3px) !important; }
-  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(0.8deg) translateX(-3px) !important; }
+  /* ✅ 필수 로직: 데이터 기반 각도 고정 (이사 방지) */
+  &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.2deg) !important; }
+  &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) !important; }
+  &[data-style="2"] { background-color: #F6FBF7; transform: rotate(-0.8deg) !important; }
+  &[data-style="3"] { background-color: #F4F9FF; transform: rotate(1.2deg) !important; }
+  &[data-style="4"] { background-color: #F9F7FF; transform: rotate(-1.5deg) !important; }
+  &[data-style="5"] { background-color: #FFF8F0; transform: rotate(0.8deg) !important; }
 
   .item-delete-btn {
     position: absolute;
@@ -103,7 +102,7 @@
   }
 }
 
-/* 📌 3. 폼 스타일 (원본 로직 유지) */
+/* 📌 3. 폼 스타일 & 페이지네이션 (필수 UI 로직) */
 .guestbook-form {
   display: flex;
   flex-direction: column;
@@ -127,7 +126,6 @@
 
 .guestbook-footer-row { display: flex; gap: 10px; margin-top: 10px; button { flex: 1; } }
 
-/* 🔢 4. 페이지네이션 (배경/테두리 제거) */
 .pagination {
   display: flex; 
   justify-content: center; 
@@ -154,10 +152,8 @@
     &::after {
       content: "";
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
       background-color: var(--theme-primary);
       animation: underlineIn 0.3s ease-out forwards;
     }
