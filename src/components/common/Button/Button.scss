@@ -55,17 +55,6 @@ button.w-btn.basic {
   font-weight: 600;
   letter-spacing: 0.15em;
   position: relative;
-
-  /* 내부 얇은 실선 프레임 */
-  &::after {
-    content: "";
-    position: absolute;
-    top: 6px; left: 6px; right: 6px; bottom: 6px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    opacity: 0.9;
-    pointer-events: none;
-  }
 }
 
 /* 👯 2. TWINS (모달 내부 버튼 - 프레임형으로 변경) */
@@ -76,22 +65,20 @@ button.w-btn.close {
   font-size: clamp(0.9rem, 2.4vw, 1.0rem);
   font-weight: 600;
   letter-spacing: 0.03em;
-  background: transparent; /* ✅ 배경색 제거 */
-  border: 1px solid rgba(0, 0, 0, 0.18); /* ✅ 기본 프레임 */
 }
 
-/* [Submit]: 저장/삭제 (네이비 프레임) */
 button.w-btn.submit {
+  border: 1.5px solid var(--theme-primary);
+  background-color: color-mix(in srgb, var(--theme-primary), transparent 95%);
   color: var(--theme-primary);
-  border-color: var(--theme-primary);
-  background-color: rgba(27, 38, 59, 0.06); /* 아주 연한 네이비 톤 */
+  font-weight: 700;
 }
 
-/* [Close]: 닫기/취소 (샌드/그레이 프레임) */
 button.w-btn.close {
-  color: var(--text-main);
-  border-color: var(--border-color);
-  background-color: rgba(0, 0, 0, 0.03); /* 아주 연한 무채색 톤 */
+  border: 1.5px solid var(--theme-primary-light);
+  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 95%);
+  color: var(--theme-primary-light);
+  font-weight: 700;
 }
 
 /* 👆 Interaction States */
