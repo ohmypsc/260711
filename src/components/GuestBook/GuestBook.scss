@@ -17,14 +17,10 @@
 .guestbook-list {
   /* ✅ 모바일: 1열 배치로 글자 크기와 포스트잇 비율 확보 */
   display: flex;
-  flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 40px 18px;
-  background-color: var(--theme-accent); 
-  border-radius: 12px;
+  padding: 40px 0;
   min-height: 400px;
-  box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.04);
 
   /* ✅ 태블릿/PC(600px 이상): 다시 2열 Masonry로 감성 사수 */
   @media (min-width: 600px) {
@@ -53,17 +49,6 @@
   box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   
-  &::before {
-    content: "";
-    position: absolute;
-    top: -10px; left: 50%;
-    transform: translateX(-50%);
-    width: 45px; height: 18px;
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(1px);
-    z-index: 2;
-  }
-
   /* ✅ ID 기반 스타일 고정 (이사 방지) */
   &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.8deg) translateY(5px) !important; }
   &[data-style="1"] { background-color: #FFF5F7; transform: rotate(1.5deg) translateY(-3px) !important; }
@@ -176,9 +161,6 @@
     align-items: center;
     justify-content: center;
     font-size: 0.8rem; 
-    border: 1px solid var(--border-color);
-    background: #fff;
-    border-radius: 4px;
     color: var(--text-light);
     &.current { background: var(--theme-primary); color: #fff; border-color: var(--theme-primary); font-weight: 700; }
   }
