@@ -164,18 +164,40 @@
 .pagination {
   display: flex; 
   justify-content: center; 
-  gap: 8px; 
+  align-items: center;
+  gap: 12px; /* 간격을 살짝 넓혀 여유를 줌 */
+  margin: 10px 0 4rem;
+
   .page-num {
-    min-width: 34px; 
-    height: 34px; 
+    min-width: 36px; 
+    height: 36px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem; 
+    font-size: 0.9rem; /* 글자 크기 살짝 키움 */
     border: none;
     background: transparent;
     color: var(--text-light);
     cursor: pointer;
-    &.current { color: var(--theme-primary); border-bottom: 2px solid var(--theme-primary); font-weight: 700; }
+    border-radius: 50%; /* ✅ 기본적으로 둥근 영역 확보 */
+    transition: all 0.2s ease; /* 부드러운 전환 효과 */
+
+    /* ✅ 핵심: 현재 페이지 스타일 */
+    &.current { 
+      background: var(--theme-primary); /* 메인 컬러 배경 */
+      color: var(--theme-primary-light);                      
+      font-weight: 700;
+    }
+  }
+
+  /* 이모티콘(화살표) 스타일도 통일 */
+  .page-arrow {
+    font-size: 1rem;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    cursor: pointer;
+    &:hover { color: var(--text-main); }
+    &:disabled { opacity: 0.3; cursor: default; }
   }
 }
