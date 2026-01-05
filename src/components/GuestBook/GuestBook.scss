@@ -19,17 +19,11 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: 20px 0; /* 배경이 없으므로 좌우 패딩 제거, 상하 여백만 유지 */
+  padding: 40px 20; 
   background-color: transparent; /* ✅ 배경 보드 색상 제거 */
   border-radius: 0;
   min-height: auto;
   box-shadow: none; /* ✅ 배경 보드 그림자 제거 */
-
-  @media (min-width: 600px) {
-    display: block; 
-    column-count: 2;
-    column-gap: 20px;
-  }
 
   &.is-empty {
     display: flex;
@@ -52,10 +46,6 @@
   transition: all 0.3s ease;
   border-radius: 4px; /* 포스트잇 느낌을 위한 약간의 라운드 */
   
-  /* ✅ 테이프 제거 */
-  &::before {
-    display: none; /* 혹은 코드 자체를 삭제해도 무방합니다 */
-  }
 
   /* ID 기반 스타일 (회전값 유지) */
   &[data-style="0"] { background-color: #FFFDF2; transform: rotate(-1.8deg); }
