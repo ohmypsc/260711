@@ -69,14 +69,14 @@ button.w-btn.close {
 
 button.w-btn.submit {
   border: 1.5px solid var(--theme-primary);
-  background-color: color-mix(in srgb, var(--theme-primary), transparent 50%);
-  color: var(--theme-primary-light);
+  background-color: color-mix(in srgb, var(--theme-primary), transparent 90%);
+  color: var(--theme-primary);
   font-weight: 700;
 }
 
 button.w-btn.close {
   border: 1.5px solid var(--theme-primary-light);
-  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 50%);
+  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 90%);
   color: var(--theme-primary);
   font-weight: 700;
 }
