@@ -20,8 +20,7 @@
      ---------------------------------------------------- */
   .calendar-headline {
     text-align: center;
-    font-family: "Gowun Batang", serif;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
     letter-spacing: -0.02em; 
@@ -139,12 +138,20 @@
     }
 
     /* D-Day 포인트 */
-    &.day.wedding .day-number {
-      font-weight: 700;
-      background-color: var(--theme-point-pink); 
-      color: var(--theme-primary);
-      box-shadow: 0 4px 12px rgba(214, 140, 144, 0.5);
-    }
+   &.day.wedding .day-number {
+  font-weight: 700;
+  background-color: var(--theme-point-pink);
+  color: var(--theme-primary);
+  
+  /* 약간 불규칙한 원형 */
+  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  
+  /* 수채화 번진 느낌의 그림자 */
+  filter: drop-shadow(2px 4px 6px rgba(214, 140, 144, 0.3));
+  
+  /* 살짝 회전시켜서 자연스러움 강조 */
+  transform: rotate(-3deg);
+}
   }
 
   /* ----------------------------------------------------
