@@ -13,10 +13,7 @@
   flex-direction: column;
   gap: 1.25rem;
 
-  /* -------------------------
-     ✅ 1. 시 전문 (Poetry) - "손글씨 감성"
-     - 고운바탕체 적용으로 서정적인 느낌 극대화
-  -------------------------- */
+
   .cover-poetry {
     display: flex;
     flex-direction: column;
@@ -32,18 +29,16 @@
 
     p {
       margin: 0;
-      /* 🖋️ 시는 '고운바탕'으로 손글씨 느낌 */
-      font-family: "Gowun Batang", serif;
       
       font-weight: 400; 
-      font-size: 1.05rem; /* 손글씨는 살짝 커야 잘 보임 */
+      font-size: 1rem; /* 손글씨는 살짝 커야 잘 보임 */
       
       /* 자연스러운 흐름 */
       letter-spacing: -0.02em; 
       line-height: 1.8;
       
       color: var(--text-main);
-      opacity: 0.95; /* 너무 진하지 않게 */
+      opacity: 0.9; /* 너무 진하지 않게 */
       text-align: center;
 
       word-break: keep-all;
@@ -52,7 +47,6 @@
 
     .poet {
       margin-top: 1.0rem;
-      font-family: "Gowun Batang", serif;
       font-size: 0.9rem;
       color: var(--text-light);
       text-align: center;
@@ -103,7 +97,6 @@
     flex-direction: column;
     gap: 0.5rem;
     
-    /* 가족 이름도 전역(명조) 따름 */
     
     .name {
       display: block;
