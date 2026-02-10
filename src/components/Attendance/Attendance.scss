@@ -282,10 +282,10 @@
     transition: all 0.2s ease;
 
     &.active {
-      border-color: var(--theme-primary);
-      background: var(--section-bg-soft);
+      border-color: var(--theme-primary-light);
+      background: var(--theme-primary);
       font-weight: 700;
-      color: var(--theme-primary);
+      color: var(--theme-primary-light);
     }
   }
 }
