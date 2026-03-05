@@ -47,8 +47,9 @@ button.w-btn {
 
 /* 🧵 1. BASIC (메인 입장 버튼) */
 button.w-btn.basic {
-  background-color: var(--theme-primary);
-  color: var(--theme-primary-light);
+  background-color: transparent;
+  color: var(--theme-primary);
+  border: 1.5px solid var(--theme-primary);
   border-radius: 6px;
   padding: 1.25rem 1.5rem;
   font-size: clamp(1.0rem, 2.6vw, 1.15rem);
