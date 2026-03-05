@@ -7,13 +7,17 @@
   flex-direction: column;
   gap: 1.25rem;
 
-
   .cover-poetry {
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
     margin-top: 0.8rem;
     margin-bottom: 0.8rem;
+
+    /* ✅ 추가: 시 영역을 확연히 분리 */
+    padding: 1.2rem 1rem;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 
     .poetry-block {
       display: flex;
@@ -23,16 +27,19 @@
 
     p {
       margin: 0;
-      
-      font-weight: 400; 
-      font-size: 1rem; 
-      
+
+      font-weight: 400;
+      font-size: 1rem;
+
       /* 자연스러운 흐름 */
-      letter-spacing: -0.02em; 
-      line-height: 1.7;
-      
-      color: var(--text-main);
-      opacity: 0.85; /* 너무 진하지 않게 */
+      letter-spacing: -0.02em;
+      line-height: 1.75;
+
+      /* ✅ 변경: 시 느낌(이탤릭 + 연한 색) */
+      font-style: italic;
+      color: var(--text-light);
+      opacity: 1;
+
       text-align: center;
 
       word-break: keep-all;
@@ -55,18 +62,18 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    
+
     font-size: 1.02rem; /* 명조체는 살짝 큼직해야 예쁨 */
     font-weight: 400;
     line-height: 1.85;
-    
-    letter-spacing: -0.01em; 
-    
+
+    letter-spacing: -0.01em;
+
     color: var(--text-main);
     text-align: center;
     word-break: keep-all;
     overflow-wrap: break-word;
-    
+
     br {
       content: "";
       display: block;
@@ -90,8 +97,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    
-    
+
     .name {
       display: block;
     }
@@ -106,14 +112,14 @@
       justify-content: center;
       align-items: center;
       min-width: 2.6em;
-      
+
       font-size: 1rem;
       color: var(--text-light);
       margin: 0 2px;
     }
-    
+
     .parent-names + .relation-name--adjust + span {
-       font-weight: 600; 
+      font-weight: 600;
     }
   }
 
