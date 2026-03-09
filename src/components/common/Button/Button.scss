@@ -22,17 +22,18 @@ button.w-btn {
 
 /* 🧵 BASIC (메인 입장 버튼) */
 button.w-btn.basic {
-  background-color: #ffffff;
+  background: var(--theme-accent);
   color: var(--theme-primary);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 1.05rem 1.45rem;
+  font-size: clamp(1rem, 2.6vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
 
-  border: 1.5px solid var(--theme-primary);
-  border-radius: 6px;
-
-  padding: 1.1rem 1.5rem;
-
-  font-size: clamp(1rem, 2.6vw, 1.15rem);
-  font-weight: 600;
-  letter-spacing: 0.15em;
+button.w-btn.basic:active {
+  transform: scale(0.985);
 }
 
 /* 👯 TWINS (모달 내부 버튼) */
