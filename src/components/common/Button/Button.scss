@@ -1,33 +1,5 @@
 /* ============================================
-   ✅ FINAL BUTTON DESIGN: Clean + Framed
-   - 메인 버튼: 스티치 제거, 고급스러운 프레임 마감
-   - 제출/닫기 버튼: 위계 조절 및 프레임형 쌍둥이 스타일
-   ============================================ */
-
-button.w-btn {
-  /* [공통 레이아웃] */
-  position: relative;
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  
-  /* [폰트 및 리셋] */
-  font-family: inherit;
-  line-height: 1;
-  border: none;
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-
-  /* [애니메이션] */
-  transition: all 0.2s ease;
-}
-
-/* ============================================
-   ✅ FINAL BUTTON DESIGN: Clean + Framed
-   - 메인 버튼: 고급스러운 프레임 마감
-   - 트윈 버튼: 위계 조절 및 프레임형 쌍둥이 스타일
+   FINAL BUTTON DESIGN: Clean + Framed
    ============================================ */
 
 button.w-btn {
@@ -36,34 +8,41 @@ button.w-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   font-family: inherit;
   line-height: 1;
+
   border: none;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+
   transition: all 0.2s ease;
 }
 
-/* 🧵 1. BASIC (메인 입장 버튼) */
+/* 🧵 BASIC (메인 입장 버튼) */
 button.w-btn.basic {
   background-color: transparent;
   color: var(--theme-primary);
+
   border: 1.5px solid var(--theme-primary);
   border-radius: 6px;
+
   padding: 1.25rem 1.5rem;
-  font-size: clamp(1.0rem, 2.6vw, 1.15rem);
+
+  font-size: clamp(1rem, 2.6vw, 1.15rem);
   font-weight: 600;
   letter-spacing: 0.15em;
-  position: relative;
 }
 
-/* 👯 2. TWINS (모달 내부 버튼 - 프레임형으로 변경) */
+/* 👯 TWINS (모달 내부 버튼) */
 button.w-btn.submit,
 button.w-btn.close {
   border-radius: 6px;
-  padding: 1.0rem 1.1rem;
-  font-size: clamp(0.9rem, 2.4vw, 1.0rem);
+
+  padding: 1rem 1.1rem;
+
+  font-size: clamp(0.9rem, 2.4vw, 1rem);
   font-weight: 600;
   letter-spacing: 0.03em;
 }
@@ -86,10 +65,14 @@ button.w-btn.close {
 button.w-btn:disabled {
   opacity: 0.42;
   cursor: not-allowed;
+
   transform: none !important;
+
   background-color: var(--border-color) !important;
   color: var(--text-light) !important;
   border: none !important;
 }
 
-button.w-btn.basic:disabled::after { display: none; }
+button.w-btn.basic:disabled::after {
+  display: none;
+}
