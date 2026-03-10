@@ -17,7 +17,7 @@
     --theme-primary-light: #D9CEC1; /* Warm Sand (서브 포인트) */
 
     --theme-leaf-green: #2a8249;    
-    --theme-point-pink: #fff2f2;    
+    --theme-point-pink: #fad7d7;    
 
     --section-bg-soft: #F9F7F5;     
 
@@ -88,72 +88,48 @@ section {
   line-height: 1.2;
 }
 
-/* =========================================================
-   Global Toast Message (White Card Pop-up)
-   - 모달의 어두운 배경 위에서도 잘 보이도록 '화이트' 테마 적용
-   - 위치: 화면 중앙보다 살짝 위 (Center-Top)
-   ========================================================= */
-
 .custom-toast {
-  /* 📍 위치: 화면 정중앙에서 살짝 위 */
   position: fixed;
   top: 40%; 
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 100000; /* 모달(z-index: 9999)보다 확실히 위에 */
+  z-index: 100000;
   
-  /* 🎨 배경: 깨끗한 화이트 (어두운 모달 위에서 가독성 최강) */
-  background: #FFFFFF;
+  /* 🎨 배경: 반투명한 화이트 & 블러 효과 (유리 질감) */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   
-  /* ✒️ 글자색: 진한 네이비 (전역 테마) */
+  /* ✒️ 글자색: 메인 네이비 컬러 */
   color: var(--theme-primary); 
   
-  /* 🔲 테두리: 네이비 라인을 둘러서 또렷하게 */
-  border: 1px solid var(--theme-primary);
+  /* 🔲 얇고 투명한 흰색 테두리로 유리 느낌 강조 */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 16px 26px;
+  border-radius: 12px; 
   
-  /* 모양: 단정한 직사각형 카드 */
-  padding: 16px 28px;
-  border-radius: 8px; 
-  
-  /* 폰트: 감성적인 고운바탕체 유지 */
-  font-family: "Gowun Batang", serif;
-  font-size: 1.05rem; /* 중앙에 뜨니까 조금 키움 */
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  /* ✨ 폰트: 깔끔하고 모던한 프리텐다드 적용 */
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500; /* 깔끔하게 떨어지는 중간 굵기 */
+  letter-spacing: -0.02em; /* 자간을 살짝 좁혀서 세련된 느낌 추가 */
   white-space: nowrap;
   
-  /* 레이아웃 */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
   
-  /* ☁️ 그림자: 공중에 붕 떠 있는 듯한 강한 그림자 */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  
+  /* ☁️ 그림자: 은은하게 퍼지는 느낌 */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   pointer-events: none;
-
-  /* 🎬 애니메이션: 살짝 아래에서 위로 떠오르며 등장 (Pop Up) */
+  
+  /* 🎬 애니메이션 유지 */
   animation: toastPopUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-
-  /* 아이콘: 핑크 포인트 */
-  i {
-    color: var(--theme-point-pink);
-    font-size: 1.1rem;
-    margin-top: -2px;
-  }
 }
 
-/* 🎬 등장 애니메이션 (Pop Up) */
-@keyframes toastPopUp {
-  0% {
-    opacity: 0;
-    /* 살짝 아래, 조금 작게 시작 */
-    transform: translate(-50%, -40%) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    /* 원래 위치, 원래 크기 */
-    transform: translate(-50%, -50%) scale(1);
-  }
+/* 🔔 토스트 내부 아이콘 스타일 (네이비로 통일하여 단정하게) */
+.custom-toast i {
+  color: var(--theme-primary); 
+  font-size: 1.1rem;
 }
