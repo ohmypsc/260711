@@ -22,7 +22,7 @@ button.w-btn {
 
 /* 🧵 BASIC (메인 축하 인사 전하기 버튼) */
 button.w-btn.basic {
-  background: rgba(255, 255, 255, 0.35);
+  background-color: color-mix(in srgb, var(--theme-bg), transparent 15%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
@@ -30,16 +30,12 @@ button.w-btn.basic {
   /* 🔲 얇고 섬세한 테두리로 형태를 깔끔하게 잡아줌 */
   border: 1px solid var(--theme-primary);
   
-  /* 토스트와 동일한 모서리 둥기 */
-  border-radius: 12px; 
+  border-radius: 6px; 
   padding: 1.15rem 1.45rem;
   
   font-size: 1.05rem;
   font-weight: 500;
   letter-spacing: -0.01em;
-  
-  /* ☁️ 아주 옅고 은은한 그림자 */
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 button.w-btn.basic:active {
