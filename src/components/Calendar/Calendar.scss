@@ -45,8 +45,11 @@
     animation: textFlow 8s linear infinite;
 
     @media (max-width: 600px) {
-      font-size: 8.5vw; 
-      padding: 0 1rem; 
+      font-size: 8.2vw; 
+      padding: 0rem; 
+    @media (max-width: 340px) {
+    font-size: 7.8vw; 
+  }
     }
   }
 
