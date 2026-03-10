@@ -9,7 +9,6 @@ button.w-btn {
   align-items: center;
   justify-content: center;
 
-  font-family: "Pretendard", sans-serif;
   line-height: 1;
 
   border: none;
@@ -22,7 +21,7 @@ button.w-btn {
 
 /* 🧵 BASIC (메인 축하 인사 전하기 버튼) */
 button.w-btn.basic {
-  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 85%); 
+  background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
