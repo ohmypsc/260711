@@ -87,6 +87,8 @@ function LeafLine({ variant }: { variant: "top" | "bottom" }) {
   );
 }
 
+// 상단 임포트 및 LeafLine 컴포넌트는 기존과 동일하게 유지하세요.
+
 export function Cover() {
   const [open, setOpen] = useState(false);
   const info = useContactInfo();
@@ -104,7 +106,6 @@ export function Cover() {
   }, [info]);
 
   return (
-    // ✅ 여기만 수정했습니다: section -> div, 클래스명 변경
     <div className="cover-wrapper">
       {/* 1) 시 전문 전체 */}
       <div className="cover-poetry">
@@ -122,19 +123,25 @@ export function Cover() {
         <p className="poet">진은영, &lt;청혼&gt; 중</p>
       </div>
 
-      {/* 2) 초대글 전문 */}
+      {/* 2) 초대글 전문 (수정된 부분: br 제거하고 블록으로 묶음) */}
       <div className="cover-message">
-        <p>오래된 거리를 거닐듯 편안하고,</p>
-        <p>밤하늘 별들처럼 벅찬 설렘을 주는 사람을 만났습니다.</p>
-        <br />
-        <p>함께라면 여름의 궂은 비도 낭만이 되는 사람과</p>
-        <p>시간의 흐름에 기대지 않고 서로에게 최선을 다하며 살겠습니다.</p>
-        <br />
-        <p>저희 두 사람의 앞날을</p>
-        <p>따뜻한 마음으로 축복해 주시면 감사하겠습니다.</p>
+        <div className="message-block">
+          <p>오래된 거리를 거닐듯 편안하고,</p>
+          <p>밤하늘 별들처럼 벅찬 설렘을 주는 사람을 만났습니다.</p>
+        </div>
+        
+        <div className="message-block">
+          <p>함께라면 여름의 궂은 비도 낭만이 되는 사람과</p>
+          <p>시간의 흐름에 기대지 않고 서로에게 최선을 다하며 살겠습니다.</p>
+        </div>
+        
+        <div className="message-block">
+          <p>저희 두 사람의 앞날을</p>
+          <p>따뜻한 마음으로 축복해 주시면 감사하겠습니다.</p>
+        </div>
       </div>
 
-      {/* 3) 가족관계 */}
+      {/* 3) 가족관계 (기존 유지) */}
       <div className="family-section">
         <LeafLine variant="top" />
 
@@ -157,7 +164,7 @@ export function Cover() {
         <LeafLine variant="bottom" />
       </div>
 
-      {/* 4) CTA */}
+      {/* 4) CTA (기존 유지) */}
       <Button variant="basic" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
