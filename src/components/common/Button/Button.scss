@@ -22,7 +22,7 @@ button.w-btn {
 
 /* 🧵 BASIC (메인 축하 인사 전하기 버튼) */
 button.w-btn.basic {
-  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 15%);
+  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 95%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
@@ -60,7 +60,7 @@ button.w-btn.submit {
   border: 1px solid var(--theme-primary);
   background-color: color-mix(in srgb, var(--theme-primary-light), transparent 90%);
   color: var(--theme-primary);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 button.w-btn.close {
