@@ -22,7 +22,7 @@ button.w-btn {
 
 /* 🧵 BASIC (메인 축하 인사 전하기 버튼) */
 button.w-btn.basic {
-  background-color: color-mix(in srgb, var(--theme-bg), transparent 15%);
+  background-color: color-mix(in srgb, var(--theme-primary-light), transparent 15%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
@@ -49,25 +49,25 @@ button.w-btn.submit,
 button.w-btn.close {
   border-radius: 6px;
 
-  padding: 1rem 1.1rem;
+  padding: 0.9rem 1.1rem;
 
   font-size: clamp(0.9rem, 2.4vw, 1rem);
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.03em;
 }
 
 button.w-btn.submit {
-  border: 1.5px solid var(--theme-primary);
+  border: 1px solid var(--theme-primary);
   background-color: color-mix(in srgb, var(--theme-primary-light), transparent 90%);
   color: var(--theme-primary);
   font-weight: 700;
 }
 
 button.w-btn.close {
-  border: 1.5px solid var(--theme-primary-light);
+  border: 1px solid var(--theme-primary-light);
   background-color: color-mix(in srgb, var(--theme-primary-light), transparent 90%);
   color: var(--theme-primary);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 /* 🚫 Disabled State */
