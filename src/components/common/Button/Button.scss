@@ -27,7 +27,7 @@ button.w-btn.basic {
 
   color: var(--theme-primary);
   /* 🔲 얇고 섬세한 테두리로 형태를 깔끔하게 잡아줌 */
-  border: 1px solid rgba(27, 38, 59, 0.12); 
+  border: 1px solid var(--theme-primary);
   
   /* 토스트와 동일한 모서리 둥기 */
   border-radius: 12px; 
