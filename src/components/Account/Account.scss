@@ -2,7 +2,6 @@
    Account Component
    ========================================================= */
 
-/* ✅ [1] 작성자님이 주신 원본 코드 (그대로 유지) */
 .account-wrapper {
   text-align: center;
 
@@ -23,10 +22,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
-
-    @media (max-width: 520px) {
-      grid-template-columns: 1fr;
-    }
   }
 }
 
@@ -42,8 +37,7 @@
 }
 
 .account-card {
-  /* 배경: 연락처 모달과 통일된 웜 샌드 */
-  background: var(--section-bg-soft); 
+  background: var(--section-bg-soft);
   border: 1px solid rgba(27, 38, 59, 0.05);
   border-radius: 6px;
   padding: 16px;
@@ -60,7 +54,7 @@
       font-size: 0.72rem;
       padding: 3px 8px;
       border-radius: 4px;
-      background: #FFFFFF; /* 칩은 깔끔하게 화이트 */
+      background: #fff;
       border: 1px solid rgba(27, 38, 59, 0.1);
       color: var(--theme-primary);
       font-weight: 700;
@@ -78,12 +72,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-
-    @media (max-width: 480px) {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 14px;
-    }
   }
 }
 
@@ -104,40 +92,36 @@
     word-break: break-all;
     font-family: "Pretendard", sans-serif;
   }
-
-  @media (max-width: 480px) {
-    text-align: center;
-  }
 }
 
-/* ✅ [2] 복사 버튼 (수정됨) */
+/* =========================================================
+   Copy Button (Refined)
+   ========================================================= */
+
 .copy-btn {
   padding: 8px 16px;
-  border-radius: 4px;
-  
+  border-radius: 10px;
+  min-width: 78px;
+
   font-size: 0.85rem;
   font-weight: 600;
-  
-  background: transparent;
-  border: 1px solid var(--theme-primary);
-  box-shadow: 0 2px 5px rgba(27, 38, 59, 0.08);
+
+  background: #fff;
+  border: 1px solid rgba(27, 38, 59, 0.14);
   color: var(--theme-primary);
-  
+
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
 
-  /* 🖱️ 클릭(Active) 시: 배경 네이비, 글자 화이트 (확실하게 보이도록) */
-  &:active {
-    transform: scale(0.96);
-    background: var(--theme-primary);
-    color: var(--theme-primary-light);
-  }
+  transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  box-shadow: none;
+}
 
-  @media (max-width: 480px) {
-    width: 100%;
-    padding: 11px 0;
-  }
+.copy-btn:active {
+  transform: scale(0.97);
+  background: var(--theme-primary);
+  color: #fff;
+  border-color: var(--theme-primary);
 }
 
 .no-account {
