@@ -54,11 +54,11 @@ export function Account() {
     <div className="account-wrapper">
       <h2 className="section-title">마음 전하실 곳</h2>
 
-      <div className="account__desc">
-        <p className="keep-all">참석이 어려우신 분들을 위해</p>
-        <p className="keep-all">계좌번호를 기재하였습니다.</p>
-        <p className="keep-all">너그러운 마음으로 양해 부탁드립니다.</p>
-      </div>
+      <div className="section-desc">
+  <p>참석이 어려우신 분들을 위해</p>
+  <p>계좌번호를 기재하였습니다.</p>
+  <p>너그러운 마음으로 양해 부탁드립니다.</p>
+</div>
 
       <div className="account-buttons">
         <Button
