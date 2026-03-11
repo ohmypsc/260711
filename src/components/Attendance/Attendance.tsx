@@ -225,7 +225,7 @@ function WriteAttendanceModal({ onClose, onSuccess, onToast }: { onClose: () => 
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.phone || !form.side || !form.meal) return onToast("모든 항목을 입력해 주세요.", "error");
+    if (!form.name || !form.phone || !form.side || !form.meal) return onToast("모든 항목을 입력해 주세요", "error");
     if (form.count < 1) return onToast("참석 인원은 최소 1명입니다", "error"); // 인원 체크 추가
 
     setLoading(true);
