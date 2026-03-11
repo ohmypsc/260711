@@ -99,6 +99,10 @@ section {
   overflow-wrap: break-word;
 }
 
+.section-desc p {
+  margin: 0;
+}
+
 .custom-toast {
   position: fixed;
   left: 50%;
