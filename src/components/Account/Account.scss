@@ -5,19 +5,6 @@
 .account-wrapper {
   text-align: center;
 
-  .account__desc {
-    margin: 1.2rem 0 2.2rem;
-    line-height: 1.8;
-    color: var(--text-main);
-    font-size: 1rem;
-
-    .keep-all {
-      word-break: keep-all;
-      overflow-wrap: break-word;
-      margin: 0;
-    }
-  }
-
   .account-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
