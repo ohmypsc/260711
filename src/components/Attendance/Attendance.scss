@@ -1,9 +1,7 @@
 .attendance-wrapper {
   text-align: center;
-  padding: 2rem 0rem;
+  padding: 2rem 0;
   font-family: inherit;
-
-  }
 
   .attendance-buttons {
     display: flex;
@@ -11,7 +9,7 @@
     gap: 0.7rem;
     width: 100%;
   }
-
+}
 
 /* ✅ '보내주신 참석 응답' 디자인 고도화 (중앙 정렬 카드) */
 .my-attendance {
@@ -65,6 +63,7 @@
           background: #eef6ff;
           color: #5a96e3;
         }
+
         &.bride {
           background: #fff0f3;
           color: #e35a7a;
@@ -90,6 +89,7 @@
           font-weight: 800;
           color: var(--text-main);
         }
+
         .suffix {
           font-size: 0.85rem;
           color: var(--text-main);
@@ -105,21 +105,25 @@
         .meta-pill {
           display: flex;
           align-items: center;
-          gap: 8px; 
+          gap: 8px;
           font-size: 0.9rem;
           font-weight: 500;
-          color: var(--text-main); 
+          color: var(--text-main);
 
           i {
             font-size: 0.85rem;
-            width: 18px; 
+            width: 18px;
             display: inline-flex;
-            justify-content: flex-end; 
+            justify-content: flex-end;
             align-items: center;
 
-            /* 부모 카드 클래스에 따른 아이콘 색상 보정 */
-            .attendance-card:has(.side-badge.groom) & { color: rgba(90, 150, 227, 0.6); }
-            .attendance-card:has(.side-badge.bride) & { color: rgba(227, 90, 122, 0.6); }
+            .attendance-card:has(.side-badge.groom) & {
+              color: rgba(90, 150, 227, 0.6);
+            }
+
+            .attendance-card:has(.side-badge.bride) & {
+              color: rgba(227, 90, 122, 0.6);
+            }
           }
         }
       }
@@ -155,13 +159,16 @@
         cursor: pointer;
         font-family: inherit;
 
-        i { font-size: 0.75rem; }
+        i {
+          font-size: 0.75rem;
+        }
 
         &.danger {
           color: #ff5e5e;
           border-color: #ffeaea;
           background: #fffafa;
         }
+
         &:active {
           background: #e9ecef;
           opacity: 0.7;
@@ -183,7 +190,10 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    &.span-2 { grid-column: span 2; }
+
+    &.span-2 {
+      grid-column: span 2;
+    }
   }
 
   .label {
@@ -193,24 +203,24 @@
     margin-left: 2px;
   }
 
- input {
-  font-family: inherit;
-  padding: 14px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  font-size: 0.95rem;
-  color: var(--text-main);
-  background: #fafafa;
-  transition: all 0.2s ease;
+  input {
+    font-family: inherit;
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background: #fafafa;
+    transition: all 0.2s ease;
 
-  &:focus {
-    border-color: var(--theme-primary);
-    outline: none;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
+    &:focus {
+      border-color: var(--theme-primary);
+      outline: none;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
+    }
   }
 }
-
 
 .counter-ui {
   display: flex;
@@ -228,14 +238,15 @@
     background: #fff;
     border-radius: 4px;
     font-size: 1.2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    flex-shrink: 0; /* 버튼 크기 고정 */
-    
-    &:active { background: #eee; }
+    flex-shrink: 0;
+
+    &:active {
+      background: #eee;
+    }
   }
 
-  /* ✅ 수정: span 대신 input 스타일 적용 */
   input.count-input {
     flex: 1;
     width: 100%;
@@ -248,19 +259,19 @@
     padding: 0;
     margin: 0 8px;
     font-family: inherit;
-    
-    /* 숫자 입력기 화살표 제거 (브라우저 기본 스타일) */
     -moz-appearance: textfield;
+
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-    
-    &:focus { outline: none; }
+
+    &:focus {
+      outline: none;
+    }
   }
 }
-
 
 .toggle-row {
   display: flex;
@@ -290,5 +301,8 @@
   display: flex;
   gap: 10px;
   margin-top: 20px;
-  button { flex: 1; }
+
+  button {
+    flex: 1;
+  }
 }
