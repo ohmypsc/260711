@@ -1,6 +1,4 @@
-import { useEffect, useRef } from "react";
-// ✅ 경로가 맞는지 꼭 확인해주세요 (Button 컴포넌트 위치)
-import { Button } from "@/components/common/Button/Button"; 
+import { useEffect, useRef, useState } from "react";
 import "./IntroCard.scss";
 
 type Props = {
@@ -8,10 +6,23 @@ type Props = {
   exiting?: boolean;
 };
 
-// 🌸 꽃잎 크기 랜덤 함수 (정규분포)
+type Petal = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  xSpeed: number;
+  ySpeed: number;
+  rot: number;
+  rotSpeed: number;
+  gravity: number;
+  opacity: number;
+  fade: number;
+};
+
 function gaussianRandom(mean = 0, stdev = 1) {
-  let u = Math.random() || 1e-10;
-  let v = Math.random() || 1e-10;
+  const u = Math.random() || 1e-10;
+  const v = Math.random() || 1e-10;
   return (
     Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v) * stdev + mean
   );
@@ -19,30 +30,43 @@ function gaussianRandom(mean = 0, stdev = 1) {
 
 export default function IntroCard({ onFinish, exiting = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  
-  // 애니메이션 관련 Refs
-  const petalsRef = useRef<any[]>([]);
+  const petalsRef = useRef<Petal[]>([]);
   const animationRef = useRef<number | null>(null);
   const petalImgRef = useRef<HTMLImageElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+  const startedRef = useRef(false);
+
+  const [opening, setOpening] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
     ctxRef.current = ctx;
 
     const petalImg = new Image();
-    // ✅ Vite 환경 변수 사용 (배포 시 경로 문제 방지)
-    petalImg.src = import.meta.env.BASE_URL + "petal.png";
+    petalImg.src = `${import.meta.env.BASE_URL}petal.png`;
     petalImgRef.current = petalImg;
 
     function resize() {
+      const targetCanvas = canvasRef.current;
+      const targetCtx = ctxRef.current;
+      if (!targetCanvas || !targetCtx) return;
+
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      targetCanvas.width = width * dpr;
+      targetCanvas.height = height * dpr;
+      targetCanvas.style.width = `${width}px`;
+      targetCanvas.style.height = `${height}px`;
+
+      targetCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     resize();
@@ -50,13 +74,19 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
 
     return () => {
       window.removeEventListener("resize", resize);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+      }
+
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
     };
   }, []);
 
-  // 🌸 [로직 1] 꽃잎 데이터 생성 (풍성하게)
   const createBurst = () => {
-    const petals: any[] = [];
+    const petals: Petal[] = [];
     const w = window.innerWidth;
     const h = window.innerHeight;
     const area = w * h;
@@ -65,7 +95,10 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     const density = isMobile ? 700 : 1200;
     const minCount = isMobile ? 900 : 0;
     const maxCount = isMobile ? 2200 : 3200;
-    const count = Math.min(maxCount, Math.max(minCount, Math.floor(area / density)));
+    const count = Math.min(
+      maxCount,
+      Math.max(minCount, Math.floor(area / density))
+    );
     const baseRadius = isMobile ? 140 : 180;
 
     for (let i = 0; i < count; i++) {
@@ -88,26 +121,28 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
         ySpeed: (Math.random() - 1.2) * 6.0 * speedScale,
         rot: Math.random() * 2 * Math.PI,
         rotSpeed: (Math.random() - 0.5) * 0.22,
-        gravity, opacity, fade,
+        gravity,
+        opacity,
+        fade,
       });
     }
+
     petalsRef.current = petals;
   };
 
-  // 🌸 [로직 2] 캔버스에 그리기 (애니메이션 루프)
   const draw = () => {
-    const ctx = ctxRef.current!;
-    const canvas = canvasRef.current!;
-    const petalImg = petalImgRef.current!;
-    let petals = petalsRef.current;
+    const ctx = ctxRef.current;
+    const petalImg = petalImgRef.current;
+    if (!ctx || !petalImg) return;
 
-    // 이미지가 아직 로드되지 않았으면 대기
     if (!petalImg.complete || petalImg.naturalWidth === 0) {
       animationRef.current = requestAnimationFrame(draw);
       return;
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    let petals = petalsRef.current;
 
     petals.forEach((p) => {
       p.x += p.xSpeed;
@@ -124,60 +159,74 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
       ctx.restore();
     });
 
-    // 사라지지 않은 꽃잎만 남김
+    ctx.globalAlpha = 1;
+
     petals = petals.filter((p) => p.opacity > 0);
     petalsRef.current = petals;
 
-    // 꽃잎이 남아있으면 계속 그리기
     if (petals.length > 0) {
       animationRef.current = requestAnimationFrame(draw);
     }
   };
 
-  // 🌸 [로직 3] 버튼 클릭 핸들러
   const handleClick = () => {
-    // 1. 기존 애니메이션 정지 (중복 방지)
-    if (animationRef.current) cancelAnimationFrame(animationRef.current);
-    
-    // 2. 꽃잎 생성 및 그리기 시작
+    if (startedRef.current) return;
+    startedRef.current = true;
+    setOpening(true);
+
+    if (animationRef.current !== null) {
+      cancelAnimationFrame(animationRef.current);
+    }
+
     createBurst();
     draw();
 
-    // 3. 2초 뒤에 메인 화면으로 전환 (onFinish 호출)
-    setTimeout(() => onFinish(), 2000); 
+    timeoutRef.current = window.setTimeout(() => {
+      onFinish();
+    }, 2000);
   };
 
   return (
     <div className={`intro-wrap ${exiting ? "exiting" : ""}`}>
-      <div id="inviteCard" className="invite-card">
-        <div className="names">
-          <span>백승철</span>
-          <span className="and">&</span>
-          <span>오미영</span>
-        </div>
-        
-        <div className="subtitle">결혼합니다</div>
+      <div className="intro-frame" />
 
-        <div className="info">
-          <div className="row date">
-            2026. 07. 11. 토요일<br/>
-            오전 11시
-          </div>
-          <div className="row place">
-            유성컨벤션웨딩홀<br/>
-            3층 그랜드홀
-          </div>
+      <div className="intro-content">
+        <div className="intro-top-line" />
+
+        <div className="intro-title-block">
+          <div className="intro-name">백승철</div>
+          <div className="intro-and">&amp;</div>
+          <div className="intro-name">오미영</div>
         </div>
 
-        {/* ✅ 버튼 클릭 시 handleClick 실행 */}
-        <div className="action-area">
-          <Button variant="basic" onClick={handleClick}>
+        <div className="intro-subtitle">결혼합니다</div>
+
+        <div className="intro-info">
+          <div className="intro-info-group">
+            <div className="intro-info-main">2026. 07. 11. 토요일</div>
+            <div className="intro-info-sub">오전 11시</div>
+          </div>
+
+          <div className="intro-info-divider" />
+
+          <div className="intro-info-group">
+            <div className="intro-info-main">유성컨벤션웨딩홀</div>
+            <div className="intro-info-sub">3층 그랜드홀</div>
+          </div>
+        </div>
+
+        <div className="intro-action">
+          <button
+            type="button"
+            className="intro-button"
+            onClick={handleClick}
+            disabled={opening}
+          >
             초대장 열기
-          </Button>
+          </button>
         </div>
       </div>
 
-      {/* ✅ 꽃잎이 그려질 캔버스 (필수) */}
       <canvas ref={canvasRef} className="petal" />
     </div>
   );
