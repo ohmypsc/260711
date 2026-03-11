@@ -9,7 +9,6 @@
 .location-wrapper {
   width: 100%;
   position: relative;
-  box-sizing: border-box;
   padding: 0; /* 부모(Section) 패딩 위임 */
 }
 
@@ -24,15 +23,14 @@
   align-items: center;
   gap: 0.4rem;
   color: var(--text-main);
-  font-family: "Noto Serif KR", serif; 
 
   .venue-name {
     display: flex;
     align-items: center;
     gap: 0.4rem;
     font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--theme-primary); 
+    font-weight: 400;
+    color: var(--text-main); 
 
     i { color: var(--theme-primary); }
   }
@@ -219,8 +217,7 @@
 
 /* Active: 작아짐 + 투명도 */
 .navi-button:active {
-  transform: scale(0.96);
-  opacity: 0.8;
+  transform: scale(0.95);
 }
 
 /* 로고 이미지 */
@@ -239,7 +236,6 @@
   display: block;
   position: relative;
   z-index: 2;
-  -webkit-font-smoothing: antialiased;
 }
 
 
