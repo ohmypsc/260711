@@ -203,18 +203,24 @@
     margin-left: 2px;
   }
 
-  input {
-    font-family: inherit;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    color: var(--text-main);
-    &:focus { border-color: var(--theme-primary); outline: none; }
+ input {
+  font-family: inherit;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background: #fafafa;
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: var(--theme-primary);
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(233, 167, 175, 0.1);
   }
 }
 
-/* ... 기존 스타일 유지 ... */
 
 .counter-ui {
   display: flex;
