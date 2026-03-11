@@ -88,6 +88,17 @@ section {
   line-height: 1.2;
 }
 
+.section-desc {
+  margin: 1.2rem 0 2.2rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-main);
+  text-align: center;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
 .custom-toast {
   position: fixed;
   left: 50%;
