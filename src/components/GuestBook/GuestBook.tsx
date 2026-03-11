@@ -89,8 +89,10 @@ export function GuestBook() {
   return (
     <div className="guestbook-wrapper">
       <h2 className="section-title">방명록</h2>
-      <p className="guestbook__desc">신랑, 신부에게<br />축하의 마음을 전해주세요.</p>
-
+      <div className="section-desc">
+  <p>신랑, 신부에게</p>
+  <p>축하의 마음을 전해주세요.</p>
+</div>
       <div className="guestbook__actions top">
         <Button variant="basic" onClick={() => setOpenModal("write")}>방명록 남기기</Button>
       </div>
