@@ -134,11 +134,11 @@ export function Attendance() {
   return (
     <div className="attendance-wrapper">
       <h2 className="section-title">참석 여부 전달</h2>
-      <p className="attendance__desc keep-all">
-        소중한 걸음을 해주시는 분들을 위해<br />
-        정성껏 예식을 준비하고자 합니다.<br />
-        참석 여부를 편히 알려주시면 감사하겠습니다.
-      </p>
+     <div className="section-desc">
+  <p>소중한 걸음을 해주시는 분들을 위해</p>
+  <p>정성껏 예식을 준비하고자 합니다.</p>
+  <p>참석 여부를 편히 알려주시면 감사하겠습니다.</p>
+</div>
 
       <div className="attendance-buttons">
         <Button variant="basic" onClick={() => setOpenModal("write")}>참석 의사 전달하기</Button>
