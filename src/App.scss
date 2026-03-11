@@ -90,46 +90,50 @@ section {
 
 .custom-toast {
   position: fixed;
-  top: 40%; 
   left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 26px;
+  transform: translateX(-50%);
   z-index: 100000;
-  
-  /* 🎨 배경: 반투명한 화이트 & 블러 효과 (유리 질감) */
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  
-  /* ✒️ 글자색: 메인 네이비 컬러 */
-  color: var(--theme-primary); 
-  
-  /* 🔲 얇고 투명한 흰색 테두리로 유리 느낌 강조 */
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 16px 26px;
-  border-radius: 12px; 
-  
-  /* ✨ 폰트: 깔끔하고 모던한 프리텐다드 적용 */
+
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--theme-primary);
+  border: 1.5px solid var(--theme-primary-light);
+  border-radius: 999px;
+  padding: 13px 20px;
+
   font-family: "Pretendard", sans-serif;
-  font-size: 1.05rem;
-  font-weight: 500; /* 깔끔하게 떨어지는 중간 굵기 */
-  letter-spacing: -0.02em; /* 자간을 살짝 좁혀서 세련된 느낌 추가 */
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+
   white-space: nowrap;
-  
+  max-width: calc(100vw - 32px);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  
-  /* ☁️ 그림자: 은은하게 퍼지는 느낌 */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  gap: 8px;
+
+  box-shadow:
+    0 10px 24px rgba(27, 38, 59, 0.10),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+
   pointer-events: none;
-  
-  /* 🎬 애니메이션 유지 */
-  animation: toastPopUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: toastBottomUp 0.28s ease-out forwards;
 }
 
-/* 🔔 토스트 내부 아이콘 스타일 (네이비로 통일하여 단정하게) */
 .custom-toast i {
-  color: var(--theme-primary); 
-  font-size: 1.1rem;
+  color: var(--theme-point-pink);
+  font-size: 0.95rem;
+}
+
+@keyframes toastBottomUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
