@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { Button } from "@/components/common/Button/Button";
 import "./IntroCard.scss";
 
 type Props = {
@@ -218,13 +217,13 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
           </div>
 
           <div className="action-area">
-            <Button
-              variant="basic"
-              onClick={handleClick}
+            <button
+              type="button"
               className="intro-open-button"
+              onClick={handleClick}
             >
               <span className="intro-open-button__label">초대장 열기</span>
-            </Button>
+            </button>
           </div>
         </div>
       </div>
