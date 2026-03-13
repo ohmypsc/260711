@@ -48,20 +48,24 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     ctxRef.current = ctx;
 
     const petalImg = new Image();
-    petalImg.src = import.meta.env.BASE_URL + "petal.png";
+    petalImg.src = `${import.meta.env.BASE_URL}petal.png`;
     petalImgRef.current = petalImg;
 
     function resize() {
+      const targetCanvas = canvasRef.current;
+      const targetCtx = ctxRef.current;
+      if (!targetCanvas || !targetCtx) return;
+
       const dpr = window.devicePixelRatio || 1;
       const width = window.innerWidth;
       const height = window.innerHeight;
 
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
+      targetCanvas.width = width * dpr;
+      targetCanvas.height = height * dpr;
+      targetCanvas.style.width = `${width}px`;
+      targetCanvas.style.height = `${height}px`;
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      targetCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     resize();
@@ -84,35 +88,44 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     const petals: Petal[] = [];
     const w = window.innerWidth;
     const h = window.innerHeight;
+    const area = w * h;
     const isMobile = w <= 480;
 
-    const centerX = w / 2;
-    const centerY = h * 0.57;
+    const density = isMobile ? 700 : 1200;
+    const minCount = isMobile ? 900 : 0;
+    const maxCount = isMobile ? 2200 : 3200;
 
-    const count = isMobile ? 150 : 230;
-    const baseRadius = isMobile ? 42 : 58;
+    const count = Math.min(
+      maxCount,
+      Math.max(minCount, Math.floor(area / density))
+    );
+
+    const baseRadius = isMobile ? 140 : 180;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * baseRadius;
-      const size = Math.max(12, gaussianRandom(isMobile ? 16 : 20, 4.5));
-      const aspect = 0.8 + Math.random() * 0.45;
-      const lift = 0.9 + Math.random() * 1.1;
-      const spreadX = 1.3 + Math.random() * 4.8;
-      const spreadY = 0.9 + Math.random() * 3.1;
+      const size = Math.max(10, gaussianRandom(24, 8));
+      const aspect = 0.8 + Math.random() * 0.6;
+      const depth = Math.min(size / 20, 2.1);
+
+      const r = Math.random() * baseRadius * depth;
+      const speedScale = 1 / (0.75 + depth * 0.45);
+      const gravity = (0.045 + Math.random() * 0.07) * depth;
+      const opacity = 0.75 + Math.random() * 0.35 * depth;
+      const fade = 0.0016 + (1 / depth) * 0.0008;
 
       petals.push({
-        x: centerX + Math.cos(angle) * distance,
-        y: centerY + Math.sin(angle) * distance,
+        x: w / 2 + Math.cos(angle) * r,
+        y: h / 2 + Math.sin(angle) * r,
         w: size,
         h: size * aspect,
-        xSpeed: Math.cos(angle) * spreadX,
-        ySpeed: Math.sin(angle) * spreadY - 5.3 * lift,
-        rot: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.18,
-        gravity: 0.038 + Math.random() * 0.03,
-        opacity: 0.72 + Math.random() * 0.28,
-        fade: 0.0021 + Math.random() * 0.0012,
+        xSpeed: (Math.random() - 0.5) * 9 * speedScale,
+        ySpeed: (Math.random() - 1.2) * 6.0 * speedScale,
+        rot: Math.random() * 2 * Math.PI,
+        rotSpeed: (Math.random() - 0.5) * 0.22,
+        gravity,
+        opacity,
+        fade,
       });
     }
 
@@ -182,7 +195,7 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
             <span>백승철</span>
 
             <span className="between-icon" aria-hidden="true">
-              <i className="fa-solid fa-wand-magic-sparkles" />
+              <i className="fa-solid fa-heart" />
             </span>
 
             <span>오미영</span>
