@@ -128,3 +128,40 @@
   font-size: 0.9rem;
   text-align: center;
 }
+
+/* =========================================================
+   Mobile Safe Guard (초소형 화면 대응: Z폴드 커버, 구형 폰 등)
+   ========================================================= */
+@media (max-width: 360px) {
+  .account-wrapper .account-buttons {
+    gap: 0.4rem; /* 버튼 사이 간격 축소 */
+    
+    button, .account-btn {
+      font-size: 0.85rem; /* 버튼 폰트 크기 축소 */
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+  }
+
+  .account-card {
+    padding: 12px; /* 카드 내부 여백 축소 */
+    
+    &__bottom {
+      gap: 6px; /* 계좌번호와 복사버튼 사이 간격 축소 */
+    }
+  }
+
+  .bank-line {
+    font-size: 0.85rem; /* 계좌번호 폰트 축소 */
+    
+    .bank-name {
+      margin-right: 4px;
+    }
+  }
+
+  .copy-btn {
+    min-width: 54px; /* 복사 버튼 최소 너비 축소 */
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+}
