@@ -111,7 +111,20 @@
   cursor: pointer;
   white-space: nowrap;
 
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+
   transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  box-shadow: none;
+}
+
+.copy-btn:focus,
+.copy-btn:focus-visible {
+  outline: none;
   box-shadow: none;
 }
 
@@ -120,13 +133,8 @@
   background: var(--theme-primary);
   color: #fff;
   border-color: var(--theme-primary);
-}
-
-.no-account {
-  padding: 2rem 0;
-  color: var(--text-light);
-  font-size: 0.9rem;
-  text-align: center;
+  outline: none;
+  box-shadow: none;
 }
 
 /* =========================================================
