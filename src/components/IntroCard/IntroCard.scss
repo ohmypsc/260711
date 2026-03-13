@@ -155,98 +155,119 @@
   }
 
   .intro-open-button {
-    appearance: none;
-    -webkit-appearance: none;
-    border: none;
-    outline: none;
-    cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  user-select: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
 
-    position: relative;
-    overflow: hidden;
+  position: relative;
+  overflow: hidden;
 
-    min-width: 204px;
-    height: 58px;
-    padding: 0 2rem;
-    border-radius: 999px;
+  min-width: 204px;
+  height: 58px;
+  padding: 0 2rem;
+  border-radius: 999px;
 
-    font-family: "Gowun Batang", serif;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--theme-primary);
+  font-family: "Gowun Batang", serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--theme-primary);
 
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(252, 245, 245, 0.92) 48%, rgba(248, 236, 236, 0.9) 100%);
-    box-shadow:
-      0 14px 28px rgba(27, 38, 59, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 1),
-      inset 0 -1px 0 rgba(244, 241, 238, 0.8);
-
-    transition:
-      transform 0.24s ease,
-      box-shadow 0.24s ease,
-      background 0.24s ease;
-  }
-
-  .intro-open-button::before {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    border-radius: inherit;
-    border: 1px solid rgba(250, 215, 215, 0.45);
-    pointer-events: none;
-  }
-
-  .intro-open-button::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -32%;
-    width: 28%;
-    height: 100%;
-    transform: skewX(-24deg);
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.8) 50%,
-      rgba(255, 255, 255, 0) 100%
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(252, 245, 245, 0.92) 48%,
+      rgba(248, 236, 236, 0.9) 100%
     );
-    opacity: 0.9;
-    pointer-events: none;
-  }
 
-  .intro-open-button__label {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    transform: translateY(-0.5px);
-  }
+  box-shadow:
+    0 14px 28px rgba(27, 38, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(244, 241, 238, 0.8);
 
-  .intro-open-button:hover {
-    transform: translateY(-2px);
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(253, 244, 246, 0.96) 50%, rgba(249, 234, 238, 0.94) 100%);
-    box-shadow:
-      0 18px 34px rgba(27, 38, 59, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 1),
-      inset 0 -1px 0 rgba(244, 241, 238, 0.9);
-  }
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    background 0.24s ease;
+}
 
-  .intro-open-button:hover::after {
-    animation: buttonShine 0.95s ease;
-  }
+.intro-open-button::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid rgba(250, 215, 215, 0.45);
+  pointer-events: none;
+}
 
-  .intro-open-button:active {
-    transform: translateY(0);
-  }
+.intro-open-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -32%;
+  width: 28%;
+  height: 100%;
+  transform: skewX(-24deg);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0.9;
+  pointer-events: none;
+}
 
-  .intro-open-button:focus-visible {
-    box-shadow:
-      0 0 0 3px rgba(250, 215, 215, 0.35),
-      0 14px 28px rgba(27, 38, 59, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 1),
-      inset 0 -1px 0 rgba(244, 241, 238, 0.8);
-  }
+.intro-open-button__label {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  transform: translateY(-0.5px);
+}
+
+.intro-open-button:hover {
+  transform: translateY(-2px);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(253, 244, 246, 0.96) 50%,
+      rgba(249, 234, 238, 0.94) 100%
+    );
+  box-shadow:
+    0 18px 34px rgba(27, 38, 59, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(244, 241, 238, 0.9);
+}
+
+.intro-open-button:hover::after {
+  animation: buttonShine 0.95s ease;
+}
+
+.intro-open-button:active {
+  transform: translateY(0);
+  outline: none;
+  box-shadow:
+    0 8px 18px rgba(27, 38, 59, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(244, 241, 238, 0.8);
+}
+
+.intro-open-button:focus,
+.intro-open-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(250, 215, 215, 0.22),
+    0 14px 28px rgba(27, 38, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(244, 241, 238, 0.8);
+}
 
   canvas.petal {
     position: fixed;
