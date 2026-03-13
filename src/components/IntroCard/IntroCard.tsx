@@ -176,29 +176,17 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     <div className={`intro-wrap ${exiting ? "exiting" : ""}`}>
       <div id="inviteCard" className="invite-card">
         <div className="card-inner">
-          <div className="top-deco" />
-
           <div className="names">
             <span>백승철</span>
 
             <span className="between-icon" aria-hidden="true">
-              <i className="fa-solid fa-sparkles" />
+              <i className="fa-solid fa-heart" />
             </span>
 
             <span>오미영</span>
           </div>
 
-          <div className="subtitle-wrap">
-            <span className="spark spark-left" aria-hidden="true">
-              <i className="fa-solid fa-star" />
-            </span>
-
-            <div className="subtitle">결혼합니다</div>
-
-            <span className="spark spark-right" aria-hidden="true">
-              <i className="fa-solid fa-star" />
-            </span>
-          </div>
+          <div className="subtitle">결혼합니다</div>
 
           <div className="info">
             <div className="row date">
@@ -220,12 +208,7 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
               onClick={handleClick}
               className="intro-open-button"
             >
-              <span className="intro-open-button__inner">
-                <span className="intro-open-button__icon" aria-hidden="true">
-                  <i className="fa-solid fa-envelope-open-text" />
-                </span>
-                <span>초대장 열기</span>
-              </span>
+              초대장 열기
             </Button>
           </div>
         </div>
