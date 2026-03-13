@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { Button } from "@/components/common/Button/Button";
 import "./IntroCard.scss";
 
 type Props = {
@@ -37,8 +38,6 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
   const timeoutRef = useRef<number | null>(null);
   const startedRef = useRef(false);
 
-  const [opening, setOpening] = useState(false);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -49,24 +48,20 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     ctxRef.current = ctx;
 
     const petalImg = new Image();
-    petalImg.src = `${import.meta.env.BASE_URL}petal.png`;
+    petalImg.src = import.meta.env.BASE_URL + "petal.png";
     petalImgRef.current = petalImg;
 
     function resize() {
-      const targetCanvas = canvasRef.current;
-      const targetCtx = ctxRef.current;
-      if (!targetCanvas || !targetCtx) return;
-
       const dpr = window.devicePixelRatio || 1;
       const width = window.innerWidth;
       const height = window.innerHeight;
 
-      targetCanvas.width = width * dpr;
-      targetCanvas.height = height * dpr;
-      targetCanvas.style.width = `${width}px`;
-      targetCanvas.style.height = `${height}px`;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
 
-      targetCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     resize();
@@ -89,41 +84,33 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     const petals: Petal[] = [];
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const area = w * h;
     const isMobile = w <= 480;
 
-    const density = isMobile ? 700 : 1200;
-    const minCount = isMobile ? 900 : 0;
-    const maxCount = isMobile ? 2200 : 3200;
-    const count = Math.min(
-      maxCount,
-      Math.max(minCount, Math.floor(area / density))
-    );
-    const baseRadius = isMobile ? 140 : 180;
+    const centerX = w / 2;
+    const centerY = h * 0.58;
+
+    const count = isMobile ? 70 : 110;
+    const baseRadius = isMobile ? 28 : 40;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const size = Math.max(10, gaussianRandom(24, 8));
-      const aspect = 0.8 + Math.random() * 0.6;
-      const depth = Math.min(size / 20, 2.1);
-      const r = Math.random() * baseRadius * depth;
-      const speedScale = 1 / (0.75 + depth * 0.45);
-      const gravity = (0.045 + Math.random() * 0.07) * depth;
-      const opacity = 0.75 + Math.random() * 0.35 * depth;
-      const fade = 0.0016 + (1 / depth) * 0.0008;
+      const distance = Math.random() * baseRadius;
+      const size = Math.max(14, gaussianRandom(isMobile ? 18 : 22, 4));
+      const aspect = 0.82 + Math.random() * 0.42;
+      const lift = 0.8 + Math.random() * 0.9;
 
       petals.push({
-        x: w / 2 + Math.cos(angle) * r,
-        y: h / 2 + Math.sin(angle) * r,
+        x: centerX + Math.cos(angle) * distance,
+        y: centerY + Math.sin(angle) * distance,
         w: size,
         h: size * aspect,
-        xSpeed: (Math.random() - 0.5) * 9 * speedScale,
-        ySpeed: (Math.random() - 1.2) * 6.0 * speedScale,
-        rot: Math.random() * 2 * Math.PI,
-        rotSpeed: (Math.random() - 0.5) * 0.22,
-        gravity,
-        opacity,
-        fade,
+        xSpeed: Math.cos(angle) * (1.2 + Math.random() * 4.2),
+        ySpeed: Math.sin(angle) * (0.8 + Math.random() * 2.6) - 4.8 * lift,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.16,
+        gravity: 0.045 + Math.random() * 0.03,
+        opacity: 0.72 + Math.random() * 0.24,
+        fade: 0.0032 + Math.random() * 0.0016,
       });
     }
 
@@ -172,7 +159,6 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
   const handleClick = () => {
     if (startedRef.current) return;
     startedRef.current = true;
-    setOpening(true);
 
     if (animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
@@ -183,47 +169,65 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
 
     timeoutRef.current = window.setTimeout(() => {
       onFinish();
-    }, 2000);
+    }, 1800);
   };
 
   return (
     <div className={`intro-wrap ${exiting ? "exiting" : ""}`}>
-      <div className="intro-frame" />
+      <div id="inviteCard" className="invite-card">
+        <div className="card-inner">
+          <div className="top-deco" />
 
-      <div className="intro-content">
-        <div className="intro-top-line" />
+          <div className="names">
+            <span>백승철</span>
 
-        <div className="intro-title-block">
-          <div className="intro-name">백승철</div>
-          <div className="intro-and">&amp;</div>
-          <div className="intro-name">오미영</div>
-        </div>
+            <span className="between-icon" aria-hidden="true">
+              <i className="fa-solid fa-sparkles" />
+            </span>
 
-        <div className="intro-subtitle">결혼합니다</div>
-
-        <div className="intro-info">
-          <div className="intro-info-group">
-            <div className="intro-info-main">2026. 07. 11. 토요일</div>
-            <div className="intro-info-sub">오전 11시</div>
+            <span>오미영</span>
           </div>
 
-          <div className="intro-info-divider" />
+          <div className="subtitle-wrap">
+            <span className="spark spark-left" aria-hidden="true">
+              <i className="fa-solid fa-star" />
+            </span>
 
-          <div className="intro-info-group">
-            <div className="intro-info-main">유성컨벤션웨딩홀</div>
-            <div className="intro-info-sub">3층 그랜드홀</div>
+            <div className="subtitle">결혼합니다</div>
+
+            <span className="spark spark-right" aria-hidden="true">
+              <i className="fa-solid fa-star" />
+            </span>
           </div>
-        </div>
 
-        <div className="intro-action">
-          <button
-            type="button"
-            className="intro-button"
-            onClick={handleClick}
-            disabled={opening}
-          >
-            초대장 열기
-          </button>
+          <div className="info">
+            <div className="row date">
+              <span className="main">2026. 07. 11. 토요일</span>
+              <span className="sub">오전 11시</span>
+            </div>
+
+            <div className="divider" />
+
+            <div className="row place">
+              <span className="main">유성컨벤션웨딩홀</span>
+              <span className="sub">3층 그랜드홀</span>
+            </div>
+          </div>
+
+          <div className="action-area">
+            <Button
+              variant="basic"
+              onClick={handleClick}
+              className="intro-open-button"
+            >
+              <span className="intro-open-button__inner">
+                <span className="intro-open-button__icon" aria-hidden="true">
+                  <i className="fa-solid fa-envelope-open-text" />
+                </span>
+                <span>초대장 열기</span>
+              </span>
+            </Button>
+          </div>
         </div>
       </div>
 
