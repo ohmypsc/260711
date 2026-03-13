@@ -87,30 +87,32 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     const isMobile = w <= 480;
 
     const centerX = w / 2;
-    const centerY = h * 0.58;
+    const centerY = h * 0.57;
 
-    const count = isMobile ? 70 : 110;
-    const baseRadius = isMobile ? 28 : 40;
+    const count = isMobile ? 150 : 230;
+    const baseRadius = isMobile ? 42 : 58;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
       const distance = Math.random() * baseRadius;
-      const size = Math.max(14, gaussianRandom(isMobile ? 18 : 22, 4));
-      const aspect = 0.82 + Math.random() * 0.42;
-      const lift = 0.8 + Math.random() * 0.9;
+      const size = Math.max(12, gaussianRandom(isMobile ? 16 : 20, 4.5));
+      const aspect = 0.8 + Math.random() * 0.45;
+      const lift = 0.9 + Math.random() * 1.1;
+      const spreadX = 1.3 + Math.random() * 4.8;
+      const spreadY = 0.9 + Math.random() * 3.1;
 
       petals.push({
         x: centerX + Math.cos(angle) * distance,
         y: centerY + Math.sin(angle) * distance,
         w: size,
         h: size * aspect,
-        xSpeed: Math.cos(angle) * (1.2 + Math.random() * 4.2),
-        ySpeed: Math.sin(angle) * (0.8 + Math.random() * 2.6) - 4.8 * lift,
+        xSpeed: Math.cos(angle) * spreadX,
+        ySpeed: Math.sin(angle) * spreadY - 5.3 * lift,
         rot: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.16,
-        gravity: 0.045 + Math.random() * 0.03,
-        opacity: 0.72 + Math.random() * 0.24,
-        fade: 0.0032 + Math.random() * 0.0016,
+        rotSpeed: (Math.random() - 0.5) * 0.18,
+        gravity: 0.038 + Math.random() * 0.03,
+        opacity: 0.72 + Math.random() * 0.28,
+        fade: 0.0021 + Math.random() * 0.0012,
       });
     }
 
@@ -169,7 +171,7 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
 
     timeoutRef.current = window.setTimeout(() => {
       onFinish();
-    }, 1800);
+    }, 1900);
   };
 
   return (
@@ -180,7 +182,7 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
             <span>백승철</span>
 
             <span className="between-icon" aria-hidden="true">
-              <i className="fa-solid fa-heart" />
+              <i className="fa-solid fa-wand-magic-sparkles" />
             </span>
 
             <span>오미영</span>
@@ -208,7 +210,7 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
               onClick={handleClick}
               className="intro-open-button"
             >
-              초대장 열기
+              <span className="intro-open-button__label">초대장 열기</span>
             </Button>
           </div>
         </div>
