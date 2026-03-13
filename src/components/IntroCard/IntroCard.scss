@@ -1,7 +1,6 @@
 /* ============================================
    IntroCard
    Summer Bright Luxe
-   정보 배치 유지 + 반짝임 포인트 강화
    ============================================ */
 
 .intro-wrap {
@@ -63,32 +62,6 @@
     pointer-events: none;
   }
 
-  .top-deco {
-    width: 88px;
-    height: 1px;
-    margin: 0 auto 1.45rem;
-    background: linear-gradient(
-      90deg,
-      rgba(217, 206, 193, 0) 0%,
-      rgba(217, 206, 193, 0.95) 50%,
-      rgba(217, 206, 193, 0) 100%
-    );
-    position: relative;
-  }
-
-  .top-deco::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(180deg, #fff8f8 0%, var(--theme-point-pink) 100%);
-    box-shadow: 0 0 0 6px rgba(250, 215, 215, 0.14);
-  }
-
   .names {
     font-family: "Gowun Batang", serif;
     font-size: 2rem;
@@ -119,65 +92,38 @@
     );
     border: 1px solid rgba(217, 206, 193, 0.5);
 
-    color: #d9a8b2;
-    font-size: 0.9rem;
+    color: #d39aa7;
+    font-size: 0.84rem;
 
     box-shadow:
       0 8px 18px rgba(27, 38, 59, 0.06),
       inset 0 1px 0 rgba(255, 255, 255, 0.96);
   }
 
-  .subtitle-wrap {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.7rem;
-    margin-bottom: 2.2rem;
-    position: relative;
-  }
-
   .subtitle {
-    position: relative;
+    margin-bottom: 2.2rem;
+
     font-family: "Gowun Batang", serif;
-    font-size: 1.08rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: var(--theme-primary);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     line-height: 1.6;
-    padding: 0.1rem 0.2rem;
 
     background: linear-gradient(
       90deg,
       #b98f98 0%,
-      var(--theme-primary) 30%,
-      #d5a3ad 52%,
-      var(--theme-primary) 74%,
+      var(--theme-primary) 35%,
+      #d5a3ad 50%,
+      var(--theme-primary) 65%,
       #b98f98 100%
     );
     background-size: 220% auto;
+
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 
-    animation: shimmerText 3.6s linear infinite;
-  }
-
-  .spark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #d7a8b1;
-    filter: drop-shadow(0 0 6px rgba(250, 215, 215, 0.38));
-  }
-
-  .spark-left {
-    font-size: 0.72rem;
-    animation: twinkleSoft 2.2s ease-in-out infinite;
-  }
-
-  .spark-right {
-    font-size: 0.62rem;
-    animation: twinkleSoft 2.2s ease-in-out infinite 0.7s;
+    animation: shimmerText 3.5s linear infinite;
   }
 
   .info {
@@ -238,102 +184,34 @@
   }
 
   .intro-open-button {
-    min-width: 196px;
-    height: 54px;
-    padding: 0;
-    border: none;
-    border-radius: 999px;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .intro-open-button__inner {
-    position: relative;
-    overflow: hidden;
-
-    min-width: 196px;
-    height: 54px;
+    min-width: 180px;
+    height: 50px;
     padding: 0 1.4rem;
     border-radius: 999px;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.62rem;
-
     font-family: "Pretendard", sans-serif;
-    font-size: 0.98rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
     color: var(--theme-primary);
 
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.98) 0%,
-      rgba(250, 238, 238, 0.96) 100%
-    );
-    border: 1px solid rgba(217, 206, 193, 0.62);
-
-    box-shadow:
-      0 12px 26px rgba(27, 38, 59, 0.09),
-      inset 0 1px 0 rgba(255, 255, 255, 1);
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 18px rgba(27, 38, 59, 0.08);
 
     transition:
-      transform 0.24s ease,
-      border-color 0.24s ease,
-      box-shadow 0.24s ease,
-      background 0.24s ease;
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
   }
 
-  .intro-open-button__inner::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -45%;
-    width: 38%;
-    height: 100%;
-    transform: skewX(-24deg);
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.85) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    opacity: 0.8;
-  }
-
-  .intro-open-button:hover .intro-open-button__inner {
+  .intro-open-button:hover {
     transform: translateY(-2px);
-    border-color: rgba(199, 160, 168, 0.68);
-    box-shadow:
-      0 16px 32px rgba(27, 38, 59, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 1);
+    border-color: #d9cec1;
+    box-shadow: 0 14px 28px rgba(27, 38, 59, 0.12);
   }
 
-  .intro-open-button:hover .intro-open-button__inner::before {
-    animation: buttonShine 1s ease;
-  }
-
-  .intro-open-button__icon {
-    width: 26px;
-    height: 26px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(250, 215, 215, 0.28);
-    color: #c8909b;
-    font-size: 0.82rem;
-    flex-shrink: 0;
-  }
-
-  .intro-open-button:disabled .intro-open-button__inner,
-  .intro-open-button[disabled] .intro-open-button__inner {
-    opacity: 0.68;
-    transform: none;
-    box-shadow:
-      0 8px 18px rgba(27, 38, 59, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 1);
+  .intro-open-button:active {
+    transform: translateY(0);
   }
 
   canvas.petal {
@@ -367,33 +245,12 @@
   }
 }
 
-@keyframes twinkleSoft {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: scale(0.92);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-
 @keyframes shimmerText {
   0% {
     background-position: 200% 50%;
   }
   100% {
     background-position: 0% 50%;
-  }
-}
-
-@keyframes buttonShine {
-  0% {
-    left: -45%;
-  }
-  100% {
-    left: 120%;
   }
 }
 
@@ -423,15 +280,11 @@
   .intro-wrap .between-icon {
     width: 32px;
     height: 32px;
-    font-size: 0.84rem;
-  }
-
-  .intro-wrap .subtitle-wrap {
-    gap: 0.55rem;
-    margin-bottom: 1.95rem;
+    font-size: 0.8rem;
   }
 
   .intro-wrap .subtitle {
+    margin-bottom: 1.95rem;
     font-size: 1rem;
   }
 
@@ -445,9 +298,9 @@
     font-size: 1.02rem;
   }
 
-  .intro-wrap .intro-open-button,
-  .intro-wrap .intro-open-button__inner {
-    min-width: 176px;
-    height: 50px;
+  .intro-wrap .intro-open-button {
+    min-width: 168px;
+    height: 48px;
+    font-size: 0.93rem;
   }
 }
