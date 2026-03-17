@@ -1,5 +1,5 @@
 /* ============================================
-   FINAL BUTTON DESIGN: mobile-first soft pink (FINAL)
+   FINAL BUTTON DESIGN: mobile visibility optimized
    ============================================ */
 
 button.w-btn {
@@ -41,7 +41,7 @@ button.w-btn::before {
   pointer-events: none;
 }
 
-/* shine (모바일에서는 거의 안 보이지만 유지) */
+/* shine */
 button.w-btn::after {
   content: "";
   position: absolute;
@@ -51,7 +51,7 @@ button.w-btn::after {
   height: 100%;
   transform: skewX(-24deg);
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.6;
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
@@ -69,7 +69,7 @@ button.w-btn::after {
 }
 
 /* ============================================
-   BASIC : 메인 버튼 (은은한 핑크 전체톤)
+   BASIC : 메인 버튼
    ============================================ */
 button.w-btn.basic {
   min-height: 58px;
@@ -80,41 +80,39 @@ button.w-btn.basic {
   font-weight: 700;
   letter-spacing: 0.04em;
 
-  color: var(--theme-primary);
-
-  border: 1px solid rgba(250, 215, 215, 0.65);
+  border: 1px solid rgba(250, 215, 215, 0.75);
 
   background:
     linear-gradient(
       180deg,
-      rgba(255, 253, 253, 0.98) 0%,
+      rgba(255, 253, 253, 1) 0%,
       rgba(253, 249, 249, 0.98) 50%,
       rgba(249, 242, 243, 0.98) 100%
     );
 
   box-shadow:
-    0 16px 30px rgba(27, 38, 59, 0.12),
-    0 5px 14px rgba(250, 215, 215, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 18px 32px rgba(27, 38, 59, 0.14),
+    0 6px 16px rgba(250, 215, 215, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -2px 0 rgba(244, 241, 238, 0.9);
 }
 
 button.w-btn.basic::before {
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 button.w-btn.basic:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 
   box-shadow:
-    0 10px 18px rgba(27, 38, 59, 0.1),
-    0 3px 8px rgba(250, 215, 215, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 10px 18px rgba(27, 38, 59, 0.12),
+    0 3px 8px rgba(250, 215, 215, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -2px 0 rgba(244, 241, 238, 0.88);
 }
 
 /* ============================================
-   SUBMIT : 보조 강조 버튼
+   SUBMIT : 핑크 기운
    ============================================ */
 button.w-btn.submit {
   min-height: 52px;
@@ -124,38 +122,38 @@ button.w-btn.submit {
   font-size: clamp(0.9rem, 2.4vw, 1rem);
   font-weight: 700;
 
-  color: var(--theme-primary);
-
-  border: 1px solid rgba(250, 215, 215, 0.45);
+  border: 1px solid rgba(250, 215, 215, 0.6);
 
   background:
     linear-gradient(
       180deg,
-      rgba(253, 251, 249, 1) 0%,
-      rgba(249, 247, 245, 0.98) 100%
+      rgba(255, 252, 252, 1) 0%,
+      rgba(253, 246, 247, 1) 52%,
+      rgba(249, 240, 242, 1) 100%
     );
 
   box-shadow:
-    0 10px 20px rgba(27, 38, 59, 0.09),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 12px 22px rgba(27, 38, 59, 0.11),
+    0 4px 10px rgba(250, 215, 215, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -1px 0 rgba(232, 228, 225, 0.9);
 }
 
 button.w-btn.submit::before {
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 button.w-btn.submit:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 
   box-shadow:
-    0 6px 12px rgba(27, 38, 59, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 6px 12px rgba(27, 38, 59, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -1px 0 rgba(232, 228, 225, 0.9);
 }
 
 /* ============================================
-   CLOSE : submit의 채도 낮춘 쌍둥이
+   CLOSE : 아이보리 (가시성 강화)
    ============================================ */
 button.w-btn.close {
   min-height: 52px;
@@ -167,33 +165,33 @@ button.w-btn.close {
 
   color: var(--text-main);
 
-  border: 1px solid rgba(250, 215, 215, 0.28);
+  border: 1px solid rgba(232, 228, 225, 1);
 
   background:
     linear-gradient(
       180deg,
-      rgba(253, 251, 249, 0.98) 0%,
-      rgba(249, 246, 246, 0.98) 100%
+      rgba(255, 253, 251, 1) 0%,
+      rgba(252, 248, 246, 1) 55%,
+      rgba(248, 244, 241, 1) 100%
     );
 
   box-shadow:
-    0 6px 14px rgba(27, 38, 59, 0.06),
-    0 2px 6px rgba(250, 215, 215, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.86);
+    0 8px 16px rgba(27, 38, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.9);
 }
 
 button.w-btn.close::before {
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
 }
 
 button.w-btn.close:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 
   box-shadow:
-    0 4px 10px rgba(27, 38, 59, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.84);
+    0 4px 10px rgba(27, 38, 59, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.88);
 }
 
 /* ============================================
@@ -205,7 +203,7 @@ button.w-btn:disabled {
 
   color: var(--text-light) !important;
 
-  border: 1px solid rgba(232, 228, 225, 0.85) !important;
+  border: 1px solid rgba(232, 228, 225, 0.9) !important;
 
   background:
     linear-gradient(
@@ -215,12 +213,12 @@ button.w-btn:disabled {
     ) !important;
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.8) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.85) !important;
 }
 
 button.w-btn:disabled::before {
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
 }
 
 button.w-btn:disabled::after {
