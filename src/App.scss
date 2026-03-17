@@ -110,45 +110,95 @@ section {
   transform: translateX(-50%);
   z-index: 100000;
 
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--theme-primary);
-  border: 1.5px solid var(--theme-primary-light);
-  border-radius: 999px;
+  min-height: 48px;
+  max-width: calc(100vw - 32px);
   padding: 13px 20px;
 
-  font-family: "Pretendard", sans-serif;
-  font-size: 0.98rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-
-  white-space: nowrap;
-  max-width: calc(100vw - 32px);
-
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 
+  white-space: nowrap;
+
+  border-radius: 999px;
+  border: 1px solid rgba(250, 215, 215, 0.42);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 253, 252, 0.98) 0%,
+      rgba(252, 248, 246, 0.98) 55%,
+      rgba(248, 243, 241, 0.98) 100%
+    );
+
+  color: var(--theme-primary);
+
+  font-family: "Pretendard", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+
   box-shadow:
-    0 10px 24px rgba(27, 38, 59, 0.10),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    0 12px 24px rgba(27, 38, 59, 0.10),
+    0 3px 8px rgba(250, 215, 215, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.84);
 
   pointer-events: none;
   animation: toastBottomUp 0.28s ease-out forwards;
 }
 
+.custom-toast::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  pointer-events: none;
+}
+
 .custom-toast i {
+  position: relative;
+  z-index: 1;
   color: var(--theme-point-pink);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  flex-shrink: 0;
+}
+
+.custom-toast span,
+.custom-toast p,
+.custom-toast strong {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes toastBottomUp {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(12px);
+    transform: translateX(-50%) translateY(12px) scale(0.985);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-toast {
+    bottom: 20px;
+    min-height: 46px;
+    padding: 12px 18px;
+    font-size: 0.92rem;
+
+    box-shadow:
+      0 10px 20px rgba(27, 38, 59, 0.11),
+      0 3px 7px rgba(250, 215, 215, 0.11),
+      inset 0 1px 0 rgba(255, 255, 255, 0.94),
+      inset 0 -1px 0 rgba(232, 228, 225, 0.86);
+  }
+
+  .custom-toast i {
+    font-size: 0.88rem;
   }
 }
