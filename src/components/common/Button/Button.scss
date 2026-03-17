@@ -109,12 +109,6 @@ button.w-btn.basic::before {
 
 button.w-btn.basic:active {
   transform: scale(0.97);
-
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.04),
-    0 1px 4px rgba(255, 255, 255, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.94),
-    inset 0 -2px 0 rgba(232, 228, 225, 0.88);
 }
 /* ============================================
    SUBMIT : 핑크 기운
@@ -152,11 +146,6 @@ button.w-btn.submit::before {
 
 button.w-btn.submit:active {
   transform: scale(0.97);
-
-  box-shadow:
-    0 6px 12px rgba(27, 38, 59, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.96),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.9);
 }
 
 /* ============================================
@@ -194,11 +183,6 @@ button.w-btn.close::before {
 
 button.w-btn.close:active {
   transform: scale(0.97);
-
-  box-shadow:
-    0 4px 10px rgba(27, 38, 59, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.88);
 }
 
 /* ============================================
