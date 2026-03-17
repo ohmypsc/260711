@@ -87,13 +87,14 @@
       letter-spacing: -0.01em;
       color: var(--theme-primary);
 
-      border: 1px solid rgba(250, 215, 215, 0.38);
+      /* 핑크 → 샌드 쪽으로 조정 */
+      border: 1px solid rgba(232, 228, 225, 0.95);
 
       background:
         linear-gradient(
           180deg,
-          rgba(255, 252, 252, 1) 0%,
-          rgba(250, 246, 246, 0.98) 100%
+          rgba(255, 253, 251, 1) 0%,
+          rgba(248, 244, 241, 0.98) 100%
         );
 
       box-shadow:
@@ -161,14 +162,17 @@
   white-space: nowrap;
 
   color: var(--theme-primary);
-  border: 1px solid rgba(250, 215, 215, 0.34);
 
+  /* 핑크 border 제거 */
+  border: 1px solid rgba(232, 228, 225, 0.95);
+
+  /* 핑크기 줄이고 웜 아이보리 버튼으로 */
   background:
     linear-gradient(
       180deg,
-      rgba(255, 252, 252, 1) 0%,
-      rgba(250, 247, 245, 1) 54%,
-      rgba(246, 242, 239, 1) 100%
+      rgba(255, 253, 251, 1) 0%,
+      rgba(250, 246, 243, 1) 54%,
+      rgba(246, 241, 238, 1) 100%
     );
 
   box-shadow:
@@ -205,7 +209,7 @@
 .copy-btn:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px rgba(250, 215, 215, 0.18),
+    0 0 0 3px rgba(217, 206, 193, 0.22),
     0 6px 12px rgba(27, 38, 59, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     inset 0 -1px 0 rgba(232, 228, 225, 0.88);
