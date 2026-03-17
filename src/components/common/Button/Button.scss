@@ -71,6 +71,9 @@ button.w-btn::after {
 /* ============================================
    BASIC : 메인 버튼
    ============================================ */
+/* ============================================
+   BASIC : 메인 버튼 (Ivory Glow Ver.)
+   ============================================ */
 button.w-btn.basic {
   min-height: 58px;
   padding: 1rem 1.6rem;
@@ -80,35 +83,41 @@ button.w-btn.basic {
   font-weight: 700;
   letter-spacing: 0.04em;
 
-  border: 1px solid rgba(250, 215, 215, 0.75);
+  color: var(--text-main);
+
+  border: 1px solid rgba(232, 228, 225, 0.9); /* 🔥 핑크 제거 */
 
   background:
     linear-gradient(
       180deg,
-      rgba(255, 253, 253, 1) 0%,
-      rgba(253, 249, 249, 0.98) 50%,
-      rgba(249, 242, 243, 0.98) 100%
-    );
+      rgba(255, 255, 255, 1) 0%,
+      rgba(250, 247, 244, 1) 55%,
+      rgba(245, 240, 237, 1) 100%
+    ); /* 🔥 아이보리 중심 */
 
   box-shadow:
-    0 18px 32px rgba(27, 38, 59, 0.14),
-    0 6px 16px rgba(250, 215, 215, 0.22),
+    0 16px 28px rgba(27, 38, 59, 0.12), /* 네이비 depth */
+    0 4px 10px rgba(255, 255, 255, 0.6), /* 🔥 은은한 빛 반사 */
     inset 0 1px 0 rgba(255, 255, 255, 0.96),
-    inset 0 -2px 0 rgba(244, 241, 238, 0.9);
+    inset 0 -2px 0 rgba(232, 228, 225, 0.9);
+
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease;
 }
 
 button.w-btn.basic::before {
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.85);
 }
 
 button.w-btn.basic:active {
   transform: scale(0.97);
 
   box-shadow:
-    0 10px 18px rgba(27, 38, 59, 0.12),
-    0 3px 8px rgba(250, 215, 215, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.96),
-    inset 0 -2px 0 rgba(244, 241, 238, 0.88);
+    0 8px 16px rgba(27, 38, 59, 0.1),
+    0 2px 6px rgba(255, 255, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    inset 0 -2px 0 rgba(232, 228, 225, 0.88);
 }
 
 /* ============================================
