@@ -80,48 +80,44 @@ button.w-btn.basic {
   letter-spacing: 0.04em;
 
   color: var(--theme-primary);
-  border: 1px solid rgba(250, 215, 215, 0.95);
+  border: 1px solid rgba(250, 215, 215, 1);
 
   background:
     linear-gradient(
       180deg,
       rgba(255, 255, 255, 1) 0%,
-      rgba(253, 251, 249, 0.98) 35%,
-      rgba(249, 247, 245, 0.96) 68%,
-      rgba(250, 215, 215, 0.34) 100%
+      rgba(253, 251, 249, 1) 28%,
+      rgba(249, 247, 245, 0.98) 58%,
+      rgba(250, 215, 215, 0.26) 78%,
+      rgba(250, 215, 215, 0.50) 100%
     );
 
   box-shadow:
-    0 16px 32px rgba(27, 38, 59, 0.12),
-    0 4px 10px rgba(250, 215, 215, 0.18),
+    0 18px 34px rgba(27, 38, 59, 0.11),
+    0 6px 16px rgba(250, 215, 215, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 1),
     inset 0 -2px 0 rgba(244, 241, 238, 0.95);
 }
 
 button.w-btn.basic::before {
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.82);
 }
 
 button.w-btn.basic:hover {
-  transform: translateY(-2px);
   background:
     linear-gradient(
       180deg,
       rgba(255, 255, 255, 1) 0%,
-      rgba(253, 251, 249, 1) 34%,
-      rgba(249, 247, 245, 0.98) 66%,
-      rgba(250, 215, 215, 0.44) 100%
+      rgba(255, 250, 251, 1) 30%,
+      rgba(252, 243, 245, 0.98) 64%,
+      rgba(250, 215, 215, 0.58) 100%
     );
 
   box-shadow:
-    0 20px 38px rgba(27, 38, 59, 0.14),
-    0 6px 14px rgba(250, 215, 215, 0.22),
+    0 22px 40px rgba(27, 38, 59, 0.13),
+    0 8px 18px rgba(250, 215, 215, 0.30),
     inset 0 1px 0 rgba(255, 255, 255, 1),
     inset 0 -2px 0 rgba(244, 241, 238, 0.95);
-}
-
-button.w-btn.basic:hover::after {
-  animation: wBtnShine 0.95s ease;
 }
 
 /* ============================================
