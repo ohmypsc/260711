@@ -8,6 +8,11 @@ import { useContactInfo } from "@/ContactInfoProvider";
 type ModalType = null | "groom" | "bride";
 type ToastState = { msg: string; type: "success" | "error" } | null;
 
+const isMobileDevice = () =>
+  /Android|iPhone|iPad|iPod|Mobile|SamsungBrowser|KAKAOTALK/i.test(
+    navigator.userAgent
+  );
+
 export function Account() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
   const [toast, setToast] = useState<ToastState>(null);
@@ -32,7 +37,11 @@ export function Account() {
 
     try {
       await navigator.clipboard.writeText(numericAccount);
-      setToast({ msg: "계좌번호가 복사되었습니다", type: "success" });
+
+      // 모바일은 브라우저/OS 기본 복사 알림이 있으므로 커스텀 토스트 생략
+      if (!isMobileDevice()) {
+        setToast({ msg: "계좌번호가 복사되었습니다", type: "success" });
+      }
     } catch {
       setToast({ msg: "복사에 실패했습니다", type: "error" });
     }
