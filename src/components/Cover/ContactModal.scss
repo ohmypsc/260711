@@ -114,9 +114,10 @@
 }
 
 /* 🔥 핵심: 살짝 핑크로 반응 */
+    
 .icon-link:active {
   transform: scale(0.92);
-  color: var(--theme-point-pink);
+  color: rgba(27, 38, 59, 0.55); /* 네이비 계열 */
 }
   }
 }
