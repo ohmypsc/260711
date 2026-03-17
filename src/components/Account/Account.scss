@@ -10,8 +10,8 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
 
-    /* 버튼 텍스트 줄바꿈 방지 및 공간 최적화 */
-    button, .account-btn {
+    button,
+    .account-btn {
       white-space: nowrap;
       word-break: keep-all;
       letter-spacing: -0.03em;
@@ -33,37 +33,86 @@
 }
 
 .account-card {
-  background: var(--section-bg-soft);
-  border: 1px solid rgba(27, 38, 59, 0.05);
-  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 
+  border-radius: 14px;
+  border: 1px solid rgba(232, 228, 225, 0.92);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 253, 252, 0.98) 0%,
+      rgba(251, 247, 245, 0.98) 55%,
+      rgba(247, 242, 240, 0.98) 100%
+    );
+
+  box-shadow:
+    0 8px 18px rgba(27, 38, 59, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.72);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    pointer-events: none;
+  }
+
   &__top {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    position: relative;
+    z-index: 1;
 
     .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 26px;
+      padding: 3px 9px;
+      border-radius: 999px;
+
       font-size: 0.72rem;
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: #fff;
-      border: 1px solid rgba(27, 38, 59, 0.1);
-      color: var(--theme-primary);
       font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--theme-primary);
+
+      border: 1px solid rgba(250, 215, 215, 0.38);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 252, 252, 1) 0%,
+          rgba(250, 246, 246, 0.98) 100%
+        );
+
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 2px 6px rgba(27, 38, 59, 0.04);
     }
 
     .name {
       font-weight: 700;
       color: var(--text-main);
       font-size: 1rem;
+      letter-spacing: -0.01em;
     }
   }
 
   &__bottom {
+    position: relative;
+    z-index: 1;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -72,14 +121,14 @@
 }
 
 .bank-line {
+  flex: 1;
+  min-width: 0;
+
+  text-align: left;
   font-size: 0.95rem;
   color: var(--text-main);
-  text-align: left;
-  flex: 1;
-
-  /* 계좌번호 한 줄 유지 및 자간 축소 */
-  white-space: nowrap;
   letter-spacing: -0.02rem;
+  white-space: nowrap;
 
   .bank-name {
     margin-right: 6px;
@@ -89,87 +138,136 @@
 
   .account-number {
     font-family: "Pretendard", sans-serif;
-    /* 기존의 word-break: break-all; 은 삭제되었습니다 */
+    color: var(--text-main);
   }
 }
 
 /* =========================================================
-   Copy Button (Refined)
+   Copy Button
    ========================================================= */
 
 .copy-btn {
-  /* 모바일 공간 확보를 위해 패딩 및 크기 미세 축소 */
-  padding: 6px 12px;
-  min-width: 60px;
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+
+  min-width: 62px;
+  padding: 7px 12px;
+  border-radius: 999px;
+
   font-size: 0.8rem;
-  font-weight: 600;
-
-  background: #fff;
-  border: 1px solid rgba(27, 38, 59, 0.14);
-  color: var(--theme-primary);
-
-  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   white-space: nowrap;
 
+  color: var(--theme-primary);
+  border: 1px solid rgba(250, 215, 215, 0.34);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 252, 252, 1) 0%,
+      rgba(250, 247, 245, 1) 54%,
+      rgba(246, 242, 239, 1) 100%
+    );
+
+  box-shadow:
+    0 6px 12px rgba(27, 38, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.88);
+
+  cursor: pointer;
+  user-select: none;
   appearance: none;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
   outline: none;
-  user-select: none;
 
-  transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  box-shadow: none;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.copy-btn::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  pointer-events: none;
 }
 
 .copy-btn:focus,
 .copy-btn:focus-visible {
   outline: none;
-  box-shadow: none;
+  box-shadow:
+    0 0 0 3px rgba(250, 215, 215, 0.18),
+    0 6px 12px rgba(27, 38, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.88);
 }
 
 .copy-btn:active {
   transform: scale(0.97);
-  background: var(--theme-primary);
-  color: #fff;
-  border-color: var(--theme-primary);
-  outline: none;
-  box-shadow: none;
+
+  box-shadow:
+    0 3px 7px rgba(27, 38, 59, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(232, 228, 225, 0.86);
 }
 
 /* =========================================================
-   Mobile Safe Guard (초소형 화면 대응: Z폴드 커버, 구형 폰 등)
+   Mobile Safe Guard
    ========================================================= */
 @media (max-width: 360px) {
   .account-wrapper .account-buttons {
-    gap: 0.4rem; /* 버튼 사이 간격 축소 */
-    
-    button, .account-btn {
-      font-size: 0.85rem; /* 버튼 폰트 크기 축소 */
+    gap: 0.4rem;
+
+    button,
+    .account-btn {
+      font-size: 0.85rem;
       padding-left: 2px;
       padding-right: 2px;
     }
   }
 
   .account-card {
-    padding: 12px; /* 카드 내부 여백 축소 */
-    
+    padding: 13px;
+
+    &__top {
+      gap: 0.5rem;
+
+      .chip {
+        min-height: 24px;
+        padding: 3px 8px;
+        font-size: 0.68rem;
+      }
+
+      .name {
+        font-size: 0.96rem;
+      }
+    }
+
     &__bottom {
-      gap: 6px; /* 계좌번호와 복사버튼 사이 간격 축소 */
+      gap: 8px;
     }
   }
 
   .bank-line {
-    font-size: 0.85rem; /* 계좌번호 폰트 축소 */
-    
+    font-size: 0.85rem;
+
     .bank-name {
       margin-right: 4px;
     }
   }
 
   .copy-btn {
-    min-width: 54px; /* 복사 버튼 최소 너비 축소 */
-    padding: 6px 8px;
-    font-size: 0.75rem;
+    min-width: 56px;
+    padding: 6px 9px;
+    font-size: 0.74rem;
   }
 }
