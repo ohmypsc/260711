@@ -168,27 +168,25 @@ button.w-btn.close {
 
   color: var(--text-main);
 
-  border: 1px solid rgba(232, 228, 225, 0.9);
+  /* 🔥 submit과 같은 계열로 맞춤 */
+  border: 1px solid rgba(250, 215, 215, 0.28);
 
   background:
     linear-gradient(
       180deg,
-      rgba(249, 247, 245, 0.98) 0%,
-      rgba(244, 241, 238, 0.96) 100%
+      rgba(253, 251, 249, 0.98) 0%,
+      rgba(249, 246, 246, 0.98) 100%
     );
 
   box-shadow:
-    0 5px 12px rgba(27, 38, 59, 0.05),
+    0 6px 14px rgba(27, 38, 59, 0.06),
+    0 2px 6px rgba(250, 215, 215, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.85);
+    inset 0 -1px 0 rgba(232, 228, 225, 0.86);
 }
 
 button.w-btn.close::before {
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-button.w-btn.close:active {
-  transform: scale(0.98);
+  border: 1px solid rgba(255, 255, 255, 0.55);
 }
 
 /* ============================================
