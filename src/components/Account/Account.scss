@@ -269,9 +269,10 @@
     }
   }
 
-  .copy-btn {
-    min-width: 56px;
-    padding: 6px 9px;
-    font-size: 0.74rem;
+ .copy-btn {
+    min-width: 72px;     /* 기존 56 → 확대 */
+    min-height: 42px;    /* 🔥 핵심: 터치 영역 */
+    padding: 8px 14px;   /* 눌리기 쉽게 */
+    font-size: 0.88rem;  /* 가독성 */
   }
 }
