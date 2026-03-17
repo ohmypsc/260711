@@ -122,32 +122,34 @@ button.w-btn.submit {
   font-size: clamp(0.9rem, 2.4vw, 1rem);
   font-weight: 700;
 
-  border: 1px solid rgba(250, 215, 215, 0.6);
+  color: var(--theme-primary);
+
+  /* 핑크는 아주 얇게만 */
+  border: 1px solid rgba(250, 215, 215, 0.34);
 
   background:
     linear-gradient(
       180deg,
-      rgba(255, 252, 252, 1) 0%,
-      rgba(253, 246, 247, 1) 52%,
-      rgba(249, 240, 242, 1) 100%
+      rgba(254, 252, 251, 1) 0%,
+      rgba(250, 247, 245, 1) 54%,
+      rgba(246, 242, 239, 1) 100%
     );
 
   box-shadow:
-    0 12px 22px rgba(27, 38, 59, 0.11),
-    0 4px 10px rgba(250, 215, 215, 0.18),
+    0 11px 20px rgba(27, 38, 59, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -1px 0 rgba(232, 228, 225, 0.9);
 }
 
 button.w-btn.submit::before {
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.72);
 }
 
 button.w-btn.submit:active {
   transform: scale(0.97);
 
   box-shadow:
-    0 6px 12px rgba(27, 38, 59, 0.09),
+    0 6px 12px rgba(27, 38, 59, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -1px 0 rgba(232, 228, 225, 0.9);
 }
