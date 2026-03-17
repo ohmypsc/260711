@@ -1,12 +1,10 @@
 /* ============================================
-   FINAL BUTTON DESIGN: mobile visibility optimized
+   BASE BUTTON
    ============================================ */
-
 button.w-btn {
   appearance: none;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
   user-select: none;
 
   position: relative;
@@ -24,12 +22,9 @@ button.w-btn {
   outline: none;
   cursor: pointer;
 
-  color: var(--theme-primary);
+  color: var(--text-main);
 
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
+  transition: transform 0.14s ease;
 }
 
 /* 내부 프레임 */
@@ -51,7 +46,7 @@ button.w-btn::after {
   height: 100%;
   transform: skewX(-24deg);
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.5;
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
@@ -60,16 +55,15 @@ button.w-btn::after {
   );
 }
 
-/* 텍스트 레이어 */
+/* 텍스트 */
 .w-btn__label {
   position: relative;
   z-index: 1;
-  display: inline-block;
   transform: translateY(-0.5px);
 }
 
 /* ============================================
-   BASIC : 메인 버튼 (Pure Ivory Glow)
+   BASIC : 메인 버튼 (아이보리 중심)
    ============================================ */
 button.w-btn.basic {
   min-height: 58px;
@@ -80,27 +74,14 @@ button.w-btn.basic {
   font-weight: 700;
   letter-spacing: 0.04em;
 
-  color: var(--text-main);
-
   border: 1px solid rgba(232, 228, 225, 0.9);
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(252, 249, 247, 1) 55%,
-      rgba(246, 241, 238, 1) 100%
-    );
-
-  box-shadow:
-    0 10px 22px rgba(0, 0, 0, 0.05), /* 🔥 완전 중립 그림자 */
-    0 2px 6px rgba(255, 255, 255, 0.7), /* 🔥 빛 반사 */
-    inset 0 1px 0 rgba(255, 255, 255, 0.96),
-    inset 0 -2px 0 rgba(232, 228, 225, 0.9);
-
-  transition:
-    transform 0.14s ease,
-    box-shadow 0.14s ease;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #fbf8f6 55%,
+    #f4efec 100%
+  );
 }
 
 button.w-btn.basic::before {
@@ -110,8 +91,9 @@ button.w-btn.basic::before {
 button.w-btn.basic:active {
   transform: scale(0.97);
 }
+
 /* ============================================
-   SUBMIT : 핑크 기운
+   SUBMIT : 살짝 강조 (톤만 조금 진하게)
    ============================================ */
 button.w-btn.submit {
   min-height: 52px;
@@ -121,27 +103,18 @@ button.w-btn.submit {
   font-size: clamp(0.9rem, 2.4vw, 1rem);
   font-weight: 700;
 
-  color: var(--theme-primary);
+  border: 1px solid rgba(222, 214, 208, 0.95);
 
-  /* 핑크는 아주 얇게만 */
-  border: 1px solid rgba(250, 215, 215, 0.34);
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(254, 252, 251, 1) 0%,
-      rgba(250, 247, 245, 1) 54%,
-      rgba(246, 242, 239, 1) 100%
-    );
-
-  box-shadow:
-    0 11px 20px rgba(27, 38, 59, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.96),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.9);
+  background: linear-gradient(
+    180deg,
+    #fdfaf8 0%,
+    #f7f3f0 55%,
+    #efe9e6 100%
+  );
 }
 
 button.w-btn.submit::before {
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 button.w-btn.submit:active {
@@ -149,7 +122,7 @@ button.w-btn.submit:active {
 }
 
 /* ============================================
-   CLOSE : 아이보리 (가시성 강화)
+   CLOSE : 더 연한 아이보리
    ============================================ */
 button.w-btn.close {
   min-height: 52px;
@@ -159,26 +132,18 @@ button.w-btn.close {
   font-size: clamp(0.9rem, 2.4vw, 1rem);
   font-weight: 700;
 
-  color: var(--text-main);
-
   border: 1px solid rgba(232, 228, 225, 1);
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 253, 251, 1) 0%,
-      rgba(252, 248, 246, 1) 55%,
-      rgba(248, 244, 241, 1) 100%
-    );
-
-  box-shadow:
-    0 8px 16px rgba(27, 38, 59, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.96),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.9);
+  background: linear-gradient(
+    180deg,
+    #fffdfb 0%,
+    #fcf9f7 55%,
+    #f7f3f1 100%
+  );
 }
 
 button.w-btn.close::before {
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.85);
 }
 
 button.w-btn.close:active {
@@ -192,28 +157,31 @@ button.w-btn:disabled {
   cursor: not-allowed;
   transform: none !important;
 
-  color: var(--text-light) !important;
+  color: var(--text-light);
 
-  border: 1px solid rgba(232, 228, 225, 0.9) !important;
+  border: 1px solid rgba(232, 228, 225, 0.9);
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(249, 247, 245, 0.96) 0%,
-      rgba(244, 241, 238, 0.96) 100%
-    ) !important;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.75),
-    inset 0 -1px 0 rgba(232, 228, 225, 0.85) !important;
+  background: linear-gradient(
+    180deg,
+    #f7f4f2 0%,
+    #f1ece9 100%
+  );
 }
 
 button.w-btn:disabled::before {
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 button.w-btn:disabled::after {
   display: none;
+}
+
+/* ============================================
+   FOCUS (접근성 최소 보완)
+   ============================================ */
+button.w-btn:focus-visible {
+  outline: 2px solid rgba(217, 206, 193, 0.6);
+  outline-offset: 2px;
 }
 
 /* ============================================
