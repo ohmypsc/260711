@@ -69,10 +69,7 @@ button.w-btn::after {
 }
 
 /* ============================================
-   BASIC : 메인 버튼
-   ============================================ */
-/* ============================================
-   BASIC : 메인 버튼 (Ivory Glow Ver.)
+   BASIC : 메인 버튼 (Pure Ivory Glow)
    ============================================ */
 button.w-btn.basic {
   min-height: 58px;
@@ -85,19 +82,19 @@ button.w-btn.basic {
 
   color: var(--text-main);
 
-  border: 1px solid rgba(232, 228, 225, 0.9); /* 🔥 핑크 제거 */
+  border: 1px solid rgba(232, 228, 225, 0.9);
 
   background:
     linear-gradient(
       180deg,
       rgba(255, 255, 255, 1) 0%,
-      rgba(250, 247, 244, 1) 55%,
-      rgba(245, 240, 237, 1) 100%
-    ); /* 🔥 아이보리 중심 */
+      rgba(252, 249, 247, 1) 55%,
+      rgba(246, 241, 238, 1) 100%
+    );
 
   box-shadow:
-    0 16px 28px rgba(27, 38, 59, 0.12), /* 네이비 depth */
-    0 4px 10px rgba(255, 255, 255, 0.6), /* 🔥 은은한 빛 반사 */
+    0 10px 22px rgba(0, 0, 0, 0.05), /* 🔥 완전 중립 그림자 */
+    0 2px 6px rgba(255, 255, 255, 0.7), /* 🔥 빛 반사 */
     inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -2px 0 rgba(232, 228, 225, 0.9);
 
@@ -107,19 +104,18 @@ button.w-btn.basic {
 }
 
 button.w-btn.basic::before {
-  border: 1px solid rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
 button.w-btn.basic:active {
   transform: scale(0.97);
 
   box-shadow:
-    0 8px 16px rgba(27, 38, 59, 0.1),
-    0 2px 6px rgba(255, 255, 255, 0.5),
+    0 6px 14px rgba(0, 0, 0, 0.04),
+    0 1px 4px rgba(255, 255, 255, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.94),
     inset 0 -2px 0 rgba(232, 228, 225, 0.88);
 }
-
 /* ============================================
    SUBMIT : 핑크 기운
    ============================================ */
