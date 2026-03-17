@@ -1,30 +1,41 @@
 import "./Account.scss";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/common/Button/Button";
 import { Modal } from "@/components/common/Modal/Modal";
 import { useContactInfo } from "@/ContactInfoProvider";
 
 type ModalType = null | "groom" | "bride";
+type ToastState = { msg: string; type: "success" | "error" } | null;
 
 export function Account() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
+  const [toast, setToast] = useState<ToastState>(null);
   const contactInfo = useContactInfo();
 
-  // 데이터 필터링
   const filtered = useMemo(
     () => contactInfo.filter((item) => item.type === openModal),
     [contactInfo, openModal]
   );
 
-  const modalTitle = openModal === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
+  const modalTitle =
+    openModal === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
-  // 복사 로직 (커스텀 토스트 제거, 에러 시에만 기본 경고창)
-  const copyToClipboard = (account: string) => {
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 2000);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const copyToClipboard = async (account: string) => {
     const numericAccount = account.replace(/[^0-9]/g, "");
-    navigator.clipboard.writeText(numericAccount)
-      .catch(() => {
-        alert("복사에 실패했습니다. 직접 입력해주세요.");
-      });
+
+    try {
+      await navigator.clipboard.writeText(numericAccount);
+      setToast({ msg: "계좌번호가 복사되었습니다", type: "success" });
+    } catch {
+      setToast({ msg: "복사에 실패했습니다", type: "error" });
+    }
   };
 
   return (
@@ -55,7 +66,6 @@ export function Account() {
         </Button>
       </div>
 
-      {/* 모달 */}
       {openModal && (
         <Modal onClose={() => setOpenModal(null)}>
           <h2 className="modal-title">{modalTitle}</h2>
@@ -76,6 +86,7 @@ export function Account() {
                     </div>
 
                     <button
+                      type="button"
                       className="copy-btn"
                       onClick={() => copyToClipboard(item.account)}
                       aria-label="계좌번호 복사"
@@ -91,6 +102,21 @@ export function Account() {
           </div>
         </Modal>
       )}
+
+      {toast &&
+        createPortal(
+          <div className="custom-toast">
+            <i
+              className={
+                toast.type === "success"
+                  ? "fa-solid fa-check"
+                  : "fa-solid fa-circle-exclamation"
+              }
+            ></i>
+            {toast.msg}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
