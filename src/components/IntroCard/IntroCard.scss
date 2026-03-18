@@ -112,17 +112,18 @@
 
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--theme-primary) 88%, var(--theme-point-pink) 12%) 0%,
-      color-mix(in srgb, var(--theme-primary) 94%, var(--theme-point-pink) 6%) 35%,
-      color-mix(in srgb, var(--theme-primary) 80%, var(--theme-point-pink) 20%) 50%,
-      color-mix(in srgb, var(--theme-primary) 94%, var(--theme-point-pink) 6%) 65%,
-      color-mix(in srgb, var(--theme-primary) 88%, var(--theme-point-pink) 12%) 100%
+      var(--theme-primary) 0%,
+      color-mix(in srgb, var(--theme-primary) 78%, var(--theme-point-pink) 22%) 38%,
+      color-mix(in srgb, var(--theme-primary) 60%, white 40%) 50%,
+      color-mix(in srgb, var(--theme-primary) 78%, var(--theme-point-pink) 22%) 62%,
+      var(--theme-primary) 100%
     );
-    background-size: 180% auto;
+    background-size: 240% 100%;
+    background-position: 200% 50%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: shimmerText 7s ease-in-out infinite;
+    animation: shimmerText 6.5s ease-in-out infinite;
   }
 
   .info {
@@ -322,10 +323,10 @@
 
 @keyframes shimmerText {
   0% {
-    background-position: 180% 50%;
+    background-position: 200% 50%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: -40% 50%;
   }
 }
 
