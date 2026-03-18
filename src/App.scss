@@ -139,7 +139,7 @@ section {
   pointer-events: none;
 
   /* 애니메이션 시간을 2.5초~3초 정도로 잡고, 부드러운 가감속 적용 */
-  animation: toastCenterFadeInOut 2s ease-in-out forwards;
+  animation: toastCenterFadeInOut 1.8s ease-in-out forwards;
 }
 
 .custom-toast::before {
