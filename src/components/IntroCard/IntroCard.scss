@@ -114,11 +114,11 @@
       90deg,
       var(--theme-primary) 0%,
       color-mix(in srgb, var(--theme-primary) 78%, var(--theme-point-pink) 22%) 38%,
-      color-mix(in srgb, var(--theme-primary) 60%, white 40%) 50%,
+      color-mix(in srgb, var(--theme-primary) 48%, white 52%) 50%,
       color-mix(in srgb, var(--theme-primary) 78%, var(--theme-point-pink) 22%) 62%,
       var(--theme-primary) 100%
     );
-    background-size: 240% 100%;
+    background-size: 300% 100%;
     background-position: 200% 50%;
     -webkit-background-clip: text;
     background-clip: text;
