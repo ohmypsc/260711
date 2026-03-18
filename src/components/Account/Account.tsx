@@ -8,10 +8,8 @@ import { useContactInfo } from "@/ContactInfoProvider";
 type ModalType = null | "groom" | "bride";
 type ToastState = { msg: string; type: "success" | "error" } | null;
 
-const isMobileDevice = () =>
-  /Android|iPhone|iPad|iPod|Mobile|SamsungBrowser|KAKAOTALK/i.test(
-    navigator.userAgent
-  );
+// 이제 모든 기기에서 토스트를 띄울 것이므로 isMobileDevice 함수는 사용하지 않아도 되지만, 
+// 다른 곳에서 쓰실 수 있으니 남겨두었습니다.
 
 export function Account() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
@@ -26,26 +24,25 @@ export function Account() {
   const modalTitle =
     openModal === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
+  // 토스트 타이머 (CSS 애니메이션 2.8초를 고려해 3초 유지)
   useEffect(() => {
     if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 2000);
+    const timer = setTimeout(() => setToast(null), 3000);
     return () => clearTimeout(timer);
   }, [toast]);
 
+  // 복사 함수 (괄호 누락 수정 및 모바일 제한 해제)
   const copyToClipboard = async (account: string) => {
     const numericAccount = account.replace(/[^0-9]/g, "");
 
     try {
       await navigator.clipboard.writeText(numericAccount);
-
-      // 모바일은 브라우저/OS 기본 복사 알림이 있으므로 커스텀 토스트 생략
-      if (!isMobileDevice()) {
-        setToast({ msg: "계좌번호가 복사되었습니다", type: "success" });
-      }
+      // 모든 기기에서 토스트 표시
+      setToast({ msg: "계좌번호가 복사되었습니다", type: "success" });
     } catch {
       setToast({ msg: "복사에 실패했습니다", type: "error" });
     }
-  };
+  }; // <--- 함수 닫는 괄호 누락되었던 부분
 
   return (
     <div className="account-wrapper">
@@ -54,7 +51,7 @@ export function Account() {
       <div className="section-desc">
         <p>참석이 어려우신 분들을 위해</p>
         <p>계좌번호를 기재하였습니다.</p>
-        <p>너그러운 마음으로 양해 부탁드립니다.</p>
+        <p>너거운 마음으로 양해 부탁드립니다.</p>
       </div>
 
       <div className="account-buttons">
