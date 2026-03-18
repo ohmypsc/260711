@@ -245,18 +245,22 @@
 
 /* 🟡 KAKAO */
 .navi-button.kakao {
-  border: 1px solid color-mix(in srgb, #FFE76A 28%, #e8e4e1 72%);
+  /* 테두리: 카카오 노란색 비중을 40%로 올려서 테두리부터 화사하게 */
+  border: 1px solid color-mix(in srgb, #FEE500 40%, #e8e4e1 60%);
+  
+  /* 배경: 맑은 화이트/아이보리 베이스에 카카오 옐로우(#FEE500) 농도 증가 */
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, white 94%, #FFE76A 6%) 0%,
-    color-mix(in srgb, #fbf8f6 90%, color-mix(in srgb, #FFE76A 50%, #FEC900 50%) 10%) 55%,
-    color-mix(in srgb, #f4efec 84%, #FEC900 16%) 100%
+    color-mix(in srgb, white 90%, #FEE500 10%) 0%,   /* 기존 6% -> 10% (시작부터 화사하게) */
+    color-mix(in srgb, #fbf8f6 85%, #FEE500 15%) 55%,  /* 기존 10% -> 15% (중간톤 맑은 노랑) */
+    color-mix(in srgb, #f4efec 75%, #FFD200 25%) 100%  /* 기존 16% -> 25% (끝은 살짝 진한 노랑으로 입체감) */
   );
 }
+
+/* 텍스트는 아까 맞춘 딥 브라운 그대로 유지하면 찰떡입니다! */
 .navi-button.kakao span {
   color: #54310E; /* 카카오 브라운 */
 }
-
 /* 🔵 TMAP */
 .navi-button.tmap {
   border: 1px solid color-mix(in srgb, color-mix(in srgb, #E645A8 50%, #0B7BF1 50%) 28%, #e8e4e1 72%);
