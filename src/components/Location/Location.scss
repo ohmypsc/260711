@@ -182,20 +182,6 @@
   /* ✅ Radius: 6px (통일) */
   border-radius: 6px; 
   
-  /* [2. 테두리 & 배경 핵심 로직] */
-  /* 물리적인 2px 투명 테두리 생성 (공간 확보) */
-  border: 2px solid transparent; 
-  
-  /* 배경 2겹 쌓기 (순서 중요: 위 -> 아래) 
-     1. 안쪽: 순수한 흰색 (#fff) -> padding-box 기준
-     2. 바깥쪽: 그라데이션 (var) -> border-box 기준
-  */
-  background-image: 
-    linear-gradient(#fff, #fff), 
-    var(--border-grad);
-  
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
 
   /* [3. 텍스트 스타일] */
   font-family: "Pretendard", sans-serif; 
