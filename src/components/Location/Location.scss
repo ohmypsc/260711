@@ -243,42 +243,47 @@
    🎨 Brand Styling (Gradient)
    --------------------------- */
 
-/* NAVER */
+/* 🟢 NAVER */
 .navi-button.naver {
-  --border-grad: linear-gradient(180deg, #017FF9 0%, #00D926 100%);
+  border: 1px solid color-mix(in srgb, #017FF9 28%, #e8e4e1 72%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, white 94%, #017FF9 6%) 0%,
+    color-mix(in srgb, #fbf8f6 90%, color-mix(in srgb, #017FF9 50%, #00D926 50%) 10%) 55%,
+    color-mix(in srgb, #f4efec 84%, #00D926 16%) 100%
+  );
 }
 .navi-button.naver span {
-  background: linear-gradient(180deg, #017FF9 0%, #00D926 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -0.02em; 
+  color: #0C5A2A; /* 딥 포레스트 그린 */
 }
 
-/* KAKAO */
+/* 🟡 KAKAO */
 .navi-button.kakao {
-  --border-grad: linear-gradient(180deg, #FFE76A 0%, #FEC900 100%);
+  border: 1px solid color-mix(in srgb, #FFE76A 28%, #e8e4e1 72%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, white 94%, #FFE76A 6%) 0%,
+    color-mix(in srgb, #fbf8f6 90%, color-mix(in srgb, #FFE76A 50%, #FEC900 50%) 10%) 55%,
+    color-mix(in srgb, #f4efec 84%, #FEC900 16%) 100%
+  );
 }
 .navi-button.kakao span {
-  background: linear-gradient(180deg, #333 0%, #000 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -0.02em;
+  color: #54310E; /* 카카오 브라운 */
 }
 
-/* TMAP */
+/* 🔵 TMAP */
 .navi-button.tmap {
-  --border-grad: linear-gradient(180deg, #C642D4 0%, #0B7BF1 100%);
+  border: 1px solid color-mix(in srgb, color-mix(in srgb, #E645A8 50%, #0B7BF1 50%) 28%, #e8e4e1 72%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, white 94%, #E645A8 6%) 0%,
+    color-mix(in srgb, #fbf8f6 90%, #0B7BF1 10%) 55%,
+    color-mix(in srgb, #f4efec 84%, #00D9CC 16%) 100%
+  );
 }
 .navi-button.tmap span {
-  background: linear-gradient(180deg, #C642D4 0%, #0B7BF1 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -0.02em;
+  color: #20367A; /* 딥 인디고 블루 */
 }
-
 
 /* 모바일 대응 */
 @media (max-width: 640px) {
