@@ -98,13 +98,13 @@ section {
 }
 
 /* ============================================
-    📍 Custom Toast (Modified: Screen Center)
+    📍 Custom Toast (Modified: Center + Fade Out)
    ============================================ */
 .custom-toast {
   position: fixed;
-  /* 화면 정중앙 배치 */
   left: 50%;
   top: 50%;
+  /* 처음 시작 위치와 크기 고정 */
   transform: translate(-50%, -50%);
   
   z-index: 100000;
@@ -134,7 +134,6 @@ section {
   font-weight: 500;
   letter-spacing: -0.02em;
 
-  /* 중앙 정렬 시 시인성을 위해 그림자 강화 */
   box-shadow:
     0 15px 35px rgba(27, 38, 59, 0.15),
     0 5px 15px rgba(250, 215, 215, 0.1),
@@ -142,8 +141,11 @@ section {
     inset 0 -1px 0 rgba(232, 228, 225, 0.84);
 
   pointer-events: none;
-  /* 중앙용 애니메이션 적용 */
-  animation: toastCenterPop 0.3s ease-out forwards;
+
+  /* 애니메이션 설정: 
+     3초 동안(3s) 'toastCenterFadeInOut' 실행 
+  */
+  animation: toastCenterFadeInOut 3s ease-in-out forwards;
 }
 
 .custom-toast::before {
@@ -163,44 +165,34 @@ section {
   flex-shrink: 0;
 }
 
-.custom-toast span,
-.custom-toast p,
-.custom-toast strong {
-  position: relative;
-  z-index: 1;
-}
-
-/* 중앙에서 부드럽게 커지며 나타나는 효과 */
-@keyframes toastCenterPop {
-  from {
+/* ============================================
+    ✨ 나타나고 사라지는 애니메이션 (Keyframes)
+   ============================================ */
+@keyframes toastCenterFadeInOut {
+  /* 0%: 시작 (투명하고 살짝 작음) */
+  0% {
     opacity: 0;
     transform: translate(-50%, -45%) scale(0.92);
   }
-  to {
+  /* 10% ~ 90%: 나타난 상태 유지 (정중앙 정석 위치) */
+  10%, 90% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
+  /* 100%: 끝 (다시 투명해지며 스르륵 사라짐) */
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
 }
 
-/* ============================================
-    📱 Responsive Design
-   ============================================ */
+/* 모바일 대응 */
 @media (max-width: 480px) {
   .custom-toast {
     top: 50%;
-    bottom: auto; /* 기존 하단 설정 초기화 */
     transform: translate(-50%, -50%);
-    
     min-height: 46px;
     padding: 12px 20px;
     font-size: 0.92rem;
-
-    box-shadow:
-      0 10px 25px rgba(27, 38, 59, 0.14),
-      0 3px 7px rgba(250, 215, 215, 0.11);
-  }
-
-  .custom-toast i {
-    font-size: 0.88rem;
   }
 }
