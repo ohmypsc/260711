@@ -9,12 +9,11 @@
 }
 
 :root {
-    /* 🎨 1. 색상 조합: Deep Navy & Warm Sand */
     --theme-bg: #FDFBF9;            
     --theme-accent: #F4F1EE;       
 
-    --theme-primary: #1B263B;       /* Deep Navy (강조, 제목) */
-    --theme-primary-light: #D9CEC1; /* Warm Sand (서브 포인트) */
+    --theme-primary: #1B263B;       /* Deep Navy */
+    --theme-primary-light: #D9CEC1; /* Warm Sand */
 
     --theme-leaf-green: #2a8249;    
     --theme-point-pink: #fad7d7;    
@@ -98,15 +97,12 @@ section {
 }
 
 /* ============================================
-    📍 Custom Toast (Modified: Center + Fade Out)
+    📍 Custom Toast (Modified: Perfect Fade In/Out)
    ============================================ */
 .custom-toast {
   position: fixed;
   left: 50%;
   top: 50%;
-  /* 처음 시작 위치와 크기 고정 */
-  transform: translate(-50%, -50%);
-  
   z-index: 100000;
   min-height: 48px;
   max-width: calc(100vw - 32px);
@@ -142,10 +138,8 @@ section {
 
   pointer-events: none;
 
-  /* 애니메이션 설정: 
-     3초 동안(3s) 'toastCenterFadeInOut' 실행 
-  */
-  animation: toastCenterFadeInOut 3s ease-in-out forwards;
+  /* 애니메이션 시간을 2.5초~3초 정도로 잡고, 부드러운 가감속 적용 */
+  animation: toastCenterFadeInOut 2.8s ease-in-out forwards;
 }
 
 .custom-toast::before {
@@ -166,23 +160,29 @@ section {
 }
 
 /* ============================================
-    ✨ 나타나고 사라지는 애니메이션 (Keyframes)
+    ✨ 스르륵 나타나고 사라지는 대칭 애니메이션
    ============================================ */
 @keyframes toastCenterFadeInOut {
-  /* 0%: 시작 (투명하고 살짝 작음) */
+  /* [나타나기] 0% ~ 15% 구간 (약 0.4초) */
   0% {
     opacity: 0;
-    transform: translate(-50%, -45%) scale(0.92);
+    transform: translate(-50%, -40%) scale(0.9);
   }
-  /* 10% ~ 90%: 나타난 상태 유지 (정중앙 정석 위치) */
-  10%, 90% {
+  15% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-  /* 100%: 끝 (다시 투명해지며 스르륵 사라짐) */
+
+  /* [유지하기] 15% ~ 85% 구간 (약 2초) */
+  85% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* [사라지기] 85% ~ 100% 구간 (약 0.4초) */
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95);
+    transform: translate(-50%, -60%) scale(0.9);
   }
 }
 
