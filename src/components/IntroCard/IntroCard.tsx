@@ -190,21 +190,21 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
     <div className={`intro-wrap ${exiting ? "exiting" : ""}`}>
       <div id="inviteCard" className="invite-card">
         <div className="card-inner">
-          <div className="names">
-            <span>백승철</span>
+          <div className="names" aria-label="백승철 오미영">
+            <span className="name groom">백승철</span>
 
             <span className="between-icon" aria-hidden="true">
               <i className="fa-solid fa-heart" />
             </span>
 
-            <span>오미영</span>
+            <span className="name bride">오미영</span>
           </div>
 
           <div className="subtitle">결혼합니다</div>
 
           <div className="info">
             <div className="row date">
-              <span className="main">2026. 07. 11. 토요일</span>
+              <span className="main">2026년 7월 11일 토요일</span>
               <span className="sub">오전 11시</span>
             </div>
 
