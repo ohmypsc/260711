@@ -408,21 +408,30 @@
     }
 
     &.active {
-      color: rgba(255, 250, 245, 0.92);
+      color: rgba(255, 251, 247, 0.96);
       font-weight: 700;
-      border-color: rgba(27, 38, 59, 0.9);
+      border-color: rgba(27, 38, 59, 0.82);
 
       background:
         linear-gradient(
           180deg,
-          rgba(40, 54, 79, 0.96) 0%,
-          rgba(27, 38, 59, 0.98) 100%
+          color-mix(in srgb, var(--theme-primary) 86%, var(--theme-point-pink) 14%) 0%,
+          color-mix(in srgb, var(--theme-primary) 92%, var(--theme-point-pink) 8%) 54%,
+          var(--theme-primary) 100%
         );
 
       box-shadow:
-        0 8px 16px rgba(27, 38, 59, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        inset 0 -1px 0 rgba(14, 20, 31, 0.22);
+        0 6px 14px rgba(27, 38, 59, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(12, 18, 29, 0.28);
+    }
+
+    &.active:active {
+      transform: scale(0.98);
+      box-shadow:
+        0 3px 8px rgba(27, 38, 59, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -1px 0 rgba(12, 18, 29, 0.24);
     }
   }
 }
