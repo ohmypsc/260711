@@ -201,7 +201,7 @@ function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId:
     setLoading(true);
     try {
       const { data } = await supabase.from("guestbook").select("password").eq("id", postId).single();
-      if (data?.password !== password) { setLoading(false); return onToast("비밀번호 불일치", "error"); }
+      if (data?.password !== password) { setLoading(false); return onToast("비밀번호가 일치하지 않습니다", "error"); }
       await supabase.from("guestbook").delete().eq("id", postId);
       onToast("삭제되었습니다", "success");
       onSuccess(); onClose();
