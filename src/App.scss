@@ -1,5 +1,5 @@
 /* ============================================
-   📌 Global Reset & Layout (Final: Original Navy)
+    📌 Global Reset & Layout (Final: Original Navy)
    ============================================ */
 
 *,
@@ -9,11 +9,11 @@
 }
 
 :root {
-    /* 🎨 1. 색상 조합: 처음 주신 Deep Navy & Warm Sand 유지 */
-    --theme-bg: #FDFBF9;           
+    /* 🎨 1. 색상 조합: Deep Navy & Warm Sand */
+    --theme-bg: #FDFBF9;            
     --theme-accent: #F4F1EE;       
 
-   --theme-primary: #1B263B;       /* Deep Navy (강조, 제목) */
+    --theme-primary: #1B263B;       /* Deep Navy (강조, 제목) */
     --theme-primary-light: #D9CEC1; /* Warm Sand (서브 포인트) */
 
     --theme-leaf-green: #2a8249;    
@@ -21,7 +21,7 @@
 
     --section-bg-soft: #F9F7F5;     
 
-    --text-main: #2F2E2D;          
+    --text-main: #2F2E2D;           
     --text-light: #6E7278;          
 
     --theme-success: #469C7A;
@@ -39,20 +39,16 @@ html,
 body {
   margin: 0;
   padding: 0;
-
   overflow-x: hidden;
   overflow-y: auto;
-
   width: 100%;
-   
   background-color: var(--theme-bg);
-
   line-height: 1.65;
-  color: var(--text-main); /* 본문 색상 */
+  color: var(--text-main);
 }
 
 /* ============================================
-   📄 Wedding Page Wrapper
+    📄 Wedding Page Wrapper
    ============================================ */
 .wedding-page {
   position: relative;
@@ -63,7 +59,7 @@ body {
 }
 
 /* ============================================
-   📦 Section Layout
+    📦 Section Layout
    ============================================ */
 section {
   padding: 3rem 0;
@@ -76,7 +72,6 @@ section {
   width: 100%;
 }
 
-/* 🎨 3. 텍스트 스타일 */
 .section-title {
   position: relative;
   font-size: clamp(1.1rem, 2.5vw, 1.3rem);
@@ -84,7 +79,7 @@ section {
   letter-spacing: 0.2em; 
   text-align: center;
   margin-bottom: 2.5rem; 
-  color: var(--theme-primary); /* 제목 색상 */
+  color: var(--theme-primary);
   line-height: 1.2;
 }
 
@@ -94,7 +89,6 @@ section {
   line-height: 1.8;
   color: var(--text-main);
   text-align: center;
-
   word-break: keep-all;
   overflow-wrap: break-word;
 }
@@ -103,16 +97,20 @@ section {
   margin: 0;
 }
 
+/* ============================================
+    📍 Custom Toast (Modified: Screen Center)
+   ============================================ */
 .custom-toast {
   position: fixed;
+  /* 화면 정중앙 배치 */
   left: 50%;
-  bottom: 26px;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  
   z-index: 100000;
-
   min-height: 48px;
   max-width: calc(100vw - 32px);
-  padding: 13px 20px;
+  padding: 13px 24px;
 
   display: inline-flex;
   align-items: center;
@@ -120,33 +118,32 @@ section {
   gap: 8px;
 
   white-space: nowrap;
-
   border-radius: 999px;
   border: 1px solid rgba(250, 215, 215, 0.42);
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 253, 252, 0.98) 0%,
-      rgba(252, 248, 246, 0.98) 55%,
-      rgba(248, 243, 241, 0.98) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 253, 252, 0.98) 0%,
+    rgba(252, 248, 246, 0.98) 55%,
+    rgba(248, 243, 241, 0.98) 100%
+  );
 
   color: var(--theme-primary);
-
   font-family: "Gowun Batang", sans-serif;
   font-size: 0.96rem;
   font-weight: 500;
   letter-spacing: -0.02em;
 
+  /* 중앙 정렬 시 시인성을 위해 그림자 강화 */
   box-shadow:
-    0 12px 24px rgba(27, 38, 59, 0.10),
-    0 3px 8px rgba(250, 215, 215, 0.12),
+    0 15px 35px rgba(27, 38, 59, 0.15),
+    0 5px 15px rgba(250, 215, 215, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.92),
     inset 0 -1px 0 rgba(232, 228, 225, 0.84);
 
   pointer-events: none;
-  animation: toastBottomUp 0.28s ease-out forwards;
+  /* 중앙용 애니메이션 적용 */
+  animation: toastCenterPop 0.3s ease-out forwards;
 }
 
 .custom-toast::before {
@@ -173,29 +170,34 @@ section {
   z-index: 1;
 }
 
-@keyframes toastBottomUp {
+/* 중앙에서 부드럽게 커지며 나타나는 효과 */
+@keyframes toastCenterPop {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(12px) scale(0.985);
+    transform: translate(-50%, -45%) scale(0.92);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
+/* ============================================
+    📱 Responsive Design
+   ============================================ */
 @media (max-width: 480px) {
   .custom-toast {
-    bottom: 20px;
+    top: 50%;
+    bottom: auto; /* 기존 하단 설정 초기화 */
+    transform: translate(-50%, -50%);
+    
     min-height: 46px;
-    padding: 12px 18px;
+    padding: 12px 20px;
     font-size: 0.92rem;
 
     box-shadow:
-      0 10px 20px rgba(27, 38, 59, 0.11),
-      0 3px 7px rgba(250, 215, 215, 0.11),
-      inset 0 1px 0 rgba(255, 255, 255, 0.94),
-      inset 0 -1px 0 rgba(232, 228, 225, 0.86);
+      0 10px 25px rgba(27, 38, 59, 0.14),
+      0 3px 7px rgba(250, 215, 215, 0.11);
   }
 
   .custom-toast i {
