@@ -24,10 +24,10 @@ export function Account() {
   const modalTitle =
     openModal === "groom" ? "신랑 측 계좌번호" : "신부 측 계좌번호";
 
-  // 토스트 타이머 (CSS 애니메이션 2.8초를 고려해 3초 유지)
+  // 토스트 타이머
   useEffect(() => {
     if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 3000);
+    const timer = setTimeout(() => setToast(null), 2000);
     return () => clearTimeout(timer);
   }, [toast]);
 
@@ -51,7 +51,7 @@ export function Account() {
       <div className="section-desc">
         <p>참석이 어려우신 분들을 위해</p>
         <p>계좌번호를 기재하였습니다.</p>
-        <p>너거운 마음으로 양해 부탁드립니다.</p>
+        <p>너그러운 마음으로 양해 부탁드립니다.</p>
       </div>
 
       <div className="account-buttons">
