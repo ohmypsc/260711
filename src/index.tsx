@@ -8,12 +8,13 @@ import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook";
+// 👇 새로 만든 GuestPhoto 컴포넌트를 불러옵니다. (경로는 실제 폴더 구조에 맞게 확인해 주세요!)
+import { GuestPhoto } from "@/components/GuestPhoto/GuestPhoto"; 
 
 export default function MainWeddingPage() {
   useEffect(() => {
     // ===============================
     // ✅ 1) 확대 방지 (유지)
-    // - 불필요한 스크롤 로직은 모두 삭제했습니다. (<FadeIn>이 알아서 함)
     // ===============================
     let lastTouchEnd = 0;
 
@@ -110,6 +111,15 @@ export default function MainWeddingPage() {
           <FadeIn>
             <div className="section-inner">
               <GuestBook />
+            </div>
+          </FadeIn>
+        </section>
+
+        {/* 👇 8. 사진 공유하기 (여기에 추가했습니다!) */}
+        <section id="guest-photo">
+          <FadeIn>
+            <div className="section-inner">
+              <GuestPhoto />
             </div>
           </FadeIn>
         </section>
