@@ -46,9 +46,13 @@ export default function IntroCard({ onFinish, exiting = false }: Props) {
 
     ctxRef.current = ctx;
 
-    const petalImg = new Image();
-    petalImg.src = `${import.meta.env.BASE_URL}petal.png`;
-    petalImgRef.current = petalImg;
+   const petalImg = new Image();
+    petalImg.src = `${import.meta.env.BASE_URL}petal.png`;
+    
+    // 이미지가 로드완료되면 ref에 쏙 넣어줍니다.
+    petalImg.onload = () => {
+      petalImgRef.current = petalImg;
+    };
 
     function resize() {
       const targetCanvas = canvasRef.current;
