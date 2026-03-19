@@ -22,7 +22,7 @@
     "vite": "^7.1.5",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-svgr": "^4.5.0",
-    "browser-image-compression": "^2.0.22"
+    "browser-image-compression": "latest"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.6.0",
