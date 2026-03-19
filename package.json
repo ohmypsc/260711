@@ -21,7 +21,7 @@
     "sass": "^1.89.2",
     "vite": "^7.1.5",
     "vite-plugin-html": "^3.2.2",
-    "vite-plugin-svgr": "^4.5.0"
+    "vite-plugin-svgr": "^4.5.0",
     "browser-image-compression": "^2.0.22"
   },
   "devDependencies": {
