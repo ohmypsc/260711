@@ -244,7 +244,7 @@ function AutoFitTitle({
 
 
 /**
- * LazyImage
+ * LazyImage (수정됨: Observer 및 상태 관리 로직 안정화)
  */
 function LazyImage({
   srcPromise,
@@ -260,8 +260,9 @@ function LazyImage({
   const [src, setSrc] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
+  // 1. 화면에 보이는지 감지하여 로딩 시작 트리거
   useEffect(() => {
-    if (aboveFold) return;
+    if (aboveFold) return; // 위쪽 이미지는 바로 로딩
 
     const el = ref.current;
     if (!el) return;
@@ -270,26 +271,35 @@ function LazyImage({
       ([entry]) => {
         if (entry.isIntersecting) {
           setShouldLoad(true);
-          io.disconnect();
+          io.disconnect(); // 한 번 보이면 더 이상 감지할 필요 없음
         }
       },
       {
         root: null,
-        rootMargin: "600px",
+        rootMargin: "600px", // 화면 밖 600px에서 미리 로딩 시작
         threshold: 0.01,
       }
     );
 
     io.observe(el);
-    return () => io.disconnect();
+    return () => io.disconnect(); // 언마운트 시 클린업
   }, [aboveFold]);
 
+  // 2. shouldLoad가 true가 되면 실제 이미지 주소를 가져옴
   useEffect(() => {
     if (!shouldLoad || src) return;
 
     let cancelled = false;
-    srcPromise().then((url) => {
-      if (!cancelled) setSrc(url);
+    
+    // srcPromise가 모듈 객체를 반환하는 경우에 대비한 안전한 처리
+    srcPromise().then((moduleOrUrl: any) => {
+      if (!cancelled) {
+        // Vite의 import.meta.glob 결과물 형태(default 추출)에 대응
+        const url = typeof moduleOrUrl === "string" ? moduleOrUrl : moduleOrUrl?.default;
+        if (url) {
+           setSrc(url);
+        }
+      }
     });
 
     return () => {
@@ -303,8 +313,10 @@ function LazyImage({
       className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`}
       aria-label={alt}
     >
+      {/* 로딩 전 뼈대(스켈레톤) 애니메이션 */}
       {!loaded && <div className="photo-skeleton" aria-hidden="true" />}
 
+      {/* 이미지가 로드되면 화면에 그림 */}
       {src && (
         <img
           src={src}
