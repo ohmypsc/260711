@@ -8,6 +8,10 @@ type ToastState = { msg: string; type: "success" | "error" } | null;
 export function GuestPhoto() {
   const [isUploading, setIsUploading] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
+  
+  // ⭐️ 추가된 부분: 현재 진행 상황을 기억하는 상태 (현재 장수, 전체 장수)
+  const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 구글 앱스 스크립트 웹앱 URL (입력하신 주소 그대로 유지)
@@ -25,14 +29,15 @@ export function GuestPhoto() {
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 1. 선택된 파일들을 안전한 배열(Array) 형태로 변환합니다.
     const fileList = e.target.files;
     if (!fileList || fileList.length === 0) return;
     const files = Array.from(fileList);
 
     setIsUploading(true);
-    // 2. 여러 장을 올릴 땐 시간이 걸리므로 하객이 기다릴 수 있게 안내 문구 변경
-    setToast({ msg: `${files.length}장의 사진을 안전하게 전송 중입니다... (조금 걸려요!)`, type: "success" });
+    // 업로드 시작 시 전체 장수 세팅
+    setUploadProgress({ current: 0, total: files.length });
+    
+    setToast({ msg: `${files.length}장의 사진을 안전하게 전송 중입니다... (창을 닫지 마세요!)`, type: "success" });
 
     try {
       const options = {
@@ -42,6 +47,9 @@ export function GuestPhoto() {
       };
 
       for (let i = 0; i < files.length; i++) {
+        // ⭐️ 추가된 부분: 반복문이 돌 때마다 현재 몇 번째 사진인지 버튼에 업데이트
+        setUploadProgress((prev) => ({ ...prev, current: i + 1 }));
+        
         const file = files[i];
         
         // 이미지 압축
@@ -72,7 +80,7 @@ export function GuestPhoto() {
           throw new Error(`서버 에러: ${file.name} 업로드 실패`);
         }
 
-        // ⭐️ 핵심 해결책: 구글 서버가 튕겨내지 않게 다음 사진을 보내기 전 1.5초(1500ms) 휴식
+        // 구글 서버가 튕겨내지 않게 다음 사진을 보내기 전 1.5초(1500ms) 휴식
         if (i < files.length - 1) {
           await new Promise((resolve) => setTimeout(resolve, 1500));
         }
@@ -85,7 +93,8 @@ export function GuestPhoto() {
       setToast({ msg: "일부 사진 전송에 실패했습니다. 다시 시도해 주세요.", type: "error" });
     } finally {
       setIsUploading(false);
-      // 똑같은 사진을 다시 올릴 수도 있으니 input 초기화
+      // 진행 상황 초기화
+      setUploadProgress({ current: 0, total: 0 });
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
@@ -116,11 +125,13 @@ export function GuestPhoto() {
             onClick={handleUploadClick}
             disabled={isUploading}
           >
-            {isUploading ? "전송 중..." : "사진 선택하기"}
+            {/* ⭐️ 추가된 부분: 업로드 중일 때 버튼 글씨를 (현재/전체) 로 보여줌 */}
+            {isUploading 
+              ? `전송 중... (${uploadProgress.current}/${uploadProgress.total})` 
+              : "사진 선택하기"}
           </button>
         </div>
 
-        {/* multiple 속성으로 여러 장 선택 가능 */}
         <input
           type="file"
           accept="image/*"
