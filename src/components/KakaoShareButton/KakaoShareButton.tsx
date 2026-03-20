@@ -26,6 +26,8 @@ export function KakaoShareButton() {
       window.Kakao.Share.sendDefault({
         objectType: "feed",
         content: {
+          title: " ", 
+          description: " ",
           imageUrl: "https://ohmypsc.github.io/260711/thumbnail.jpg", 
           link: {
             mobileWebUrl: shareUrl,
