@@ -27,7 +27,7 @@ export function KakaoShareButton() {
         objectType: "feed",
         content: {
           title: "백승철 ❤️ 오미영 결혼합니다",
-          description: "2026년 7월 11일 토요일 오전 11시\n유성컨벤션웨딩홀", // 예식 날짜와 장소 적어주세요
+          description: "2026년 7월 11일 토요일 오전 11시\n대전 유성컨벤션웨딩홀", // 예식 날짜와 장소 적어주세요
           
           // 📌 1:1 비율의 예쁜 정방형 썸네일 주소 (새로 만들어서 public 폴더에 넣어주세요!)
           imageUrl: "https://ohmypsc.github.io/260711/thumbnail.jpg", 
@@ -38,7 +38,7 @@ export function KakaoShareButton() {
         },
         buttons: [
           {
-            title: "청첩장 보러가기", // 버튼에 들어갈 텍스트
+            title: "청첩장 보러 가기", // 버튼에 들어갈 텍스트
             link: {
               mobileWebUrl: shareUrl,
               webUrl: shareUrl,
