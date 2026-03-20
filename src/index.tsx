@@ -8,6 +8,7 @@ import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook";
+import { KakaoShareButton } from "@/components/KakaoShareButton";
 
 export default function MainWeddingPage() {
   useEffect(() => {
@@ -109,6 +110,15 @@ export default function MainWeddingPage() {
           <FadeIn>
             <div className="section-inner">
               <GuestBook />
+            </div>
+          </FadeIn>
+        </section>
+
+        {/*8. 공유버튼 */}
+        <section id="share" style={{ paddingBottom: "80px", textAlign: "center" }}>
+          <FadeIn>
+            <div className="section-inner">
+              <KakaoShareButton />
             </div>
           </FadeIn>
         </section>
