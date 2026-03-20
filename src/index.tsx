@@ -8,7 +8,7 @@ import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
 import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook";
-import { KakaoShareButton } from "@/components/KakaoShareButton";
+import { KakaoShareButton } from "@/components/KakaoShareButton/KakaoShareButton";
 
 export default function MainWeddingPage() {
   useEffect(() => {
