@@ -29,7 +29,7 @@ export function KakaoShareButton() {
         content: {
           title: "백승철 ❤️ 오미영 결혼합니다",
           description: "2026년 7월 11일 토요일 오전 11시\n대전 유성컨벤션웨딩홀",
-          imageUrl: "https://ohmypsc.github.io/260711/thumbnail.jpg", 
+          imageUrl: "https://ohmypsc.github.io/260711/thumbnail.png", 
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
