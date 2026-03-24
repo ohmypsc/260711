@@ -66,9 +66,9 @@
     line-height: 1.3;
     margin-bottom: 1.3rem;
 
-    /* 💡 Flex로 변경하여 간격을 완벽하게 고정 */
-    display: flex;
-    justify-content: center;
+    /* ✨ Grid를 사용하여 [신랑영역] [아이콘] [신부영역] 비율을 완벽히 고정 */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 0.65rem; 
     
@@ -78,19 +78,19 @@
     margin-right: auto;
   }
 
-  .name {
-    display: block;
-    flex: 1; /* 💡 신랑, 신부 이름 영역의 크기를 동일하게 강제 지정 */
-    min-width: 0;
-    white-space: nowrap;
-  }
-
-  /* 💡 중앙 아이콘을 기준으로 데칼코마니처럼 정렬 */
-  .name:first-child {
+  /* ✨ HTML 구조와 상관없이 첫 번째 요소는 무조건 우측, 마지막 요소는 좌측으로 붙임 */
+  .names > :first-child {
     text-align: right;
   }
-  .name:last-child {
+  
+  .names > :last-child {
     text-align: left;
+  }
+
+  .name {
+    display: block;
+    min-width: 0;
+    white-space: nowrap;
   }
 
   .between-icon {
@@ -364,7 +364,6 @@
   .intro-wrap .names {
     font-size: 1.76rem;
     max-width: 230px;
-    /* 💡 모바일에서도 gap으로 통일 */
     gap: 0.52rem; 
   }
 
