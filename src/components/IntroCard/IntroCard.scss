@@ -1,4 +1,3 @@
-
 /* ============================================
    IntroCard
    Summer Bright Luxe Final
@@ -81,11 +80,18 @@
 
   .name {
     display: block;
+    flex: 1; /* 💡 신랑, 신부 이름 영역의 크기를 동일하게 강제 지정 */
     min-width: 0;
     white-space: nowrap;
   }
 
-  /* 💡 text-align 제거 (Flex가 알아서 중앙 정렬) */
+  /* 💡 중앙 아이콘을 기준으로 데칼코마니처럼 정렬 */
+  .name:first-child {
+    text-align: right;
+  }
+  .name:last-child {
+    text-align: left;
+  }
 
   .between-icon {
     display: inline-flex;
