@@ -102,7 +102,9 @@
     color: var(--theme-point-pink);
     font-size: 0.92rem;
     line-height: 1;
-    transform: translateY(0.02em);
+
+    /* 💡 데스크톱(PC) 환경 시각적 보정: 하트를 오른쪽으로 4px 이동 */
+    transform: translate(4px, 0.02em);
   }
 
   .subtitle {
@@ -369,6 +371,9 @@
 
   .intro-wrap .between-icon {
     font-size: 0.86rem;
+
+    /* 💡 모바일 환경에서는 쏠림 현상이 없으므로 다시 정중앙으로 원상복구! */
+    transform: translate(0, 0.02em); 
   }
 
   .intro-wrap .subtitle {
