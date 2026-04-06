@@ -295,10 +295,18 @@ function WriteAttendanceModal({
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.name || !form.phone || !form.side || !form.meal) {
-      return onToast("모든 항목을 입력해 주세요", "error");
+    if (!form.side) {
+      return onToast("신랑/신부 측 구분을 선택해 주세요", "error");
     }
-
+    if (!form.name.trim()) {
+      return onToast("성함을 입력해 주세요", "error");
+    }
+    if (!form.phone) {
+      return onToast("연락처를 입력해 주세요", "error");
+    }
+    if (!form.meal) {
+      return onToast("식사 여부를 선택해 주세요", "error");
+    }
     if (form.count < 1) {
       return onToast("참석 인원은 최소 1명입니다", "error");
     }
@@ -441,8 +449,11 @@ function FindAttendanceModal({
   const onFind = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !phone) {
-      return onToast("모든 항목을 입력해 주세요", "error");
+    if (!name.trim()) {
+      return onToast("성함을 입력해 주세요", "error");
+    }
+    if (!phone) {
+      return onToast("연락처를 입력해 주세요", "error");
     }
 
     setLoading(true);
@@ -524,10 +535,18 @@ function EditAttendanceModal({
   const onUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.name || !form.phone || !form.side || !form.meal) {
-      return onToast("모든 항목을 입력해 주세요", "error");
+    if (!form.side) {
+      return onToast("신랑/신부 측 구분을 선택해 주세요", "error");
     }
-
+    if (!form.name.trim()) {
+      return onToast("성함을 입력해 주세요", "error");
+    }
+    if (!form.phone) {
+      return onToast("연락처를 입력해 주세요", "error");
+    }
+    if (!form.meal) {
+      return onToast("식사 여부를 선택해 주세요", "error");
+    }
     if (form.count < 1) {
       return onToast("참석 인원은 최소 1명입니다", "error");
     }
