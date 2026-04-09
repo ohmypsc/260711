@@ -34,18 +34,13 @@
     animation: textFlow 8s linear infinite;
 
     @media (prefers-color-scheme: dark) {
-      /* 삼성 인터넷 강제 다크모드 우회: 그라데이션 제거 및 그림자 활용 */
       background: none !important;
-      -webkit-background-clip: border-box !important;
+      -webkit-background-clip: initial !important;
+      background-clip: initial !important;
       -webkit-text-fill-color: initial !important;
-      background-clip: border-box !important;
-      
-      /* 글자 자체는 투명하게 만들고, 그림자로 색을 입힘 */
-      color: transparent !important;
-      text-shadow: 0 0 0 var(--theme-primary-light) !important;
-      animation: none !important; /* 그라데이션이 없으므로 애니메이션 정지 */
+      color: var(--theme-primary) !important;
+      animation: none !important;
     }
-
     @media (max-width: 600px) {
       font-size: 8.2vw; 
       padding: 0rem; 
