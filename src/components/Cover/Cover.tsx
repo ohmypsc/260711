@@ -131,7 +131,7 @@ export function Cover() {
         </div>
         
         <div className="message-block">
-          <p>함께라면 여름의 궂은 비도 낭만이 되는 사람과</p>
+          <p>함께라면 여름의 궂은비도 낭만이 되는 사람과</p>
           <p>시간의 흐름에 기대지 않고 서로에게 최선을 다하며 살겠습니다.</p>
         </div>
         
