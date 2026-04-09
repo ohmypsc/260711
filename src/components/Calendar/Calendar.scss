@@ -1,32 +1,21 @@
-/* =========================================================
-   Calendar Component (Final: No Colons, Natural Text)
-   ========================================================= */
-
-/* ✨ 끊김 없는 텍스트 흐름 애니메이션 */
 @keyframes textFlow {
   0% { background-position: 0% 50%; }
   100% { background-position: -200% 50%; }
 }
 
-/* ✅ 최상위 클래스 */
 .calendar-wrapper {
   width: 100%;
   box-sizing: border-box;
   text-align: center;
   font-family: inherit;
 
-  /* ----------------------------------------------------
-     Headline (감성적인 타이틀)
-     ---------------------------------------------------- */
   .calendar-headline {
     text-align: center;
     font-weight: 800;
     line-height: 1.2;
     white-space: nowrap;
     letter-spacing: 0.03em; 
-    
     font-size: clamp(1.8rem, 5vw, 3.2rem); 
-    
     margin-bottom: 3.5rem;
     padding: 0 0.5rem;
     width: 100%;
@@ -44,28 +33,36 @@
     background-clip: text;
     animation: textFlow 8s linear infinite;
 
+    @media (prefers-color-scheme: dark) {
+      background: linear-gradient(
+        120deg, 
+        #FFFFFF 0%, 
+        var(--theme-primary-light) 50%, 
+        #FFFFFF 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
     @media (max-width: 600px) {
       font-size: 8.2vw; 
       padding: 0rem; 
+    }
+    
     @media (max-width: 340px) {
-    font-size: 7.8vw; 
-  }
+      font-size: 7.8vw; 
     }
   }
 
-  /* ----------------------------------------------------
-     Topline (날짜 텍스트)
-     ---------------------------------------------------- */
   .calendar-topline {
     width: 100%;
     text-align: center;
-
     font-family: inherit;
     font-size: 1.5rem; 
     font-weight: 500;
     color: var(--theme-primary);
     letter-spacing: 0.05em;
-
     padding-bottom: 1.2rem;
     margin-bottom: 1.5rem;
     position: relative;
@@ -81,9 +78,6 @@
     }
   }
 
-  /* ----------------------------------------------------
-     Weekdays (요일 헤더)
-     ---------------------------------------------------- */
   .calendar-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -101,9 +95,6 @@
     }
   }
 
-  /* ----------------------------------------------------
-     Calendar Grid (날짜 그리드)
-     ---------------------------------------------------- */
   .calendar-box {
     background: transparent;
     margin-bottom: 2rem;
@@ -137,26 +128,16 @@
       border-radius: 50%;
     }
 
-    /* D-Day 포인트 */
-   &.day.wedding .day-number {
-  font-weight: 700;
-  background-color: var(--theme-point-pink);
-  color: var(--theme-primary);
-  
-  /* 약간 불규칙한 원형 */
-  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-  
-  /* 수채화 번진 느낌의 그림자 */
-  filter: drop-shadow(2px 4px 6px rgba(214, 140, 144, 0.3));
-  
-  /* 살짝 회전시켜서 자연스러움 강조 */
-  transform: rotate(-3deg);
-}
+    &.day.wedding .day-number {
+      font-weight: 700;
+      background-color: var(--theme-point-pink);
+      color: var(--theme-primary);
+      border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+      filter: drop-shadow(2px 4px 6px rgba(214, 140, 144, 0.3));
+      transform: rotate(-3deg);
+    }
   }
 
-  /* ----------------------------------------------------
-     Leaf Divider (나뭇잎)
-     ---------------------------------------------------- */
   .calendar-leaf-line {
     width: 100%;
     margin: 2.5rem 0 1.5rem;
@@ -170,16 +151,12 @@
     }
   }
 
-  /* ----------------------------------------------------
-     Countdown (카운트다운)
-     ---------------------------------------------------- */
   .countdown-wrap {
     margin-top: 1rem;
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    
     color: var(--theme-primary);
 
     .countdown-line1,
@@ -188,7 +165,6 @@
       opacity: 0.9;
       font-weight: 500;
       
-      /* "신랑과 신부의 결혼식이" 텍스트 스타일 */
       .highlight-name {
          font-weight: 600;
          color: var(--theme-primary);
@@ -232,9 +208,8 @@
         margin-left: 2px;
       }
       
-      /* 모바일 대응 */
       @media (max-width: 400px) {
-        gap: 0.5rem; /* 모바일에서는 조금 좁힘 */
+        gap: 0.5rem;
         .num { font-size: 1.6rem; }
         .unit { font-size: 0.8rem; }
       }
