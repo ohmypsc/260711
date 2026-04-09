@@ -9,6 +9,7 @@
 }
 
 :root {
+    color-scheme: light;
     --theme-bg: #FDFBF9;            
     --theme-accent: #F4F1EE;       
 
@@ -41,6 +42,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
+  color-scheme: light;
   background-color: var(--theme-bg);
   line-height: 1.65;
   color: var(--text-main);
