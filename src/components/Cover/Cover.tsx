@@ -1,5 +1,7 @@
-import { useMemo, useState } from "react";
-import { Button } from "@/components/common/Button/Button";
+import { useMemo } from "react";
+// import { useState } from "react";
+// import { Button } from "@/components/common/Button/Button";
+// import { ContactModal } from "@/components/Cover/ContactModal";
 import { useContactInfo } from "@/ContactInfoProvider";
 import "./Cover.scss";
 
@@ -86,10 +88,8 @@ function LeafLine({ variant }: { variant: "top" | "bottom" }) {
   );
 }
 
-// 상단 임포트 및 LeafLine 컴포넌트는 기존과 동일하게 유지하세요.
-
 export function Cover() {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const info = useContactInfo();
 
   const names = useMemo(() => {
@@ -122,7 +122,7 @@ export function Cover() {
         <p className="poet">진은영, &lt;청혼&gt; 중</p>
       </div>
 
-      {/* 2) 초대글 전문 (수정된 부분: br 제거하고 블록으로 묶음) */}
+      {/* 2) 초대글 전문 */}
       <div className="cover-message">
         <div className="message-block">
           <p>오래된 거리를 거닐듯 편안하고,</p>
@@ -140,7 +140,7 @@ export function Cover() {
         </div>
       </div>
 
-      {/* 3) 가족관계 (기존 유지) */}
+      {/* 3) 가족관계 */}
       <div className="family-section">
         <LeafLine variant="top" />
 
@@ -163,12 +163,13 @@ export function Cover() {
         <LeafLine variant="bottom" />
       </div>
 
-      {/* 4) CTA (기존 유지) 
-      <Button variant="basic" onClick={() => setOpen(true)}>
+      {/* 4) CTA (주석 처리) */}
+      {/* <Button variant="basic" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
 
       {open && <ContactModal onClose={() => setOpen(false)} />}
-    </div>*/}
+      */}
+    </div>
   );
 }
