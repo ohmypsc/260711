@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button } from "@/components/common/Button/Button";
+import "@/components/common/Button/Button.scss";
 
 // 타입스크립트 에러 방지용 (window.Kakao를 인식하게 해줌)
 declare global {
