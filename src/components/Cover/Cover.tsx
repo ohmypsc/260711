@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/common/Button/Button";
-import { ContactModal } from "@/components/Cover/ContactModal";
 import { useContactInfo } from "@/ContactInfoProvider";
 import "./Cover.scss";
 
