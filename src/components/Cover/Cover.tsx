@@ -163,12 +163,12 @@ export function Cover() {
         <LeafLine variant="bottom" />
       </div>
 
-      {/* 4) CTA (기존 유지) */}
+      {/* 4) CTA (기존 유지) 
       <Button variant="basic" onClick={() => setOpen(true)}>
         축하 인사 전하기
       </Button>
 
       {open && <ContactModal onClose={() => setOpen(false)} />}
-    </div>
+    </div>*/}
   );
 }
