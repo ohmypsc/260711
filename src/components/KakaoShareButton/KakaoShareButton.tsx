@@ -1,5 +1,5 @@
-
 import { useEffect } from "react";
+import "@/components/common/Button";
 
 // 타입스크립트 에러 방지용 (window.Kakao를 인식하게 해줌)
 declare global {
@@ -50,57 +50,21 @@ export function KakaoShareButton() {
 
   return (
     <button
+      className="w-btn basic"
       onClick={handleShare}
       style={{
-        /* --- 기본 버튼 초기화 --- */
-        WebkitAppearance: "none",
-        appearance: "none",
-        WebkitTapHighlightColor: "transparent",
-        userSelect: "none",
-        border: "none",
-        outline: "none",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "8px", // 아이콘과 글자 간격
-        fontFamily: '"Gowun Batang", serif', // 고운바탕체 적용
-
-        /* --- BASIC 무드 기반 디자인 (카카오 포인트 가미) --- */
-        width: "100%",
-        maxWidth: "320px",
-        margin: "0 auto",
-        minHeight: "58px",
-        padding: "1rem 1.6rem",
-        borderRadius: "999px", // 완전 둥근 형태
-        fontSize: "1rem",
-        fontWeight: "700",
-        letterSpacing: "0.04em",
-        
-        // 🌟 1. 카카오 느낌을 은은하게 내는 부드러운 노란색 그라데이션
+        // 🌟 레이아웃과 크기는 CSS(w-btn basic)를 따르고, 카카오 색상만 덮어씌웁니다.
         background: "linear-gradient(180deg, #FFFDE0 0%, #FFFAF0 100%)",
-        
-        // 🌟 2. 가독성과 브랜드 정체성을 위한 카카오 공식 갈색 텍스트
         color: "#3A1D1D", 
-        
-        // 청첩장 무드용 내부 프레임(box-shadow)과 외부 테두리
-        boxShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 2px 4px rgba(0, 0, 0, 0.05)",
-        border: "1px solid #E0D4C8",
-        
-        transition: "transform 0.14s ease",
+        borderColor: "#E0D4C8",
+        gap: "8px", // 아이콘과 글자 간격
       }}
-      // 클릭 시 살짝 눌리는 효과
-      onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
-      onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
     >
-      {/* 🌟 3. 아이콘 색상도 갈색으로 통일하여 정체성 강화 */}
-      <span style={{ color: "#3A1D1D", fontSize: "1.1em", display: "flex" }}>
-        <i className="fa-solid fa-comment"></i>
-      </span>
+      {/* 아이콘 */}
+      <i className="fa-solid fa-comment" style={{ fontSize: "1.1em" }}></i>
       
-      {/* 버튼 텍스트 (청첩장 서체와 카카오 갈색의 조화) */}
-      <span style={{ transform: "translateY(-0.5px)" }}>
+      {/* 텍스트 (CSS에 정의된 w-btn__label 클래스 사용) */}
+      <span className="w-btn__label">
         카카오톡으로 공유하기
       </span>
     </button>
