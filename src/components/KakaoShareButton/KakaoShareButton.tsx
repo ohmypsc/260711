@@ -27,7 +27,7 @@ export function KakaoShareButton() {
       window.Kakao.Share.sendDefault({
         objectType: "feed",
         content: {
-          title: "백승철 ❤️ 오미영 결혼합니다",
+          title: "결혼식에 초대합니다 💍",
           description: "2026.7.11.(토) 11시\n대전 유성컨벤션웨딩홀",
           imageUrl: "https://ohmypsc.github.io/260711/thumbnail.png", 
           link: {
