@@ -10,7 +10,7 @@ declare global {
 
 export function KakaoShareButton() {
   // 📌 실제 배포되는 청첩장 주소
-  const shareUrl = "https://ohmypsc.github.io/260711"; 
+  const shareUrl = "https://ohmybsc.github.io/260711"; 
 
   useEffect(() => {
     // 📌 JavaScript 키
@@ -29,7 +29,7 @@ export function KakaoShareButton() {
         content: {
           title: "결혼식에 초대합니다💍",
           description: "2026.7.11.(토) 11시\n대전 유성컨벤션웨딩홀",
-          imageUrl: "https://ohmypsc.github.io/260711/thumbnail_v2.jpg", 
+          imageUrl: "https://ohmybsc.github.io/260711/thumbnail_v2.jpg", 
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
