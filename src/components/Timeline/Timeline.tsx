@@ -8,16 +8,18 @@ import {
 } from "react";
 import "./Timeline.scss";
 
-/** Vite: src/image 안 jpg 자동 로드 (동적 import) */
-const imageModules = import.meta.glob("/src/image/*.jpg", {
-  eager: false,
+/** * ✅ 수정 1: WebP 파일도 읽어오도록 수정하고, 
+ * 속도 향상을 위해 eager: true 로 변경하여 Promise 대기 시간을 없앰!
+ */
+const imageModules = import.meta.glob("/src/image/*.{jpg,webp,png}", {
+  eager: true,
   import: "default",
-}) as Record<string, () => Promise<string>>;
+}) as Record<string, string>;
 
-/** 이미지 경로를 번호순으로 정렬한 "키 목록" */
+/** ✅ 수정 2: 정렬할 때 확장자가 webp여도 숫자를 제대로 인식하도록 정규식 수정 */
 const imageKeys = Object.keys(imageModules).sort((a, b) => {
-  const na = Number(a.match(/(\d+)\.jpg$/)?.[1] ?? 0);
-  const nb = Number(b.match(/(\d+)\.jpg$/)?.[1] ?? 0);
+  const na = Number(a.match(/(\d+)\.(jpg|webp|png)$/)?.[1] ?? 0);
+  const nb = Number(b.match(/(\d+)\.(jpg|webp|png)$/)?.[1] ?? 0);
   return na - nb;
 });
 
@@ -183,11 +185,9 @@ function AutoFitTitle({
     };
 
     const fit = () => {
-      // 1) 리셋
       h.style.whiteSpace = "nowrap";
       h.style.fontSize = "";
 
-      // 2) 컨테이너 폭(캡션 컬럼 폭)
       const parent = h.parentElement as HTMLElement | null;
       let cw = parent ? parent.getBoundingClientRect().width : h.getBoundingClientRect().width;
 
@@ -198,10 +198,8 @@ function AutoFitTitle({
         cw = Math.max(0, cw - pl - pr);
       }
 
-      // 3) 텍스트 폭
       const tw = measureTextWidth();
 
-      // 4) 줄이기(즉시 적용)
       if (cw > 0 && tw > cw) {
         const base = parseFloat(getComputedStyle(h).fontSize) || 16;
         const next = base * (cw / tw) * 0.98;
@@ -242,27 +240,24 @@ function AutoFitTitle({
   );
 }
 
-
-/**
- * LazyImage (수정됨: Observer 및 상태 관리 로직 안정화)
- */
+// ===============================================
+// ✅ 수정 3: 훨씬 가벼워진 LazyImage 
+// ===============================================
 function LazyImage({
-  srcPromise,
+  srcUrl,
   alt,
   aboveFold = false,
 }: {
-  srcPromise: () => Promise<string>;
+  srcUrl: string; // Promise 대기 없이 즉시 URL 주소를 받음
   alt: string;
   aboveFold?: boolean;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(aboveFold);
-  const [src, setSrc] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
-  // 1. 화면에 보이는지 감지하여 로딩 시작 트리거
   useEffect(() => {
-    if (aboveFold) return; // 위쪽 이미지는 바로 로딩
+    if (aboveFold) return;
 
     const el = ref.current;
     if (!el) return;
@@ -271,41 +266,19 @@ function LazyImage({
       ([entry]) => {
         if (entry.isIntersecting) {
           setShouldLoad(true);
-          io.disconnect(); // 한 번 보이면 더 이상 감지할 필요 없음
+          io.disconnect();
         }
       },
       {
         root: null,
-        rootMargin: "600px", // 화면 밖 600px에서 미리 로딩 시작
+        rootMargin: "1000px", // 미리 불러오는 구간을 넉넉하게 확장
         threshold: 0.01,
       }
     );
 
     io.observe(el);
-    return () => io.disconnect(); // 언마운트 시 클린업
+    return () => io.disconnect();
   }, [aboveFold]);
-
-  // 2. shouldLoad가 true가 되면 실제 이미지 주소를 가져옴
-  useEffect(() => {
-    if (!shouldLoad || src) return;
-
-    let cancelled = false;
-    
-    // srcPromise가 모듈 객체를 반환하는 경우에 대비한 안전한 처리
-    srcPromise().then((moduleOrUrl: any) => {
-      if (!cancelled) {
-        // Vite의 import.meta.glob 결과물 형태(default 추출)에 대응
-        const url = typeof moduleOrUrl === "string" ? moduleOrUrl : moduleOrUrl?.default;
-        if (url) {
-           setSrc(url);
-        }
-      }
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [shouldLoad, src, srcPromise]);
 
   return (
     <div
@@ -313,13 +286,11 @@ function LazyImage({
       className={`lazy-photo ${loaded ? "is-loaded" : "is-loading"}`}
       aria-label={alt}
     >
-      {/* 로딩 전 뼈대(스켈레톤) 애니메이션 */}
       {!loaded && <div className="photo-skeleton" aria-hidden="true" />}
 
-      {/* 이미지가 로드되면 화면에 그림 */}
-      {src && (
+      {shouldLoad && (
         <img
-          src={src}
+          src={srcUrl}
           alt={alt}
           loading={aboveFold ? "eager" : "lazy"}
           fetchPriority={aboveFold ? "high" : "auto"}
@@ -348,7 +319,6 @@ export function Timeline() {
   const isFontLoaded = useFontLoaded();
 
   return (
-    // ✅ 수정됨: .w-timeline -> .timeline-wrapper
     <div className="timeline-wrapper">
       <ol className="timeline-list">
         {items.map((item, idx) => {
@@ -373,8 +343,9 @@ export function Timeline() {
               {/* 사진 */}
               <div className="media">
                 <div className="photo-wrap">
+                  {/* ✅ 수정 4: srcPromise 대신 srcUrl 사용 */}
                   <LazyImage
-                    srcPromise={imageModules[item.key]}
+                    srcUrl={imageModules[item.key]}
                     alt={
                       typeof cap?.title === "string"
                         ? cap.title
