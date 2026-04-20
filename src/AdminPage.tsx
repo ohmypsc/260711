@@ -1,14 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import "./AdminPage.scss";
-
-import { Button } from "@/components/common/Button/Button";
-import { Modal } from "@/components/common/Modal/Modal";
 import { supabase } from "@/supabaseClient";
 
 /* ======================================================================
    타입
 ====================================================================== */
-
 type Meal = "yes" | "no" | "unknown";
 type Side = "groom" | "bride";
 
@@ -32,7 +28,6 @@ type GuestbookRow = {
 /* ======================================================================
    관리자 설정
 ====================================================================== */
-
 const ADMIN_STORAGE_KEY = "admin_authed";
 const ADMIN_CODE = import.meta.env.VITE_ADMIN_CODE || "";
 
@@ -42,7 +37,6 @@ const mealLabel = (m: Meal) =>
 /* ======================================================================
    메인 AdminPage
 ====================================================================== */
-
 export function AdminPage() {
   const [adminOk, setAdminOk] = useState(false);
   const [needAuthModal, setNeedAuthModal] = useState(true);
@@ -51,10 +45,8 @@ export function AdminPage() {
   const [guestbook, setGuestbook] = useState<GuestbookRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [tab, setTab] =
-    useState<"attendance" | "guestbook" | "photos">("attendance");
+  const [tab, setTab] = useState<"attendance" | "guestbook" | "photos">("attendance");
 
-  // ✅ 관리자 인증 상태 로드
   useEffect(() => {
     const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
     if (stored === "true") {
@@ -63,19 +55,12 @@ export function AdminPage() {
     }
   }, []);
 
-  // ✅ 데이터 로드(참석/방명록)
   const loadAll = async () => {
     setLoading(true);
     try {
       const [attRes, gbRes] = await Promise.all([
-        supabase
-          .from("attendance")
-          .select("id, name, phone, side, count, meal, created_at")
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("guestbook")
-          .select("id, name, content, created_at")
-          .order("created_at", { ascending: false }),
+        supabase.from("attendance").select("*").order("created_at", { ascending: false }),
+        supabase.from("guestbook").select("*").order("created_at", { ascending: false }),
       ]);
 
       if (attRes.error) throw attRes.error;
@@ -96,13 +81,10 @@ export function AdminPage() {
   }, [adminOk]);
 
   return (
-    <section className="admin-page">
-      <h2 className="section-title">관리자 대시보드</h2>
-
-      {/* ✅ 관리자 인증 */}
+    <div className="admin-page">
+      {/* ✅ 관리자 인증 모달 (직접 구현) */}
       {!adminOk && needAuthModal && (
         <AdminAuthModal
-          onClose={() => setNeedAuthModal(false)}
           onSuccess={() => {
             localStorage.setItem(ADMIN_STORAGE_KEY, "true");
             setAdminOk(true);
@@ -113,44 +95,35 @@ export function AdminPage() {
 
       {adminOk && (
         <>
-          <div className="admin-actions">
-            <Button variant="outline" onClick={loadAll} disabled={loading}>
-              새로고침
-            </Button>
-
-            <Button
-              variant="outline"
-              onClick={() => {
-                localStorage.removeItem(ADMIN_STORAGE_KEY);
-                setAdminOk(false);
-                setNeedAuthModal(true);
-              }}
-            >
-              로그아웃
-            </Button>
+          <div className="admin-header">
+            <h2 className="section-title">Admin Dashboard</h2>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button className="admin-btn" onClick={loadAll} disabled={loading}>
+                🔄 새로고침
+              </button>
+              <button
+                className="admin-btn"
+                onClick={() => {
+                  localStorage.removeItem(ADMIN_STORAGE_KEY);
+                  setAdminOk(false);
+                  setNeedAuthModal(true);
+                }}
+              >
+                로그아웃
+              </button>
+            </div>
           </div>
 
           {/* ✅ 탭 */}
           <div className="admin-tabs">
-            <button
-              className={`tab ${tab === "attendance" ? "active" : ""}`}
-              onClick={() => setTab("attendance")}
-            >
+            <button className={`tab ${tab === "attendance" ? "active" : ""}`} onClick={() => setTab("attendance")}>
               참석여부 ({attendance.length})
             </button>
-
-            <button
-              className={`tab ${tab === "guestbook" ? "active" : ""}`}
-              onClick={() => setTab("guestbook")}
-            >
+            <button className={`tab ${tab === "guestbook" ? "active" : ""}`} onClick={() => setTab("guestbook")}>
               방명록 ({guestbook.length})
             </button>
-
-            <button
-              className={`tab ${tab === "photos" ? "active" : ""}`}
-              onClick={() => setTab("photos")}
-            >
-              사진
+            <button className={`tab ${tab === "photos" ? "active" : ""}`} onClick={() => setTab("photos")}>
+              사진 관리
             </button>
           </div>
 
@@ -166,170 +139,112 @@ export function AdminPage() {
           )}
         </>
       )}
-    </section>
+    </div>
   );
 }
 
 /* ======================================================================
-   관리자 인증 모달
+   관리자 인증 모달 컴포넌트
 ====================================================================== */
-
-function AdminAuthModal({
-  onClose,
-  onSuccess,
-}: {
-  onClose: () => void;
-  onSuccess: () => void;
-}) {
+function AdminAuthModal({ onSuccess }: { onSuccess: () => void }) {
   const [code, setCode] = useState("");
 
+  const handleConfirm = () => {
+    if (!ADMIN_CODE) {
+      alert("환경변수(VITE_ADMIN_CODE)가 설정되어 있지 않습니다.");
+      return;
+    }
+    if (code.trim() !== ADMIN_CODE) {
+      alert("코드가 올바르지 않습니다.");
+      return;
+    }
+    onSuccess();
+  };
+
   return (
-    <Modal onClose={onClose}>
-      <div className="admin-modal">
-        <h2 className="modal-heading modal-divider">관리자 인증</h2>
-
-        <p className="admin-modal__desc">관리자 코드를 입력해주세요.</p>
-
+    <div className="admin-modal-overlay">
+      <div className="admin-modal-content">
+        <h2>관리자 인증</h2>
+        <p>안전한 관리를 위해 비밀번호를 입력해주세요.</p>
         <input
           type="password"
-          placeholder="관리자 코드"
+          placeholder="관리자 코드 입력"
           value={code}
           onChange={(e) => setCode(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleConfirm()}
         />
-
-        <div className="admin-modal__actions" style={{ marginTop: '16px' }}>
-          <Button
-            variant="outline"
-            onClick={() => {
-              if (!ADMIN_CODE) {
-                alert("VITE_ADMIN_CODE가 설정되어 있지 않습니다.");
-                return;
-              }
-              if (code.trim() !== ADMIN_CODE) {
-                alert("코드가 올바르지 않습니다.");
-                return;
-              }
-              onSuccess();
-            }}
-          >
-            확인
-          </Button>
-        </div>
+        <button className="admin-btn primary" onClick={handleConfirm}>
+          접속하기
+        </button>
       </div>
-    </Modal>
+    </div>
   );
 }
 
 /* ======================================================================
    Attendance 관리자 뷰
 ====================================================================== */
-
 function AttendanceAdmin({ attendance }: { attendance: AttendanceRow[] }) {
   const totalCount = attendance.reduce((sum, r) => sum + (r.count || 0), 0);
-  const groomCount = attendance
-    .filter((r) => r.side === "groom")
-    .reduce((s, r) => s + r.count, 0);
-  const brideCount = attendance
-    .filter((r) => r.side === "bride")
-    .reduce((s, r) => s + r.count, 0);
-
-  const mealYes = attendance
-    .filter((r) => r.meal === "yes")
-    .reduce((s, r) => s + r.count, 0);
-  const mealNo = attendance
-    .filter((r) => r.meal === "no")
-    .reduce((s, r) => s + r.count, 0);
-  const mealUnknown = attendance
-    .filter((r) => r.meal === "unknown")
-    .reduce((s, r) => s + r.count, 0);
+  const groomCount = attendance.filter((r) => r.side === "groom").reduce((s, r) => s + r.count, 0);
+  const brideCount = attendance.filter((r) => r.side === "bride").reduce((s, r) => s + r.count, 0);
+  const mealYes = attendance.filter((r) => r.meal === "yes").reduce((s, r) => s + r.count, 0);
+  const mealNo = attendance.filter((r) => r.meal === "no").reduce((s, r) => s + r.count, 0);
+  const mealUnknown = attendance.filter((r) => r.meal === "unknown").reduce((s, r) => s + r.count, 0);
 
   const downloadCSV = () => {
-    const header = ["id", "name", "phone", "side", "count", "meal", "created_at"];
+    const header = ["이름", "연락처", "구분", "참석인원", "식사여부", "작성일시"];
     const rows = attendance.map((r) => [
-      r.id,
       r.name,
       r.phone,
-      r.side,
+      r.side === "groom" ? "신랑측" : "신부측",
       r.count,
-      r.meal,
-      r.created_at,
+      mealLabel(r.meal),
+      new Date(r.created_at).toLocaleString(),
     ]);
-
     const csv = [header, ...rows]
-      .map((line) =>
-        line.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")
-      )
+      .map((line) => line.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","))
       .join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" }); // 한글 깨짐 방지 BOM 추가
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "attendance.csv";
+    a.download = "참석자명단.csv";
     a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="admin-box">
+    <div>
       <div className="admin-summary">
-        <div className="sum-item">
-          <div className="label">총 참석</div>
-          <div className="value">{totalCount}명</div>
-        </div>
-        <div className="sum-item">
-          <div className="label">신랑 측</div>
-          <div className="value">{groomCount}명</div>
-        </div>
-        <div className="sum-item">
-          <div className="label">신부 측</div>
-          <div className="value">{brideCount}명</div>
-        </div>
-        <div className="sum-item">
-          <div className="label">식사 O</div>
-          <div className="value">{mealYes}명</div>
-        </div>
-        <div className="sum-item">
-          <div className="label">식사 X</div>
-          <div className="value">{mealNo}명</div>
-        </div>
-        <div className="sum-item">
-          <div className="label">미정</div>
-          <div className="value">{mealUnknown}명</div>
-        </div>
+        <div className="sum-item highlight"><div className="label">총 참석 인원</div><div className="value">{totalCount}명</div></div>
+        <div className="sum-item"><div className="label">신랑 측</div><div className="value">{groomCount}명</div></div>
+        <div className="sum-item"><div className="label">신부 측</div><div className="value">{brideCount}명</div></div>
+        <div className="sum-item"><div className="label">식사 하심</div><div className="value">{mealYes}명</div></div>
+        <div className="sum-item"><div className="label">식사 안함</div><div className="value">{mealNo}명</div></div>
+        <div className="sum-item"><div className="label">미정</div><div className="value">{mealUnknown}명</div></div>
       </div>
 
-      <div className="admin-sub-actions">
-        <Button variant="outline" onClick={downloadCSV}>
-          Excel(CSV) 다운로드
-        </Button>
+      <div className="admin-toolbar">
+        <button className="admin-btn" onClick={downloadCSV}>📥 엑셀(CSV) 다운로드</button>
       </div>
 
       <div className="admin-list">
         {attendance.map((r) => (
-          <div key={r.id} className="admin-row">
-            <div className="row-top">
+          <div key={r.id} className="admin-card">
+            <div className="card-header">
               <span className="name">{r.name}</span>
-              <span className="badge">
-                {r.side === "groom" ? "🤵 신랑 측" : "👰 신부 측"}
-              </span>
+              <span className="badge">{r.side === "groom" ? "🤵 신랑 측" : "👰 신부 측"}</span>
             </div>
-
-            <div className="row-mid">
-              <div className="meta">📞 {r.phone}</div>
-              <div className="meta">👥 동행인 포함 {r.count}명</div>
-              <div className="meta">🍽️ {mealLabel(r.meal)}</div>
+            <div className="card-body">
+              <div className="meta-line">📞 {r.phone}</div>
+              <div className="meta-line">👥 동행인 포함 <b>{r.count}명</b> 참석</div>
+              <div className="meta-line">🍽️ {mealLabel(r.meal)}</div>
             </div>
-
-            <div className="row-bottom">
-              {new Date(r.created_at).toLocaleString()}
-            </div>
+            <div className="card-footer">{new Date(r.created_at).toLocaleString()}</div>
           </div>
         ))}
-
-        {attendance.length === 0 && (
-          <div className="empty">아직 참석 응답이 없습니다.</div>
-        )}
+        {attendance.length === 0 && <div className="empty">아직 참석 응답이 없습니다.</div>}
       </div>
     </div>
   );
@@ -338,70 +253,49 @@ function AttendanceAdmin({ attendance }: { attendance: AttendanceRow[] }) {
 /* ======================================================================
    Guestbook 관리자 뷰
 ====================================================================== */
-
 function GuestbookAdmin({ guestbook }: { guestbook: GuestbookRow[] }) {
   const downloadCSV = () => {
-    const header = ["id", "name", "content", "created_at"];
-    const rows = guestbook.map((r) => [
-      r.id,
-      r.name,
-      r.content,
-      r.created_at,
-    ]);
-
+    const header = ["이름", "내용", "작성일시"];
+    const rows = guestbook.map((r) => [r.name, r.content, new Date(r.created_at).toLocaleString()]);
     const csv = [header, ...rows]
-      .map((line) =>
-        line.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")
-      )
+      .map((line) => line.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","))
       .join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "guestbook.csv";
+    a.download = "방명록.csv";
     a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="admin-box">
-      <div className="admin-sub-actions">
-        <Button variant="outline" onClick={downloadCSV}>
-          Excel(CSV) 다운로드
-        </Button>
+    <div>
+      <div className="admin-toolbar">
+        <button className="admin-btn" onClick={downloadCSV}>📥 엑셀(CSV) 다운로드</button>
       </div>
-
       <div className="admin-list">
         {guestbook.map((r) => (
-          <div key={r.id} className="admin-row">
-            <div className="row-top">
+          <div key={r.id} className="admin-card">
+            <div className="card-header">
               <span className="name">{r.name}</span>
-              <span className="badge">방명록</span>
+              <span className="badge" style={{ background: '#f1f3f5', color: '#495057' }}>방명록</span>
             </div>
-
-            <div className="row-mid">
-              <div className="content">{r.content}</div>
+            <div className="card-body">
+              <div className="content-box">{r.content}</div>
             </div>
-
-            <div className="row-bottom">
-              {new Date(r.created_at).toLocaleString()}
-            </div>
+            <div className="card-footer">{new Date(r.created_at).toLocaleString()}</div>
           </div>
         ))}
-
-        {guestbook.length === 0 && (
-          <div className="empty">아직 남겨진 방명록이 없습니다.</div>
-        )}
+        {guestbook.length === 0 && <div className="empty">아직 작성된 방명록이 없습니다.</div>}
       </div>
     </div>
   );
 }
 
 /* ======================================================================
-   ✅ AdminPhotos (내부 통합 컴포넌트)
+   AdminPhotos 사진 관리
 ====================================================================== */
-
 const PHOTO_BUCKET = "wedding-photos";
 const PER_PAGE = 36;
 const ALL_CHUNK = 200;
@@ -421,373 +315,148 @@ type ViewMode = "page" | "all";
 function AdminPhotos() {
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [mode, setMode] = useState<ViewMode>("page");
-
-  // page mode pagination
   const [page, setPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
-
-  // selected by name
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  // name -> publicUrl
   const toPhotoItem = (f: any): PhotoItem => {
-    const { data: urlData } = supabase.storage
-      .from(PHOTO_BUCKET)
-      .getPublicUrl(f.name);
-    return {
-      name: f.name,
-      url: urlData.publicUrl,
-      created_at: f.created_at ?? "",
-      size: f.metadata?.size ?? 0,
-    };
+    const { data: urlData } = supabase.storage.from(PHOTO_BUCKET).getPublicUrl(f.name);
+    return { name: f.name, url: urlData.publicUrl, created_at: f.created_at ?? "", size: f.metadata?.size ?? 0 };
   };
 
-  // meta map
   const fetchMetaMap = async (names: string[]) => {
     const map = new Map<string, { uploader_name: string; created_at: string }>();
     if (names.length === 0) return map;
-
     for (let i = 0; i < names.length; i += META_CHUNK) {
       const chunk = names.slice(i, i + META_CHUNK);
-      const { data, error } = await supabase
-        .from("photo_meta")
-        .select("file_name, uploader_name, created_at")
-        .in("file_name", chunk);
-
-      if (error) {
-        console.warn("photo_meta fetch error:", error);
-        continue;
-      }
-
-      (data ?? []).forEach((row: any) => {
-        map.set(row.file_name, {
-          uploader_name: row.uploader_name,
-          created_at: row.created_at,
-        });
-      });
+      const { data } = await supabase.from("photo_meta").select("file_name, uploader_name, created_at").in("file_name", chunk);
+      (data ?? []).forEach((row: any) => map.set(row.file_name, { uploader_name: row.uploader_name, created_at: row.created_at }));
     }
-
     return map;
   };
 
   const attachMeta = async (list: PhotoItem[]) => {
-    const names = list.map((p) => p.name);
-    const metaMap = await fetchMetaMap(names);
-
-    return list.map((p) => {
-      const m = metaMap.get(p.name);
-      return {
-        ...p,
-        uploader_name: m?.uploader_name ?? "익명",
-        meta_created_at: m?.created_at ?? "",
-      };
-    });
+    const metaMap = await fetchMetaMap(list.map((p) => p.name));
+    return list.map((p) => ({ ...p, uploader_name: metaMap.get(p.name)?.uploader_name ?? "익명", meta_created_at: metaMap.get(p.name)?.created_at ?? "" }));
   };
 
-  // page load
   const loadPage = async (targetPage = page) => {
     setLoading(true);
     try {
-      const offset = targetPage * PER_PAGE;
       const { data, error } = await supabase.storage.from(PHOTO_BUCKET).list("", {
-        limit: PER_PAGE,
-        offset,
-        sortBy: { column: "created_at", order: "desc" },
+        limit: PER_PAGE, offset: targetPage * PER_PAGE, sortBy: { column: "created_at", order: "desc" },
       } as any);
-
       if (error) throw error;
-
-      const baseList = (data ?? [])
-        .filter((f) => f.name && !f.name.startsWith("."))
-        .map(toPhotoItem);
-
+      const baseList = (data ?? []).filter((f) => f.name && !f.name.startsWith(".")).map(toPhotoItem);
       const listWithMeta = await attachMeta(baseList);
-
-      setPhotos(listWithMeta);
-      setPage(targetPage);
-      setHasNext(baseList.length === PER_PAGE);
-      setSelected(new Set());
-    } catch (e) {
-      console.error(e);
-      alert("사진 목록 불러오기에 실패했습니다.");
-    } finally {
-      setLoading(false);
-    }
+      setPhotos(listWithMeta); setPage(targetPage); setHasNext(baseList.length === PER_PAGE); setSelected(new Set());
+    } catch (e) { alert("사진을 불러오지 못했습니다."); } finally { setLoading(false); }
   };
 
-  // all load
   const loadAll = async () => {
     setLoading(true);
     try {
-      let offset = 0;
-      let all: PhotoItem[] = [];
-
+      let offset = 0, all: PhotoItem[] = [];
       while (true) {
-        const { data, error } = await supabase.storage.from(PHOTO_BUCKET).list("", {
-          limit: ALL_CHUNK,
-          offset,
-          sortBy: { column: "created_at", order: "desc" },
-        } as any);
-
+        const { data, error } = await supabase.storage.from(PHOTO_BUCKET).list("", { limit: ALL_CHUNK, offset, sortBy: { column: "created_at", order: "desc" } } as any);
         if (error) throw error;
-
-        const chunk = (data ?? [])
-          .filter((f) => f.name && !f.name.startsWith("."))
-          .map(toPhotoItem);
-
+        const chunk = (data ?? []).filter((f) => f.name && !f.name.startsWith(".")).map(toPhotoItem);
         all = all.concat(chunk);
-
         if (chunk.length < ALL_CHUNK) break;
         offset += ALL_CHUNK;
       }
-
-      const allWithMeta = await attachMeta(all);
-
-      setPhotos(allWithMeta);
-      setHasNext(false);
-      setSelected(new Set());
-      setPage(0);
-    } catch (e) {
-      console.error(e);
-      alert("전체 사진 불러오기에 실패했습니다.");
-    } finally {
-      setLoading(false);
-    }
+      setPhotos(await attachMeta(all)); setHasNext(false); setSelected(new Set()); setPage(0);
+    } catch (e) { alert("전체 사진을 불러오지 못했습니다."); } finally { setLoading(false); }
   };
 
-  useEffect(() => {
-    if (mode === "page") loadPage(0);
-    else loadAll();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  useEffect(() => { mode === "page" ? loadPage(0) : loadAll(); }, [mode]);
 
-  // selection
-  const toggleSelect = (name: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(name)) next.delete(name);
-      else next.add(name);
-      return next;
-    });
-  };
-
-  const allSelectedOnScreen = useMemo(() => {
-    if (photos.length === 0) return false;
-    return photos.every((p) => selected.has(p.name));
-  }, [photos, selected]);
-
-  const selectAllOnScreen = () => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (allSelectedOnScreen) photos.forEach((p) => next.delete(p.name));
-      else photos.forEach((p) => next.add(p.name));
-      return next;
-    });
-  };
-
-  // delete helpers
-  const removeMetaRows = async (names: string[]) => {
-    const { error } = await supabase
-      .from("photo_meta")
-      .delete()
-      .in("file_name", names);
-    if (error) console.warn("meta delete failed:", error);
-  };
+  const toggleSelect = (name: string) => setSelected((prev) => { const next = new Set(prev); next.has(name) ? next.delete(name) : next.add(name); return next; });
+  const allSelected = useMemo(() => photos.length > 0 && photos.every((p) => selected.has(p.name)), [photos, selected]);
+  const selectAll = () => setSelected((prev) => { const next = new Set(prev); allSelected ? photos.forEach(p => next.delete(p.name)) : photos.forEach(p => next.add(p.name)); return next; });
 
   const deleteOne = async (name: string) => {
-    const ok = confirm("이 사진을 삭제할까요? (삭제하면 복구 불가)");
-    if (!ok) return;
-
+    if (!confirm("이 사진을 삭제할까요?")) return;
+    setLoading(true);
     try {
-      setLoading(true);
-
-      const { error } = await supabase.storage
-        .from(PHOTO_BUCKET)
-        .remove([name]);
-      if (error) throw error;
-
-      await removeMetaRows([name]);
-
-      alert("삭제되었습니다.");
-      if (mode === "page") loadPage(page);
-      else loadAll();
-    } catch (e: any) {
-      console.error(e);
-      alert(e?.message ?? "삭제 실패");
-      setLoading(false);
-    }
+      await supabase.storage.from(PHOTO_BUCKET).remove([name]);
+      await supabase.from("photo_meta").delete().in("file_name", [name]);
+      mode === "page" ? loadPage(page) : loadAll();
+    } catch (e) { alert("삭제 실패"); setLoading(false); }
   };
 
   const deleteSelected = async () => {
-    if (selected.size === 0) {
-      alert("선택된 사진이 없습니다.");
-      return;
-    }
-
+    if (selected.size === 0) return alert("선택된 사진이 없습니다.");
     const names = Array.from(selected);
-    const ok = confirm(`${names.length}장을 일괄 삭제할까요?\n(삭제하면 복구 불가)`);
-    if (!ok) return;
-
+    if (!confirm(`${names.length}장을 일괄 삭제할까요?`)) return;
+    setLoading(true);
     try {
-      setLoading(true);
-
-      const { error } = await supabase.storage
-        .from(PHOTO_BUCKET)
-        .remove(names);
-      if (error) throw error;
-
-      await removeMetaRows(names);
-
-      alert(`${names.length}장 삭제 완료!`);
-      if (mode === "page") loadPage(page);
-      else loadAll();
-    } catch (e: any) {
-      console.error(e);
-      alert(e?.message ?? "일괄 삭제 실패");
-    } finally {
-      setLoading(false);
-    }
+      await supabase.storage.from(PHOTO_BUCKET).remove(names);
+      await supabase.from("photo_meta").delete().in("file_name", names);
+      mode === "page" ? loadPage(page) : loadAll();
+    } catch (e) { alert("삭제 실패"); setLoading(false); }
   };
 
-  // download
   const downloadOne = async (name: string) => {
     try {
-      const { data, error } = await supabase.storage
-        .from(PHOTO_BUCKET)
-        .download(name);
-      if (error) throw error;
-
-      const url = URL.createObjectURL(data);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = name;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error(e);
-      alert("다운로드 실패");
-    }
+      const { data } = await supabase.storage.from(PHOTO_BUCKET).download(name);
+      if (!data) return;
+      const url = URL.createObjectURL(data), a = document.createElement("a");
+      a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url);
+    } catch (e) { alert("다운로드 실패"); }
   };
 
   const downloadAllOnScreen = async () => {
     if (photos.length === 0) return;
-    const ok = confirm(
-      `현재 화면의 ${photos.length}장을 순서대로 다운로드합니다.\n(브라우저가 여러 다운로드를 물어볼 수 있어요)`
-    );
-    if (!ok) return;
-
-    for (const p of photos) {
-      await downloadOne(p.name);
-      await new Promise((r) => setTimeout(r, 120));
-    }
+    if (!confirm(`화면의 ${photos.length}장을 다운로드합니다. (브라우저 팝업 허용 필요)`)) return;
+    for (const p of photos) { await downloadOne(p.name); await new Promise(r => setTimeout(r, 150)); }
   };
 
   return (
-    <section className="admin-photos admin-box">
-      <h3 className="admin-photos__title">하객 사진 모아보기</h3>
-
-      <div className="admin-photos__actions">
-        <Button
-          variant="outline"
-          onClick={() => setMode(mode === "page" ? "all" : "page")}
-          disabled={loading}
-        >
-          {mode === "page" ? "전체보기" : "페이지보기"}
-        </Button>
-
-        <Button
-          variant="outline"
-          onClick={() => (mode === "page" ? loadPage(0) : loadAll())}
-          disabled={loading}
-        >
-          새로고침
-        </Button>
-
-        <Button
-          variant="outline"
-          onClick={selectAllOnScreen}
-          disabled={loading || photos.length === 0}
-        >
-          {allSelectedOnScreen ? "전체 해제" : "전체 선택"}
-        </Button>
-
-        <Button
-          variant="outline"
-          onClick={deleteSelected}
-          disabled={loading || selected.size === 0}
-        >
+    <div className="admin-photos">
+      <div className="photos-toolbar">
+        <button className="admin-btn" onClick={() => setMode(mode === "page" ? "all" : "page")} disabled={loading}>
+          {mode === "page" ? "전체보기" : "페이지별 보기"}
+        </button>
+        <button className="admin-btn" onClick={selectAll} disabled={loading || photos.length === 0}>
+          {allSelected ? "전체 해제" : "전체 선택"}
+        </button>
+        <button className="admin-btn" onClick={downloadAllOnScreen} disabled={loading || photos.length === 0}>
+          화면 전체 다운로드
+        </button>
+        <button className="admin-btn danger" onClick={deleteSelected} disabled={loading || selected.size === 0}>
           선택 삭제 ({selected.size})
-        </Button>
-
-        <Button
-          variant="outline"
-          onClick={downloadAllOnScreen}
-          disabled={loading || photos.length === 0}
-        >
-          현재 화면 다운로드
-        </Button>
+        </button>
       </div>
 
       {loading ? (
-        <div className="admin-loading">불러오는 중…</div>
+        <div className="admin-loading">사진을 불러오는 중...</div>
       ) : photos.length === 0 ? (
-        <div className="empty">아직 업로드된 사진이 없습니다.</div>
+        <div className="empty">업로드된 사진이 없습니다.</div>
       ) : (
         <>
-          <div className="admin-photos__grid">
+          <div className="photos-grid">
             {photos.map((p) => {
               const checked = selected.has(p.name);
-              const uploader = p.uploader_name ?? "익명";
-              const time = p.meta_created_at || p.created_at || "";
-
+              const time = p.meta_created_at || p.created_at;
               return (
-                <div
-                  key={p.name}
-                  className={`admin-photos__card ${checked ? "selected" : ""}`}
-                >
-                  <label className="check">
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => toggleSelect(p.name)}
-                    />
-                    <span />
+                <div key={p.name} className={`photo-card ${checked ? "selected" : ""}`}>
+                  <label className="check-wrap">
+                    <input type="checkbox" checked={checked} onChange={() => toggleSelect(p.name)} />
+                    <div className="checkbox" />
                   </label>
-
                   <a href={p.url} target="_blank" rel="noreferrer">
-                    <img src={p.url} alt="uploaded" loading="lazy" />
+                    <img src={p.url} alt="guest upload" loading="lazy" />
                   </a>
-
-                  <div className="admin-photos__meta">
-                    <div className="meta-left">
-                      <div className="uploader">
-                        업로드: <b>{uploader}</b>
-                      </div>
-
-                      <div className="sub">
-                        {time ? new Date(time).toLocaleString() : ""}
-                        {" · "}
-                        {(p.size / 1024 / 1024).toFixed(2)}MB
-                      </div>
-
-                      <div className="name">{p.name}</div>
+                  <div className="photo-info">
+                    <div className="uploader">{p.uploader_name ?? "익명"}</div>
+                    <div className="date-size">
+                      {time ? new Date(time).toLocaleDateString() : ""} · {(p.size / 1024 / 1024).toFixed(1)}MB
                     </div>
-
-                    <div className="meta-actions">
-                      <button
-                        className="mini-btn"
-                        onClick={() => downloadOne(p.name)}
-                      >
-                        다운로드
-                      </button>
-                      <button
-                        className="mini-btn danger"
-                        onClick={() => deleteOne(p.name)}
-                      >
-                        삭제
-                      </button>
+                    <div className="action-btns">
+                      <button className="admin-btn" onClick={() => downloadOne(p.name)}>저장</button>
+                      <button className="admin-btn danger" onClick={() => deleteOne(p.name)}>삭제</button>
                     </div>
                   </div>
                 </div>
@@ -796,28 +465,18 @@ function AdminPhotos() {
           </div>
 
           {mode === "page" && (
-            <div className="admin-photos__pagination">
-              <button
-                className="page-btn"
-                disabled={page === 0 || loading}
-                onClick={() => loadPage(page - 1)}
-              >
-                이전
+            <div className="pagination">
+              <button className="admin-btn" disabled={page === 0 || loading} onClick={() => loadPage(page - 1)}>
+                이전 페이지
               </button>
-
-              <div className="page-info">{page + 1} 페이지</div>
-
-              <button
-                className="page-btn"
-                disabled={!hasNext || loading}
-                onClick={() => loadPage(page + 1)}
-              >
-                다음
+              <div className="page-info">{page + 1}</div>
+              <button className="admin-btn" disabled={!hasNext || loading} onClick={() => loadPage(page + 1)}>
+                다음 페이지
               </button>
             </div>
           )}
         </>
       )}
-    </section>
+    </div>
   );
 }
