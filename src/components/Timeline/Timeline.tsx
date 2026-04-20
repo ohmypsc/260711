@@ -8,20 +8,21 @@ import {
 } from "react";
 import "./Timeline.scss";
 
-/** * ✅ 수정 1: WebP 파일도 읽어오도록 수정하고, 
- * 속도 향상을 위해 eager: true 로 변경하여 Promise 대기 시간을 없앰!
- */
 const imageModules = import.meta.glob("/src/image/*.{jpg,webp,png}", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
 
-/** ✅ 수정 2: 정렬할 때 확장자가 webp여도 숫자를 제대로 인식하도록 정규식 수정 */
-const imageKeys = Object.keys(imageModules).sort((a, b) => {
-  const na = Number(a.match(/(\d+)\.(jpg|webp|png)$/)?.[1] ?? 0);
-  const nb = Number(b.match(/(\d+)\.(jpg|webp|png)$/)?.[1] ?? 0);
-  return na - nb;
-});
+const imageKeys = Object.keys(imageModules)
+  .filter((key) => {
+    const fileName = key.split('/').pop() || "";
+    return /^\d+\.(jpg|webp|png)$/i.test(fileName);
+  })
+  .sort((a, b) => {
+    const na = Number(a.match(/(\d+)\.(jpg|webp|png)$/i)?.[1] ?? 0);
+    const nb = Number(b.match(/(\d+)\.(jpg|webp|png)$/i)?.[1] ?? 0);
+    return na - nb;
+  });
 
 type Caption = {
   imgIndex: number; // 1-based
@@ -30,8 +31,8 @@ type Caption = {
 
 /** 타이틀 no-break */
 const captions: Caption[] = [
-  { imgIndex: 1, title: <span className="no-break">가을에 태어난 승철이와</span> },
-  { imgIndex: 2, title: <span className="no-break">봄에 태어난 미영이가</span> },
+  { imgIndex: 1, title: <span className="no-break">1989년 가을에 태어난 승철이와</span> },
+  { imgIndex: 2, title: <span className="no-break">1990년 봄에 태어난 미영이가</span> },
   { imgIndex: 3, title: <span className="no-break">2024년 가을에 만나</span> },
   { imgIndex: 4, title: <span className="no-break">2024년 겨울,</span> },
   { imgIndex: 5, title: <span className="no-break">2025년 봄,</span> },
@@ -241,14 +242,14 @@ function AutoFitTitle({
 }
 
 // ===============================================
-// ✅ 수정 3: 훨씬 가벼워진 LazyImage 
+// 훨씬 빠르고 가벼워진 LazyImage
 // ===============================================
 function LazyImage({
   srcUrl,
   alt,
   aboveFold = false,
 }: {
-  srcUrl: string; // Promise 대기 없이 즉시 URL 주소를 받음
+  srcUrl: string;
   alt: string;
   aboveFold?: boolean;
 }) {
@@ -271,7 +272,7 @@ function LazyImage({
       },
       {
         root: null,
-        rootMargin: "1000px", // 미리 불러오는 구간을 넉넉하게 확장
+        rootMargin: "1000px", // 스크롤 내리기 훨씬 전부터 미리 로딩 준비!
         threshold: 0.01,
       }
     );
@@ -343,7 +344,6 @@ export function Timeline() {
               {/* 사진 */}
               <div className="media">
                 <div className="photo-wrap">
-                  {/* ✅ 수정 4: srcPromise 대신 srcUrl 사용 */}
                   <LazyImage
                     srcUrl={imageModules[item.key]}
                     alt={
