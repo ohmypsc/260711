@@ -97,7 +97,7 @@ export function AdminPage() {
 
   return (
     <section className="admin-page">
-      <h2 className="section-title">관리자 페이지</h2>
+      <h2 className="section-title">관리자 대시보드</h2>
 
       {/* ✅ 관리자 인증 */}
       {!adminOk && needAuthModal && (
@@ -158,7 +158,7 @@ export function AdminPage() {
           {tab === "photos" ? (
             <AdminPhotos />
           ) : loading ? (
-            <div className="admin-loading">불러오는 중…</div>
+            <div className="admin-loading">데이터를 불러오는 중입니다...</div>
           ) : tab === "attendance" ? (
             <AttendanceAdmin attendance={attendance} />
           ) : (
@@ -197,7 +197,7 @@ function AdminAuthModal({
           onChange={(e) => setCode(e.target.value)}
         />
 
-        <div className="admin-modal__actions">
+        <div className="admin-modal__actions" style={{ marginTop: '16px' }}>
           <Button
             variant="outline"
             onClick={() => {
@@ -274,7 +274,7 @@ function AttendanceAdmin({ attendance }: { attendance: AttendanceRow[] }) {
     <div className="admin-box">
       <div className="admin-summary">
         <div className="sum-item">
-          <div className="label">총 참석 인원</div>
+          <div className="label">총 참석</div>
           <div className="value">{totalCount}명</div>
         </div>
         <div className="sum-item">
@@ -286,22 +286,22 @@ function AttendanceAdmin({ attendance }: { attendance: AttendanceRow[] }) {
           <div className="value">{brideCount}명</div>
         </div>
         <div className="sum-item">
-          <div className="label">식사 예정</div>
+          <div className="label">식사 O</div>
           <div className="value">{mealYes}명</div>
         </div>
         <div className="sum-item">
-          <div className="label">식사 안 함</div>
+          <div className="label">식사 X</div>
           <div className="value">{mealNo}명</div>
         </div>
         <div className="sum-item">
-          <div className="label">식사 미정</div>
+          <div className="label">미정</div>
           <div className="value">{mealUnknown}명</div>
         </div>
       </div>
 
       <div className="admin-sub-actions">
         <Button variant="outline" onClick={downloadCSV}>
-          CSV 다운로드
+          Excel(CSV) 다운로드
         </Button>
       </div>
 
@@ -311,14 +311,14 @@ function AttendanceAdmin({ attendance }: { attendance: AttendanceRow[] }) {
             <div className="row-top">
               <span className="name">{r.name}</span>
               <span className="badge">
-                {r.side === "groom" ? "신랑 측" : "신부 측"}
+                {r.side === "groom" ? "🤵 신랑 측" : "👰 신부 측"}
               </span>
             </div>
 
             <div className="row-mid">
-              <div className="meta">전화번호: {r.phone}</div>
-              <div className="meta">인원: {r.count}명</div>
-              <div className="meta">식사: {mealLabel(r.meal)}</div>
+              <div className="meta">📞 {r.phone}</div>
+              <div className="meta">👥 동행인 포함 {r.count}명</div>
+              <div className="meta">🍽️ {mealLabel(r.meal)}</div>
             </div>
 
             <div className="row-bottom">
@@ -368,7 +368,7 @@ function GuestbookAdmin({ guestbook }: { guestbook: GuestbookRow[] }) {
     <div className="admin-box">
       <div className="admin-sub-actions">
         <Button variant="outline" onClick={downloadCSV}>
-          CSV 다운로드
+          Excel(CSV) 다운로드
         </Button>
       </div>
 
@@ -391,7 +391,7 @@ function GuestbookAdmin({ guestbook }: { guestbook: GuestbookRow[] }) {
         ))}
 
         {guestbook.length === 0 && (
-          <div className="empty">아직 방명록이 없습니다.</div>
+          <div className="empty">아직 남겨진 방명록이 없습니다.</div>
         )}
       </div>
     </div>
