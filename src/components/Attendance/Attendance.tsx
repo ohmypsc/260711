@@ -97,7 +97,8 @@ function CountInput({
         onChange(Number.isNaN(val) ? 0 : val);
       }}
       onBlur={() => {
-        if (value < min) onChange(min);
+        // 값이 비어있지(0) 않을 때만 최소값 검사
+        if (value !== 0 && value < min) onChange(min);
       }}
     />
   );
@@ -289,7 +290,7 @@ function WriteAttendanceModal({
     phone: "",
     side: "" as Side | "",
     meal: "" as Meal | "",
-    count: 1,
+    count: 0, // 초기값을 0으로 설정하여 화면에 빈 칸으로 나타나게 함
   });
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -308,7 +309,7 @@ function WriteAttendanceModal({
       return onToast("식사 여부를 선택해 주세요", "error");
     }
     if (form.count < 1) {
-      return onToast("참석 인원은 최소 1명입니다", "error");
+      return onToast("참석 인원을 1명 이상 입력해 주세요", "error");
     }
 
     setLoading(true);
