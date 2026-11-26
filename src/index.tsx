@@ -6,7 +6,6 @@ import { Timeline } from "@/components/Timeline/Timeline";
 import { Calendar } from "@/components/Calendar/Calendar";
 import { Location } from "@/components/Location/Location";
 import { Account } from "@/components/Account/Account";
-import { Attendance } from "@/components/Attendance/Attendance";
 import { GuestBook } from "@/components/GuestBook/GuestBook";
 import { KakaoShareButton } from "@/components/KakaoShareButton/KakaoShareButton";
 
@@ -96,16 +95,7 @@ export default function MainWeddingPage() {
           </FadeIn>
         </section>
 
-        {/* 6. 참석 여부 */}
-        <section id="attendance">
-          <FadeIn>
-            <div className="section-inner">
-              <Attendance />
-            </div>
-          </FadeIn>
-        </section>
-
-        {/* 7. 방명록 */}
+        {/* 6. 방명록 */}
         <section id="guestbook">
           <FadeIn>
             <div className="section-inner">
@@ -114,7 +104,7 @@ export default function MainWeddingPage() {
           </FadeIn>
         </section>
 
-        {/*8. 공유버튼 */}
+        {/* 7. 공유버튼 */}
         <section id="share" style={{ paddingBottom: "80px", textAlign: "center" }}>
           <FadeIn>
             <div className="section-inner">

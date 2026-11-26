@@ -21,8 +21,7 @@
     "sass": "^1.89.2",
     "vite": "^7.1.5",
     "vite-plugin-html": "^3.2.2",
-    "vite-plugin-svgr": "^4.5.0",
-    "browser-image-compression": "latest"
+    "vite-plugin-svgr": "^4.5.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.6.0",
