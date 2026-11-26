@@ -15,7 +15,7 @@ type Post = {
   content: string;
 };
 
-type ModalType = null | "write" | { type: "delete"; postId: number };
+type ModalType = null | "write";
 type ToastState = { msg: string; type: "success" | "error" } | null;
 type ToastHandler = (msg: string, type: "success" | "error") => void;
 
@@ -103,18 +103,6 @@ export function GuestBook() {
         ) : (
           posts.map((post) => (
             <article key={post.id} className="guestbook-item" data-style={post.id % 6}>
-              {/* 삭제 버튼은 폼 요소가 아니므로 그대로 유지하거나 SCSS에서 !important 처리 필요 */}
-              <button
-                className="item-delete-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenModal({ type: "delete", postId: post.id });
-                }}
-                type="button"
-                aria-label="delete"
-              >
-                <i className="fa-solid fa-xmark"></i>
-              </button>
               <div className="guestbook-item__head">
                 <span className="name">{post.name}</span>
                 <div className="date"><span>{formatDate(post.timestamp)}</span></div>
@@ -153,9 +141,6 @@ export function GuestBook() {
       )}
 
       {openModal === "write" && <WriteGuestBookModal onClose={() => setOpenModal(null)} onSuccess={() => loadPage(0)} onToast={handleToast} />}
-      {openModal && typeof openModal === "object" && openModal.type === "delete" && (
-        <DeleteGuestBookModal postId={openModal.postId} onClose={() => setOpenModal(null)} onSuccess={() => loadPage(currentPage)} onToast={handleToast} />
-      )}
       {toast && createPortal(<div className="custom-toast"><i className={toast.type === "success" ? "fa-solid fa-check" : "fa-solid fa-circle-exclamation"}></i>{toast.msg}</div>, document.body)}
     </div>
   );
@@ -168,11 +153,11 @@ function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => v
     const formData = new FormData(e.currentTarget);
     const name = (formData.get("name") as string).trim();
     const content = (formData.get("content") as string).trim();
-    const password = (formData.get("password") as string).trim();
-    if (!name || !content || !password) return onToast("모든 항목을 입력해 주세요", "error");
+    if (!name || !content) return onToast("모든 항목을 입력해 주세요", "error");
     setLoading(true);
     try {
-      const { error } = await supabase.from("guestbook").insert([{ name, content, password }]);
+      // 비밀번호는 더 이상 받지 않음 (기존 컬럼 호환용 빈 값)
+      const { error } = await supabase.from("guestbook").insert([{ name, content, password: "" }]);
       if (error) throw error;
       onToast("방명록이 등록되었습니다", "success");
       onSuccess(); onClose();
@@ -185,35 +170,6 @@ function WriteGuestBookModal({ onClose, onSuccess, onToast }: { onClose: () => v
         <form id="write-form" className="guestbook-form" onSubmit={handleSubmit}>
           <div className="field"><label className="label">성함</label><input name="name" disabled={loading} type="text" autoComplete="off" /></div>
           <div className="field"><label className="label">메시지</label><textarea name="content" disabled={loading} /></div>
-          <div className="field"><label className="label">비밀번호</label><input name="password" disabled={loading} type="password" autoComplete="new-password" /></div>
-        </form>
-      </div>
-    </Modal>
-  );
-}
-
-function DeleteGuestBookModal({ postId, onClose, onSuccess, onToast }: { postId: number; onClose: () => void; onSuccess: () => void; onToast: ToastHandler }) {
-  const [loading, setLoading] = useState(false);
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const password = (new FormData(e.currentTarget).get("password") as string).trim();
-    if (!password) return onToast("비밀번호를 입력해 주세요", "error");
-    setLoading(true);
-    try {
-      const { data } = await supabase.from("guestbook").select("password").eq("id", postId).single();
-      if (data?.password !== password) { setLoading(false); return onToast("비밀번호가 일치하지 않습니다", "error"); }
-      await supabase.from("guestbook").delete().eq("id", postId);
-      onToast("삭제되었습니다", "success");
-      onSuccess(); onClose();
-    } catch { onToast("오류 발생", "error"); setLoading(false); }
-  };
-  return (
-    <Modal onClose={onClose} footer={<div className="guestbook-footer-row"><Button variant="submit" type="submit" form="del-form" disabled={loading}>삭제하기</Button><Button variant="close" onClick={onClose}>취소</Button></div>}>
-      <div className="guestbook-modal-content">
-        <h2 className="modal-title">방명록 삭제</h2>
-        <p className="modal-subtitle" style={{ textAlign: 'center', margin: '10px 0 20px', color: 'var(--text-main)', opacity: 0.8 }}>삭제를 위해 비밀번호를 입력해주세요.</p>
-        <form id="del-form" className="guestbook-form" onSubmit={handleSubmit}>
-          <div className="field"><label className="label">비밀번호</label><input name="password" disabled={loading} type="password" /></div>
         </form>
       </div>
     </Modal>
